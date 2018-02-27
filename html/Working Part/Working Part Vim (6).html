@@ -1,614 +1,649 @@
 <!DOCTYPE html>
 
-<html>
-  <head>
-    <title>Working Part Vim</title>
-    <meta charset="utf-8">
-  </head>
+<html lang="zh-Hant-TW">
+
+<head>
+  <title>Working Part Vim</title>
+  <meta charset="utf-8">
+</head>
 
 
-  <body>
+<body>
+  <header>
+    <h1>Working Part Vim</h1>
+    <h2>Purpose: 熟悉一款在 terminal 中的編輯器</h2>
+  </header>
 
-    ﻿<h1 id="working-part-vim">Working Part Vim</h1>
-    <h2 id="purpose-熟悉一款在-terminal-中的編輯器">PURPOSE: 熟悉一款在 terminal 中的編輯器</h2>
-    <nav class="website_nav">
-      <a href="../index.html">AboutBlog</a> |
-      <a href="../Daily Work (143).html">DailyWork</a> |
-      <a href="../Working Part (126).html">Working Part</a> |
-      <a href="../Learning Path (46).html">Learning Path</a> |
-      <a href="../Questions.html">Questions</a> |
-      <a href="../Ideas.html">Ideas</a> |
-      <a href="../To-do List.html">To-do List</a>
-      <br />
+  <nav class="website_nav">
+    <a href="../index.html">AboutBlog</a> |
+    <a href="../Daily Work (143).html">DailyWork</a> |
+    <a href="../Working Part (126).html">Working Part</a> |
+    <a href="../Learning Path (46).html">Learning Path</a> |
+    <a href="../Questions.html">Questions</a> |
+    <a href="../Ideas.html">Ideas</a> |
+    <a href="../To-do List.html">To-do List</a>
+    <br />
 
-      <a href="../List/List (19).html">List</a> |
-      <a href="../List/List Books I Have (14).html">List Books I Have</a> |
-      <a href="../List/List Computer Science (4).html">List Computer Science</a> |
-      <a href="../List/List Cook.html">List Cook</a> |
-      <a href="../List/List Manner (2).html">List Manner</a> |
-      <a href="../List/List Reading Note (3).html">List Readning Note</a> |
-      <a href="../List/List Way of Learning (3).html">List Way of Learning</a> |
-      <a href="../List/List Workout (109).html">List Workout</a>
-      <br />
+    <a href="../List/List (19).html">List</a> |
+    <a href="../List/List Books I Have (14).html">List Books I Have</a> |
+    <a href="../List/List Computer Science (4).html">List Computer Science</a> |
+    <a href="../List/List Cook.html">List Cook</a> |
+    <a href="../List/List Manner (2).html">List Manner</a> |
+    <a href="../List/List Reading Note (3).html">List Readning Note</a> |
+    <a href="../List/List Way of Learning (3).html">List Way of Learning</a> |
+    <a href="../List/List Workout (109).html">List Workout</a>
+    <br />
 
-      <a href="./Working Part Coursera - An Introduction to Linguistics (1).html">Working Part Coursera - An Introduction to Linguistics</a> |
-      <a href="./Working Part CSS (10).html">Working Part CSS</a> |
-      <a href="./Working Part English Learning (54).html">Working Part English Learning</a> |
-      <a href="./Working Part GitHub (5).html">Working Part GitHub</a> |
-      <a href="./Working Part IPA (0).html">Working Part IPA</a> |
-      <a href="./Working Part Learning Method of Myself (9).html">Working Part Learning Method of Myself</a> |
-      <a href="./Working Part PC install Ubuntu.html">Working Part PC install Ubuntu</a> |
-      <a href="./Working Part Python (52).html">Working Part Python</a> |
-      <a href="./Working Part Reading Note the intelligent investor.html">Working Part Reading Note the intelligent investor</a> |
-      <a href="./Working Part Vim (6).html">Working Part Vim</a> |
-      <a href="./Interesting Dress (2).html">Interesting Dress</a> |
-      <a href="./Interesting Reading Note the intelligent investor (13).html">Interesting Reading Note the intelligent investor</a>
-      <br />
+    <a href="./Working Part Coursera - An Introduction to Linguistics (1).html">Working Part Coursera - An Introduction to Linguistics</a> |
+    <a href="./Working Part CSS (10).html">Working Part CSS</a> |
+    <a href="./Working Part English Learning (54).html">Working Part English Learning</a> |
+    <a href="./Working Part GitHub (5).html">Working Part GitHub</a> |
+    <a href="./Working Part IPA (0).html">Working Part IPA</a> |
+    <a href="./Working Part Learning Method of Myself (9).html">Working Part Learning Method of Myself</a> |
+    <a href="./Working Part PC install Ubuntu.html">Working Part PC install Ubuntu</a> |
+    <a href="./Working Part Python (52).html">Working Part Python</a> |
+    <a href="./Working Part Reading Note the intelligent investor.html">Working Part Reading Note the intelligent investor</a> |
+    <a href="./Working Part Vim (6).html">Working Part Vim</a> |
+    <a href="./Interesting Dress (2).html">Interesting Dress</a> |
+    <a href="./Interesting Reading Note the intelligent investor (13).html">Interesting Reading Note the intelligent investor</a>
+    <br />
 
-      <a href="../Detail/Detail Anki Personal Note (4).html">Detail Anki Personal Note</a> |
-      <a href="../Detail/Detail Finding the Way to Learn Languages (22).html">Detail Finding the Way to Learn Languages</a> |
-      <a href="../Detail/Detail HTML (6).html">Detail HTML</a> |
-      <a href="../Detail/Detail Interesting history of mathematics (6).html">Detail Interesting history of mathematics</a> |
-      <a href="../Detail/Detail Markdown Language (8).html">Detail Markdown Language</a> |
-      <a href="../Detail/Detail Reading Note fluent forever (10).html">Detail Reading Note fluent forever</a> |
-      <a href="../Detail/Detail Reading Note language learning with Anki (10).html">Detail Reading Note language learning with Anki</a> |
-      <a href="../Detail/Detail time management (7).html">Detail time management</a>
+    <a href="../Detail/Detail Anki Personal Note (4).html">Detail Anki Personal Note</a> |
+    <a href="../Detail/Detail Finding the Way to Learn Languages (22).html">Detail Finding the Way to Learn Languages</a> |
+    <a href="../Detail/Detail HTML (6).html">Detail HTML</a> |
+    <a href="../Detail/Detail Interesting history of mathematics (6).html">Detail Interesting history of mathematics</a> |
+    <a href="../Detail/Detail Markdown Language (8).html">Detail Markdown Language</a> |
+    <a href="../Detail/Detail Reading Note fluent forever (10).html">Detail Reading Note fluent forever</a> |
+    <a href="../Detail/Detail Reading Note language learning with Anki (10).html">Detail Reading Note language learning with Anki</a> |
+    <a href="../Detail/Detail time management (7).html">Detail time management</a>
+  </nav>
 
-    </nav>
-    <h1 id="學習主軸-1.-鳥哥-vim">學習主軸 1. <a href="http://linux.vbird.org/linux_basic/0310vi.php">鳥哥 vim</a></h1>
-    <h1 id="進度紀錄">進度紀錄</h1>
+  <main>
+    <article>
+      <h2>學習主軸 1. <a href="http://linux.vbird.org/linux_basic/0310vi.php">鳥哥 vim</a></h2>
 
-    <table>
-    <thead>
-    <tr>
-    <th align="left">Table of Contents</th>
-    <th align="center">Read</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td align="left">count</td>
-    <td align="center">21</td>
-    </tr>
-    <tr>
-    <td align="left">9.1 vi 與 vim</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.1.1 為何要學 vim</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.2 vi 的使用</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.2.1 簡易執行範例</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.2.2 按鍵說明</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.2.3 一個案例的練習</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.2.4 vim 的暫存檔、救援回復與開啟時的警告訊息</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3 vim 的額外功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3.1 區塊選擇(Visual Block)</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3.2 多檔案編輯</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3.3 多視窗功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3.4 vim 的挑字補全功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3.5 vim 環境設定與記錄： ~/.vimrc, ~/.viminfo</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.3.6 vim 常用指令示意圖</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.4 其他 vim 使用注意事項</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.4.1 中文編碼的問題</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.4.2 DOS 與 Linux 的斷行字元： dos2unix, unix2dos</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.4.3 語系編碼轉換： iconv</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.5 重點回顧</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.6 本章習題</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">9.7 參考資料與延伸閱讀</td>
-    <td align="center">done 21</td>
-    </tr>
-    </tbody>
-    </table><h1 id="br學習主軸-2.-大家來學vim"><br><br>
-    學習主軸 2. <a href="http://www.study-area.org/tips/vim/index.html">大家來學VIM</a></h1>
-    <h1 id="進度紀錄-1">進度紀錄</h1>
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="center">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="center">21</td>
+            </tr>
+            <tr>
+              <td align="left">9.1 vi 與 vim</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.1.1 為何要學 vim</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2 vi 的使用</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2.1 簡易執行範例</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2.2 按鍵說明</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2.3 一個案例的練習</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2.4 vim 的暫存檔、救援回復與開啟時的警告訊息</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3 vim 的額外功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.1 區塊選擇(Visual Block)</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.2 多檔案編輯</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.3 多視窗功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.4 vim 的挑字補全功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.5 vim 環境設定與記錄： ~/.vimrc, ~/.viminfo</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.6 vim 常用指令示意圖</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.4 其他 vim 使用注意事項</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.4.1 中文編碼的問題</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.4.2 DOS 與 Linux 的斷行字元： dos2unix, unix2dos</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.4.3 語系編碼轉換： iconv</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.5 重點回顧</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.6 本章習題</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.7 參考資料與延伸閱讀</td>
+              <td align="center">done 21</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </article>
+    <hr>
 
-    <table>
-    <thead>
-    <tr>
-    <th align="left">Table of Contents</th>
-    <th align="center">Read</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td align="left">count</td>
-    <td align="center">50</td>
-    </tr>
-    <tr>
-    <td align="left">一、前言</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">為什麼選 VIM？</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">何處抓 VIM(elvis)？</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">編譯安裝</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">勤前教育</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">基本教練：step by step</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">二、游標的移動</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">基本的游標移動</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">進階的游標移動</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">特殊的移動</td>
-    <td align="center">done 10</td>
-    </tr>
-    <tr>
-    <td align="left">三、基本編輯指令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">進入 i-mode 的指令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">刪除指令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">取代及還原</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">加上數目字</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">簡單重排功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">四、複製（yank）</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">指令說明</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">天大的指令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">疑難雜症</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">五、尋找、替換</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">尋找</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">更方便的尋找操作（vim 才有）</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">替換（substitute）</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">書籤功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">vim 對於書籤的擴充功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">六、叫檔、存檔、緊急回復</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">開檔的一些花招</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">多檔編輯</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">離開</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">vim 的加密功能</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">緊急回復</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">七、各種標示方法與視窗操作</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">標示指令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">視窗操作</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">八、shell 命令及求助系統</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">shell 命令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">求助系統</td>
-    <td align="center">done 38</td>
-    </tr>
-    <tr>
-    <td align="left">九、set 功能設定</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">該在何處設定？</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">如何得知目前的設定</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">各種 set 功能設定說明</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">關於 softtabstop(sts)</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">關於折行</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">十、規則表示式的運用</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">基本的匹配</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">中介字元</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">全域性的指令</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">&amp; 替代變數</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">greedy 陷阱</td>
-    <td align="center">done 50</td>
-    </tr>
-    </tbody>
-    </table><h1 id="br學習主軸-3.-vimtutor"><br><br>
-    學習主軸 3. vimtutor</h1>
-    <p>官方內建的 tutorial , 在 terminal 中輸入 vimtutor 即可開啟，<br>
-    或者在 vim 中使用 :help tutor 查詢相關資訊。<br>
-    官方預計 25~30 分鐘，可以完成整份教學。</p>
-    <p><strong>do not try to memorize, learn by usage.</strong></p>
-    <h1 id="br學習主軸-4.-learn-vim-progressively"><br><br>
-    學習主軸 4. <a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/">Learn Vim Progressively</a></h1>
-    <h1 id="進度紀錄-2">進度紀錄</h1>
+    <article>
+      <h2>學習主軸 2. <a href="http://www.study-area.org/tips/vim/index.html">大家來學VIM</a></h2>
 
-    <table>
-    <thead>
-    <tr>
-    <th align="left">Table of Contents</th>
-    <th align="center">Read</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td align="left">count</td>
-    <td align="center">15</td>
-    </tr>
-    <tr>
-    <td align="left">1st Level – Survive</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">2nd Level – Feel comfortable</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">3rd Level – Better. Stronger. Faster.</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">3.1 Better</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">3.2 Stronger</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">3.3 Faster</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4th Level – Vim Superpowers</td>
-    <td align="center">done 7</td>
-    </tr>
-    <tr>
-    <td align="left">4.1 Move on current line: 0 ^ $ g_ f F t T , ;</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4.2 <code>Zone selection &lt;action&gt;a&lt;object&gt; or &lt;action&gt;i&lt;object&gt;</code></td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4.3 Select rectangular blocks: <code>&lt;C-v&gt;.</code></td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4.4 Completion: <code>&lt;C-n&gt;</code> and <code>&lt;C-p&gt;</code>.</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4.5 Macros : qa do something q, @a, @@</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4.6 Visual selection: v,V,<code>&lt;C-v&gt;</code></td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">4.7 Splits: :split and vsplit.</td>
-    <td align="center">done</td>
-    </tr>
-    <tr>
-    <td align="left">5 Conclusion</td>
-    <td align="center">done 15</td>
-    </tr>
-    </tbody>
-    </table><h1 id="br學習主軸-5.-the-user-manual"><br><br>
-    學習主軸 5. The User manual</h1>
-    <p>vim 內建的使用者手冊，<br>
-    在 vim 界面中使用命令 <code>:help</code> 看說明或者 <code>:help usr_toc.txt</code> 看目錄。<br>
-    或者看線上版 <a href="http://vimdoc.sourceforge.net/">http://vimdoc.sourceforge.net/</a></p>
-    <h1 id="進度紀錄-3">進度紀錄</h1>
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="center">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="center">50</td>
+            </tr>
+            <tr>
+              <td align="left">一、前言</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">為什麼選 VIM？</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">何處抓 VIM(elvis)？</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">編譯安裝</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">勤前教育</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">基本教練：step by step</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">二、游標的移動</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">基本的游標移動</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">進階的游標移動</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">特殊的移動</td>
+              <td align="center">done 10</td>
+            </tr>
+            <tr>
+              <td align="left">三、基本編輯指令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">進入 i-mode 的指令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">刪除指令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">取代及還原</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">加上數目字</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">簡單重排功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">四、複製（yank）</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">指令說明</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">天大的指令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">疑難雜症</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">五、尋找、替換</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">尋找</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">更方便的尋找操作（vim 才有）</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">替換（substitute）</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">書籤功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">vim 對於書籤的擴充功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">六、叫檔、存檔、緊急回復</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">開檔的一些花招</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">多檔編輯</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">離開</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">vim 的加密功能</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">緊急回復</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">七、各種標示方法與視窗操作</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">標示指令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">視窗操作</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">八、shell 命令及求助系統</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">shell 命令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">求助系統</td>
+              <td align="center">done 38</td>
+            </tr>
+            <tr>
+              <td align="left">九、set 功能設定</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">該在何處設定？</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">如何得知目前的設定</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">各種 set 功能設定說明</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">關於 softtabstop(sts)</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">關於折行</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">十、規則表示式的運用</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">基本的匹配</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">中介字元</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">全域性的指令</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">&amp; 替代變數</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">greedy 陷阱</td>
+              <td align="center">done 50</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </article>
+    <hr>
 
-    <table>
-    <thead>
-    <tr>
-    <th align="left">Table of Contents</th>
-    <th align="center">Read</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td align="left">count</td>
-    <td align="center">32</td>
-    </tr>
-    <tr>
-    <td align="left">usr_01.txt</td>
-    <td align="center">done 1</td>
-    </tr>
-    <tr>
-    <td align="left">usr_02.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_03.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_04.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_05.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_06.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_07.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_08.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_09.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_10.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_11.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_12.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_20.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_21.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_22.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_23.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_24.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_25.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_26.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_27.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_28.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_29.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_30.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_31.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_32.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_40.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_41.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_42.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_43.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_44.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_45.txt</td>
-    <td align="center"></td>
-    </tr>
-    <tr>
-    <td align="left">usr_90.txt</td>
-    <td align="center"></td>
-    </tr>
-    </tbody>
-    </table><h3 id="section"></h3>
-    <br>
-    # 其他資源
-    <ol start="3">
-    <li><a href="https://vim.sourceforge.io/docs.php">Vim website docs</a></li>
-    <li>批踢踢 editor 版</li>
-    </ol>
-  </body>
+    <article>
+      <h2>學習主軸 3. vimtutor</h2>
+      <p>官方內建的 tutorial , 在 terminal 中輸入 vimtutor 即可開啟，
+        <br> 或者在 vim 中使用 :help tutor 查詢相關資訊。
+        <br> 官方預計 25~30 分鐘，可以完成整份教學。
+      </p>
+      <p><strong>do not try to memorize, learn by usage.</strong></p>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 4. <a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/">Learn Vim Progressively</a></h2>
+
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="center">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="center">15</td>
+            </tr>
+            <tr>
+              <td align="left">1st Level – Survive</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">2nd Level – Feel comfortable</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">3rd Level – Better. Stronger. Faster.</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.1 Better</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.2 Stronger</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.3 Faster</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4th Level – Vim Superpowers</td>
+              <td align="center">done 7</td>
+            </tr>
+            <tr>
+              <td align="left">4.1 Move on current line: 0 ^ $ g_ f F t T , ;</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.2 <code>Zone selection &lt;action&gt;a&lt;object&gt; or &lt;action&gt;i&lt;object&gt;</code></td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.3 Select rectangular blocks: <code>&lt;C-v&gt;.</code></td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.4 Completion: <code>&lt;C-n&gt;</code> and <code>&lt;C-p&gt;</code>.</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.5 Macros : qa do something q, @a, @@</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.6 Visual selection: v,V,<code>&lt;C-v&gt;</code></td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7 Splits: :split and vsplit.</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">5 Conclusion</td>
+              <td align="center">done 15</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 5. The User manual</h2>
+      <p>vim 內建的使用者手冊，
+        <br> 在 vim 界面中使用命令 <code>:help</code> 看說明或者 <code>:help usr_toc.txt</code> 看目錄。
+        <br> 或者看線上版 <a href="http://vimdoc.sourceforge.net/">http://vimdoc.sourceforge.net/</a>
+      </p>
+
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="center">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="center">32</td>
+            </tr>
+            <tr>
+              <td align="left">usr_01.txt</td>
+              <td align="center">done 1</td>
+            </tr>
+            <tr>
+              <td align="left">usr_02.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_03.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_04.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_05.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_06.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_07.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_08.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_09.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_10.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_11.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_12.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_20.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_21.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_22.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_23.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_24.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_25.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_26.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_27.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_28.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_29.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_30.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_31.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_32.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_40.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_41.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_42.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_43.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_44.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_45.txt</td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">usr_90.txt</td>
+              <td align="center"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </article>
+    <hr>
+
+    <article>
+      <h2>其他資源</h2>
+      <ol>
+        <li><a href="https://vim.sourceforge.io/docs.php">Vim website docs</a></li>
+        <li>批踢踢 editor 版</li>
+      </ol>
+    </article>
+  </main>
+</body>
 </html>
