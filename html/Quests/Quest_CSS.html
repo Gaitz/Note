@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant-TW">
+
+<head>
+  <title>Working Part CSS</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../../images/icon.png">
+</head>
+
+
+<body>
+  <header>
+    <h1>Working Part CSS (10)</h1>
+    <h2>Purpose: 網頁前端 CSS 入門含 CSS frameworks</h2>
+    <h2>NEXT: 現有方法不好玩，尋找新的學習方式</h2>
+  </header>
+
+  <nav class="Website_Nav">
+    <table>
+      <tbody>
+        <tr class="First_Row">
+          <td><a href="../index.html">About System</a></td>
+          <td><a href="../Others/Daily_Work.html">Daily Work</a></td>
+          <td><a href="../Others/Ideas.html">Ideas</a></td>
+          <td><a href="../Others/Learning_Path.html">Learning Path</a></td>
+          <td><a href="../Others/Questions.html">Questions</a></td>
+          <td><a href="../Others/To-do_List.html">To-do List</a></td>
+        </tr>
+        <tr class="Quests_Row">
+          <td><a href="./Display_Quests.html">Display Quests</a></td>
+          <td><a href="./Quest_CSS.html">Quest CSS</a></td>
+          <td><a href="./Quest_Dress.html">Quest Dress</a></td>
+          <td><a href="./Quest_English_Learning.html">Quest English Learning</a></td>
+          <td><a href="./Quest_GitHub.html">Quest GitHub</a></td>
+          <td><a href="./Quest_IPA.html">Quest IPA</a></td>
+          <td><a href="./Quest_Learning_Method.html">Quest Learning Method</a></td>
+          <td><a href="./Quest_Install_Ubuntu.html">Quest Install Ubuntu</a></td>
+          <td><a href="./Quest_Python.html">Quest Python</a></td>
+          <td><a href="./Quest_Reading_Note_The_Intelligent_Investor.html">Quest Reading Note The Intelligent Investor</a></td>
+          <td><a href="./Quest_Vim.html">Quest Vim</a></td>
+        </tr>
+        <tr class="Record_Row">
+          <td><a href="../Record/Record_Books.html">Record Books</a></td>
+          <td><a href="../Record/Record_Cook.html">Record Cook</a></td>
+          <td><a href="../Record/Record_Workout.html">Record Workout</a></td>
+        </tr>
+        <tr class="Toolbox">
+          <td><a href="../Toolbox/Display_All.html">Display All</a></td>
+          <td><a href="../Toolbox/Display_Computer_Science.html">Display Computer Science</a></td>
+          <td><a href="../Toolbox/Display_Manner.html">Display Manner</a></td>
+          <td><a href="../Toolbox/Display_Reading_Note.html">Display Reading Note</a></td>
+          <td><a href="../Toolbox/Display_Way_of_Learning.html">Display Way of Learning</a></td>
+          <td><a href="../Toolbox/Toolbox_Anki_Personal_Note.html">Anki Personal Note</a></td>
+          <td><a href="../Toolbox/Toolbox_Finding_The_Way_to_Learn_Languages.html">Finding The Way to Learn Languages</a></td>
+          <td><a href="../Toolbox/Toolbox_HTML.html">HTML</a></td>
+          <td><a href="../Toolbox/Toolbox_History_of_Mathematics.html">History of Mathematics</a></td>
+          <td><a href="../Toolbox/Toolbox_Markdown_Language.html">Markdown Language</a></td>
+          <td><a href="../Toolbox/Toolbox_Reading_Note_Fluent_Forever.html">Reading Note Fluent Forever</a></td>
+          <td><a href="../Toolbox/Toolbox_Reading_Note_Language_Learning_with_Anki.html">Reading Note Learning with Anki</a></td>
+          <td><a href="../Toolbox/Toolbox_Time_Management.html">Time Management</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </nav>
+  <hr>
+
+  <main>
+    <article>
+      <h2>可以把玩的檢查清單</h2>
+    </article>
+
+    <article>
+      <h2>wikipedia 簡介</h2>
+      <p><a href="https://zh.wikipedia.org/wiki/%E5%B1%82%E5%8F%A0%E6%A0%B7%E5%BC%8F%E8%A1%A8">chinese version wikipeida of CSS</a></p>
+
+      <p><a href="https://en.wikipedia.org/wiki/Cascading_Style_Sheets">wikipedia of CSS</a></p>
+      <ul>
+        <li>選擇器</li>
+      </ul>
+
+      <p><a href="https://en.wikipedia.org/wiki/CSS_framework">wikipedia of CSS framework</a></p>
+      <ul>
+        <li>
+          <p><a href="https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)">Bootstrap</a></p>
+          <p>專注於前端的 framework
+            <br> 可以選擇使用包含 Javascript 的擴充功能
+            <br> 開源的專案 GitHub
+          </p>
+        </li>
+        <li>
+          <p><a href="https://en.wikipedia.org/wiki/Foundation_(framework)">Foundation</a></p>
+          <p>回應式, 開源, 包含 Javascript, 前端的 framework</p>
+        </li>
+        <li>
+          <p>WC.CSS # 簡單, 只包含CSS</p>
+        </li>
+      </ul>
+
+      <p><a href="https://zh.wikipedia.org/wiki/Sass">Sass</a></p>
+      <p>CSS的前處理器</p>
+      <p>提供很多語法糖，以程式語言的方式描述設計者的意圖，在轉譯為 CSS 語法。</p>
+
+      <p>DOM</p>
+      <p><a href="https://ithelp.ithome.com.tw/articles/10108783">https://ithelp.ithome.com.tw/articles/10108783</a>
+        <br>
+        <a href="https://openhome.cc/Gossip/JavaScript/W3CDOM.html">https://openhome.cc/Gossip/JavaScript/W3CDOM.html</a>
+      </p>
+      <p>Document Object Model, DOM
+        <br> 作為程式語言與瀏覽器之間的中間層，一種標準界面。
+        <br> 前端使用
+        <br> 由 W3C 訂定。
+      </p>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 1. <a href="https://www.codecademy.com/learn/learn-css">codecademy - learn css</a> undone</h2>
+      <ul>
+        <li>
+          <p>Cascading Style Sheets, CSS</p>
+        </li>
+        <li>
+          <p>為了從 HTML 中分離樣式 (style) 程式碼，
+            <br>
+            <strong>HTML</strong> 文件中只負責<strong>結構與內容</strong>，
+            <br>
+            <strong><code>.css</code></strong> 文件負責<strong>樣式</strong>，讓 HTML 更好維護與修改。
+          </p>
+        </li>
+        <li>
+          <p>以 <code>key:value;</code> pair 的形式指定樣式，結尾最好都加上 <code>;</code> 。
+            <br> Example: <code>font-family:Arial;</code>
+          </p>
+        </li>
+        <li>
+          <p><strong>inline style</strong>, 在 HTML 檔案中的 elements 可以直接使用屬性 (style) 來指定 css 樣式。
+            <br> 例如：
+            <br>
+            <code>&lt;p style="font-family:Arial;"&gt; &lt;/p&gt;</code>
+          </p>
+        </li>
+        <li>
+          <p><strong>internal style</strong>, 在 HTML 撰寫 css 程式碼於 metadata 區塊中以標籤 <code>&lt;style&gt;</code>包起來。</p>
+          <pre><code>&lt;head&gt;
+            &lt;style&gt;
+              css codes here
+            &lt;/style&gt;
+        &lt;/head&gt;
+        </code>
+          </pre>
+        </li>
+        <li>
+          <p><strong>external style</strong>, 把所有的樣式 css 程式碼放置在 <code>.css</code> 檔案中，從 HTML 中分離出去，推薦使用這種方式，才符合 css 設計的目的。</p>
+          <ul>
+            <li>連結 <strong><code>&lt;link /&gt;</code></strong> HTML 與 CSS 檔案，
+              <br> 標籤
+              <code>&lt;link /&gt;</code>是自身標籤
+              <br> 屬性 (href) 連結 <code>.css</code> 檔案的位置
+              <br> 屬性 (type) 連結的檔案類型，這邊固定為 <code>text/css</code>
+              <br> 屬性 relation (rel) 檔案的關係，這邊固定為 <code>stylesheet</code>
+            </li>
+          </ul>
+          <pre><code>&lt;link href="" type="text/css" rel="stylesheet"/&gt;
+        </code>
+          </pre>
+        </li>
+        <li>
+          <p>CSS <strong>選擇器</strong> selector，用來連結需要造型的位置。</p>
+          <ul>
+            <li>
+              <p>利用標籤名稱 <code>&lt;tag_name&gt;</code></p>
+              <p>範例：</p>
+            </li>
+          </ul>
+          <pre><code>p {
+            color:red;
+        }
+        </code>
+          </pre>
+          <ul>
+            <li>
+              <p>利用類別名稱 屬性 (class)， <code>.</code> 是必須的。</p>
+              <pre><code>.className {
+        }
+        </code></pre>
+            </li>
+            <li>
+              <p>利用唯一名稱 屬性 (id), <code>#</code> 是必須的。</p>
+              <pre><code>#id {
+        }
+        </code></pre>
+            </li>
+            <li>
+              <p><strong>選擇器的優先順序</strong>，如果有相同的造型被指定不同的值，會依據優先順序去覆蓋，<strong>id &gt; class &gt; tag</strong> ，越嚴格的越優先。</p>
+            </li>
+            <li>
+              <p>使用選擇器時，<strong>先以優先序較弱的開始規劃</strong>。</p>
+            </li>
+            <li>
+              <p>選擇器<strong>組合</strong>使用，為了更有彈性的指定目標，可以組合標籤 (tag) 與物件 (class) 兩種選擇器，只有當<strong>同時符合條件</strong>的目標才會使用。</p>
+              <pre><code>elementName.className {
+        }
+        </code></pre>
+            </li>
+            <li>
+              <p><strong>巢狀指定</strong> nested element 利用<strong>空白間隔</strong>指定，巢狀結構內的標籤。
+                <br> example:
+              </p>
+            </li>
+          </ul>
+          <pre><code>&lt;ul class="main-list"&gt;
+          &lt;li&gt;&lt;/li&gt;
+        &lt;ul&gt;
+        </code></pre>
+          <pre><code>.main-list li {
+        }
+        </code></pre>
+          <ul>
+            <li>
+              <p><strong>最嚴格的指定</strong> <code>!important</code>，最好<strong>不要使用</strong>，因為非常沒有彈性。
+                <br> example: <code>p { color: red !important;}</code>
+              </p>
+            </li>
+            <li>
+              <p><strong>共用</strong> css 程式碼以 <code>,</code> 隔開即可。
+                <br> example: <code>p, h1 { }</code>
+              </p>
+            </li>
+            <li>
+              <p>萬用指定 <code>*</code></p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <br>
+      <ul>
+        <li>
+          <p>字型 (<strong>font-family</strong>), 預設 <code>Times New Roman</code></p>
+        </li>
+        <li>
+          <p>字形大小 (<strong>font-size</strong>), Example: <code>font-size: 18px;</code></p>
+        </li>
+        <li>
+          <p>字形粗細 (<strong>font-weight</strong>), 選項: <code>thin</code>, <code>normal</code>, <code>bold</code></p>
+        </li>
+        <li>
+          <p>文字對齊 (<strong>text-align</strong>), 選項: <code>left</code>, <code>center</code>, <code>right</code></p>
+        </li>
+        <li>
+          <p>顏色 (<strong>color</strong>), 背景顏色(<strong>background-color</strong>)</p>
+        </li>
+        <li>
+          <p>透明度 (<strong>opacity</strong>), 值介於 0 ~ 1 之間, 0 完全透明, 1 不透明</p>
+        </li>
+        <li>
+          <p>背景圖片 (<strong>background-image</strong>), <code>background-image: url("");</code></p>
+        </li>
+        <li>
+          <p>預留份 (<strong>margin</strong>), 邊框 (<strong>border</strong>), 填充 (<strong>padding</strong>)
+            <br>
+            <img src="https://s3.amazonaws.com/codecademy-content/courses/freelance-1/unit-4/diagram-boxmodel.svg" alt="圖片來源 codecademy" title="圖片來源 codecademy">
+          </p>
+        </li>
+        <li>
+          <p>寬度 (<strong>width</strong>), 高度 (<strong>height</strong>) 可以指定為固定的pixel (px)。</p>
+        </li>
+        <li>
+          <p>邊框設定 (<strong>border</strong>), <code>border: width style color ;</code>
+            <br> 可以設定寬度, 形式, 顏色。
+            <br> 寬度選項可以為指定 <code>px</code> 或者 <code>thin</code>, (default)<code>medium</code>, <code>thick</code>
+          </p>
+        </li>
+        <li>
+          <p>邊框四個角圓弧設定 (<strong>border-radius</strong>), 選項為 百分比 (%) 或者pixel (px)</p>
+        </li>
+        <li>
+          <p>邊框與內容物之間的填充區塊 (<strong>padding</strong>), 值為 pixel (px),
+            <br> 可以分別指定四個方向:
+            <br> (
+            <strong>padding-top</strong>), (<strong>padding-right</strong>), (<strong>padding-down</strong>), (<strong>padding-left</strong>)。
+            <br> 或者寫為同一個指令
+            <br>
+            <code>padding: 1px 2px 3px 4px</code>, 從上方開始順時鐘, 上, 右, 下, 左。
+            <br>
+            <code>padding: 1px 2px</code>, 上下, 左右 分成兩組。
+          </p>
+        </li>
+        <li>
+          <p>邊框外的預留區 (<strong>margin</strong>) 指令方法同 padding。</p>
+        </li>
+      </ul>
+      <br>
+      <p>**tutorial undone**</p>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 2. <a href="https://www.w3schools.com/css/default.asp">w3school - CSS</a> undone</h2>
+      <p><strong>do all exercises</strong></p>
+      <ul>
+        <li>
+          <p>CSS <strong>註解</strong> 同 C 語言, <code>//</code> , <code>/* */</code></p>
+        </li>
+        <li>
+          <p><strong>Colors</strong></p>
+        </li>
+        <li>
+          <p><strong>Backgrounds</strong>
+            <br>
+            <code>background-color</code>,
+            <br>
+            <code>background-image: url("")</code>,
+            <br>
+            <code>background-repeat: repeat-x, repeat-y, no-repeat</code>
+            <br>
+            <code>background-position: right top</code>
+            <br>
+            <code>background-attachment: fixed</code>
+            <br> 簡化
+            <br>
+            <code>background:#fff url("") no-repeat right top</code>
+          </p>
+        </li>
+        <li>
+          <p><strong>Borders</strong>
+            <br>
+            <code>border:size style color</code>
+            <br>
+            <code>border-radius: % or px</code>
+          </p>
+        </li>
+        <li>
+          <p><strong>Margins</strong>
+            <br>
+            <code>margin: auto</code> # 置中
+            <br> Margin Collapse # 只有在<strong>上下</strong>才存在的問題，上下兩個的 Margin 取<strong>最大值顯示</strong>。
+            <br>
+            <code>margin: inherit</code> # 繼承上層的設定值
+          </p>
+        </li>
+        <li>
+          <p><strong>Padding</strong>
+            <br> Padding # 會額外增加於 width 之外。
+            <br>
+            <code>box-sizing: border-box</code> # 或者使用這個指令，則由 width 控制寬度，多的內容會自動換行。
+          </p>
+        </li>
+        <li>
+          <p><strong>Height, Width</strong>
+            <br> pixel <code>px</code> 控制
+            <br> 百分比 <code>%</code> 控制 # 畫面寬度或高度的百分比
+          </p>
+          <p><code>max-width:</code> # 與 <code>width</code> 不同，<code>max-width</code> 在顯示長度小於設定時，會自動縮小 <code>width</code> 。</p>
+        </li>
+        <li>
+          <p><strong>Box Model</strong>
+            <br> margin, border, padding, content.
+          </p>
+        </li>
+        <li>
+          <p><strong>Outline</strong>
+            <br> 類似於 border 設至於 border 之外，作為輪廓或高亮使用
+          </p>
+        </li>
+        <li>
+          <p><strong>Text</strong>
+            <br>
+            <code>text-align: center, left, right, justify</code> # justify 每行字都拉到同寬，報紙或雜誌的排版。
+            <br>
+            <code>text-decoration: none, overline, line-through, underline</code>
+            <br>
+            <code>text-transform: uppercase, lowercase, capitalize</code>
+            <br>
+            <code>text-indent: px</code> # 段落首行內縮
+            <br>
+            <code>letter-spacing:</code>
+            <br>
+            <code>line-height:</code>
+            <br>
+            <code>word-spacing:</code>
+            <br>
+            <code>text-shadow:</code>
+          </p>
+        </li>
+        <li>
+          <p><strong>Font</strong>
+            <br>
+            <code>font-family:</code> # 字型
+            <br>
+            <code>font-size: px, em, %</code> # 大小
+            <br>
+            <code>font-style: normal, italic</code> # 斜體與否
+            <br>
+            <code>font-weight: normal, bold</code> # 粗體與否
+            <br>
+            <code>font-variant: small-caps</code> # 字型變化
+          </p>
+        </li>
+        <li>
+          <p><strong>Icons</strong>
+            <br> 有很多內建的小圖示可以使用，搜尋 CSS Icons
+          </p>
+        </li>
+        <li>
+          <p><strong>link</strong> 裝飾 超連結
+            <br>
+            <code>color</code>, <code>background-color</code>, <code>padding</code>, <code>text-decoration</code>
+            <br>
+            <code>以連結的狀態區分</code>
+            <br>
+            <code>a:link</code> # 一般狀態, <strong>未拜訪過的</strong>
+            <br>
+            <code>a:visited</code> # <strong>拜訪過的</strong>
+            <br>
+            <code>a:active</code> # 滑鼠<strong>點擊</strong>超連結時
+            <br>
+            <code>a:hover</code> # 滑鼠在超連結<strong>上</strong>時
+          </p>
+        </li>
+        <li>
+          <p><strong>list</strong> ul, ol, li
+            <br>
+            <code>list-style-type: circle, square, upper-roman, lower-alpha</code>
+            <br>
+            <code>list-style-image: url(" ")</code> # 利用圖片作為標籤
+            <br>
+            <code>list-style-position: inside, outside</code> # 顯示位置
+            <br>
+            <code>可以調整 padding, margin, list-style-type</code>
+            <br>
+            <code>list-style: image type position</code> # 簡寫
+          </p>
+        </li>
+        <li>
+          <p><strong>table</strong> table, th, tr, td
+            <br>
+            <code>border:</code> # 設定邊框
+            <br>
+            <code>border-collapse: collapse</code> # 自動結合邊界
+            <br>
+            <code>width, height</code> # 設定寬高
+            <br>
+            <code>text-align, vertical-align</code> # 設定對齊
+            <br>
+            <code>padding:</code> # 設定填充區
+            <br>
+            <code>tr:hover</code> # 指定設定於被<strong>滑鼠移動到的列</strong> <code>:hover</code>
+            <br>
+            <code>tr:nth-child(even, odd)</code> # 藉由 <code>:nth-child()</code> 指定基數或偶數列的裝飾
+          </p>
+          <p>當欄位過長於顯示寬度時，<strong>讓表格擁有拖拉列</strong>。</p>
+          <pre><code>&lt;div style="overflow-x: auto;"&gt;
+           &lt;table&gt;
+           &lt;/table&gt;
+        &lt;/div&gt;
+        </code></pre>
+        </li>
+      </ul>
+      <p>&lt;br / &gt;</p>
+      <ul>
+        <li>
+          <p><strong>Display &amp; Visibility</strong>
+            <br>
+            <code>display: none</code> # Remove 直接移除，導致相鄰的物件移位。
+            <br>
+            <code>display: block</code> # 顯示, 把不換行的物件變成換行。
+            <br>
+            <code>display: inline</code> # 把換行的物件變成不換行。
+            <br>
+            <code>display: inline-block;</code> # 變成不換行並且顯示空間。
+            <br>
+            <code>visibility: hidden</code> # 隱藏，但是位置還在。
+          </p>
+        </li>
+        <li>
+          <p><strong>position</strong>
+            <br> 先指定類型後才指定位置
+            <br>
+            <code>position: static;</code> # default
+            <br>
+            <code>position: relative;</code> # 從 default 的位置去移動
+            <br>
+            <code>position: fixed;</code> # 固定於畫面的指定位置，就算捲動畫面也不會移動。
+            <br>
+            <code>position: sticky;</code> # 一開始類似 <code>relative</code> 指定位置，捲動畫面後如同 <code>fixed</code> 被黏住畫面上。
+            <br>
+            <code>position: absolute;</code># 絕對於上層結構的位置。即把上層結構當作畫面去移動。
+          </p>
+          <p>移動明確位置
+            <br>
+            <code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code> px;
+          </p>
+          <p><code>z-index: -1;</code> # 移動到後方不覆蓋。</p>
+        </li>
+        <li>
+          <p><strong>Overflow</strong>
+            <br> 捲軸設定
+            <br>
+            <code>overflow: visible</code> # default
+            <br>
+            <code>overflow: hidden</code> # 看不到也沒有捲軸
+            <br>
+            <code>overflow: scroll</code> # 固定加上捲軸
+            <br>
+            <code>overflow: auto</code> # 只有在需要的時候，才會增加捲軸。
+            <br>
+            <code>overflow-x:</code> # 只增加水平捲軸
+            <br>
+            <code>overflow-y:</code> # 只增加垂直捲軸
+          </p>
+        </li>
+        <li>
+          <p><strong>Float &amp; Clear</strong>
+            <br> 物件在容器中的位置設定
+            <br>
+            <code>float: left</code>
+            <br>
+            <code>float: right</code>
+            <br>
+            <code>float: none</code> # 預設
+            <br>
+            <code>float: inherit</code>
+            <br> 設置空間不允許的 float 位置
+            <br>
+            <code>clear: none</code> # 預設
+            <br>
+            <code>clear: left</code>
+            <br>
+              <code>clear: right</code>
+            <br>
+            <code>clear: both</code>
+            <br>
+            <code>clear: inherit</code>
+          </p>
+        </li>
+        <li>
+          <p>藉由
+            <br>
+            <code>float</code>,
+            <br>
+            <code>padding</code>,
+            <br>
+            <code>margin</code>,
+            <br>
+            <code>position</code>,
+            <br>
+            <code>text-align</code>,
+            <br>
+            <code>line-height</code>
+            <br> 排版物件想要的位置
+          </p>
+        </li>
+        <li>
+          <p>Selector Combinators
+            <br>
+            <code>空白</code> # 所有的後代 ex: <code>div p</code>
+            <br>
+            <code>&gt;</code> # 連接的下一層 ex: <code>div &gt; p</code>
+            <br>
+            <code>+</code> # 馬上相連的一個 ex: <code>div + p</code>
+            <br>
+            <code>~</code> # 之後所有的 ex: <code>div ~ p</code>
+          </p>
+        </li>
+        <li>
+          <p>Pseudo-classes
+            <br> 選擇器加上特殊的狀態 <code>selector:pseudo-classes {}</code>
+            <br> 例如 <code>:hover</code>
+            <br> 可以藉由 <code>:hover</code> 與 <code>display:none</code> 製作出移動顯示的功能。
+          </p>
+        </li>
+        <li>
+          <p>Pseudo-elements
+            <br> 用來指定選擇器中特定的
+            <strong>部份</strong>， <code>selector::pseudo-elements {}</code>
+            <br> 使用 <code>::</code> 作為與 Pseudo-classes 的區分。
+            <br>
+            <code>::first-line</code> # 第一行
+            <br>
+            <code>::first-letter</code> # 第一個字母
+            <br>
+            <code>::selection</code> # 被選取時，可單獨使用
+            <br>
+            <code>::before { content: }</code> # 物件之後
+            <br>
+            <code>::after { content: }</code> # 物件之前
+          </p>
+        </li>
+        <li>
+          <p>opacity
+            <br> 不透明度設定 <code>1.0 ~ 0.0</code>, 1 不透明, 0 完全透明
+          </p>
+        </li>
+        <li>
+          <p>navigation bar
+            <br> 藉由 超連結的 list 裝飾而成
+          </p>
+        </li>
+      </ul>
+    </article>
+
+    <article>
+      <h2>學習主軸 3. 書: CSS 重構</h2>
+      <p>Book: CSS 重構, Steve Lindstrom</p>
+
+      <h3>第一章 重構與架構</h3>
+      <p>好架構：</p>
+      <ul>
+        <li>可預期性</li>
+        <li>重用性</li>
+        <li>擴充性</li>
+        <li>維護性</li>
+      </ul>
+      <p>最佳實務: 新技術帶來的新方法取代舊方法。</p>
+      <p>重構的時機與重構的內容</p>
+      <p>進行的流程：</p>
+      <ol>
+        <li>撰寫程式碼</li>
+        <li>撰寫測試</li>
+        <li>重構</li>
+        <li>執行測試</li>
+      </ol>
+
+      <h3>第二章 瞭解串接</h3>
+      <p>串接 (cascade)</p>
+      <p>特定度
+        <br> 選擇器的優先順序
+      </p>
+
+      <h3>第三章 編寫較佳的 CSS</h3>
+      <h3>第四章 為不同類型的樣式分類</h3>
+      <h3>第五章 測試</h3>
+      <h3>第六章 樣式碼置放與重構策略</h3>
+
+      <aside>
+        <h2>NOTE</h2>
+        <ul>
+          <li>selector</li>
+          <li>box model</li>
+        </ul>
+      </aside>
+    </article>
+
+    <article>
+      <h2>真實文本, mud your hand</h2>
+      <p>使用 GitHub Page 練習前端技術並且保留作品。
+        <br> HTML, CSS, Javascript
+      </p>
+      <ul>
+        <li><a href="https://github.com/twbs/bootstrap">Bootstrap framework GitHub repository</a></li>
+      </ul>
+    </article>
+    <hr>
+
+    <aside>
+      <h2>其他資源</h2>
+      <p><a href="https://www.codecademy.com/catalog/language/html-css">https://www.codecademy.com/catalog/language/html-css</a>
+        <br> codecademy
+      </p>
+      <p><a href="https://www.w3schools.com/">https://www.w3schools.com/</a>
+        <br> w3schools
+      </p>
+      <p><a href="http://www.tutorialspoint.com/tutorialslibrary.htm">http://www.tutorialspoint.com/tutorialslibrary.htm</a>
+        <br> tutorials
+      </p>
+      <p><a href="https://noootown.wordpress.com/category/%E5%89%8D%E7%AB%AF%E9%80%A3%E8%BC%89/">https://noootown.wordpress.com/category/前端連載/</a>
+        <br> 前端入門 概念說明
+      </p>
+      <p><a href="https://www.edx.org/course/css-basics-w3cx-css-0x-0?utm_source=sailthru&amp;utm_medium=email&amp;utm_campaign=newsletter_student_actives_20171128_givingtuesday" target="_blank"> edX 免費課程 CSS basics </a></p>
+      <p><a href="https://www.edx.org/school/w3cx">https://www.edx.org/school/w3cx</a>
+        <br> edX 課程由 w3c 提供 包含前端語言入門
+      </p>
+      <p><a href="https://developer.mozilla.org/zh-TW/">https://developer.mozilla.org/zh-TW/</a>
+        <br> 網頁入門教學 <strong>待閱讀</strong>
+      </p>
+    </aside>
+    <hr>
+
+    <article>
+      <h2>note</h2>
+      <p>What made this design stand out to you?
+        <br> What do you like best about this design?
+        <br> What is one thing you don’t like about this design?
+      </p>
+    </article>
+  </main>
+</body>
+</html>

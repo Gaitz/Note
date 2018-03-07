@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant-TW">
+
+<head>
+  <title>Working Part PC install Ubuntu</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../../images/icon.png">
+</head>
+
+<body>
+
+  <nav class="Website_Nav">
+    <table>
+      <tbody>
+        <tr class="First_Row">
+          <td><a href="../index.html">About System</a></td>
+          <td><a href="../Others/Daily_Work.html">Daily Work</a></td>
+          <td><a href="../Others/Ideas.html">Ideas</a></td>
+          <td><a href="../Others/Learning_Path.html">Learning Path</a></td>
+          <td><a href="../Others/Questions.html">Questions</a></td>
+          <td><a href="../Others/To-do_List.html">To-do List</a></td>
+        </tr>
+        <tr class="Quests_Row">
+          <td><a href="./Display_Quests.html">Display Quests</a></td>
+          <td><a href="./Quest_CSS.html">Quest CSS</a></td>
+          <td><a href="./Quest_Dress.html">Quest Dress</a></td>
+          <td><a href="./Quest_English_Learning.html">Quest English Learning</a></td>
+          <td><a href="./Quest_GitHub.html">Quest GitHub</a></td>
+          <td><a href="./Quest_IPA.html">Quest IPA</a></td>
+          <td><a href="./Quest_Learning_Method.html">Quest Learning Method</a></td>
+          <td><a href="./Quest_Install_Ubuntu.html">Quest Install Ubuntu</a></td>
+          <td><a href="./Quest_Python.html">Quest Python</a></td>
+          <td><a href="./Quest_Reading_Note_The_Intelligent_Investor.html">Quest Reading Note The Intelligent Investor</a></td>
+          <td><a href="./Quest_Vim.html">Quest Vim</a></td>
+        </tr>
+        <tr class="Record_Row">
+          <td><a href="../Record/Record_Books.html">Record Books</a></td>
+          <td><a href="../Record/Record_Cook.html">Record Cook</a></td>
+          <td><a href="../Record/Record_Workout.html">Record Workout</a></td>
+        </tr>
+        <tr class="Toolbox">
+          <td><a href="../Toolbox/Display_All.html">Display All</a></td>
+          <td><a href="../Toolbox/Display_Computer_Science.html">Display Computer Science</a></td>
+          <td><a href="../Toolbox/Display_Manner.html">Display Manner</a></td>
+          <td><a href="../Toolbox/Display_Reading_Note.html">Display Reading Note</a></td>
+          <td><a href="../Toolbox/Display_Way_of_Learning.html">Display Way of Learning</a></td>
+          <td><a href="../Toolbox/Toolbox_Anki_Personal_Note.html">Anki Personal Note</a></td>
+          <td><a href="../Toolbox/Toolbox_Finding_The_Way_to_Learn_Languages.html">Finding The Way to Learn Languages</a></td>
+          <td><a href="../Toolbox/Toolbox_HTML.html">HTML</a></td>
+          <td><a href="../Toolbox/Toolbox_History_of_Mathematics.html">History of Mathematics</a></td>
+          <td><a href="../Toolbox/Toolbox_Markdown_Language.html">Markdown Language</a></td>
+          <td><a href="../Toolbox/Toolbox_Reading_Note_Fluent_Forever.html">Reading Note Fluent Forever</a></td>
+          <td><a href="../Toolbox/Toolbox_Reading_Note_Language_Learning_with_Anki.html">Reading Note Learning with Anki</a></td>
+          <td><a href="../Toolbox/Toolbox_Time_Management.html">Time Management</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </nav>
+
+  <main>
+    <article>
+      <h2>Ubuntu 安裝紀錄</h2>
+      <ol>
+        <li>
+          <p>使用 UEFI USB 安裝 Ubuntu 16.04 desktop 版，bootable USB from windows 參考Ubuntu官方教學 <a href="https://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows">ClickForWebsite</a></p>
+        </li>
+        <li>
+          <p>磁碟分割: UTF 1GB, SWAP 10GB, / 100GB, /home others = total 1TB</p>
+        </li>
+        <li>
+          <p>安裝 chrome from web</p>
+        </li>
+        <li>
+          <p>由於設定時語言選擇英文，因此要安裝中文注音輸入法 參考這篇部落格文章的教學 <a href="http://it.livekn.com/2016/05/ubuntu-1604-ibus.html">ClickForWebsite</a>：</p>
+          <p>Terminal 輸入以下指令:</p>
+          <pre><code> sudo apt-get install ibus-chewing
+         ibus restart
+        </code></pre>
+          <p>從 System Settings -&gt; Text Entry 中
+            <br> 點選 input sources to use 下方的 + 號
+            <br> 找到 Chinese (Chewing) (IBus) 加入後即可使用酷注音輸入。
+          </p>
+        </li>
+        <li>
+          <p>安裝 spotify for linux from web <a href="https://www.spotify.com/tw/download/linux/">ClickForWebsite</a>
+            <br> System Settings -&gt; Security&amp;Privacy -&gt; Files&amp;Applications add in Exclude.
+          </p>
+        </li>
+        <li>
+          <p>安裝 unrar</p>
+          <p>sudo apt-get install unrar</p>
+        </li>
+        <li>
+          <p>安裝 minecraft <a href="https://www.howtogeek.com/198476/how-to-install-minecraft-on-ubuntu-or-any-other-linux-distribution/">ClickForWebsite</a></p>
+        </li>
+        <li>
+          <p>安裝 Anki <a href="https://apps.ankiweb.net/">ClickForWebsite</a></p>
+        </li>
+        <li>
+          <p>安裝 Unity Tweak Tool 與 <a href="https://snwh.org/paper/download">ubuntu themes : paper</a> 下載</p>
+          <pre><code>  sudo apt-get install unity-tweak-tool
+        </code></pre>
+          <p><a href="https://wallpaperscraft.com/">wallpapers website</a></p>
+        </li>
+      </ol>
+
+      <section>
+        <h2>Used commands</h2>
+        <ul>
+          <li>apt-get install</li>
+          <li>tar xjf</li>
+          <li>make</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+</body>
+
+</html>
