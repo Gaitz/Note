@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant-TW">
+
+<head>
+  <title>Working Part Python</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../../images/icon.png">
+</head>
+
+<body>
+  <header>
+    <h1>學習 Python (52)</h1>
+    <h2>Purpose: 需要一個熟練且深度了解的程式語言，做為日常使用能快速開發</h2>
+    <h2>NEXT: 真實文本, 標準函式庫略讀</h2>
+  </header>
+
+  <nav class="Website_Nav">
+    <table>
+      <tbody>
+        <tr class="First_Row">
+          <td><a href="../index.html">About System</a></td>
+          <td><a href="../Others/Daily_Work.html">Daily Work</a></td>
+          <td><a href="../Others/Ideas.html">Ideas</a></td>
+          <td><a href="../Others/Learning_Path.html">Learning Path</a></td>
+          <td><a href="../Others/Questions.html">Questions</a></td>
+          <td><a href="../Others/To-do_List.html">To-do List</a></td>
+        </tr>
+        <tr class="Quests_Row">
+          <td><a href="./Display_Quests.html">Display Quests</a></td>
+          <td><a href="./Quest_CSS.html">Quest CSS</a></td>
+          <td><a href="./Quest_Dress.html">Quest Dress</a></td>
+          <td><a href="./Quest_English_Learning.html">Quest English Learning</a></td>
+          <td><a href="./Quest_GitHub.html">Quest GitHub</a></td>
+          <td><a href="./Quest_IPA.html">Quest IPA</a></td>
+          <td><a href="./Quest_Learning_Method.html">Quest Learning Method</a></td>
+          <td><a href="./Quest_Install_Ubuntu.html">Quest Install Ubuntu</a></td>
+          <td><a href="./Quest_Python.html">Quest Python</a></td>
+          <td><a href="./Quest_Reading_Note_The_Intelligent_Investor.html">Quest Reading Note The Intelligent Investor</a></td>
+          <td><a href="./Quest_Vim.html">Quest Vim</a></td>
+        </tr>
+        <tr class="Record_Row">
+          <td><a href="../Record/Record_Books.html">Record Books</a></td>
+          <td><a href="../Record/Record_Cook.html">Record Cook</a></td>
+          <td><a href="../Record/Record_Workout.html">Record Workout</a></td>
+        </tr>
+        <tr class="Toolbox">
+          <td><a href="../Toolbox/Display_All.html">Display All</a></td>
+          <td><a href="../Toolbox/Display_Computer_Science.html">Display Computer Science</a></td>
+          <td><a href="../Toolbox/Display_Manner.html">Display Manner</a></td>
+          <td><a href="../Toolbox/Display_Reading_Note.html">Display Reading Note</a></td>
+          <td><a href="../Toolbox/Display_Way_of_Learning.html">Display Way of Learning</a></td>
+          <td><a href="../Toolbox/Toolbox_Anki_Personal_Note.html">Anki Personal Note</a></td>
+          <td><a href="../Toolbox/Toolbox_Finding_The_Way_to_Learn_Languages.html">Finding The Way to Learn Languages</a></td>
+          <td><a href="../Toolbox/Toolbox_HTML.html">HTML</a></td>
+          <td><a href="../Toolbox/Toolbox_History_of_Mathematics.html">History of Mathematics</a></td>
+          <td><a href="../Toolbox/Toolbox_Markdown_Language.html">Markdown Language</a></td>
+          <td><a href="../Toolbox/Toolbox_Reading_Note_Fluent_Forever.html">Reading Note Fluent Forever</a></td>
+          <td><a href="../Toolbox/Toolbox_Reading_Note_Language_Learning_with_Anki.html">Reading Note Learning with Anki</a></td>
+          <td><a href="../Toolbox/Toolbox_Time_Management.html">Time Management</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </nav>
+  <hr>
+
+  <main>
+    <article>
+      <h2>可以把玩的檢查清單</h2>
+      <ul>
+        <li>註解 #, “”"</li>
+        <li>輸出 print()</li>
+        <li>輸入 raw_input()</li>
+        <li>檔案輸入輸出</li>
+        <li>各式迴圈與 in 算子</li>
+        <li>物件導向</li>
+        <li>自訂函數 def</li>
+        <li>資料結構
+          <br> List
+          <br> Tuple, Sequence
+          <br> Set
+          <br> Dictionary
+        </li>
+        <li>多重賦值</li>
+        <li>Module 與 script</li>
+        <li>例外處理</li>
+        <li>標準函式庫</li>
+        <li>函式庫引入 pip, pypi</li>
+      </ul>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 1. <a href="https://learnpythonthehardway.org/book/" title="Learn Python the Hard Way">Learn Python the Hard Way (免費版已關閉) Python2.7</a></h2>
+
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="center">Read</th>
+              <th align="center">Study Drills Undone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">Preface</td>
+              <td align="center">Done</td>
+              <td align="center">null</td>
+            </tr>
+            <tr>
+              <td align="left">Introduction: The Hard Way Is Easier</td>
+              <td align="center">Done</td>
+              <td align="center">null</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 0: The Setup</td>
+              <td align="center">Done</td>
+              <td align="center">null</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 1: A Good First Program</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 2: Comments And Pound Characters</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 3: Numbers And Math</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 4: Variables And Names</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 5: More Variables And Printing</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 6: Strings And Text</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 7: More Printing</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 8: Printing, Printing</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 9: Printing, Printing, Printing</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 10: What Was That?</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 11: Asking Questions</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 12: Prompting People</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 13: Parameters, Unpacking, Variables</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 14: Prompting And Passing</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 15: Reading Files</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 16: Reading And Writing Files</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 17: More Files</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 18: Names, Variables, Code, Functions</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 19: Functions And Variables</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 20: Functions And Files</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 21: Functions Can Return Something</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 22: What Do You Know So Far?</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 23: Read Some Code</td>
+              <td align="center">Done</td>
+              <td align="center">1</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 24: More Practice</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 25: Even More Practice</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 26: Congratulations, Take A Test!</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 27: Memorizing Logic</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 28: Boolean Practice</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 29: What If</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 30: Else And If</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 31: Making Decisions</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 32: Loops And Lists</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 33: While Loops</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 34: Accessing Elements Of Lists</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 35: Branches and Functions</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 36: Designing and Debugging</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 37: Symbol Review</td>
+              <td align="center">Done</td>
+              <td align="center">n</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 38: Doing Things To Lists</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 39: Dictionaries, Oh Lovely Dictionaries</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 40: Modules, Classes, And Objects</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 41: Learning To Speak Object Oriented</td>
+              <td align="center">Done</td>
+              <td align="center">n</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 42: Is-A, Has-A, Objects, and Classes</td>
+              <td align="center">Done</td>
+              <td align="center">Done</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 43: Gothons From Planet Percal #25</td>
+              <td align="center">Done</td>
+              <td align="center">n</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 44: Inheritance Vs. Composition</td>
+              <td align="center">Done</td>
+              <td align="center">1, n</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 45: You Make A Game</td>
+              <td align="center">Done</td>
+              <td align="center">1, n</td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 46: A Project Skeleton</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 47: Automated Testing</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 48: Advanced User Input</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 49: Making Sentences</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 50: Your First Website</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 51: Getting Input From A Browser</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Exercise 52: The Start Of Your Web Game</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Advice From An Old Programmer</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Next Steps</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+            <tr>
+              <td align="left">Appendix A: Command Line Crash Course</td>
+              <td align="center"></td>
+              <td align="center"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>Note</h3>
+
+        <h4>學習技巧</h4>
+        <ul>
+          <li><strong>每天</strong>練習</li>
+          <li>如果遇到困難或是卡關，仍就<strong>繼續嘗試</strong>最後就會變簡單。</li>
+          <li><strong>專於於享受學習的過程</strong></li>
+          <li>把<strong>問題拆解</strong>成<strong>較小的問題</strong>和課程，並且<strong>每天</strong>都<strong>嘗試練習</strong>，利用這樣的步驟幾乎可以做到任何事情。</li>
+          <li><strong>專注於緩慢的進步</strong>和<strong>享受學習的過程</strong>就能從中得到好處。</li>
+          <li>最重要的是<strong>保持進程</strong>，<strong>太困難的問題，可以先略過標注之後再回來</strong>。</li>
+          <li>Never give up.</li>
+        </ul>
+        <p><a href="https://learnpythonthehardway.org/book/intro.html" title="A Note on Practice and Persistence">Reference: A Note on Practice and Persistence</a></p>
+
+        <h4>記憶技巧</h4>
+        <ul>
+          <li>Your brain will retain whatever you studied in the first 15 or 30 minutes anyway.</li>
+          <li>flash cards</li>
+          <li>write out from memory each night if stuck then glance quickly to refresh it.</li>
+        </ul>
+
+        <h4>程式碼閱讀技巧</h4>
+        <ul>
+          <li>comment every line of code</li>
+          <li>read it backward</li>
+          <li>read it loud</li>
+        </ul>
+
+        <h4>物件導向開發流程</h4>
+        <h5>Top Down</h5>
+        <h5>Bottom Up</h5>
+
+        <h4>Python 練習環境</h4>
+        <p>使用 Atom 為文字編輯器，Terminal 執行，使用 Python 2.X 而非 3</p>
+
+        <h4>註解與文件</h4>
+        <h5>註解</h5>
+        <p>
+          <br> 單行註解： <strong>＃</strong></p>
+        <h5>說明文件 pydoc</h5>
+        <ul>
+          <li>
+            <p>在 <strong>terminal 下使用 pydoc</strong> + 要查詢的指令</p>
+          </li>
+          <li>
+            <p>自訂函式中的文件註解 ( documentation comments )
+              <br> 在函式中使用 “”" 多行字串語法 “”" 會自動生成文件</p>
+          </li>
+        </ul>
+        <p>File: <a href="http://fileName.py">fileName.py</a></p>
+        <pre><code>	def functionName():
+      				""" here is the documentation comments of this function """
+      				functionBody...
+      		</code></pre>
+        <p>在 python 互動式界面中可以使用 <code>help(fileName)</code> 查詢整個檔案的說明文件或者
+          <br>
+          <code>help(fileName.functionName)</code> 查詢檔案中的單個函式。</p>
+
+        <h4>Print</h4>
+        <h5>一般</h5>
+        <pre><code>print "Strings"
+      		</code></pre>
+        <h5>使用 format</h5>
+        <pre><code>print "%d %r %s" % ( variable1, variable2, variable3 )
+
+      		%d -&gt; 顯示十進位數字
+      		%r -&gt; 顯示變數原始內容 ( raw ), 多用於 debug 時
+      		%s -&gt; 顯示字串 ( string )
+      		</code></pre>
+        <h5>使用算子</h5>
+        <pre><code>#使用乘號 *
+      		print " hi " * 10
+
+      		#使用加號連接變數
+      		print var1 + var2 + var3
+
+      		#使用逗號連結兩個 print 指令避免換行並且兩個字串中自動加上一個空白
+      		print "Hello",
+      		print "World!"
+      		結果如下：
+      		Hello World!
+      		</code></pre>
+        <h5>包含 format 的字串變數</h5>
+        <pre><code>把包含 format 的字串放入變數中，在 print 時才指定。
+      		formatter = "%r %r %r"
+      		print formatter % ( 1, 2, 3 )
+      		</code></pre>
+        <h5>print 多行字串</h5>
+        <pre><code>print """
+      		line1 %r
+      		line2 %r
+      		line3
+      		""" % ( v1, v2 )
+
+      		多行字串也可以配合 format 使用
+      		</code></pre>
+        <h5>使用 <code>,</code> 輸出變數</h5>
+        <pre><code>print "Hello ", variable, " World!"   # 使用 ,
+      		</code></pre>
+        <h5>跳脫字元</h5>
+        <pre><code>\n #換行
+      		\b #向後
+      		\f #向前
+      		\\ #\
+      		\' #'
+      		\t #1個tab
+      		...
+      		</code></pre>
+
+        <h4>輸入</h4>
+        <h5>不含參數</h5>
+        <pre><code>raw_input() #從鍵盤輸入,內容當成字串
+      		input() #自動轉換成 python 資料型態，可能有安全性問題，盡量使用 raw_input()。
+      		</code></pre>
+        <h5>含參數 ( prompt )</h5>
+        <pre><code>raw_input("the prompt string")   #參數為顯示在輸入前的字串 ( prompt )
+      		</code></pre>
+
+        <h4>Sys 函式庫</h4>
+        <h5>argv</h5>
+        <p>外部傳入參數 argument variable</p>
+        <pre><code>from sys import argv # import argv
+
+      		script, first, second, third = argv
+      		# 指定順序與名稱，第一個必為檔名即 script
+      		</code></pre>
+        <h5>exit</h5>
+        <p>跳出程式</p>
+        <pre><code>from sys import exit
+
+      		exit(0)
+      		</code></pre>
+
+        <h4>讀寫檔案</h4>
+        <h5>開檔案</h5>
+        <pre><code>開啟檔案並且回傳一個 file 物件
+      		txtFile = open(filename, mode)	 # both filename and mode are string,
+
+      		txtFile = open(filename) # 不加入 mode 則預設是 read only
+      		txtFile = open(filename, 'w') # 從頭寫入模式 (write)
+      		txtFile = open(filename, 'a') # 附加寫入模式 (append)
+      		txtFile = open(filename, 'r+') # 同時包含 read and write
+
+      		**write mode**：
+      		如果有相同名稱的檔案會被覆蓋
+      		=&gt; 先**清除檔案內容**在從頭開始寫入。
+      		</code></pre>
+        <h5>讀檔案</h5>
+        <pre><code>txtFile.read() # 讀取 file 物件中所有的內容
+      		txtFile.readline() # 一次讀取一行
+      		</code></pre>
+        <h5>寫入, 清空與關閉檔案</h5>
+        <pre><code>寫入內容
+      		txtFile.write(content)
+
+      		清空檔案內容
+      		txtFile.truncate()
+
+      		關閉檔案且儲存
+      		textFile.close()
+      		</code></pre>
+        <h5>其他檔案操作</h5>
+        <pre><code>想知道相同名稱的檔案是否存在則使用：
+      		from os.path import exists
+      		exists( filename ) # return boolean
+
+      		移動到檔案起始處：
+      		txtFile.seek(0)
+      		</code></pre>
+
+        <h4>自定義函式</h4>
+        <pre><code>def functionName(arg1, arg2):
+      			function_body
+      			return      # not necessary
+
+      		Python 的縮排也是語法的一部分，function body 必有一個 tab 的空間。
+      		</code></pre>
+        <p>另外一種的 arguments 的寫法，類似於外部讀取：</p>
+        <pre><code>def functionName(*args):
+      			arg1, arg2 = args
+      		</code></pre>
+        <p>函式回傳值，可有可無，並且<strong>可以回傳一個以上</strong>。例如：</p>
+        <pre><code>def example():
+      			variable1 = doSomethings(1)
+      			varibale2 = doSomethings(2)
+      			return variable1, variable2
+
+      		get1, get2 = example()
+      		</code></pre>
+        <h5>函數呼叫</h5>
+        <p>
+          <br> python 操作函數的方式</p>
+        <p><strong>Object.functionName( argument )</strong>
+          <br> =&gt; <strong>functionName( Object, argument )</strong></p>
+
+        <h4>函式庫、模組</h4>
+        <pre><code>import fileName
+
+      		or
+
+      		from fileName import *
+      		</code></pre>
+        <p>像 C 一般使用函式庫，每個 .py 都能成為函式庫，
+          <br> 檔案中的函式 ( def ) 與變數 ( variable ) 皆可被呼叫。
+        </p>
+        <ul>
+          <li>
+            <p>import fileName
+              <br> 使用函數時需包含檔名，類似名稱空間的方式使用。
+            </p>
+            <pre><code>  fileName.function()
+      		  fileName.variable
+      		</code></pre>
+          </li>
+          <li>
+            <p>from fileName import function
+              <br> 直接引入函數，因此不需要使用時不需包含檔名。
+              <br>
+              <code>function()</code>
+            </p>
+          </li>
+        </ul>
+
+        <h4>算子</h4>
+        <h5>邏輯算子：</h5>
+        <p>
+          <br> 算子 | 意義
+          <br> --------|----
+          <br>
+          <code>==</code> | 等於
+          <br>
+          <code>!=</code> | 不等於
+          <br>
+          <code>not</code> | 非
+          <br>
+          <code>&lt;=</code> | 小於等於
+          <br>
+          <code>&gt;=</code> | 大於等於
+          <br>
+          <code>&lt;</code> | 小於
+          <br>
+          <code>&gt;</code> | 大於
+          <br>
+          <code>and</code> | 和
+          <br>
+          <code>or</code> | 或
+          <br>
+          <code>True</code> | 真
+          <br>
+          <code>False</code> | 假
+          <br>
+          <code>1</code> | == True
+          <br>
+          <code>0</code> | == False
+          <br>
+          <code>None</code> | == False
+        </p>
+        <p><strong>數字除了 0, 1 之外並無真假值</strong></p>
+        <p><strong>使用 and, or 算子於非 True, False 時回傳並不一定為 True, False</strong>
+          <br> 例如：
+          <br> “test” <code>and</code> “test” <strong>回傳</strong> “test”,
+          <br> 0 <code>and</code> True <strong>回傳</strong> 0
+          <br> 應
+          <strong>避免使用</strong>或者需先測試過避免非預期的結果。
+        </p>
+        <h5>in 算子：</h5>
+        <pre><code>1. 作為判斷元素是否在變數中，回傳 True/False
+      			element `in` variable
+      			element `not in` variable
+
+      		2. 作為 `for` 迴圈中的迭代
+
+      				for element in variable:
+      					print element
+      		</code></pre>
+
+        <h4>判斷</h4>
+        <h5>if</h5>
+        <pre><code>if condition:
+      			execution
+
+      		elif condition:
+      			execution
+
+      		else:
+      			execution
+      		</code></pre>
+        <p><strong>Rules</strong></p>
+        <ol>
+          <li>一定要有 <strong>else</strong></li>
+          <li>利用 else 接住一些異常，印出警告。</li>
+          <li>巢狀 if 最多<strong>2</strong>層</li>
+          <li>簡化判斷式，為了可閱讀性</li>
+          <li>每個 elif 都像是文章的段落，所以可以在前後空行，有較好的閱讀性。</li>
+        </ol>
+
+        <h4>迴圈</h4>
+        <h5>for-loop</h5>
+        <pre><code>for i in range(0,3):
+      			repeat 3 times.
+      		</code></pre>
+        <p>**記得 " ： " python 中的 code block 之前會有 : **</p>
+        <h5>while-loop</h5>
+        <p>
+          <br> while condition:
+          <br> execution when condition is true
+        </p>
+
+        <h4>資料結構</h4>
+        <h5>list</h5>
+        <p>可作為 array, stack, queue 使用</p>
+        <ul>
+          <li>
+            <p>初始化</p>
+            <pre><code>  list = []
+
+      		  listExmaple1 = [1, 2, 3]
+      		  listExample2 = ['a', 'b', 'c']
+      		  listExample3 = [1, 'abc', 3]
+      		</code></pre>
+            <p>python list 可包含<strong>不同資料型態</strong>的資料。</p>
+          </li>
+          <li>
+            <p>加入資料</p>
+            <pre><code>  list.append()
+
+      		  接合 (concatenation):
+      		  list + [30, 'a', 'abc']
+      		</code></pre>
+          </li>
+          <li>
+            <p>讀取資料</p>
+            <pre><code>  list[index]
+      		  list[index : index]
+      		</code></pre>
+          </li>
+          <li>
+            <p>Functions</p>
+            <ol>
+              <li>
+                <p>len() # 長度</p>
+              </li>
+              <li>
+                <p>pop([index]) # 移除並且回傳
+                  <br> default 是最後一個元素, [ ] 在 python 文件中表示 optional 。
+                </p>
+              </li>
+            </ol>
+          </li>
+        </ul>
+        <h5>dictionary (dict)</h5>
+        <p>一種 key, value pair</p>
+        <ul>
+          <li>
+            <p>初始化</p>
+            <pre><code>  dictionary= {}
+
+      		  states = {
+      		      'Oregon': 'OR',
+      		      'Florida': 'FL',
+      		      'California': 'CA,
+      		      'New York': 'NY',
+      		      'Michigan': 'MI'
+      		  }
+      		</code></pre>
+            <p>用 <strong>:</strong> 分開 key 與 value
+              <br> 用 <strong>,</strong> 分開數個 pair
+            </p>
+          </li>
+          <li>
+            <p>加入或改寫資料</p>
+            <pre><code>  dictionary[key] = value
+      		</code></pre>
+            <p>如果 key not in dictionary 則加入, 反之改寫資料。</p>
+          </li>
+          <li>
+            <p>讀取資料</p>
+            <pre><code>  dictionary[key]
+
+      		  dictionary.get(key) # safer
+      		</code></pre>
+          </li>
+          <li>
+            <p>移除資料</p>
+            <pre><code>  del dictionary[key]
+      		</code></pre>
+          </li>
+          <li>
+            <p>functions</p>
+            <ol>
+              <li>
+                <p>keys() # 回傳所有的 key</p>
+              </li>
+              <li>
+                <p>items() # 回傳所有的 key, value pairs
+                  <br> 可使用於 <strong>for</strong> loop 例如：
+                </p>
+                <pre><code> for key, value in dictionary.items():
+      		     print "key-value pair ( %r, %r )" % ( key, value )
+      		</code></pre>
+              </li>
+              <li>
+                <p>get( key ) # 比較安全的讀取資料方式
+                  <br> 如果 key 不存在，則回傳 None ，等同於 False
+                  <br> use case:
+                </p>
+                <pre><code> state = states.get('Texas') # return None if 'Texas' is not a key.
+
+      		 if not state: # (not None) == True
+      		     print "Sorry, no Texas."
+      		</code></pre>
+              </li>
+            </ol>
+          </li>
+        </ul>
+
+        <h4>物件導向</h4>
+        <h5>Class</h5>
+        <p>new-style class 可以使用更多能力，例如 super()</p>
+        <pre><code>class ClassName(object):
+
+      			def __init__(self, arguments):
+      				self.variableName = arguments
+
+      			def functions(self, arguments):
+      		</code></pre>
+        <p><code>object</code> 物件的 class ，等同於 Java 中所有的 class 都繼承 Object，
+          <br> 但是 python 的 object 類別是小寫，是 python 的歷史錯誤。
+        </p>
+        <p><code>def __init__(self):</code> 即建構子 ( constructor )</p>
+        <p><code>self</code> 即 this pointer</p>
+        <ul>
+          <li>
+            <p>繼承</p>
+            <pre><code>  class ClassName( ParentClass ):
+
+      		  	def __init__(self):
+      		  		# 使用 ParentClass 中的  __init__ 方法
+      		  		super( ClassName, Self ).__init__( arguments )
+      		</code></pre>
+          </li>
+        </ul>
+        <h5>Object</h5>
+        <ul>
+          <li>
+            <p>生成物件</p>
+            <pre><code>  objectName = ClassName()
+      		</code></pre>
+          </li>
+        </ul>
+      </section>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 2. <a href="https://docs.python.org.tw/3/tutorial/index.html">Python3.5 官方教學文件</a></h2>
+
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="left">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="left">124</td>
+            </tr>
+            <tr>
+              <td align="left">1 淺嘗滋味</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2 使用 Python 直譯器</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2.1. 啟動直譯器</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2.1.1. 傳遞引數</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2.1.2. 互動模式</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2.2. 直譯器與它的環境</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2.2.1. 原始碼的字元編碼 (encoding)</td>
+              <td align="left">done 7</td>
+            </tr>
+            <tr>
+              <td align="left">3 一個非正式的 Python 簡介</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.1. 把 Python 當作計算機使用</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.1.1. 數字 (Number)</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.1.2. 字串 (String)</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">3.1.3. List（串列）</td>
+              <td align="left">done 12</td>
+            </tr>
+            <tr>
+              <td align="left">3.2. 初探程式設計的前幾步</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4 深入了解流程控制</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.1. if 陳述式</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.2. for 陳述式</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.3. range() 函式</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.4. break 和 continue 陳述、迴圈內 else 段落</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.5. pass 陳述式</td>
+              <td align="left">done 19</td>
+            </tr>
+            <tr>
+              <td align="left">4.6. 定義函式 (function)</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7. More on Defining Functions</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.1. Default Argument Values</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.2. Keyword Arguments</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.3. Arbitrary Argument Lists</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.4. Unpacking Argument Lists</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.5. Lambda Expressions</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.6. 說明文件字串</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4.7.7. Function Annotations</td>
+              <td align="left">done 28</td>
+            </tr>
+            <tr>
+              <td align="left">4.8. Intermezzo: Coding Style</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5 資料結構</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.1. 進一步了解 List（串列）</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.1.1. 將 List 作為 Stack（堆疊）使用</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.1.2. 將 List 作為 Queue（佇列）使用</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.1.3. List Comprehensions（串列綜合運算）</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.1.4. 巢狀的 List Comprehensions</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.2. del 陳述式</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.3. Tuples 和序列 (Sequences)</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.4. 集合 (Sets)</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.5. 字典（Dictionary）</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.6. 迴圈技巧</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.7. 更多條件式主題</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">5.8. 序列和其他資料結構之比較</td>
+              <td align="left">done 42</td>
+            </tr>
+            <tr>
+              <td align="left">6 模組</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.1. More on Modules</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.1.1. Executing modules as scripts</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.1.2. The Module Search Path</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.1.3. “Compiled” Python files</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.2. Standard Modules</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.3. The dir() Function</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.4. Packages</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.4.1. Importing * From a Package</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.4.2. Intra-package References</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6.4.3. Packages in Multiple Directories</td>
+              <td align="left">done 53</td>
+            </tr>
+            <tr>
+              <td align="left">7 輸入和輸出</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">7.1. Fancier Output Formatting</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">7.1.1. Old string formatting</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">7.2. Reading and Writing Files</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">7.2.1. Methods of File Objects</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">7.2.2. Saving structured data with json</td>
+              <td align="left">done 59</td>
+            </tr>
+            <tr>
+              <td align="left">8 錯誤和例外</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.1. 語法錯誤</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.2. 例外</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.3. 處理例外</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.4. Raising Exceptions</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.5. User-defined Exceptions</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.6. Defining Clean-up Actions</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">8.7. Predefined Clean-up Actions</td>
+              <td align="left">done 67</td>
+            </tr>
+            <tr>
+              <td align="left">9 Classes</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.1. A Word About Names and Objects</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2. Python Scopes and Namespaces</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.2.1. Scopes and Namespaces Example</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3. A First Look at Classes</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.1. Class Definition Syntax</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.2. Class Objects</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.3. Instance Objects</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.4. Method Objects</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.3.5. Class and Instance Variables</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.4. Random Remarks</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.5. Inheritance</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.5.1. Multiple Inheritance</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.6. Private Variables</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.7. Odds and Ends</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.8. Exceptions Are Classes Too</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.9. Iterators</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.10. Generators</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">9.11. Generator Expressions</td>
+              <td align="left">done 86</td>
+            </tr>
+            <tr>
+              <td align="left">10 Python 標準函式庫概覽</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.1. 作業系統介面</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.2. 檔案之萬用字元</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.3. 命令列引數</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.4. 錯誤輸出重新導向與程式終止</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.5. 字串樣式比對</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.6. 數學相關</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.7. 網路存取</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.8. 日期與時間</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.9. 資料壓縮</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.10. 效能量測</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.11. 品質控管</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">10.12. 標準模組庫</td>
+              <td align="left">done 99</td>
+            </tr>
+            <tr>
+              <td align="left">11 Python標準函式庫概覽 – Part II</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.1. Output Formatting</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.2. Templating</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.3. Working with Binary Data Record Layouts</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.4. Multi-threading</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.5. Logging</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.6. Weak References</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.7. Tools for Working with Lists</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">11.8. Decimal Floating Point Arithmetic</td>
+              <td align="left">done 108</td>
+            </tr>
+            <tr>
+              <td align="left">12 Virtual Environments and Packages</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">12.1. 簡介</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">12.2. Creating Virtual Environments</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">12.3. Managing Packages with pip</td>
+              <td align="left">done 112</td>
+            </tr>
+            <tr>
+              <td align="left">13 What Now?</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">14 Interactive Input Editing and History Substitution</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">14.1. Tab Completion and History Editing</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">14.2. Alternatives to the Interactive Interpreter</td>
+              <td align="left">done 116</td>
+            </tr>
+            <tr>
+              <td align="left">15 Floating Point Arithmetic: Issues and Limitations</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">15.1. Representation Error</td>
+              <td align="left">done 118</td>
+            </tr>
+            <tr>
+              <td align="left">16 附錄</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">16.1. 互動模式</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">16.1.1. Error Handling</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">16.1.2. Executable Python Scripts</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">16.1.3. The Interactive Startup File</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">16.1.4. The Customization Modules</td>
+              <td align="left">done 124</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <br>
+
+      <section>
+        <h3>Note</h3>
+
+        <h4>互動式相關指令</h4>
+        <p>在 terminal 下執行指令或腳本</p>
+        <pre><code>python -c command [arg] # 指令可為多行
+      		python -m module [arg]
+      		python -i # 執行完腳本後留在互動式界面中
+      		</code></pre>
+        <p>在 python 互動式界面中，當計算機運算時</p>
+        <pre><code>_ : 儲存最後一次計算的結果，可以方便之後的計算。
+
+      		&gt;&gt;&gt; 2 + 3
+      		5
+      		&gt;&gt;&gt; _ ** 2
+      		25
+      		</code></pre>
+
+        <h4>原始碼的編碼</h4>
+        <pre><code>default: UTF-8
+
+      		指定特殊編碼指令，寫在第一行或第二行：
+      		# -*- coding: encoding -*-
+      		</code></pre>
+
+        <h4>運算子</h4>
+        <ol>
+          <li>
+            <p>/ 除法</p>
+            <p>python3:
+              <br> division always returns a floating point number
+            </p>
+          </li>
+          <li>
+            <p>// 整數除法</p>
+            <p>回傳整數，無條件捨去小數點。</p>
+          </li>
+          <li>
+            <p>** power 次方</p>
+          </li>
+        </ol>
+
+        <h4>字串</h4>
+        <p>python 中字串是 immutable，因此一個已經宣告的字串無法被更改。
+          <br> 如要更改，只能創造一個新的。
+        </p>
+        <p>字串變數類似於 array ，可使用 [index], [ index : index] 取值</p>
+        <h5>raw string</h5>
+        <pre><code>不把 \ 當作跳脫字元則在字串前加入 r
+
+      		&gt;&gt;&gt;print(r'C:\some\name')
+      		C:\some\name
+      		</code></pre>
+        <h5>多行字串, 換行控制</h5>
+        <pre><code>在多行字串中每行的結尾可以使用 \ 避免換行。
+
+      		&gt;&gt;&gt;print("""\
+      		...Hello\
+      		... World\
+      		...""")
+      		Hello World
+      		</code></pre>
+        <h5>配合運算子</h5>
+        <pre><code>+ : 連接
+      		* : 重複
+      		len() : 取得字串長度
+      		</code></pre>
+        <h5>相鄰的字串自動連接</h5>
+        <pre><code>&gt;&gt;&gt;'py' 'thon'
+      		'python'
+
+      		可以用在很長的字串時
+      		text = ('Put several strings within parentheses '
+      		...    'to have them joined together.')
+      		</code></pre>
+
+        <h4>多重賦值</h4>
+        <pre><code>單行可以多重賦值，可以精簡指令行數。
+      		使用與否需考量可閱讀性的好壞。
+
+      		a, b = 0, 1
+      		a, b = b, a + b
+      		</code></pre>
+
+        <h4>print()</h4>
+        <p>python3 之後，使用格式與 python2 不同。
+          <br> 使用 print( ) 。
+        </p>
+        <ul>
+          <li>
+            <p>參數 end</p>
+            <p>利用 end 參數取代換行，更靈巧控制輸出格式。
+              <br> print(content, end = ‘,’)
+            </p>
+          </li>
+        </ul>
+
+        <h4>迴圈</h4>
+        <p>如果需要在迴圈中更改參考到的資料，
+          <br> 建議以複製過後的資料作為迭代，再來更改原變數中的資料。
+        </p>
+        <p>例如使用 python 中的 slice 複製一份新的內容。</p>
+        <pre><code> for w in words[:]:
+      			 # Loop over a slice copy of the entire list.
+      		</code></pre>
+        <h5>for-loop</h5>
+        <p>python for-loop 可以配合 in 算子迭代任何資料型態中的內容。</p>
+        <pre><code>box = ['hi', 'there']
+      		for x in box:
+      			print(x, len(x))
+      		</code></pre>
+        <h5>other keywords</h5>
+        <ul>
+          <li>continue</li>
+          <li>break</li>
+          <li>pass</li>
+        </ul>
+
+        <h4>函式 (function)</h4>
+        <p>必有回傳值，沒有指定時回傳 <strong>None</strong> 。</p>
+        <p>python call by <strong>value</strong> (where the <strong>value</strong> is always an <strong>object reference</strong>)</p>
+        <ul>
+          <li>
+            <p>函式重新命名
+              <br> 可藉由 assignment 把函式指派給新的名子，同時可以呼叫到舊的函式內容。</p>
+            <pre><code>  &gt;&gt;&gt; fib
+      		  &lt;function fib at 10042ed0&gt;
+      		  &gt;&gt;&gt; f = fib
+      		  &gt;&gt;&gt; f(100)
+      		  0 1 1 2 3 5 8 13 21 34 55 89
+      		</code></pre>
+          </li>
+        </ul>
+        <h5>函式參數 ( arguments )</h5>
+        <ul>
+          <li>設定參數<strong>預設值</strong> ( default arguments )</li>
+        </ul>
+        <p>函式參數可以有預設值設定，在參數後面使用 <code>=</code> 即可指定預設值。</p>
+        <pre><code>	def f(a, b = 1, c = 2):
+      				print(a,b,c)
+      		</code></pre>
+        <p><strong>重要:</strong> 如果預設值是 mutable 物件，例如空序列 <code>[]</code>，則預設值的物件只會被生成一次，意思是重複呼叫函式會使用到同一個物件，可能會有舊的值存在。</p>
+        <pre><code>&gt;&gt;&gt;def f(a, L=[]):
+      		&gt;&gt;&gt;    L.append(a)
+      		&gt;&gt;&gt;    return L
+
+      		&gt;&gt;&gt;print(f(1))
+      		[1]
+      		&gt;&gt;&gt;print(f(2))
+      		[1, 2]
+      		</code></pre>
+        <p>可以使用以下方式避開在預設值生成物件：</p>
+        <pre><code>def f(a, L=None):
+      		    if L is None:
+      		        L = []
+      		    L.append(a)
+      		    return L
+      		</code></pre>
+        <br>
+        <ul>
+          <li><strong>指定</strong>參數 ( keyword arguments )</li>
+        </ul>
+        <p>在呼叫函式時可以<strong>指定</strong>參數傳值，藉由定義函式參數時所使用的<strong>變數名稱</strong>指定，可不依定義時順序指定傳值。</p>
+        <pre><code>def f(v1, v2 = 'default', v3 = 'value'):
+
+      		f(v2 = 'new', v1 = 'value')
+      		</code></pre>
+        <p><strong>限制</strong>是指定參數後面不能再有不指定的參數，因為直譯器無法確定是哪個參數的值。</p>
+        <br>
+        <ul>
+          <li><strong>隨意</strong>數量參數 ( arbitrary arguments )</li>
+        </ul>
+        <p>參數為 tuple 或 dictionary 資料型態，可以傳入不限定數量的參數。
+          <br> tuple 使用 * ，dictionary 使用 ** ，並且如果同時使用時 tuple 類型必須在 dictionary 類型之前。
+        </p>
+        <pre><code>def f(v1, *tuple_V, **dictionary_V):
+
+      		f('v1', 1, 2, 3, k1 = 'a', k2 = 'b')
+      		</code></pre>
+        <p>如果在隨意參數<strong>之後</strong>還有其他類型參數的話，必須是<strong>指定</strong>參數。</p>
+        <pre><code>def f(*tuple_V, v1 = 'default'):
+
+      		f(1,2,3, v1 = 'value')
+      		</code></pre>
+        <br>
+        <ul>
+          <li><strong>打開資料結構</strong>後傳入參數 ( unpacking )</li>
+        </ul>
+        <p>只要資料型態中的資料類型與數量<strong>對應</strong>函式的參數，不管是 tuple 或者 dictionary 皆可以透過 unpacking 直接傳給函式作為參數。
+          <br> tuple 使用 * ， dictionary 使用 ** 解開資料型態。
+        </p>
+        <pre><code>tuple:
+
+      		&gt;&gt;&gt;args = [3, 6]
+      		&gt;&gt;&gt;list(range(*arfgs))
+      		[3, 4, 5]
+
+      		dictionary 配合指定參數:
+
+      		&gt;&gt;&gt;def f(v1, v2 = 'default', v3 = 'value'):
+      		...    print(v1, v2, v3)
+      		...
+      		&gt;&gt;&gt;args = {'v1' : 'this', 'v2' : 'is', 'v3' :  'fashion'}
+      		&gt;&gt;&gt;f(**args)
+      		this is fashion
+      		</code></pre>
+
+        <h4>python 程式碼慣例</h4>
+        <p>參考官方文件 <a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a></p>
+        <ul>
+          <li>縮排使用 4 個空白，而非 tab。</li>
+          <li>每一行程式碼不超過 79 個字元。</li>
+          <li>如果可以註解寫在同一行程式碼後面</li>
+          <li>使用 docstrings 產生文件</li>
+          <li>命名 Classes 使用 CamelCase，functions or methods 使用 小寫與 _ 。</li>
+        </ul>
+
+        <h4>資料結構</h4>
+        <h5>List （串列）</h5>
+        <p>mutable 資料，通常儲存同質資料。</p>
+        <ul>
+          <li>當作 array 和 stack 使用，雖然也能作為 queue 使用但是效能較差。</li>
+          <li>如要使用 queue 推薦使用 collections.deque 實作。</li>
+        </ul>
+        <h5>Tuple 與 sequence （序列）</h5>
+        <p><strong>Immutable</strong> 通常儲存異質資料，可以以 index 讀取。</p>
+        <ul>
+          <li>
+            <p>初始化</p>
+            <pre><code>  直接使用 , 隔開，使用 ( ) 可有可無。
+      		  t = 123, 'abc'
+      		  t = ( 123, 'abc' )
+      		</code></pre>
+          </li>
+          <li>
+            <p>多重賦值</p>
+            <pre><code>  只要數量相對，資料會自動 unpacking 達到多重賦值
+      		  t = 123, 'abc'
+      		  a, b = t
+      		</code></pre>
+          </li>
+        </ul>
+        <h5>Set （集合）</h5>
+        <p>無序，沒有重複的資料，有提供集合運算。</p>
+        <ul>
+          <li>
+            <p>初始化</p>
+            <pre><code>  使用 { } 或 set()
+      		  &gt;&gt;&gt;s = set('aaaaaabbbdddcc')
+      		  &gt;&gt;&gt;s
+      		  {'b', 'c', 'a', 'd'}
+      		</code></pre>
+          </li>
+        </ul>
+        <h5>Dictionary (字典)</h5>
+        <p>無序的 key, value pairs 。</p>
+        <ul>
+          <li>
+            <p>當 key 為字串時的簡化語法，key 不需使用 ’ or " 表示字串</p>
+            <pre><code>  &gt;&gt;&gt; dict(sape=4139, guido=4127, jack=4098)
+      		  {'sape': 4139, 'jack': 4098, 'guido': 4127}
+      		</code></pre>
+          </li>
+        </ul>
+        <h5>Comprehensions （綜合運算）</h5>
+        <p>藉由 for、 in 和 if 算子的運算，作為資料內容的生成表達。
+          <br> 不需要使用迴圈結構，產生資料內容。
+          <br> 以更簡化與直觀的方式產生資料，類似 lambda 的功能。
+          <br> 非常類似數學集合的表示方式。
+        </p>
+        <pre><code>&gt;&gt;&gt; [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
+
+      		[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+      		</code></pre>
+        <p>甚至可以以巢狀運算表示，只是可讀性可能較差。</p>
+        <pre><code>以巢狀運算達到矩陣轉置
+
+      		&gt;&gt;&gt; matrix = [
+      		...     [1, 2, 3, 4],
+      		...     [5, 6, 7, 8],
+      		...     [9, 10, 11, 12],
+      		... ]
+
+      		&gt;&gt;&gt; [[row[i] for row in matrix] for i in range(4)]
+      		[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+      		</code></pre>
+
+        <h4>模組與模組庫 ( Module &amp; Package )</h4>
+        <h5>import</h5>
+        <ul>
+          <li>from package import (module or item)</li>
+          <li>程式只載入 import 後面的內容，使用時亦從 import 的資料階層開始呼叫。</li>
+          <li>盡量不要使用 import * ，避免不預期的邊際效應。</li>
+        </ul>
+        <h5>Module ( 模組 )</h5>
+        <p>當同一個 python 檔案同時作為 script 與 module 使用時，可以利用以下程式碼分開使用時機：</p>
+        <pre><code>if __name__ == '__main__' :
+      		    # script code here
+      		</code></pre>
+        <p><code>__name__</code> 當作 module 被呼叫時，會是 python 檔案名稱；
+          <br> 作為 script 執行時則是 <code>"__main__"</code>。
+        </p>
+        <p>這種方式可以將 module 所需要的測試寫在同一個檔案裡。</p>
+        <h5>dir([object]) 查詢 namespace</h5>
+        <p>內建函數 ( built-in function ) ， dir([object]) 可以用來取得 module 裡的 item names ，不加參數時 dir() ，可以取得當前環境的 names 。</p>
+        <h5>Package (模組庫)</h5>
+        <p>把多個 modules 放置於相同的資料夾做成 package ，可以在包含資料夾做成階層模組庫。</p>
+        <p>每個資料夾中都會有 <code>__init__.py</code> 內容可為空，這樣使 python 直譯器能識別該資料夾為一個 package 結構。
+          <br>
+          <code>__init__.py</code> 中亦可定義其他內容。
+        </p>
+
+        <h4>輸入和輸出</h4>
+        <h5>String Format</h5>
+        <ul>
+          <li>字串排版函數 rjust(), ljust(), center(), zfill()</li>
+        </ul>
+        <p>新的 String Format : str.format() 以下為各種不同的例子。</p>
+        <pre><code>'We are the {} who say "{}!"'.format('knights', 'Ni')
+
+      		'The story of {0}, {1}, and {other}.'.format('Bill', 'Manfred', other = 'Georg'
+
+      		'{0:.3f}'.format(math.pi)
+
+
+
+      		table = {'Sjoerd': 4127, 'Jack': 4098, 'Dcab': 8637678}
+
+      		'Jack: {0[Jack]:d}; Sjoerd: {0[Sjoerd]:d}; ''Dcab: {0[Dcab]:d}'.format(table)
+
+      		'Jack: {Jack:d}; Sjoerd: {Sjoerd:d}; Dcab: {Dcab:d}'.format(**table)
+      		</code></pre>
+        <h5>File I/O</h5>
+
+        <h4>Efficient Way of Read</h4>
+        <pre><code>f = open('filename','mode')
+      		for line in f:
+      			# operating about line
+      		</code></pre>
+
+        <h4>open file with key word <code>with</code></h4>
+        <p>這是一種良好的操作檔案的方式，因為他會自動 f.close() 關閉檔案，
+          <br> 就算發生 exception 依舊會自動關閉檔案。不需要繁複的 try-finally 語法。
+        </p>
+        <pre><code>with open('filename', 'r') as f:
+      		    read_data = f.read()
+      		</code></pre>
+        <h5 id="json">JSON</h5>
+
+        <h4>例外處理 (Exception)</h4>
+        <p>Python 中的 Exception ，除了 Base Exception class 使用 Exception 之外。其他繼承的例外處理皆使用 Error 作為其名稱。
+          <br> 除了 SyntaxError 為 parsing error 外，其他為 run-time error
+        </p>
+        <p>語法使用：</p>
+        <pre><code>try:
+      			# do something
+      			raise SomeError('WithAttributes')
+      		except SomeKindError:
+      		except ( HandleError, MultipleError, ATimeError ):
+      		except OSError as err:
+      		    print("OS error: {0}".format(err))
+      		except:
+      		    print("Unexpected error:", sys.exc_info()[0])
+      		    raise # raise the exception again then show the description.
+      		else:
+      		    # when try scope has no exception
+      		finally:
+      		    # doing this not matter what. clean-up
+      		</code></pre>
+        <br>
+        <h5>預先定義好的 clean-up 物件</h5>
+        <p>python 中有些物件有定義出 clean-up 機制例如 File，這種設計會被寫在說明文件中。此時可以使用 with 語法，並且保證了 clean-up 機制。</p>
+        <p>範例：</p>
+        <pre><code>with open("myfile.txt") as f:
+      		    for line in f:
+      		        print(line, end="")
+      		</code></pre>
+
+        <h4><br><br>
+      		Classes</h4>
+        <p>類似於 C++ 中 static 的 data ，一個 class 只有一份被其所有的 objects 使用。</p>
+        <h5>static data in python</h5>
+        <pre><code>class ClassName:
+
+      		    shared_data = 0
+      		    # class variable shared by all instances (static variable)
+
+      			def __init__(self, name):
+      		        self.name = name
+      		    # instance variable unique to each instance
+      		</code></pre>
+        <h5>多重繼承 (Multiple Inheritance)</h5>
+        <p>為了避免參考問題，python 中的呼叫順序為 depth-first, left-to-right, 並且每個 class 只被查詢一次。因此會產生不重複的線性查詢序。</p>
+        <ul>
+          <li>一些關於繼承的 built-in functions:</li>
+        </ul>
+        <ol>
+          <li>isinstance( instance, class ) return True / False</li>
+          <li>issubclass( subclass, parentclass ) return True / False</li>
+        </ol>
+        <h5>private</h5>
+        <p>python 中並沒有 private 的使用，因此所以的成員皆可以被外部呼叫。但是 python 中有命名慣例，來代表希望只被內部使用的成員。</p>
+        <p>命名慣例在希望使用 private 的成員名稱前面加上 <code>__</code> or <code>_</code> ，
+          <br> 例如 <code>__spam</code>
+        </p>
+        <h5>自訂 iterator</h5>
+        <p>實做 iterator 之後就能在使用 for-loop 時配合 <code>in</code> 算子執行迭代。
+          <br> 以下為官方文件中的例子：
+        </p>
+        <pre><code>class Reverse:
+      		    """Iterator for looping over a sequence backwards."""
+      			def __init__(self, data):
+      		        self.data = data
+      		        self.index = len(data)
+
+      		    def __iter__(self):
+      		        return self
+
+      		    def __next__(self):
+      		        if self.index == 0:
+      		            raise StopIteration
+      		        self.index = self.index - 1
+      		        return self.data[self.index]
+      		</code></pre>
+        <p>重點在於</p>
+        <ol>
+          <li><code>__iter__</code> 回傳 <code>self</code></li>
+          <li>實作 <code>__next__</code></li>
+          <li>包含 raise StopIteration 作為中止條件</li>
+        </ol>
+
+        <h4>常用的標準函式庫</h4>
+        <h5>作業系統介面 os, 檔案操作 shutil</h5>
+        <ul>
+          <li>
+            <p>os.system(’ system call commands ') # 直接把指令以字串型態傳出執行。</p>
+          </li>
+          <li>
+            <p>os.getcwd() # 取得當前位置
+              <br> 等等其他常見的殼層操作
+            </p>
+          </li>
+        </ul>
+        <h5>檔案路徑搜尋 glob</h5>
+        <p>可以通過 * wildcard 查詢檔案</p>
+        <h5>正規表示式字串操作 re</h5>
+        <h5>數學相關 math, random, statistics, decimal</h5>
+        <h5>網路相關 urllib.request</h5>
+        <h5>日期與時間 datetime</h5>
+        <h5>資料壓縮 zlib, gzip, bz2, lzma, zipfile, tarfile</h5>
+        <h5>效能量測 timeit</h5>
+        <h5>程式測試 doctest, unittest</h5>
+        <h5>多執行序 threading</h5>
+
+        <h4>虛擬環境與函式庫引入 pip</h4>
+        <p>python 提供 script : <strong>pyvenv</strong> ，可以創造出虛擬的工作環境，
+          <br> 為了讓不同的 python 程式可以運行在指定的 python 版本中。
+          <br> 可以通過使用 <strong>pip</strong> 模組中的指令，管理不同函式庫的版本，
+          <br> 並且可以做成清單重複使用。
+        </p>
+        <h5>pyvenv</h5>
+        <h5>pip</h5>
+        <h5>pypi</h5>
+        <p>Python Package Index, 這是一個第三方使用者創造的函式庫的官方管理儲存庫。
+          <br>
+          <a href="https://pypi.python.org/pypi">pypi 網站連結</a>
+        </p>
+
+        <h4>Python 其他官方建議的資源</h4>
+        <h5><a href="https://docs.python.org/3.5/library/index.html#the-python-standard-library">標準函式庫</a></h5>
+        <h5><a href="https://docs.python.org.tw/3/installing/index.html#installing-index">安裝第三方函式庫文件</a></h5>
+        <h5><a href="https://docs.python.org.tw/3/reference/index.html#reference-index">細部討論 python 語法</a></h5>
+        <h5><a href="https://www.python.org/">python 官方網站</a></h5>
+        <h5><a href="https://pypi.python.org/pypi">Pypi</a></h5>
+        <h5><a href="https://code.activestate.com/recipes/langs/python/">Python Cookbook</a></h5>
+        <p>大量的 python 實作程式碼，包含實用的 script 與其他函式庫。</p>
+        <h5><a href="http://pyvideo.org/">python conference video</a></h5>
+        <h5><a href="https://scipy.org/">scipy : Scientific Python project</a></h5>
+
+        <h4>Python shell</h4>
+        <p>python 中的互動式殼層 (shell)，
+          <br> 可以使用 <strong>tab</strong> 自動語法補全。
+        </p>
+        <p>在自定義的函式庫中也可以支援語法自動補全，
+          <br> 需在類別中實作 <code>__getattr()__</code>。
+        </p>
+        <h5>IPython 與 bpython</h5>
+        <p>IPython 與 bpython 是非官方開發的互動式殼層，
+          <br> 有更好的編輯能力，包含語法高亮、更強大的自動補完等等。
+        </p>
+
+        <h4>浮點數運算與限制</h4>
+        <p>在電腦中儲存小數的方式，是轉為二進位小數。
+          <br> 因此以十進制的小數，無法被
+          <strong>準確</strong>的表達，大多數皆是近似值，
+          <br> 因此在做運算時，常常會得到非預期的判斷，尤其是作等號 <code>==</code> 判別時。
+        </p>
+        <h5>decimal, fractions, SciPy</h5>
+        <p>如果需要考慮精確值時可使用函式庫 <strong>decimal</strong> 和 <strong>fractions</strong> ，或者直接使用專門做數值運算的第三方函式庫 <a href="https://scipy.org/"><strong>SciPy</strong></a></p>
+        </section>
+    </article>
+    <hr>
+
+    <article>
+      <h2>學習主軸 3. <a href="https://www.codecademy.com/learn/learn-python">codecademy : Python (lesson broken at 8)</a></h2>
+
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="left">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="left">12</td>
+            </tr>
+            <tr>
+              <td align="left">1 Python Syntax</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">2 Strings and Console Output</td>
+              <td align="left">done 2</td>
+            </tr>
+            <tr>
+              <td align="left">3 Conditionals and Control Flow</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">4 Functions</td>
+              <td align="left">done 4</td>
+            </tr>
+            <tr>
+              <td align="left">5 Lists &amp; Dictionaries</td>
+              <td align="left">done</td>
+            </tr>
+            <tr>
+              <td align="left">6 Student Becomes the Teacher</td>
+              <td align="left">done 6</td>
+            </tr>
+            <tr>
+              <td align="left">7 Lists and Functions</td>
+              <td align="left">done 7</td>
+            </tr>
+            <tr>
+              <td align="left">8 Loops</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">9 Exam Statistics</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">10 Advanced Topics in Python</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">11 Introduction to Classes</td>
+              <td align="left"></td>
+            </tr>
+            <tr>
+              <td align="left">12 File Input and Output</td>
+              <td align="left"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>Note</h3>
+
+        <h4>多行註解</h4>
+        <pre><code>"""
+      		comments
+      		here
+      		"""
+      		</code></pre>
+
+        <h4>datetime module</h4>
+
+        <h4>list methods</h4>
+        <ul>
+          <li>pop(index)</li>
+          <li>remove(itme)</li>
+          <li>del()</li>
+        </ul>
+
+        <h4>String methods</h4>
+        <ul>
+          <li>" string ".join()</li>
+        </ul>
+
+        <h4>指令分段</h4>
+        <ul>
+          <li>使用 \</li>
+        </ul>
+      </section>
+    </article>
+    <hr>
+
+    <article>
+      <h2>專題學習 1. <a href="http://djangogirlstaipei.herokuapp.com/tutorials/">Django Girls 教學手冊</a></h2>
+
+      <section>
+        <h3>進度紀錄</h3>
+        <table>
+          <thead>
+            <tr>
+              <th align="left">Table of Contents</th>
+              <th align="center">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">count</td>
+              <td align="center">8</td>
+            </tr>
+            <tr>
+              <td align="left">課前準備</td>
+              <td align="center">-</td>
+            </tr>
+            <tr>
+              <td align="left">1 安裝開發環境</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">2 PythonAnywhere 註冊與設定</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">前導課程</td>
+              <td align="center">-</td>
+            </tr>
+            <tr>
+              <td align="left">3 命令列</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">4 Python 入門</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">5 HTML</td>
+              <td align="center">done 5</td>
+            </tr>
+            <tr>
+              <td align="left">Django 教學</td>
+              <td align="center">-</td>
+            </tr>
+            <tr>
+              <td align="left">6 Django 學習指南</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">進階教材</td>
+              <td align="center">-</td>
+            </tr>
+            <tr>
+              <td align="left">7 用 Git 進行版本控制</td>
+              <td align="center">done</td>
+            </tr>
+            <tr>
+              <td align="left">8 部屬到 Heroku</td>
+              <td align="center">done 8</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </article>
+    <hr>
+
+    <article>
+      <h2>專題學習2. 探索標準函式庫與 build-in function</h2>
+      <h3><a href="https://docs.python.org/3.5/library/index.html#the-python-standard-library">標準函式庫</a></h3>
+      <h3><a href="https://docs.python.org.tw/3/installing/index.html#installing-index">安裝第三方函式庫文件</a></h3>
+      <h3><a href="https://docs.python.org.tw/3/reference/index.html#reference-index">細部討論 python 語法</a></h3>
+    </article>
+    <hr>
+
+    <article>
+      <h2>真實文本 mud your hand</h2>
+    </article>
+    <hr>
+
+    <article>
+      <h2>其他資源</h2>
+
+      <h3>完整學習地圖資源</h3>
+      <ul>
+        <li><a href="https://openhome.cc/Gossip/Python/index.html">良葛葛 python</a></li>
+        <li><a href="http://www.diveintopython3.net/">Dive into Python 3</a></li>
+      </ul>
+
+      <h3>其他</h3>
+      <ul>
+        <li><a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a></li>
+        <li><a href="https://docs.python.org/3.5/library/functions.html">Built-in Functions</a></li>
+        <li>Flake8</li>
+        <li><a href="http://seanlin.logdown.com/posts/239883-python-idioms">Python 慣用語</a></li>
+        <li><a href="http://wiki.python.org.tw/Pot">Python 台灣使用者群組</a></li>
+      </ul>
+    </article>
+  </main>
+</body>
+</html>
