@@ -67,232 +67,73 @@
   <hr>
 
   <main>
-    <article>
-      <h2>可以把玩的檢查清單</h2>
+    <article class="Repository">
+      <section class="Framework">
+        <h3>知識框架</h3>
+        <ul>
+          <li>控制網頁的外觀與版面配置</li>
+          <li>選擇器 selectors</li>
+          <li>屬性與值 properties and values</li>
+          <li>箱型模組 box model</li>
+        </ul>
+      </section>
+
+      <section class="Knowledge_Base">
+        <h3>基底</h3>
+
+
+      </section>
     </article>
 
-    <article>
+    <article class="Outline">
       <h2>wikipedia 簡介</h2>
-      <p><a href="https://zh.wikipedia.org/wiki/%E5%B1%82%E5%8F%A0%E6%A0%B7%E5%BC%8F%E8%A1%A8">chinese version wikipeida of CSS</a></p>
 
-      <p><a href="https://en.wikipedia.org/wiki/Cascading_Style_Sheets">wikipedia of CSS</a></p>
-      <ul>
-        <li>選擇器</li>
-      </ul>
-
-      <p><a href="https://en.wikipedia.org/wiki/CSS_framework">wikipedia of CSS framework</a></p>
-      <ul>
-        <li>
-          <p><a href="https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)">Bootstrap</a></p>
-          <p>專注於前端的 framework
-            <br> 可以選擇使用包含 Javascript 的擴充功能
-            <br> 開源的專案 GitHub
-          </p>
-        </li>
-        <li>
-          <p><a href="https://en.wikipedia.org/wiki/Foundation_(framework)">Foundation</a></p>
-          <p>回應式, 開源, 包含 Javascript, 前端的 framework</p>
-        </li>
-        <li>
-          <p>WC.CSS # 簡單, 只包含CSS</p>
-        </li>
-      </ul>
-
-      <p><a href="https://zh.wikipedia.org/wiki/Sass">Sass</a></p>
-      <p>CSS的前處理器</p>
-      <p>提供很多語法糖，以程式語言的方式描述設計者的意圖，在轉譯為 CSS 語法。</p>
-
-      <p>DOM</p>
-      <p><a href="https://ithelp.ithome.com.tw/articles/10108783">https://ithelp.ithome.com.tw/articles/10108783</a>
-        <br>
-        <a href="https://openhome.cc/Gossip/JavaScript/W3CDOM.html">https://openhome.cc/Gossip/JavaScript/W3CDOM.html</a>
+      <p>
+        <a href="https://zh.wikipedia.org/wiki/%E5%B1%82%E5%8F%A0%E6%A0%B7%E5%BC%8F%E8%A1%A8">wikipeida of CSS</a>
+        <ul>
+          <li>選擇器 (selector)</li>
+          <li>屬性:值 (property:value pair)</li>
+        </ul>
       </p>
-      <p>Document Object Model, DOM
-        <br> 作為程式語言與瀏覽器之間的中間層，一種標準界面。
-        <br> 前端使用
-        <br> 由 W3C 訂定。
-      </p>
-    </article>
-    <hr>
 
-    <article>
-      <h2>學習主軸 1. <a href="https://www.codecademy.com/learn/learn-css">codecademy - learn css</a> undone</h2>
-      <ul>
-        <li>
-          <p>Cascading Style Sheets, CSS</p>
-        </li>
-        <li>
-          <p>為了從 HTML 中分離樣式 (style) 程式碼，
-            <br>
-            <strong>HTML</strong> 文件中只負責<strong>結構與內容</strong>，
-            <br>
-            <strong><code>.css</code></strong> 文件負責<strong>樣式</strong>，讓 HTML 更好維護與修改。
-          </p>
-        </li>
-        <li>
-          <p>以 <code>key:value;</code> pair 的形式指定樣式，結尾最好都加上 <code>;</code> 。
-            <br> Example: <code>font-family:Arial;</code>
-          </p>
-        </li>
-        <li>
-          <p><strong>inline style</strong>, 在 HTML 檔案中的 elements 可以直接使用屬性 (style) 來指定 css 樣式。
-            <br> 例如：
-            <br>
-            <code>&lt;p style="font-family:Arial;"&gt; &lt;/p&gt;</code>
-          </p>
-        </li>
-        <li>
-          <p><strong>internal style</strong>, 在 HTML 撰寫 css 程式碼於 metadata 區塊中以標籤 <code>&lt;style&gt;</code>包起來。</p>
-          <pre><code>&lt;head&gt;
-            &lt;style&gt;
-              css codes here
-            &lt;/style&gt;
-        &lt;/head&gt;
-        </code>
-          </pre>
-        </li>
-        <li>
-          <p><strong>external style</strong>, 把所有的樣式 css 程式碼放置在 <code>.css</code> 檔案中，從 HTML 中分離出去，推薦使用這種方式，才符合 css 設計的目的。</p>
-          <ul>
-            <li>連結 <strong><code>&lt;link /&gt;</code></strong> HTML 與 CSS 檔案，
-              <br> 標籤
-              <code>&lt;link /&gt;</code>是自身標籤
-              <br> 屬性 (href) 連結 <code>.css</code> 檔案的位置
-              <br> 屬性 (type) 連結的檔案類型，這邊固定為 <code>text/css</code>
-              <br> 屬性 relation (rel) 檔案的關係，這邊固定為 <code>stylesheet</code>
-            </li>
-          </ul>
-          <pre><code>&lt;link href="" type="text/css" rel="stylesheet"/&gt;
-        </code>
-          </pre>
-        </li>
-        <li>
-          <p>CSS <strong>選擇器</strong> selector，用來連結需要造型的位置。</p>
-          <ul>
-            <li>
-              <p>利用標籤名稱 <code>&lt;tag_name&gt;</code></p>
-              <p>範例：</p>
-            </li>
-          </ul>
-          <pre><code>p {
-            color:red;
-        }
-        </code>
-          </pre>
-          <ul>
-            <li>
-              <p>利用類別名稱 屬性 (class)， <code>.</code> 是必須的。</p>
-              <pre><code>.className {
-        }
-        </code></pre>
-            </li>
-            <li>
-              <p>利用唯一名稱 屬性 (id), <code>#</code> 是必須的。</p>
-              <pre><code>#id {
-        }
-        </code></pre>
-            </li>
-            <li>
-              <p><strong>選擇器的優先順序</strong>，如果有相同的造型被指定不同的值，會依據優先順序去覆蓋，<strong>id &gt; class &gt; tag</strong> ，越嚴格的越優先。</p>
-            </li>
-            <li>
-              <p>使用選擇器時，<strong>先以優先序較弱的開始規劃</strong>。</p>
-            </li>
-            <li>
-              <p>選擇器<strong>組合</strong>使用，為了更有彈性的指定目標，可以組合標籤 (tag) 與物件 (class) 兩種選擇器，只有當<strong>同時符合條件</strong>的目標才會使用。</p>
-              <pre><code>elementName.className {
-        }
-        </code></pre>
-            </li>
-            <li>
-              <p><strong>巢狀指定</strong> nested element 利用<strong>空白間隔</strong>指定，巢狀結構內的標籤。
-                <br> example:
-              </p>
-            </li>
-          </ul>
-          <pre><code>&lt;ul class="main-list"&gt;
-          &lt;li&gt;&lt;/li&gt;
-        &lt;ul&gt;
-        </code></pre>
-          <pre><code>.main-list li {
-        }
-        </code></pre>
-          <ul>
-            <li>
-              <p><strong>最嚴格的指定</strong> <code>!important</code>，最好<strong>不要使用</strong>，因為非常沒有彈性。
-                <br> example: <code>p { color: red !important;}</code>
-              </p>
-            </li>
-            <li>
-              <p><strong>共用</strong> css 程式碼以 <code>,</code> 隔開即可。
-                <br> example: <code>p, h1 { }</code>
-              </p>
-            </li>
-            <li>
-              <p>萬用指定 <code>*</code></p>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <br>
-      <ul>
-        <li>
-          <p>字型 (<strong>font-family</strong>), 預設 <code>Times New Roman</code></p>
-        </li>
-        <li>
-          <p>字形大小 (<strong>font-size</strong>), Example: <code>font-size: 18px;</code></p>
-        </li>
-        <li>
-          <p>字形粗細 (<strong>font-weight</strong>), 選項: <code>thin</code>, <code>normal</code>, <code>bold</code></p>
-        </li>
-        <li>
-          <p>文字對齊 (<strong>text-align</strong>), 選項: <code>left</code>, <code>center</code>, <code>right</code></p>
-        </li>
-        <li>
-          <p>顏色 (<strong>color</strong>), 背景顏色(<strong>background-color</strong>)</p>
-        </li>
-        <li>
-          <p>透明度 (<strong>opacity</strong>), 值介於 0 ~ 1 之間, 0 完全透明, 1 不透明</p>
-        </li>
-        <li>
-          <p>背景圖片 (<strong>background-image</strong>), <code>background-image: url("");</code></p>
-        </li>
-        <li>
-          <p>預留份 (<strong>margin</strong>), 邊框 (<strong>border</strong>), 填充 (<strong>padding</strong>)
-            <br>
-            <img src="https://s3.amazonaws.com/codecademy-content/courses/freelance-1/unit-4/diagram-boxmodel.svg" alt="圖片來源 codecademy" title="圖片來源 codecademy">
-          </p>
-        </li>
-        <li>
-          <p>寬度 (<strong>width</strong>), 高度 (<strong>height</strong>) 可以指定為固定的pixel (px)。</p>
-        </li>
-        <li>
-          <p>邊框設定 (<strong>border</strong>), <code>border: width style color ;</code>
-            <br> 可以設定寬度, 形式, 顏色。
-            <br> 寬度選項可以為指定 <code>px</code> 或者 <code>thin</code>, (default)<code>medium</code>, <code>thick</code>
-          </p>
-        </li>
-        <li>
-          <p>邊框四個角圓弧設定 (<strong>border-radius</strong>), 選項為 百分比 (%) 或者pixel (px)</p>
-        </li>
-        <li>
-          <p>邊框與內容物之間的填充區塊 (<strong>padding</strong>), 值為 pixel (px),
-            <br> 可以分別指定四個方向:
-            <br> (
-            <strong>padding-top</strong>), (<strong>padding-right</strong>), (<strong>padding-down</strong>), (<strong>padding-left</strong>)。
-            <br> 或者寫為同一個指令
-            <br>
-            <code>padding: 1px 2px 3px 4px</code>, 從上方開始順時鐘, 上, 右, 下, 左。
-            <br>
-            <code>padding: 1px 2px</code>, 上下, 左右 分成兩組。
-          </p>
-        </li>
-        <li>
-          <p>邊框外的預留區 (<strong>margin</strong>) 指令方法同 padding。</p>
-        </li>
-      </ul>
-      <br>
-      <p>**tutorial undone**</p>
+      <p>
+        <a href="https://en.wikipedia.org/wiki/CSS_framework">wikipedia of CSS framework</a>
+        <ul>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)">Bootstrap</a>
+            <p>專注於前端的 framework
+              <br> 可以選擇使用包含 Javascript 的擴充功能
+              <br> 開源的專案 GitHub
+            </p>
+          </li>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Foundation_(framework)">Foundation</a>
+            <p>回應式, 開源, 包含 Javascript, 前端的 framework</p>
+          </li>
+          <li>
+            <p>WC.CSS # 簡單, 只包含CSS</p>
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        <a href="https://zh.wikipedia.org/wiki/Sass">Sass</a>
+        <p>
+          CSS的前處理器 <br>
+          提供很多語法糖，以程式語言的方式描述設計者的意圖，在轉譯為 CSS 語法。<br>
+        </p>
+      </p>
+
+      <p>
+        <h3>DOM</h3> <br>
+        <a href="https://ithelp.ithome.com.tw/articles/10108783">https://ithelp.ithome.com.tw/articles/10108783</a><br>
+        <a href="https://ithelp.ithome.com.tw/articles/10108783">https://ithelp.ithome.com.tw/articles/10108783</a><br>
+        <p>Document Object Model, DOM
+          <br> 作為程式語言與瀏覽器之間的中間層，一種標準界面。
+          <br> 前端使用
+          <br> 由 W3C 訂定。
+        </p>
+      </p>
     </article>
     <hr>
 
@@ -643,40 +484,18 @@
       </aside>
     </article>
 
-    <article>
-      <h2>真實文本, mud your hand</h2>
-      <p>使用 GitHub Page 練習前端技術並且保留作品。
-        <br> HTML, CSS, Javascript
-      </p>
+    <article class="Sources">
+      <h2>學習資源</h2>
+
       <ul>
-        <li><a href="https://github.com/twbs/bootstrap">Bootstrap framework GitHub repository</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Learn">MDN 教學</a></li>
+        <li><a href="https://www.w3.org/Style/CSS/learning">W3C 官方推薦教學</a></li>
+        <ul>
+          <li><a href="https://www.w3.org/Style/Examples/007/Overview.en.html">tips and tricks</a></li>
+        </ul>
+        <li><a href="https://www.tutorialspoint.com/css/index.htm">tutorialspoint 參考資料</a></li>
       </ul>
     </article>
-    <hr>
-
-    <aside>
-      <h2>其他資源</h2>
-      <p><a href="https://www.codecademy.com/catalog/language/html-css">https://www.codecademy.com/catalog/language/html-css</a>
-        <br> codecademy
-      </p>
-      <p><a href="https://www.w3schools.com/">https://www.w3schools.com/</a>
-        <br> w3schools
-      </p>
-      <p><a href="http://www.tutorialspoint.com/tutorialslibrary.htm">http://www.tutorialspoint.com/tutorialslibrary.htm</a>
-        <br> tutorials
-      </p>
-      <p><a href="https://noootown.wordpress.com/category/%E5%89%8D%E7%AB%AF%E9%80%A3%E8%BC%89/">https://noootown.wordpress.com/category/前端連載/</a>
-        <br> 前端入門 概念說明
-      </p>
-      <p><a href="https://www.edx.org/course/css-basics-w3cx-css-0x-0?utm_source=sailthru&amp;utm_medium=email&amp;utm_campaign=newsletter_student_actives_20171128_givingtuesday" target="_blank"> edX 免費課程 CSS basics </a></p>
-      <p><a href="https://www.edx.org/school/w3cx">https://www.edx.org/school/w3cx</a>
-        <br> edX 課程由 w3c 提供 包含前端語言入門
-      </p>
-      <p><a href="https://developer.mozilla.org/zh-TW/">https://developer.mozilla.org/zh-TW/</a>
-        <br> 網頁入門教學 <strong>待閱讀</strong>
-      </p>
-    </aside>
-    <hr>
 
     <article>
       <h2>note</h2>

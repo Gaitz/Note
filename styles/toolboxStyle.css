@@ -1,0 +1,43 @@
+header {
+  text-align: center;
+  background-color: cornflowerblue;
+}
+
+
+main {
+  text-align: center;
+}
+
+main ol, ul {
+  display: inline-block;  
+}
+
+main li {
+  text-align: left;
+}
+
+
+article.mainIdeas {
+  background-color: aliceblue;
+}
+
+nav.innerNav {
+ background-color: cornflowerblue; 
+}
+
+article.tools  {
+  background-color: aliceblue;
+}
+
+article.questions {
+ background-color: cornflowerblue; 
+}
+
+article.resourcesMap {
+  background-color: aliceblue;
+}
+
+
+
+code {
+}
