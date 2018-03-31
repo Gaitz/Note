@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="../images/icon.png">
-  <link rel="stylesheet" href="../styles/aboutSystem.css" type="text/css">
+  <link rel="icon" type="image/png" href="/images/icon.png">
+  <link rel="stylesheet" href="/styles/aboutSystem.css" type="text/css">
   <title>About System</title>
 </head>
 
@@ -16,12 +16,12 @@
     <p class="purpose">Purpose: 說明系統的文章結構與設計原因</p>
   </header>
 
-  <nav class="Website_Nav">
+  <nav class="websiteNav">
     <table>
       <tbody>
         <tr class="First_Row">
-          <td><a href="./index.html">About System</a></td>
-          <td><a href="./Others/Daily_Work.html">Daily Work</a></td>
+          <td><a href="/html/index.html">About System</a></td>
+          <td><a href="/html/Others/Daily_Work.html">Daily Work</a></td>
           <td><a href="./Others/Ideas.html">Ideas</a></td>
           <td><a href="./Others/Learning_Path.html">Learning Path</a></td>
           <td><a href="./Others/Questions.html">Questions</a></td>
@@ -65,176 +65,165 @@
   </nav>
 
   <main>
-    <article>
-      <section id="editing_environment">
+    <article class="aboutSystem">
+      <section class="editingEnvironment">
         <h2>編輯環境</h2>
         <p>
-          目前使用純 HTML 語法撰寫網站，<br>
-          本地端使用 Atom 作為編輯器，<br>
-          資料同步儲存於 Drobpox 中，<br>
-          使用 Git 與 GitHub 作為版本控制系統，<br>
-          利用 pythonanywhere 免費發布網站內容。<br>
+          目前使用純 HTML 語法撰寫網站，<br> 本地端使用 Brackets 作為編輯器，<br> 資料同步儲存於 Drobpox 中，<br> 使用 Git 與 GitHub 作為版本控制系統，<br> 利用 pythonanywhere 免費發布網站內容。<br>
         </p>
         <p>使用：</p>
         <ul>
           <li>HTML5 # 練習純粹的 HTML5 來編寫</li>
-          <li>Atom # 作為開發用的編輯器，可以安裝不同的 packages。</li>
+          <li>Brackets # 作為開發用的編輯器，專為網頁設計開發的編輯器。Live Preview 是很方便的功能。</li>
           <li>Dropbox # 作為開發時的資料儲存，可以用於異地編輯。</li>
           <li>Git/GitHub # 版本控制</li>
           <li>pythonanywhere # 發布伺服器 </li>
         </ul>
       </section>
+      <!-- editingEnvironment -->
 
-      <section id="system_purpose">
+      <section class="systemPurposes">
         <h2>系統目的</h2>
 
         <p>目的是達到 1. 系統化的學習 (motivation)、2. 建造實用的知識庫</p>
         <p>實作的經驗 優於 詳細的紀錄</p>
-        <p>建造實用的資料庫是用於 輔助 實作</p>
+        <p>建造實用的資料庫以用於輔助實作</p>
 
-        <p>人腦對於記憶效果非常的差，因此把學習後的內容存在電腦裡
-            ，幫助人腦使用已經學過的知識。需要記憶的內容存在電腦裡，
-            使用知識的時候只要喚醒 ( arouse ) 內容就好。
+        <p>人腦對於記憶效果非常的差，因此把學習後的內容存在電腦裡 ，幫助人腦使用已經學過的知識。需要記憶的內容存在電腦裡， 使用知識的時候只要喚醒 ( arouse ) 內容就好。
         </p>
 
-        <p>藉由重複更新和編寫系統化的文章，達到類似於編寫程式的創作流程，
-          來自於 Test-Driven Development (TDD) 中的流程不斷的重構。
+        <p>藉由重複更新和編寫系統化的文章，達到類似於編寫程式的創作流程， 來自於 Test-Driven Development (TDD) 中的流程不斷的重構。
         </p>
 
-        <p>實用的知識庫，(儲存細節與實用的檢查清單?)</p>
+        <p>實用的知識庫，(儲存精煉中的素材與最終的實用個人經驗)</p>
         <ul>
           <li>Toolbox</li>
         </ul>
 
         <p>學習動力 (power) 推動工作執行 :</p>
-        <ol>
+        <ul>
           <li>Quests</li>
           <li>Learning Path</li>
-        </ol>
-
+        </ul>
       </section>
+      <!-- systemPurposes -->
 
-      <section id="article_type">
+      <section class="articleType">
         <h2>文章類型</h2>
         <p>文章類型分為:</p>
 
-        <ul>
-          <li>About System <br>
-            說明系統目的與各種文章類型設計原因。<br>
-            作為系統說明書與未來改進的依據。
-          </li>
+        <p>AboutSystem, Ideas, Questions, Achievements, Record, Toolboxes, Quests, Learning Path (big Map), Display Toolboxes, Display Quests</p>
 
-          <li>Ideas <br>
-            紀錄突發奇想的靈感並且在之後整合進入系統中。
-          </li>
 
-          <li>Questions <br>
-            統整所有系統中的問題，作為問題集去檢視且回答。 <br>
-            提醒自己過去有興趣的問題。包含已解答與未解答的。
-          </li>
-
-          <li>Success <br>
-            紀錄自己成功的經驗，藉此抽象化成功的方式， <br>
-            利用於下一次的活動。
-          </li>
-
-          <li>Record <br>
-            繼續瑣碎且需要持續紀錄的內容， <br>
-            例如健身日記、所擁有的實體書、所煮過的菜色。<br>
-            (舊版 list record 改制)
-          </li>
-
-          <li>Toolbox <br>
-            <strong>實用</strong>的知識庫 <br>
-            實用為1.骨架、2.基底、3.延伸 <br>
-            包含快速喚醒用的框架 <br>
-            依據難度而區分的基底與延伸 <br>
-            由此建立出4.學習路程，可以作為後進者的參考。<br>
-            抽象化過後的概念需要紀錄下原始來源，<br>
-            可以更好的在遺忘時喚醒。<br>
-            精鍊系統 ...<br>
-            分類 閱讀筆記、主題學習、個人心得<br>
-            (舊版 details 改制)<br>
-            Note:<br>
-            實用與重要的東西來自於自己的大腦，<br>
-            需要紀錄的東西是自己大腦覺得重要的東西，<br>
-            並且紀錄的目的是利於喚醒，為何重要。<br>
-            閱讀筆記：<br>
-            以知識順序排列，而非書目錄順序。<br>
-            每個知識區塊需要附上來源<br>
-            書目錄當成附錄。
-          </li>
-
-          <li>Quests <br>
-            仿照遊戲的任務系統，<br>
-            作為有樂趣的動力系統，<br>
-            任務需要有可以執行的步驟，越<strong>具體</strong>越好。<br>
-            (舊版 Working Part Subject 改制)
-          </li>
-
-          <li>Learning Path <br>
-            不迷失在散落的任務中，<br>
-            需要一個長期的路徑規劃。<br>
-            以年為單位的長期計畫。
-          </li>
-
-          <li>Display Toolbox page <br>
-            改造過後的檢查清單，<br>
-            作為標題式的檢查清單，<br>
-            並且可以達到緩慢的成長可視化，<br>
-            產生收集的成就感與欲望。<br>
-            (舊版 List, List Subject 改制)
-          </li>
-
-          <li>Display Quests page <br>
-            展示與追蹤任務，<br>
-            包含執行中的任務、完成的任務。<br>
-            (舊版 Working Part 改制)
-          </li>
-
-        </ul>
-
-        <p> 精鍊符號:<br>
-          + number: 只有當有實質意義的精鍊時才使用。
+        <p>About System
+          <br>說明系統目的與各種文章類型設計原因。
+          <br>作為系統說明書與未來改進的依據。
         </p>
-        <hr>
 
-      </section>
+        <p>Ideas
+          <br>紀錄突發奇想的靈感並且在之後整合進入系統中。
+        </p>
 
-      <section id="questions">
-        <h2>Questions</h2>
-        <ul>
-          <li>
-            <p>什麼是把知識學得踏實? 是知識能解決問題? 學到什麼樣的程度?</p>
-          </li>
-          <li>
-            <p>如何累積知識並且可以充分活用所學過的知識 ?</p>
-          </li>
-          <li>
-            <p>人類知識的全貌? 學科?</p>
-          </li>
-          <li>
-            <p>人類社會的分類與所需? 社會學?</p>
-          </li>
-          <li>
-            <p>尋找閱讀與紀錄的程序，個人學習方法的演進
-              <br> Ans: Working Part 個人學習方法
-            </p>
-          </li>
-          <li>
-            <p>如何把 Ideas 文件中的 Inspiration 和 to-do list 整合到系統中？系統中需要地方承載更多的個人心得與靈感
-              <br> Ans:
-            </p>
-          </li>
-        </ul>
-        <ol>
-          <li>分別存放於 ideas 與 to-do list 並且重複瀏覽與思考後整合進系統中在刪除。</li>
-          <li>不同類型的個人心得都新開 Working Part 去紀錄與思考</li>
-        </ol>
+        <p>Questions
+          <br>統整所有系統中的問題，作為問題集去檢視且回答。
+          <br> 提醒自己過去有興趣的問題。包含已解答與未解答的。
+        </p>
+
+        <p>Achievements
+          <br> 紀錄自己成功的經驗，藉此抽象化成功的方式，
+          <br> 利用於下一次的活動。
+        </p>
+
+        <p>Record
+          <br> 繼續瑣碎且需要持續紀錄的內容，
+          <br> 儲存不會刪除的內容，但可以更改。
+          <br> 例如健身日記、所擁有的實體書、所煮過的菜色。
+          <br> (舊版 list subject 改制)
+        </p>
+
+        <p>Toolbox
+          <br> 文章結構：
+          <br> 知識框架 main ideas,
+          <br> 大地圖-骨架超連結 skeleton and hyperlink,
+          <br> 實用的工具箱 tools simple to hard,
+          <br> 素材地圖 materials map,
+          <br> 素材精煉中 materials refining
+          <br> 工具箱的內容，全部是依據<strong>個人實作經驗</strong>與以<strong>實用</strong>為目的製作的， 依據難度延伸排序，從最簡單的至越來越複雜困難的 (simple to complex)。內容需要是可運行的 (workable)。
+          <br> 實作流程：
+          <br> 1. 素材地圖收集素材 materials map，
+          <br> 2. 素材精煉 material refining，紀錄半成品，
+          <br> 3. 以素材內容實作，產生個人經驗，並且以實用為目的製作良好的工具 (tool)。
+          <br> 知識框架 main ideas，用簡單的描述表達各種概念與注意事項 (心法) 。
+          <br> 大地圖-骨架超連結 skeleton and hyperlink，放置資料搜尋時的連結清單，並且同時可以看到知識全貌 。
+        </p>
+
+        <p>Quests
+          <br> 仿照遊戲的任務系統，
+          <br> 勇者的任務領用，
+          <br> 作為有樂趣的動力系統，
+          <br> 任務需要有可以執行的步驟，越<strong>具體</strong>越好。
+          <br> (舊版 Working Part Subject 改制)
+        </p>
+
+        <p>Learning Path
+          <br> 大地圖
+          <br> 不迷失在散落的任務中，
+          <br> 需要一個長期的路徑規劃。
+          <br> 紀錄需要包含時間區段，
+          <br> 為了輕易檢視任何時間段所完成的任務。
+        </p>
+
+        <p>Display Toolboxes
+          <br> 工具庫的展示頁面，
+          <br> 以有趣與實用為主題，
+          <br> (舊版 List, List Subject 改制)
+        </p>
+
+        <p>Display Quests
+          <br> 任務展示頁面，展示與追蹤任務，
+          <br> 包含 1. 巨大的任務牆、2. 領用的任務追蹤
+          <br> 執行中的任務、完成的任務。
+          <br> (舊版 Working Part 改制)
+        </p>
+
+        <p> 精鍊符號:
+          <br> + number: 每次工具能力實質成長時使用。
+        </p>
       </section>
+      <!-- articleType -->
     </article>
-  </main>
+    <!-- aboutSystem -->
 
+    <hr>
+    <article class="questions">
+
+      <h2>Questions</h2>
+      <ul>
+        <li>什麼是把知識學得踏實? 是知識能解決問題? 學到什麼樣的程度?</li>
+        <li>如何累積知識並且可以充分活用所學過的知識?</li>
+        <li>人類知識的全貌? 學科?</li>
+        <li>人類社會的分類與所需? 社會學?</li>
+        <li>如何閱讀與紀錄，個人學習方法的演進
+          <p class="answer">
+            Ans:
+            <br> 最適應自己大腦的學習方式，
+            <br> 閱讀整本書，困難的就跳過 (skip)，自己抽象化出自我導向目錄 (skeleton)，
+            <br>產生骨架後，在依據有興趣的順序閱讀。
+            <br> 學習以用為重點，因此在填肉的時候，必須以實作產生個人經驗。(實用主義, 經驗, mud your hand)
+          </p>
+        </li>
+
+        <li>如何把 Ideas 文件中的 Inspiration 和 to-do list 整合到系統中？系統中需要地方承載更多的個人心得與靈感
+          <p class="answer">
+            Ans:
+            <br> 1. 分別存放於 ideas 與 to-do list 並且重複瀏覽與思考後整合進系統中在刪除。
+            <br> 2. 不同類型的個人心得都新開 Working Part 去紀錄與思考
+          </p>
+        </li>
+      </ul>
+    </article>
+    <!-- questions -->
+  </main>
 </body>
 
 </html>
