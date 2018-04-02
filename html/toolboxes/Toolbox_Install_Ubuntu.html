@@ -3,7 +3,7 @@
 <html lang="zh-Hant-TW">
 
 <head>
-  <title>Toolbox Time Management</title>
+  <title>Working Part PC install Ubuntu</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="../../images/icon.png">
@@ -11,12 +11,7 @@
 
 <body>
 
-  <header>
-    <h1>Toolbox Time Management (7)</h1>
-    <h2>Purpose: 找到方法更有效的使用時間</h2>
-  </header>
-
-   <nav class="websiteNav">
+  <nav class="websiteNav">
     <div class="others">
       <a href="../index.html">About System</a>
       <a href="../others/Ideas.html">Ideas</a>
@@ -61,30 +56,65 @@
       <a href="../toolboxes/Toolbox_Vim.html">Toolbox Vim</a>
     </div>
   </nav>
-  <hr>
+
 
   <main>
+    <article>
+      <h2>Ubuntu 安裝紀錄</h2>
+      <ol>
+        <li>
+          <p>使用 UEFI USB 安裝 Ubuntu 16.04 desktop 版，bootable USB from windows 參考Ubuntu官方教學 <a href="https://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows">ClickForWebsite</a></p>
+        </li>
+        <li>
+          <p>磁碟分割: UTF 1GB, SWAP 10GB, / 100GB, /home others = total 1TB</p>
+        </li>
+        <li>
+          <p>安裝 chrome from web</p>
+        </li>
+        <li>
+          <p>由於設定時語言選擇英文，因此要安裝中文注音輸入法 參考這篇部落格文章的教學 <a href="http://it.livekn.com/2016/05/ubuntu-1604-ibus.html">ClickForWebsite</a>：</p>
+          <p>Terminal 輸入以下指令:</p>
+          <pre><code> sudo apt-get install ibus-chewing
+         ibus restart
+        </code></pre>
+          <p>從 System Settings -&gt; Text Entry 中
+            <br> 點選 input sources to use 下方的 + 號
+            <br> 找到 Chinese (Chewing) (IBus) 加入後即可使用酷注音輸入。
+          </p>
+        </li>
+        <li>
+          <p>安裝 spotify for linux from web <a href="https://www.spotify.com/tw/download/linux/">ClickForWebsite</a>
+            <br> System Settings -&gt; Security&amp;Privacy -&gt; Files&amp;Applications add in Exclude.
+          </p>
+        </li>
+        <li>
+          <p>安裝 unrar</p>
+          <p>sudo apt-get install unrar</p>
+        </li>
+        <li>
+          <p>安裝 minecraft <a href="https://www.howtogeek.com/198476/how-to-install-minecraft-on-ubuntu-or-any-other-linux-distribution/">ClickForWebsite</a></p>
+        </li>
+        <li>
+          <p>安裝 Anki <a href="https://apps.ankiweb.net/">ClickForWebsite</a></p>
+        </li>
+        <li>
+          <p>安裝 Unity Tweak Tool 與 <a href="https://snwh.org/paper/download">ubuntu themes : paper</a> 下載</p>
+          <pre><code>  sudo apt-get install unity-tweak-tool
+        </code></pre>
+          <p><a href="https://wallpaperscraft.com/">wallpapers website</a></p>
+        </li>
+      </ol>
 
-    <article class="Repository">
-      <p>使用 <strong>google 行事曆</strong></p>
-
-      <p>工作名稱對應系統的工作<strong>名稱保持一致性</strong>
-        <br> 最後記錄花費時間，為了可在結算的時候一眼看出。
-      </p>
-
-      <p><strong>只記錄正面的工作事項</strong>，利用意圖使自己更好的正向方式去利用時間。</p>
-
-      <p>累積時數達到成就感</p>
-
-      <p>練習使用 <a href="https://cirillocompany.de/pages/pomodoro-technique"><strong>POMODORO TECHNIQUE</strong></a>
-        <br> =&gt; 目前使用效果不佳，換回原本的方式。2017/5/28
-      </p>
-
-      <h3>參考資料:</h3>
-      <p>detail 閱讀筆記 “英日語同步 Anki 自學法”</p>
-
+      <section>
+        <h2>Used commands</h2>
+        <ul>
+          <li>apt-get install</li>
+          <li>tar xjf</li>
+          <li>make</li>
+        </ul>
+      </section>
     </article>
-    <hr>
   </main>
 </body>
+
 </html>
