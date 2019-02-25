@@ -1,8 +1,16 @@
-'use strict'
 
-let navElement = document.getElementById('js-nav');
-let ul = document.createElement('ul');
-let li = document.createElement('li');
+(function () {
+  'use strict'
+
+  let nav = getNavigatorElement()
+  nav.innerHTML = 'hello'
+  
+  function getNavigatorElement () {
+    return document.getElementsByName('nav')[0]
+  }
+})()
+
+
 
 /*
 <nav id="js-nav" class="websiteNav">
