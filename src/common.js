@@ -2,12 +2,21 @@
 (function () {
   'use strict'
 
-  let nav = getNavigatorElement()
-  nav.innerHTML = 'hello'
-  
   function getNavigatorElement () {
     return document.getElementsByName('nav')[0]
   }
+
+  const siteMap = {
+    index: {""},
+    others: {},
+    quests: {},
+    records: {},
+    toolboxes: {}
+  };
+
+  let nav = getNavigatorElement()
+  nav.innerHTML = 'hello'
+  
 })()
 
 
