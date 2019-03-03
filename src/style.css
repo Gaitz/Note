@@ -2,6 +2,11 @@
 /*# sourceMappingURL=normalize.min.css.map */
 
 /* base */
+html {
+  background-color: #854836;
+  color: #7DB9DE;
+}
+
 body {
   display: flex;
   flex-direction: column;
