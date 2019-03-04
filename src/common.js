@@ -3,7 +3,7 @@
   'use strict'
 
   function getNavigatorElement () {
-    return document.getElementsByName('nav')[0]
+    return document.getElementsByName('nav')[0];
   }
 
   const siteMap = {
@@ -14,12 +14,14 @@
     toolboxes: {}
   };
 
-  let nav = getNavigatorElement()
-  nav.innerHTML = 'hello'
-  
+  function createNavigator () {
+
+  }
+
+  function addNavigatorElement () {
+    let nav = getNavigatorElement();
+  }  
 })()
-
-
 
 /*
 <nav id="js-nav" class="websiteNav">
