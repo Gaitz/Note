@@ -45,20 +45,18 @@ a, a:link, a:vistied, a:focus, a:active {
   background-color: #00896C;
   color: #4E4F97;
   height: 2rem;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .navigatorButton {
-  padding: 0 0.2rem;
-  margin: auto 0.4rem;
-  display: flex;
+  margin: auto 3vw;
   border: 1px black solid;
-  justify-content: center;
-  word-spacing: 0.5rem;
+  padding: 0 0.2rem;
+  word-spacing: 1vw;
 }
 
 .whereDescription {
-  margin: auto 0;
+  margin: auto 3vw;
   display: flex;
   align-content: center;
 }
