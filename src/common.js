@@ -1,27 +1,13 @@
-
 (function () {
   'use strict'
 
-  function getNavigatorElement () {
-    return document.getElementsByName('nav')[0];
+  function handleNavigatorButton () {
+    
   }
 
-  const siteMap = {
-    index: {""},
-    others: {},
-    quests: {},
-    records: {},
-    toolboxes: {}
-  };
-
-  function createNavigator () {
-
-  }
-
-  function addNavigatorElement () {
-    let nav = getNavigatorElement();
-  }  
-})()
+  const navigatorButton = Document.getElementById("js-navigatorButton");
+  navigatorButton.click = handleNavigatorButton;
+})();
 
 /*
 <nav id="js-nav" class="websiteNav">
