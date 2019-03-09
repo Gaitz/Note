@@ -44,16 +44,20 @@ img {
   flex-wrap: nowrap;
   background-color: #00896C;
   color: #4E4F97;
-  height: 2rem;
+  height: 3rem;
   justify-content: space-between;
   overflow: auto;
 }
 
 .navigatorButton {
-  margin: auto 3vw;
+  margin: auto 1.5rem;
   border: 1px black solid;
-  padding: 0 0.2rem;
+  padding: 0.2rem 0.7rem;
   word-spacing: 1vw;
+}
+
+.navigatorButton:hover {
+  cursor: pointer;
 }
 
 .whereDescription {
