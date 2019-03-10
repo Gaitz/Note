@@ -49,6 +49,17 @@ img {
   overflow: auto;
 }
 
+.whereDescription {
+  margin: auto 3vw;
+  display: flex;
+  flex: 1 1 0;
+  align-content: center;
+}
+
+.where {
+  padding-right: 0.5vw;
+}
+
 .navigatorButton {
   margin: auto 1.5rem;
   border: 1px black solid;
@@ -60,21 +71,21 @@ img {
   cursor: pointer;
 }
 
-.whereDescription {
-  margin: auto 3vw;
-  display: flex;
-  align-content: center;
-}
-
-.where {
-  padding-right: 0.5vw;
-}
-
-.navigatorMap {
-  display: block;
+.lightBoxContainer {
+  min-width: 100vw;
+  min-height: 100vw;
+  background-color: rgba(239, 224, 218, 0.8);
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.navigatorMap {
+  position: relative;
+  top: 50;
+  left: 50;
+  width: 50vw;
+  list-style-type: none;
 }
 
 .show {
