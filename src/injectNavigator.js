@@ -2,10 +2,11 @@
   'use strict'
 
   /* main process */
+  const pageTitle = document.title;
   const navigatorElementOnPage = document.getElementsByTagName("nav").item(0);
   navigatorElementOnPage.innerHTML = `
   <nav class="websiteNav">
-    <p class="whereDescription"><span class="where">所在地 :</span><b>About System</b></p>
+    <p class="whereDescription"><span class="where">所在地 :</span><b>${pageTitle}</b></p>
     <p class="navigatorButton" id="js-navigatorButton">移 動</p>
 
     <div id="js-lightBoxContainer" class="lightBoxContainer hide">

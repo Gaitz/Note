@@ -54,6 +54,7 @@ img {
   display: flex;
   flex: 1 1 0;
   align-content: center;
+  font-size: 1.3rem;
 }
 
 .where {
