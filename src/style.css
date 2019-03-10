@@ -55,6 +55,7 @@ img {
   flex: 1 1 0;
   align-content: center;
   font-size: 1.3rem;
+  overflow-y: auto;
 }
 
 .where {
@@ -87,6 +88,7 @@ img {
   left: 50;
   width: 50vw;
   list-style-type: none;
+  overflow-y: auto;
 }
 
 .show {
