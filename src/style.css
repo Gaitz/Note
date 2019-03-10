@@ -5,17 +5,27 @@
 html {
   background-color: #e2ded0;
   color: #100330;
+  zoom: 150%;
+}
+
+/* mobile */
+@media (max-width: 700px) {  
+  html { 
+    zoom: 100%;
+  }
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin:0 3vw;
   max-width: 100vw;
-  word-break: break-all;
   line-height: 1.7;
   margin-bottom: 2rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
 }
 
 header {
@@ -28,8 +38,9 @@ img {
   max-width: 100vw;
 }
 
-:any-link {
-  color: #7DB9DE !important;
+body a:link {
+  color: #7DB9DE;
+  word-break: break-all;
 }
 
 /* style */
@@ -50,7 +61,7 @@ img {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .whereDescription {
@@ -76,10 +87,15 @@ img {
   cursor: pointer;
 }
 
+/* mobile */
+@media (max-width: 700px) {  
+
+}
+
 .lightBoxContainer {
   min-width: 100vw;
   min-height: 100vh;
-  background-color: rgba(239, 224, 218, 0.8);
+  background-color: rgba(239, 224, 218, 0.9);
   position: fixed;
   z-index: 10;
   top: 0;
@@ -92,6 +108,10 @@ img {
   left: 50;
   width: 50vw;
   list-style-type: none;
+}
+
+.navigatorMap a:link, a:visited {
+  
 }
 
 .show {
