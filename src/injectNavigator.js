@@ -6,8 +6,10 @@
   const navigatorElementOnPage = document.getElementsByTagName("nav").item(0);
   navigatorElementOnPage.innerHTML = `
   <nav class="websiteNav">
-    <p class="whereDescription"><span class="where">所在地 :</span><b>${pageTitle}</b></p>
-    <p class="navigatorButton" id="js-navigatorButton">移 動</p>
+    <div class="navigatorBar">
+      <p class="whereDescription"><span class="where">所在地 :</span><b>${pageTitle}</b></p>
+      <p class="navigatorButton" id="js-navigatorButton">移 動</p>
+    </div>
 
     <div id="js-lightBoxContainer" class="lightBoxContainer hide">
       <ul id="js-navigatorMap" class="navigatorMap">

@@ -36,15 +36,19 @@ img {
 
   /* navigator map */
 .websiteNav {
+
+}
+
+.navigatorBar {
   min-width: 100vw;
+  height: 3rem;
+  color: #4E4F97;
+  background-color: #00896C;
   position: fixed;
   bottom: 0;
   left: 0;
   display: flex;
   flex-wrap: nowrap;
-  background-color: #00896C;
-  color: #4E4F97;
-  height: 3rem;
   justify-content: space-between;
   overflow: auto;
 }
