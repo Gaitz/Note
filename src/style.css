@@ -5,13 +5,12 @@
 html {
   background-color: #e2ded0;
   color: #100330;
-  zoom: 150%;
 }
 
 /* mobile */
-@media (max-width: 700px) {  
+@media (min-width: 1950px) {  
   html { 
-    zoom: 100%;
+    zoom: 150%;
   }
 }
 
