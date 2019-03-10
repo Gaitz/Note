@@ -32,7 +32,6 @@
           <a href="../records/Record_Books.html">Record Books</a>
           <a href="../records/Record_Cook.html">Record Cook</a>
           <a href="../records/Record_Workout.html">Record Workout</a>
-          <a href="../records/Record_Achievements.html">Record Achievements</a>
           <a href="../records/Record_Questions.html">Record Questions</a>
         </li>
         <li>
