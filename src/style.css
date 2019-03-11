@@ -27,7 +27,7 @@ header {
 }
 
 img {
-  max-width: 100vw;
+  max-width: 100%;
 }
 
 body a:link {
