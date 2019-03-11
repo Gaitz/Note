@@ -1,21 +1,28 @@
 (function () {
   'use strict'
 
+  function toggleStyle (element , styleClass) {
+    if (element.classList.contains( styleClass )) {
+      element.classList.remove(styleClass);
+    } else {
+      element.classList.add(styleClass);
+    }
+  }
+
   function handleNavigatorButton () {
     const navigatorMap = document.getElementById("js-lightBoxContainer");
-    navigatorMap.classList.remove("hide");
-    navigatorMap.classList.add("show");
+    toggleStyle(navigatorMap, "hide");
+    toggleStyle(document.getElementsByTagName("body")[0], "overflow-hide");
   }
 
   function handleLightBoxClick () {
     const navigatorMap = document.getElementById("js-lightBoxContainer");
-    navigatorMap.classList.remove("show");
-    navigatorMap.classList.add("hide");
+    toggleStyle(navigatorMap, "hide");
+    toggleStyle(document.getElementsByTagName("body")[0], "overflow-hide");
   }
 
   function handleLightBoxScroll (event) {
-    event.preventDefault();
-    event.stopPropagation();
+    
   }
 
   /* main process */
