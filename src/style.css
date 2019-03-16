@@ -2,6 +2,10 @@
 /*# sourceMappingURL=normalize.min.css.map */
 
 /* base */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
 html {
   background-color: #e2ded0;
   color: #100330;
