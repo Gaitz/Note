@@ -79,18 +79,18 @@ CSS
   
   * 文字,
 
-    serif(襯線), san-serif(非襯線), monospace(等寬),　
+    serif (襯線), san-serif (非襯線), monospace (等寬),　
     `font-family`, `@font-face`, `font-size`, px, %, em, 
-    `font-weight`(bold), `font-style`(italic), `text-transform`(uppercase...), `text-decoration`,
+    `font-weight` (bold), `font-style` (italic), `text-transform` (uppercase...), `text-decoration`,
     `line-height`, `letter-spacing, word-spacing`, `text-align`, `vertical-align`, `text-indent`, `text-shadow`,
-    `:first-letter`, `:first-line`, `:link`(未連結), `:visited`, `:hover`, `:active`, `:focus`,
-    selectors `[]`, `[=]`, `[~=]`(空格分割後), `[*=]`(substring), `[^=]`(start), `[$=]`(end)
+    `:first-letter`, `:first-line`, `:link` (未連結), `:visited`, `:hover`, `:active`, `:focus`,
+    selectors `[]`, `[=]`, `[~=]` (空格分割後), `[*=]` (substring), `[^=]` (start), `[$=]` (end)
   
   * 方框
 
     `width`, `height`, `min-`, `max-`, `overflow`, 
     `margin`, `border-width`, `border-style`, `border-color`, `border`, `padding`,
-    `margin-left: auto; margin-right: auto;`(置中), 
+    `margin-left: auto; margin-right: auto;` (置中), 
     `display`, `visibility`,
     `box-shadow`, `border-image`, `border-radius`
   
@@ -114,15 +114,15 @@ CSS
   * HTML5版面
 
     sematic tags `<header>`, `<footer>`, `<nav>`, `<article>`, `<aside>`, `<section>`, 
-  `<hgroup>`, `<figure>, <figcaption>`, `<div>`,
-  `<a>`(contain block elements)
+    `<hgroup>`, `<figure>, <figcaption>`, `<div>`,
+    `<a>`(contain block elements)
 
-流程與設計
+* 流程與設計
 
   目標群眾 -> 造訪理由 -> 訪客目標 -> 訪客需要的資訊 -> 造訪頻率 -> 設計 sitemap -> 線條草稿
   視覺階層(尺寸、顏色、樣式、影像) 
 
-實用資訊
+* 實用資訊
 
   SEO, `<title>`, URL 命名, `<h1>..`, `<img> alt`, `<meta>`,
   Trackgin, Google Analytics (GA),
