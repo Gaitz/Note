@@ -33,9 +33,12 @@
 
 ------
 
+
 ### 第一章 - 開發工具、測試工具
 
+
 ******
+
 
 ### 第二章 - 升級 HTML5
 
@@ -121,7 +124,9 @@
   * 屬性 async 非同步執行, defer 解析完文件後執行
   * `<noscript>` 顯示無 JavaScript 時的內容
     
+
 *****
+
 
 ### 第三章 - HTML5 的新元素
 
@@ -148,24 +153,65 @@
   * `<bdi>`
   * `<wbr>`, 告知瀏覽器可換行點, word break
   * `<data>`
-  * `<a>`, 可以容納行內和區塊元素, 新屬性 download, media, ping. 特別的 href, `mailto:`, `tel:`, `sms:`...
-  * `<small>`
-  * `<s>`
-  * `<cite>`
-  * `<i>`, 
-  * `<b>`
-  * `<u>`
-  * `<q>`
-  * `<samp>`
-  * `<kbd>`
-  * `<sub>`
-  * `<sup>`
-  * `<bdo>`
+  * `<a>`, 可以容納行內和區塊元素, 新屬性 download, media, ping. 特別的 href(`mailto:`, `tel:`, `sms:`...)
+  * `<small>`, 文件小字體的部份, 例如法律條文..
+  * `<s>`, 已經不正確或不相關的
+  * `<i>`, 突顯重點
+  * `<b>`, 字體上的不同
+  * `<u>`, 突顯文字, 例如拼錯的字
+  * `<cite>`, 標記標題, 例如書籍, 歌曲...
+  * `<em>`, 強調文字
+  * `<strong>`, 重點文字, 重要的
+  * `<q>`, 引用文字
+  * `<dfn>`, 定義
+  * `<abbr>`, 縮寫, 配合 title 屬性標明完整文字
+  * `<code>`, 程式碼
+  * `<var>`, 數學或程式變數
+  * `<samp>`, 程式的輸出範例
+  * `<kbd>`, 使用者鍵盤輸入
+  * `<sub>`, 下標
+  * `<sup>`, 上標
+  * `<bdo>`, 改變文字方向
   * `<span>`
-  * `<br>`
-  * `<em>`
-  * `<strong>`
-  * `<dfn>`
-  * `<abbr>`
-  * `<code>`
-  * `<var>`
+  * `<br>`, 分行
+  
+#### 內嵌元素
+  * `<embed>`, 整合第三方資源, 屬性 src, type
+  * `<video>`
+  * `<audio>`
+  * `<source>`
+  * `<track>`
+  * `<canvas>`
+  * `<img>`, 屬性 srcset 
+  * `<iframe>`, 屬性 srcdoc(建立iframe裡的html), sandbox(控制iframe的限制), seamless(無外框,可以繼承父文件的樣式)
+  * `<object>`, 必要屬性 data, type
+  * `<param>`, 屬性 name, value
+  * `<map>`
+  * `<area>`, 屬性 rel, ping, media, hreflang
+
+#### 互動式元素
+  * `<details>`, `<summary>`, 屬性 open
+  * `<menu>`, `<menuitem>`, 尚未支援, 透過表單控制項, 產生互動功能
+
+
+******
+
+
+### 第四章 - HTML5 Web 表單
+
+#### `<input>` 屬性
+  * `type`, 預設是 text
+  * `required`, 必填, 空值或錯誤格式會停止 submit
+  * `min`, `max`, 限制數值最小、最大
+  * `step`, 遞增遞減值
+  * `placeholder`, 佔位文字, 需配合 `<label>` 達到無障礙功能
+  * `pattern`, 指定 regular expression 來驗證輸入, 配合屬性 title 來說明限制。
+  * `readonly`
+  * `disabled`
+  * `maxlength`
+  * `size`
+  * `form`
+  * `autocomplete`
+  * `autofocus`
+
+#### `<input type="">` 類型
