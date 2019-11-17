@@ -113,7 +113,7 @@ CSS
   
   * HTML5版面
 
-  sematic tags `<header>`, `<footer>`, `<nav>`, `<article>`, `<aside>`, `<section>`, 
+    sematic tags `<header>`, `<footer>`, `<nav>`, `<article>`, `<aside>`, `<section>`, 
   `<hgroup>`, `<figure>, <figcaption>`, `<div>`,
   `<a>`(contain block elements)
 
