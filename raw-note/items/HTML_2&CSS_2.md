@@ -206,12 +206,64 @@
   * `step`, 遞增遞減值
   * `placeholder`, 佔位文字, 需配合 `<label>` 達到無障礙功能
   * `pattern`, 指定 regular expression 來驗證輸入, 配合屬性 title 來說明限制。
-  * `readonly`
-  * `disabled`
-  * `maxlength`
-  * `size`
-  * `form`
-  * `autocomplete`
-  * `autofocus`
+  * `readonly`, 不可編輯, 會被送出。
+  * `disabled`, 不可編輯, 不會被送出。
+  * `maxlength`, 長度限制, 不建議使用, 使用者體驗不佳。
+  * `size`, 
+  * `form`, input 不需要被包在 `<form>` 中也可以一起被傳送，指定 form 屬性到表單 id。
+  * `autocomplete`, 提供瀏覽器建議是否要自動填入。
+  * `autofocus`, 整頁中只能有一個 autofocus 自動聚焦。
+  * `name`,
+  * `value`,
+  * `id`, 
 
 #### `<input type="">` 類型
+  * `type="text"`, default
+  * `type="password"`, 傳送密碼務必使用 POST
+  * `type="checkbox"`, 確認方塊, 務必填上 name, value
+  * `type="radio"`, 單選按鈕, 同組使用相同的 name, 不同的 value, 可配合 `type=reset` 取消選定。
+  * `type="submit"`, 可以透過 form 屬性指定要傳送的 form 表單, 取消發送表單行為方法 
+    1. disabled, 
+    2. JavaScript `return false;` 
+    3. JavaScript `preventDefault()`
+  * `type="reset"`, 重設按鈕, 不推薦使用, 使用者體驗不佳。
+  * `type="file"`, 屬性 `accept` 指定檔案類型, `capture` 指定行動裝置使用設備。
+  * `type="hidden"`, 傳送使用者看不到的值
+  * `type="image"`, 包含所有 `<img>` 的屬性, 可給予 name, value 傳送值。
+  * `type="button"`,  需要配合 JavaScript 提供功能, `<button>` 更適合 CSS。
+  * `type="search"`, 搜尋欄位 
+  * `type="tel"`, 電話號碼, 可以配合 placeholder 和 pattern 使用
+  * `type="url"`, url, 不會檢查, 可以配合 pattern 使用
+  * `type="email"`, email 支援 multiple
+  * `type="datetime"`, 日期 + 時間, 可以配合 min, max, step 或者 pattern 來做驗證
+  * `type="datetime-local"`, 同 datetime 但不是 UTC 
+  * `type="date"`, 年、月、日的日期
+  * `type="month"`, 年、月, 可設置 min, max, step
+  * `type="week"`, 年、當年週數 01 ~ 52 
+  * `type="time"`, 24時制, 可設置 min, max, step 以秒遞增。 
+  * `type="number"`, 數字, 可配合 min, max, step 做驗證優先程度強於 pattern 驗證。可以使用 pattern 驗證當作候補。
+  * `type="range"`, 配合 min, max, step 產生可拖拉的範圍區間。
+  * `type="color"`, 預設 #000000
+
+#### 表單驗證
+  * HTML5 用戶端驗證
+  * JavaScript Validity API, 與 HTML5 驗證方法互動、客製化。
+  * CSS 改變驗證 UI, ::-webkit-validation-bubble
+  * input:required, :invalid, :valid, :read-only, :checked
+
+#### 其他表單元素
+  * `<datalist>` 配合 `<option>` 使用提供**建議**資料選項, input 的 list 屬性指定哪個 datalist 提供選項。
+  * `<output>`, 類似 `<span>` 提供語義與表單屬性 name, form 等等, 表單中的顯示區塊。
+  * `<meter>`, 計量顯示, 配合 min, max, high, low, optimum
+  * `<progress>`, 顯示進度
+  * `<keygen>`, 金鑰, 授權..
+  * `<form>` 屬性 novalidate 取消驗證功能。
+  * `<button>`, 三種類型 submit (default), reset, button 
+  * `<label>`, 配合 for 指定說明
+
+
+******
+
+
+### 第五章 - SVG、Canvas、音訊與視訊
+
