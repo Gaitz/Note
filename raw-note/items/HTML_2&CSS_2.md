@@ -267,3 +267,47 @@
 
 ### 第五章 - SVG、Canvas、音訊與視訊
 
+#### SVG
+  * 向量基底的圖片或動畫
+  * 以 XML 為基礎, 需要 SVG DTD，`<svg></svg>`, 結構存在於 DOM 中。
+  * `<title></title>`, `<desc></desc>` 作為說明用途
+  * style 使用方式跟一般 CSS 類似, inline, `<style></style>`, 外部檔案
+  * `<img src=".svg" alt />`
+  * `<embed type="image/svg+xml" src=".svg" width height/>`
+  * `<object data=".svg" type="image/svg+xml" width height ></object>`
+  * `<svg>` 屬性 `viewbox`: min-x, min-y, width, height, `preserveAspectRatio`
+  * [W3C 規格書](https://www.w3.org/TR/SVG/), 免費工具 [Amaya](https://www.w3.org/Amaya), [Inkscape](https://inkscape.org/)
+
+#### Canvas
+  * 繪畫用的 JavaScript API, 像素基底的圖片或者動畫
+  * `<canvas></canvas>` 畫板元素
+  * 直譯式的變數宣告與繪製
+
+#### WebGL
+  * SVG, Canvas, WebGL 在行動裝置上都有可能會有效能問題，需要評估使用。
+
+#### 音訊 `<audio>`, 視訊 `<video>`
+  * 注意各瀏覽器支援的檔案格式，確認目標瀏覽器支援編碼。
+  * `<video>`, `<audio>` 屬性
+    * src 單個來源, `<source>` 子節點承載多個來源。
+    * autoplay,
+    * loop,
+    * controls,
+    * preload,
+  * `<video>` 屬性
+    * poster, 預覽圖
+    * width,
+    * height,
+  * `<track>` 元素, 連結字幕檔案
+    * 屬性 kind, 類型, subtitles, captions, descriptions, chapters, metadata
+    * 屬性 src 來源, srclang 內容語言, label 描述, default 設定預設的 `<track>`
+  * 內容可以使用 JavaScript API, CSS 控制, 與 Canvas 互動
+
+
+******
+
+
+### 第六章 - 其他的 HTML5 API
+#### 離線功能, 快取 Application Cache
+  * `navigator.onLine` 判斷是否在線上
+  
