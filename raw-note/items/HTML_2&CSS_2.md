@@ -308,6 +308,72 @@
 
 
 ### 第六章 - 其他的 HTML5 API
-#### 離線功能, 快取 Application Cache
+#### 離線功能
   * `navigator.onLine` 判斷是否在線上
-  
+
+#### 應用程式快取 Application Cache API
+  * mobile 容量限制 5MB
+  * `<html manifest='url To .appcache file'>`
+  * 更新快取，必需先更新 manifest 裡的內容。
+  * 只有在瀏覽器更新完所有新的內容後，並且在下一次的載入才會有全新的內容，之外都採用舊的快取顯示。
+  * 快取清單檔 `.appcache`
+    * 第一行必為 `CACHE MANIFEST` 
+    * 註解行以 `#` 開頭
+    * 四種類型區隔 `CACHE:`, `NETWORK:`, `FALLBACK:`, `SETTINGS:`
+    * `CACHE:`, 會被快取的檔案 **不可以**將 .appcache 放在 `CACHE:` 裡, 不然頁面永遠不會被更新。
+    * `NETWORK:`, **不會**被快取的檔案
+    * `FALLBACK:`, 檔案備援配對
+    * `SETTINGS:`, 
+  * 更新快取, 
+    1. 通過更新快取清單檔 `.appcache`, 只更新快取檔案內容不會自動更新。
+      * 例如修改快取清單檔裡面的註解 `# timestamp` 造成快取清單檔內容改變。
+      * 如果快取清單檔得到 404 回應也會讓瀏覽器清除快取。
+    2. 使用 applicationCache JavaScript
+      * `window.applicationCache.status`, UNCACHED, IDLE, CHECKING, DOWLOADING, UPDATEREADY, OBSOLETE
+      * `window.applicationCache.swapCache()`
+
+#### 瀏覽器端暫存 storage
+  * localStorage, sessionStorage, IndexedDB, Web SQL Database (deprecated)
+  * 與 cookie 的差別
+    * cookie 會帶在 http 上增加頻寬, KB 級的容量限制
+  * localStorage domain 共享, 關閉瀏覽器不會被刪除。
+  * sessionStorage domain 共享，關閉瀏覽器會被刪除。
+  * localStorage, sessionStorage, 都是 key-value pair storage, API 操作是同步執行的。
+    * `setItem(key, value)`,
+    * `getitem(key)`,
+    * `removeItem(key)`,
+    * `clear()`,
+    * `key(position)`,
+    * `length`,
+  * IndexedDB, 關聯式資料表的儲存，API 操作是非同步執行的。
+
+#### 地理定位 geolocation
+  * 得到使用者的地理位置資訊，非同步的 API
+  * `getCurrentPosition()`, latitude 緯度, longitude 經度, altitude 海拔, accuracy
+  * `watchCurrentPosition()`, heading 方向, speed 速度
+
+#### Web Workers
+  * 額外的執行序, 背景執行與 DOM 無關的 JavaScript, 與 UI 執行序平行處理。
+  * `new Worker('.js')`,
+  * 訊息溝通使用 `postMessage()` 配合 `onmessage` 事件
+  * web worker 中可以配合 timeout 和 interval 來做週期執行。
+  * `importScripts()`, 載入其他 js 庫
+
+#### Microdata
+  * SEO 相關, HTML5 標準
+  * 使用新的屬性 `itemscope`, `itemprop`, `itemref`, `itemtype`
+
+#### 跨文件溝通
+  * 可以跨 domain 的溝通
+  * 通過 `postMessage(message, domain)` 傳遞訊息到別的 domain
+  * 通過 message event listener 讀取資訊，`event.origin` 辨別來源，為了安全性一定要辨別來源。
+
+#### ARIA 無障礙網頁 (Accesible Rich Internet Applications)
+  * 網頁增強功能
+  * 最重要且最容易加入的屬性 `role`，最佳策略還是選用原生語義的元素。
+
+
+******
+
+
+### 第七章 - 升級 CSS3
