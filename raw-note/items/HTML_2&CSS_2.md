@@ -377,3 +377,88 @@
 
 
 ### 第七章 - 升級 CSS3
+
+
+#### media query
+  * device: all, braille, embossed, handheld, print, projection, screen, speech, tty, tv
+  * width, 視區寬度, min-width ,max-width
+  * height, 視區高度, min-height, max-height
+  * device-width, 螢幕寬度, min-device-width, max-device-width
+  * device-height, 螢幕高度, min-device-height, max-device-height
+  * orientation, 直向或橫向
+  * aspect-ratio, 視區寬度 / 視區高度, min-aspect-ratio, max-aspect-ratio
+  * device-aspectratio, 螢幕寬度 / 螢幕高度, min-device-aspectratio, max-device-aspectratio
+
+#### CSS Best Practice
+  * 減少 http request, 使用 bundle.css 單一檔案。
+  * 使用外部樣式表 `<link rel="stylesheet">`
+  * 使用 reset.css 或者 normalize.css
+  * 使用較不明確的選擇器，每個選擇器使用小於三種規則，維持**效能**、**明確性**、**可閱讀性**之間的取捨。
+  * `inline style` 與 `!important` 只用於 debug。
+
+#### CSS selectors
+  * 元素選擇器, element,
+  * 多重選擇, 以 `,` 分隔選擇器
+  * class 選擇器, `.`, 大小寫有別
+  * id 選擇器, `#`, 大小寫有別
+  * 萬用選擇器, `*`
+  * 後代選擇器, `E F`, 以一個或多個空白間隔
+  * 直接子代選擇器, `E > F`
+  * 相鄰選擇器, `E + F`, E 相鄰的 F
+  * 鄰居選擇器, `E ~ F`, E 之後所有的 F
+  * 屬性選擇器, `E[attr]`, 具有屬性
+    * `E[attr=val]`, 具有屬性，值為 val
+    * `E[attr|=val]`, 具有屬性，值為 val 或 val-
+    * `E[attr~=val]`, 具有屬性，值為 val
+    * `E[attr^=val]`, 具有屬性，值開頭為 val
+    * `E[attr$=val]`, 具有屬性，值結尾為 val
+    * `E[attr*=val]`, 具有屬性，值含有 val 子字串
+  * 擬類別 Pseudo-classes
+    * `:link`, 未造訪連結
+    * `:visited`, 已造訪連結
+    * `:hover`, 游標覆蓋
+    * `:active`, 
+    * `:focus`, 被聚焦的
+    * `:enabled`,
+    * `:disabled`,
+    * `:checked`, input 被選取的
+    * `:indeterminate`, 未被選取的
+    * `:default`,
+    * `:valid`,
+    * `:invalid`,
+    * `:in-range`,
+    * `:out-of-range`,
+    * `:required`,
+    * `:optional`,
+    * `:read-only`,
+    * `:read-write`,
+    * `:root`, 根元素 `<html>`
+    * `:nth-child(n)`, even, odd, (x*n+y), n start from 0
+    * `:nth-last-child(n)`, even, odd, (x*n+y)
+    * `:nth-of-type(n)`, even, odd, (x*n+y) 
+    * `:nth-last-of-type(n)`, even, odd, (x*n+y)
+    * `:first-child`,
+    * `:last-child`,
+    * `:first-of-type()`,
+    * `:last-of-type()`,
+    * `:only-child`,
+    * `:only-of-type`,
+    * `:empty`, 沒有子元素
+    * `E:target`, 錨點
+    * `E:lang(L)`, 配合屬性 lang 語言選擇器
+    * `E:not(s)`, 反向選擇
+  * 擬元素 pseudo-element, 從 DOM 上取得不到的元素
+    * `:before`, 可以配合 `{ content: '' }` 給值
+    * `:after`, 可以配合 `{ content: '' }` 給值
+    * `:first-line`,
+    * `:first-letter`,
+  * 各個瀏覽器自有的選擇器
+
+
+******
+
+
+### 第八章 - 擴充的 CSS3 特性
+
+
+#### 
