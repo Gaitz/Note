@@ -32,7 +32,7 @@ count             | 18/18
 2.1 wikiHow to Learn English       | done
 2.2 Echo Method                   | done
 2.3 LearnEnglish - britishcouncil | done
-2.4 Fluent Forever                |  
+2.4 Fluent Forever                | done
 2.5 italki                        | done
 3.1 Memrise                       | done
 3.2 LingQ                          | done
@@ -41,8 +41,10 @@ count             | 18/18
 4.2 How to learn any language in six months, Chris Lonsdale, TEDxLingnanUniversity 18m26s       | done
 4.3 YOUTUBER 語言學習心得 - MaoMaoTV 7m32s     | done
 4.4 YOUTUBER 語言學習心得 - I’m Charlie 12m27s | done
-4.5 Expert Advice on Accent Reduction from Paddy Kennedy 4m15s                                        | done
-4.6 How to Learn English - Be a Lazy Language Learner                                                       | done
+4.5 Expert Advice on Accent Reduction from Paddy Kennedy 4m15s | done
+4.6 How to Learn English - Be a Lazy Language Learner | done
+4.7 Youtube Rachel’s English |	done
+4.8 如何學好英文及任何語言? By托哥 - How to learn any language fast? | done
 
 * * * * * * * * * * * * 
 
@@ -910,7 +912,22 @@ Hard-working learner Advice 5. Review your words and phrases.
 
 3. **重複練習**！ 大量的重複練習，口說是一種肌肉訓練，重複可以不斷的修正並且熟悉發聲肌肉的運作，直到非常自然的運作。像是練習唱歌一樣。
 
+### 4.8 [如何學好英文及任何語言? By托哥 | How to learn any language fast?](https://www.youtube.com/watch?v=OomEupK_UrU)
 
+內容關注於 everyday conversation, 討論外語溝通。
+
+丟掉字典
+
+從重複的聽力中學習、學整個句子
+
+影片重複三次法, 電影或影集 ...
+1. 第一遍、觀看、沒有字幕。
+2. 第二遍、觀看、有字幕、了解所以他們說的字。
+3. 第三遍、跟讀所有的句子。
+
+Surround with native speaker; force yourself to speak
+
+Meetup、跟目標語言的人交朋友、語言交換、聽 podcast、italki
 
 * * * *
 ## 5. 參考資料 books

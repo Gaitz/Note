@@ -308,6 +308,7 @@
 
 
 ### 第六章 - 其他的 HTML5 API
+
 #### 離線功能
   * `navigator.onLine` 判斷是否在線上
 
@@ -377,7 +378,6 @@
 
 
 ### 第七章 - 升級 CSS3
-
 
 #### media query
   * device: all, braille, embossed, handheld, print, projection, screen, speech, tty, tv
@@ -460,5 +460,84 @@
 
 ### 第八章 - 擴充的 CSS3 特性
 
+#### CSS 顏色值
+  * `#RRGGBB`, `#RGB`, 16進位顏色值, 不區分大小寫
+  * `rgb(255,255,255)`, `rgb(100%, 100%, 100%)` 數字或者百分比
+  * `rgba()`, 增加 alpha 透明度, 1 不透明 ~ 0 完全透明
+  * `hsl()`, 色調(hue) 0 ~ 359, 彩度(saturation) 0 ~ 100%, 亮度(lightness) 0 ~ 100%
+  * `hsla()`, 增加 alpha 透明度, 1 不透明 ~ 0 完全透明
+  * `currentColor` 對應到當前的 `color:` 值, example: `text-shadow: 0 0 1px currentColor;`
+  * 瀏覽器顏色值, 統一的或各瀏覽器不同的, 例如 `activateBorder`, `background`, `-webkit-link`, `-moz-buttonDefault`...
+
+#### CSS 計量單位
+  * 長度值
+    * px, 像素, 相對於螢幕解析度
+    * %, 相對於**父**元素
+    * em, 相對於**父**元素字形大小
+    * rem, 相對於**根**字形大小
+    * vw, 視區寬度百分比 100vw
+    * vh, 視區高度百分比 100vh
+    * vmin, vh, vw 的較小值
+    * vmax, vh, vw 的較大值
+    * ex, 相對於`小寫x`的高度
+    * ch, 相對於字元`0`的大小
+    * in, 英吋
+    * cm, 公分
+    * mm, 公釐
+    * pt, 
+    * pc,
+  * 解析度單位
+    * dpi, dpc, dppx
+  * 角度、時間、頻率單位 **(使用時必需加上單位，包含 0)**
+    * deg, 0deg ~ 360deg, + 順時針, - 逆時針
+    * grad, 0grad ~ 400gard, + 順時針, - 逆時針
+    * rad, 0 ~ 2pi, 1rad = 180/pi
+    * turn, 1turn = 360deg
+    * ms, 
+    * s, 
+    * Hz, 
+    * kHz, 
+
+
+******
+
+
+### 第九章 - CSS3 模組、模型與圖像
+ 
+  * CSS3 將 CSS 規則分成模組，每個模組有自己的 level 和認證階段。
+
+#### CSS 方塊模型 box-model
+  * margin, margin-top, margin-right, margin-bottom, margin-left
+  * border, border-style, border-color, border-width, ...
+  * padding, padding-top, padding-right, padding-bottom, padding-left
+  * border-style: hidden (default), dashed, dotted, double, groove, inset, none, outset, ridge, solid.
+  * border-color: currentColor (default)
+  * border 配合 transparent 可以做出三角形
+  * box-sizing: content-box (default), border-box (width, height 包含 border-size, padding)
+  * **相鄰的 margin 會整合在一起** 值都為 + 時取最長, 有正負時則取總和。
+  * border-radius, 原生圓角, border-top-left-radius, border-top-right-radius, border-bottom-right-radius, border-bottom-left-radius.
+
+#### CSS 漸層
+  * 視為一種圖像的值，可以放在任何使用 image 的 CSS 欄位中。Example: border-image, background-image, list-style-image
+  * 線性漸層 linear-gradient 
+    * `linear-gradient([<angle> | to <keyword>], <colorstop>, [<colorstop>,] <colorstop>)`
+    * **通過中心點**的方向
+    * 方向預設值是 `to bottom`
+    * 可以設置多組顏色配合起始點百分比
+  * 放射漸層 radial-gradient (需考慮效能問題,佔用記憶體)
+  * `background-size`, contain: 保持比例縮小, cover: 覆蓋整個元素、切割
+    * 只有在 width, height 同時被宣告時，會有破圖的情況，可以其一選用 auto 來保持圖片比例。
+  * `background-image` 多重背景
+
+#### 陰影
+  * 文字陰影 `text-shadow` 水平偏移量, 垂直偏移量, 陰影寬度, 陰影顏色
+  * 處理超過容器的文字, `text-overflow`, `width`, `white-space`, `overflow` 相互配合
+  * 方框陰影 `box-shadow`, 內陰影、外陰影
+
+
+******
+
+
+### 第十章 - CSS3 變形、漸變、動畫
 
 #### 
