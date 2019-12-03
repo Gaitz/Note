@@ -540,4 +540,57 @@
 
 ### 第十章 - CSS3 變形、漸變、動畫
 
+#### 漸變 Transition
+  * 狀態之間的轉變
+  * `transition-property`, 要影響的特性, 以 `,` 區隔或者使用關鍵字 `all`。
+  * `transition-duration`, 持續時間, `s` or `ms`
+  * `transition-timing-function`, 過程函數
+  * `transition-delay`, 延遲時間, `0s` (default)
+  * `transition`: property, duration, timing-function, delay (縮寫順序)
+
+#### 變形 transform
+  * 對元素變形, 不影響流向, box-model
+  * `tramsform`, 變形種類 2D 變形, 3D 變形
+    * `translate(x, y)`, 位移
+    * `translateX(x)`, 水平移動
+    * `translateY(y)`, 垂直移動
+    * `scale(w, h)`, 縮放 w, h 寬高或單變數等比例縮放
+    * `scaleX(w)`, 水平縮放
+    * `scaleY(h)`, 垂直縮放
+    * `rotate(angle)`, 旋轉
+    * `rotateX(angle)`, 以 x 為軸旋轉
+    * `rotateY(angle)`, 以 y 為軸旋轉
+    * `skew(x, y)`, 傾斜
+    * `skewX(x)`, 設定水平向傾斜
+    * `skewY(y)`, 設定垂直向傾斜
+    * `matrix()`, 混合函數
+    * 可以多重種類變形, 以 ` ` 間隔
+    * `translate3d(x, y, z)`, 3d位移
+    * `translateZ(z)`, trick `translateZ(0)` 可以把渲染運算刻意給 GPU。
+    * `scale3d(w, h ,z)`, 3d縮放
+    * `scaleZ(z)`
+    * `rotate3d(x, y, z, angle)` 3d旋轉
+    * `perspective()` 透視效果
+  * `transform-origin`, 元素變形的原點, `50% 50% 0` (default), x, y, z 值, 0 0 是左上。
+  * `transform-style`, 受變形影響的子元素行為, `flat` (default), `preserves-3d`
+  * `backface-visibility`, 背面是否可視, `visible` (default), `hidden`
+
+#### 動畫 animation
+  * `animation-name`, keyframe 對應的動畫名稱, `none` (default)
+  * `animation-duration`, 一個循環的持續時間, `0s` (default)
+  * `animation-timing-function`, 過程函數, `ease` (default)
+  * `animation-iteration-count`, 播放次數, `1` (default), 整數, `infinite`
+  * `animation-direction`, 循環時的方向, `normal`, `alternate` 正反循環
+  * `animation-play-state`, `running` (default), `paused`
+  * `animation-delay`, 開始的時間
+  * `animation-fill-mode`, 開始前或結束後要保留的值, `none` (default), `backwards`, `forwards`, `both`
+  * `animation`, 縮寫使用以上順序, 以 ` ` 間隔。
+  * `@keyframes animation-name {  }`, `from {}`, `to {}`, 百分比 `n% {}`
+
+
+******
+
+
+### 第十一章 - 響應式 Web 的 CSS 功能
+
 #### 
