@@ -45,6 +45,7 @@ count             | 18/18
 4.6 How to Learn English - Be a Lazy Language Learner | done
 4.7 Youtube Rachel’s English |	done
 4.8 如何學好英文及任何語言? By托哥 - How to learn any language fast? | done
+4.9 How To Learn the British Accent With Listening Practice 口說練習 | done
 
 * * * * * * * * * * * * 
 
@@ -929,6 +930,18 @@ Surround with native speaker; force yourself to speak
 
 Meetup、跟目標語言的人交朋友、語言交換、聽 podcast、italki
 
+### 4.9 [How To Learn the British Accent With Listening Practice 口說練習](https://www.youtube.com/watch?v=Y9OFhg17AvI)
+
+把此訓練放到練習週期中
+
+1. 尋找口音偶像, 想成為的對象
+2. 尋找口音偶像的聽力資源, interview, chat show, Youtube, Podcast, ... (不要是讀文章的類型, 語調與溝通時常不同)
+3. 找到資源時，第一次以學習為優先
+4. 設定此次學習主題, interview, specific sound, vowel sound, consonant sound, 一次一種主題。
+5. 聽 5 ~ 10秒或以小段時間, 
+6. 復誦, 口音偶像如何說
+7. 回到重頭，反覆三次, 以此訓練口說肌肉
+ 
 * * * *
 ## 5. 參考資料 books
 
