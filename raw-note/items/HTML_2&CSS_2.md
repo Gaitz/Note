@@ -593,4 +593,54 @@
 
 ### 第十一章 - 響應式 Web 的 CSS 功能
 
-#### 
+#### Media Query and break point
+  * 在變動中發現開始變不好看的時候，增加中斷點。
+
+#### 多重欄位
+  * `column-count`, 最大欄位數
+  * `column-width`, 最小欄位寬度
+  * `columns`: 縮寫 width, count
+  * `column-gap`, 欄位間距
+  * `column-rule-width`, 分隔線寬度
+  * `column-rule-style`, 分隔線樣式
+  * `column-rule-color`, 分隔線顏色
+  * `column-rule`, 分隔線縮寫, width, style, color
+  * `column-span`, `none` (default), `all` 元素橫跨所有欄位
+  * `column-fill`, 指定分 column 時的行為
+
+#### 邊框圖片
+  * `border-image-source`, 圖片URL, 漸層函數
+  * `border-image-slice`, 圖片切割, 選擇要使用的部份
+  * `border-image-width`, 邊框寬度
+  * `border-image-outset`, 邊框與內容之間的距離, `0` (default)
+  * `border-image-repeat`, 除了四個角之外的邊框，如何展示, `stretch`, `repeat`, `round`, `space`
+  * `border-image`, 縮寫
+
+#### flexbox
+  * `display: flex` or `display: inline-flex` 啟用
+  * `flex-direction`, 延伸方向, `row` (default), `column`, `row-reverse`, `column-reverse`
+  * `flex-wrap`, 是否折行, `nowrap` (default), `wrap`, `wrap-reverse`
+  * `flex-grow`, 與同層元素放大的比率
+  * `flex-shrink`, 與同層元素縮小的比率
+  * `flex-basis`, 等同於 width
+  * `flex`, 縮寫 grow, shrink, basis, 均分 `1 1 0` 
+  * `order`, 元素排列順序
+  * `justify-content`, 整體元素主軸線上的排列方式
+  * `align-content`, 整體元素在正交線上的排列方式
+  * `align-items`, 各個元素在正交線上的行為
+  * `align-self`, 控制單獨元素在正交線上的行為
+
+#### 偵測功能
+  * `@supports` 依據功能支援與否來建立 css, 如同 media query 一般
+
+#### image-set()
+  * srcset, 讓瀏覽器選擇要請求的圖片大小, 為不同類型的螢幕給予不同的檔案來源。
+
+#### filter
+  * CSS層級的圖片濾鏡
+
+
+******
+
+
+### 第十二章 - 行動應用程式設計
