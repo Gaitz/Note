@@ -644,3 +644,58 @@
 
 
 ### 第十二章 - 行動應用程式設計
+
+#### 設計的注意事項
+  * 決定使用者是誰, 什麼族群, 瀏覽的目的, 使用的情境
+  * 網站需要 
+    * "簡單", 
+    * "可理解", 
+    * "具相關性"
+  * 應用程式什麼類型, 生產立工具, 公用程式, 娛樂程式, 
+  * 風格是正式 (簡單, 顏色種類少, 設計單調), 還是有趣。
+  * 行動裝置網頁, 仍然要提供完整的內容, 但是呈現是有順序的。
+  * 行動裝置網站要思考的特性
+    * 小螢幕, => 一次能呈現的內容更少, 循序的瀏覽
+    * 較少的記憶體空間, => 縮小原始檔案, 不要載入不需要的資源
+    * 多利用開發者工具檢查記憶體的使用
+    * 通過 meta data 設置，與行動裝置互動
+    * 減少鍵盤輸入
+    * 無法使用 hover, 不要使用下拉、彈出式互動。
+    * 使用點擊式的互動, 動態載入更多的內容。
+
+
+### 第十三章 - 以行動與觸控設備為目標
+  * 設置 `<meta name="viewport" content="width=device-width"/>`
+  * 觸碰而非滑鼠的行為模式, 手指相對於螢幕很巨大。
+  * 需要更大的點擊範圍與間隔, height > 22px, 間隔 > 10px
+  * 注意所有原生 OS 提供的功能，避免非預期的行為。
+  
+#### 操作行動硬體
+  * event listener `'devicemotion'`, 加速度計
+  * event listener `'compassneedscalibration'`, 磁強計
+  * event listener `'deviceorientation'`, 陀螺儀
+  * Network API, `navigator.connection.type` 檢測連線狀況與品質
+  * Battery Status API, `navigator.battery` 檢查目前電池狀況
+  * 更多行動裝置上專屬的 API 
+
+
+### 第十四章 - 行動效能
+  * 效能優先
+  * 減少 JavaScript 大小與運算量
+  * 以 CSS 動畫取代 JavaScript 動畫
+  * 使用暗色系設計, 減少發光量 => 減少電源消耗
+  * 使用 **JPEG** 比 PNG 擁有更好的壓縮率
+  * 減少網路請求, 移除不必要的 polling request
+  * 避免重新繪製 (repaint)、重新排版 (reflow)
+    * 避免重繪 alpha 等等比較複雜的特性
+    * 更少的操作 DOM 節點, 改變 box-model, 刪除複雜的 CSS 選擇器
+  * 行動裝置下載延遲，盡可能的減少 HTTP request 和 DNS request
+  * 使用瀏覽器快取, 加上適當的 Cache-control response header
+  * 單一的 CSS 樣式檔
+  * 盡可能的圖片壓縮 gzip, base64, inline SVG, ...
+  * 使用開發者工具 network 檢查, 查看各個 request 所需要的時間並且減少他們。
+  * 壓縮所有的檔案, JavaScript, CSS, image, ...
+  * 使用者開發工具檢查檔案大小
+  * 避免非必要的 JavaScript library 或者延遲載入
+  * 最小化 DOM 的結點數量與深度
+  
