@@ -75,3 +75,28 @@
 
 ### 第二章 - 結構化頁面 (Structuring Pages) 和語義元素 (Semantic Elements)
 
+#### 語義元素
+  * `<header>`
+  * `<footer>`
+  * `<article>`, 需要標題
+  * `<figure>`, `<ficaption>`
+  * `<aside>`
+  * `<nav>`
+  * `<section>`, 需要標題
+  * `<details>`, `<summary>`
+  * `<main>`, 整個頁面只能有一個
+  * HTML5 outline system, 利用 `<h1>...<h5>`, `<article>`, `<aside>`, `<nav>`, `<section>` 產生
+
+
+------------------------------
+
+
+### 第三章 - 撰寫更多有意義的標記
+
+#### 行內語義元素
+  * microdata 與 SEO
+  * `<time>` 時間與日期, 配合屬性 `datetime` 提供專用格式 `YYYY-MM-DD HH:MM-TimeZone`, 屬性 `pudate` 標注出版日期
+  * `<output>` JavaScript 輸出的內容, 可以通過屬性 `form` 指定表單ID, 屬性 `for` 說明
+  * `<mark>` 強調重要內容或者關鍵字, 
+  * `<del>` 被刪除的、不合現狀的
+  * `<ins>` 新增的
