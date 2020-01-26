@@ -172,7 +172,7 @@
   * 屬性 `height`, `width`
   * 屬性 `poster`,
   * 配合屬性 `mediagroup` 讓多個 video 或者 audio 同時播放。
-  * 影片字幕 
+  * 影片字幕, `<track src srclang kind label default>`
 
 #### 檔案格式
   * 多媒體檔案格式與 MINE 類型
@@ -182,3 +182,118 @@
 #### 透過 JavaScript 操作
   * audio API
   * video API
+
+
+------------------------------
+
+
+### 第六章 - CSS3 的吸睛特效與絢麗字體
+
+#### CSS3使用策略
+  1. 能用則用
+  2. 不同瀏覽器可以看起來不一樣但是行為要一致。
+  3. 必須加上備援機制, Modernizr / CSS fallback / 查詢 caniuse 帶上前綴
+
+#### CSS3 新功能
+  * 透明度 (Transparency)
+    * `rgba()`
+    * `opacity()`
+  * 弧形邊角 (Rounded Corners)
+    * `border-radius`
+    * 可以設置成橢圓邊角, Ex. `border-top-left-radius: 150px 30px;`
+  * 多重背景 (Background)
+    * `background-image`
+    * `background-position`
+    * `background-repeat`
+  * 陰影 (Shadow)
+    * `box-shadow`
+    * `text-shadow`
+  * 漸層 (Gradients)  
+    * 線性漸層 `linear-gradient()`
+    * 放射漸層 `radial-gradient()`
+    * 循環漸層 `repeating-linear-gradient(), repeating-radial-gradient()`
+  * 轉場 (transition)
+    * `transition`
+    * 範例 `opacity`, `box-shadow`, `gradient`, `transform` 
+  * 變形 (transform)
+    * 2D transform, 3D transform
+  * 網頁字體 (Web Font)
+    * `@font-face`
+    * 下載免費字體 Font Squirrel
+    * 使用 Google Fonts
+    * 付費字體 https://fonts.com https://typekit.com
+  * 欄位文字排版 (Column)
+    * `column-count`
+    * `column-gap`
+    * `column-rule`
+    * `column-span`
+
+
+------------------------------
+
+
+### 第七章 - CSS 的自適應式網頁設計 (Responsive Web Design)
+
+#### 流體排版
+  * 從固定尺寸改成百分比排版 `%`
+  * `box-sizing: border-box`
+  * `calc()`
+
+#### 流體圖片
+  * `max-width: 100%`
+  * 無論顯示大小，圖片都會被完整的下載。小心大圖造成的效能問題
+
+#### 流體字型
+  * `em`, `rem` 取代 `px`
+
+#### 設置 viewport
+  * `<meta name='viewport' content='initial-scale=1.0' />`
+
+#### Media Query
+  * `@media () {}`
+  * media query 不會增加 CSS 選擇的權重
+  * 設計時行動裝置優先 (mobile first)
+  * 連結整份樣式表 `<link rel='stylesheet' media='' href />`
+  * 查詢裝置大小 www.mobitest.me/devices
+  * 影片的 media query, `<source media src type />`
+
+
+------------------------------
+
+
+### 第八章 - Canvas 的基本繪圖功能
+
+#### Canvas 基礎入門
+  * 必須配合 JavaScript 使用
+  * `<canvas id width height ></canvas>`
+  * JavaScript
+    1. `getElementById()`
+    2. `getContext("2d")`
+  * 原點(0, 0) 為左上角
+
+##### 直線
+  * `moveTo()`, 畫筆移動到起始點
+  * `lineTo()`, 畫線到
+  * `stroke()`, 實際畫出
+  * 在呼叫 `stroke()` 實際畫出內容之前，還可以設置 `lineWidth`, `strokeStyle`, `lineCap`
+  * `beginPath()` 重新開啟一段，否則呼叫 `stroke()` 時會重新繪製先前所有的內容。
+
+##### 路徑和形狀
+  * `closePath()`, 關閉路徑
+  * `fillStyle`, 填滿設定
+  * `fill()`, 實際填滿內容
+  * 可以使用一樣的路徑配合 `stroke()` 畫出邊框
+
+##### 方形
+  * `fillRect()` 左上座標, 寬度, 長度, 配合 `fillStyle` 設定
+  * `strokeRect()`, 配合 `lineWidth`, `strokeStyle` 設定
+
+##### 曲線和圓形
+  * `arc()`, `arcTo()`, `bezierCurveTo()`, `quadraticCurveTo()`
+  * `arc()`, 圓心, 半徑, 起始角度, 中止角度, 0 ~ 2 Math.PI
+  * `bezierCurveTo()` Bezier 曲線, 兩個控制點, 和終點
+
+##### 變形
+  * `translate()` 平移畫布 (移動原點)
+  * `scale`, `rotate`, `matrix`
+
