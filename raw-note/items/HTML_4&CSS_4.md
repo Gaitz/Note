@@ -271,29 +271,114 @@
     2. `getContext("2d")`
   * 原點(0, 0) 為左上角
 
-##### 直線
+#### 直線
   * `moveTo()`, 畫筆移動到起始點
   * `lineTo()`, 畫線到
   * `stroke()`, 實際畫出
   * 在呼叫 `stroke()` 實際畫出內容之前，還可以設置 `lineWidth`, `strokeStyle`, `lineCap`
   * `beginPath()` 重新開啟一段，否則呼叫 `stroke()` 時會重新繪製先前所有的內容。
 
-##### 路徑和形狀
+#### 路徑和形狀
   * `closePath()`, 關閉路徑
   * `fillStyle`, 填滿設定
   * `fill()`, 實際填滿內容
   * 可以使用一樣的路徑配合 `stroke()` 畫出邊框
 
-##### 方形
+#### 方形
   * `fillRect()` 左上座標, 寬度, 長度, 配合 `fillStyle` 設定
   * `strokeRect()`, 配合 `lineWidth`, `strokeStyle` 設定
 
-##### 曲線和圓形
+#### 曲線和圓形
   * `arc()`, `arcTo()`, `bezierCurveTo()`, `quadraticCurveTo()`
   * `arc()`, 圓心, 半徑, 起始角度, 中止角度, 0 ~ 2 Math.PI
   * `bezierCurveTo()` Bezier 曲線, 兩個控制點, 和終點
 
-##### 變形
+#### 變形
   * `translate()` 平移畫布 (移動原點)
   * `scale`, `rotate`, `matrix`
 
+#### 透明度
+  * `rgba()`
+  * `globalAlpha` context 參數
+
+#### 複合運算 (Composite Operations)
+  * 設定相疊的行為, default: `source-over`
+  * `globalCompositionOperation` context 參數
+  * `source-over`, `source-in`, `source-out`, `source-atop`, `destination-over`, `destination-in`, `destination-out`, `destination-atop`, `lighter`, `copy`, `xor`
+
+#### 儲存
+  * 儲存成資料網址 `toDataURL()`, base64
+  * 取得原始資料 `getImageData()`
+  * 儲存生成步驟清單
+
+
+------------------------------
+
+
+### 第九章 - Canvas 進階: 互動性與動畫
+  * 在 Canvas 中所有的動畫與互動功能都需要自行使用 JavaScript 實作，因此可以選用函式庫。
+ 
+#### 繪製圖片
+  * 畫出現有的圖片, `drawImage()`, 現有的 `<img>`, `Image` 物件, 甚至是另一個 `<canvas>`, 或者播放中的 `<video>`。
+  * 裁切現有圖片, 重設圖片大小 `drawImage()` 代入更多參數。
+
+#### 繪製文字
+  * 只能繪製單行，多行文字需要自行斷行，配合參數 `font`, `textBaseline` 設定
+  * `fillText()`, 繪製實心文字
+  * `strokeText()`, 繪製空心文字, 配合屬性 `lineWidth`, `strokeStyle`
+  * 繪製文字效能較差，在需要效能最佳化的情況下，可以把文字存成圖片檔，使用 `drawImage()` 畫出。
+
+#### 陰影
+  * 屬性 `shadowColor`, 陰影顏色
+  * 屬性 `shadowBlur`, 陰影模糊程度, 最清晰是 0
+  * 屬性 `shadowOffsetX`, `shadowOffsetY`, 陰影位置
+
+#### 利用圖片填滿
+  * `createPattern()`, 參數 src, `repeat-x`, `repeat-y`, `repeat`
+  * pattern 設定給 `fillStyle` 或 `strokeStyle`
+
+#### 利用漸層填滿
+  * 支援線性漸層 (linear-gradient) 與放射漸層 (radial-gradient)
+  * `createLinearGradient()`, 創造線性漸層給予兩個點
+  * `createRadialGradient()`, 創造放射漸層給予兩個圓
+  * 設定漸層顏色 `addColorStop()`, 0 起點 ~ 1 終點, 及顏色。
+
+#### 互動功能
+  * 紀錄繪製
+  * 點擊測試
+
+#### Canvas 動畫
+  * 使用 `setTimeout()`, `setInterval()`, 清除與重新繪製
+  * 在 mobile 時可能會有效能問題，要多測試並且最佳化。
+  * 瀏覽器通過硬體加速 (hardware-acceleration) 把繪圖交給顯示卡處理。
+
+
+------------------------------
+
+
+### 第十章 - 儲存你的資料
+  * 分成伺服器端 (server-side) 與客戶端 (client-side)
+  * 客戶端是瀏覽器軟體
+
+#### 客戶端儲存 Web Storage 入門
+  * `localStorage`, 長期儲存
+  * `sessionStorage`, 暫存
+  * 儲存容量以各瀏覽器實作為準
+  * 儲存以 domain 區分
+  * key-value pair storage, 資料都以字串儲存
+  * `setItem()`, `getItem()`, `removeItem()`, `clear()`, `key()`
+  * 字串以外的型別，需要做型別轉換。例如 `Number()`
+  * 儲存物件時可以通過 `JSON`, `JSON.stringify()`, `JSON.parse()`
+  * `window.onStorage` 事件，`addEventListener("storage")`，監聽事件可以讓同 domain 跨頁上做出互動。
+
+#### File API 檔案操作
+  * 取得檔案的方式
+    * `<input type="file">` 元素
+    * 隱藏的 `<input type="file">` 元素, 使用 JavaScript 觸發
+    * 拖拉 API (drag-and-drop), `onDragEnter`, `onDragOver`, `onDrag` 配合 `event.stopPropagation()`, `event.preventDefault()`, `event.dataTransfer.files`
+  * `FileReader()` 非同步處理, 需配合 `onload` 事件
+    * `readAsText()`, `readAsBinaryString()`, `readAsArrayBuffer()`, `readAsDataUrl()`
+    * 配合 `Blob` (binary large object) 物件
+
+#### IndexedDB 瀏覽器中的資料庫
+  * 
