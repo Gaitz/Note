@@ -381,4 +381,119 @@
     * 配合 `Blob` (binary large object) 物件
 
 #### IndexedDB 瀏覽器中的資料庫
-  * 
+  * 用戶端資料庫的用途
+    * 離線應用程式的資料庫
+    * 提升效能，強大的暫存能力
+    * 改善 local storage ，允許更複雜多樣的內容
+  * 所有動作都是非同步執行 (asynchronous model)
+  * 儲存的資料皆是物件
+  * 建立與連結資料庫
+    * `window.indexedDB.open(DB_name, DB_version)`
+    * `onsuccess`, `onerror`, `onupgradeneeded`
+  * 物件庫 (object store)
+    * 等同於關聯式資料庫的表格
+    * `createObjectStore(name, { keyPath: ""})`
+    * keyPath == primary key
+    * 如果沒有適合的 keyPath ，可以使用傳統的 `id` 配合 `autoIncrement: true`
+  * 資料操作的基礎一組交易 `transaction`
+    1. 建立 `transaction`, `transaction()`, 參數用到的物件庫及操作類型
+    1. 取出物件庫, `transaction.objectStore()` 
+    1. 對物件庫進行資料操作, `objectStore.put()`, `get()`, `delete()`, ...
+    1. 處理成功與失敗, `onerror`, `onsuccess`
+  * 使用 `cursor` 讀取完整的資料庫
+    * `objectStore.openCursor()`
+    * `onsuccess`, `var cursor = event.target.result`, true, false 表示是否有資料。
+    * `cursor.value` 取得資料
+    * `cursor.continue()` 取得下筆資料
+
+
+------------------------------
+
+
+### 第十一章 - 離線執行
+  * Progressive Web Apps (PWA) 離線功能從 manfiest 改成使用 `service workers`
+  * ~~Progressive Web Apps (PWA) 基礎~~
+
+#### ~~使用 Manifest 設定快取 (caching)~~ 
+  * 沒有網路的時候，仍然可以取得快取的版本。
+  * ~~與傳統的瀏覽器快取 (cache-control headers) 不同，更明確的設定離線程式，並且快取時間無限制。~~
+
+#### ~~建立 manifest~~
+  * ~~純文字檔案~~
+  * ~~設定離線程式所需的一切~~
+  * ~~`CACHE MANIFEST` 開頭~~
+  * ~~`#` 註解行~~
+  * ~~任意檔案名稱但是使用正確的副檔名~~
+
+
+------------------------------
+
+
+### 第十二章 - 連結網路伺服器 (Web Server)
+  * server-side event
+  * web sockets
+
+#### XMLHTTPRequest 
+  * 使用 JavaScript 發送 http Request
+  * `new XMLHTTPRequest()`
+  * `open(httpType, URL, isAsynchornous)`, 設定 http request
+  * `send()`, 發送 request
+  * `onreadystatechange` 事件處理 http response
+  * `readyState`, request 目前的狀態
+  * `status`, 回傳狀態碼
+
+#### Server-sent Events
+  * 單向的溝通，瀏覽器端只能接收資訊不能傳送資訊。
+  * 除了使用 `setInterval()`, `setTimeout()` 定期去做 polling 之外。
+  * 可以使用 server-sent events, IE/Edge 不支援
+  * 資訊格式 `data: messageHere \n\n`
+  * MINE Type, `text/event-stream`
+  * 建立監聽 `new EventSource()`, `onmessage` event
+  * 關閉連線 `close()`
+  * 瀏覽器端不會知道伺服器端是否關閉，會不斷 retry。
+  * 伺服器端可以加上 `retry:` 讓瀏覽器端知道多久重新連線一次。
+
+#### Web Sockets
+  * 保持連線，雙向溝通。
+  * 瀏覽器端 `new WebSocket("ws://")`
+  * 瀏覽器端事件 
+    * `onOpen`, 首次連線
+    * `onError`, 錯誤發生
+    * `onClose`, 連線關閉
+    * `onMessage`, 收到訊息
+  * 傳送資訊給伺服器端 `send()`
+  * 瀏覽器端關閉連線 `close()`
+
+
+------------------------------
+
+
+### 第十三章 - Geolocation、Web Workers、與瀏覽紀錄管理
+
+#### Geolocation
+  * 非 W3C 標準
+  * 在使用者授權後，能取得地理位置。
+  * `navigator.geolocation`, 
+  * `getCurrentPosition()`, 非同步的取得地理位置
+  * `watchPosition()`, `clearWatch()`, 定時查詢地理位置與關閉
+
+#### Web Workers
+  * 背景執行 JavaScript
+  * 資訊傳遞使用複製，而非共用記憶體位置，避免 race-condition。
+  * Web worker 中無法存取 DOM
+  * `new Worker()`
+  * 傳遞資訊, `postMessage()`
+  * 接收資訊使用 `onMessage` 事件
+  * `onError` 事件取得 web worker 出問題時的錯誤訊息。
+  * 停止 web worker 工作，`worker.terminate()`
+  * Web Worker 可以遞迴生成 (web worker 裡創造另一個 web worker)
+  * Web Worker 可以發送 http request
+
+#### History API
+  * history 物件
+  * `length` 取得歷史訊息長度
+  * `history.back()` 回到上一頁
+  * `history.pushState()` 修改網址並且新增到瀏覽器的歷史紀錄中
+  * `onPopState` 事件處理，使用者點擊上一頁時
+  * 需要 server-side 做相同的 rendering 機制才能在使用者自行輸入網址時取得正確的內容。
+
