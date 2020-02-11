@@ -270,9 +270,123 @@
 #### 打包
   * `()`, 會儲存的打包, 可以藉由 `\數字` 取出。
   * `(?)`, 不會儲存的分組, 更好的比對效能。
- 
+
 
 ------------------------------
 
 
 ### 第八章 - 方法
+
+#### Array
+  * `concat(item...)`
+  * `join(separtor)`, 大量的字串串聯用, `join()` 效能勝過 `+`
+  * `pop()`
+  * `push(item...)`, 回傳值是新陣列的長度
+  * `reverse()`
+  * `shift()`, 比 `pop()` 慢很多
+  * `slice(start, end)`
+  * `sort(compareFunction)`
+  * `splice(start, deleteCount, item...)`, 刪除指定數量並且新增 `item`
+  * `unshift(item...)`, 回傳值是新陣列的長度
+
+#### Function
+  * `apply(thisArg, argArray)`, 函式呼較指定 `this` 與參數
+
+#### Number
+  * `toExponential(fractionDigits)`, 轉換成指數形式字串
+  * `toFixed(fractionDigits)`, 轉換成十進位字串
+  * `toPrecision(precision)`, 指定精度轉換成十進位字串
+  * `toString(radix)`, 轉換為指定基底的字串, 預設是 `10`
+
+#### Object
+  * `hasOwnProperty(name)`, 檢查是否為物件自身的特性, 不檢查繼承鏈上的。
+
+#### RegExp
+  * `exec(string)`, 可以回傳 grouping 的陣列，失敗則回傳 `null`。
+  * `test(string)`, 最簡單也最快，回傳 `true`, `false`
+
+#### String
+  * `charAt(pos)`, 回傳指定位置字串, 失敗回傳空字串 `""`
+  * `charCodeAt(pos)`, 回傳指定位置的 code point (整數值)
+  * `concat(string...)`, 等同於 `+`, `+` 更便利。
+  * `indexOf(searchString, position)`, 回傳**第一個**符合字串的 `index`
+  * `lastIndexOf(searchString, position)`, 從尾端比對。
+  * `localeCompare(that)`, 通過 code point 做字串比較。
+  * `match(regexp)`, 
+  * `replace(searchValue, replaceValue)`, 搜尋與取代，回傳新字串，預設只有第一個符合的，除非使用 RegExp flag `g`
+  * `search(regexp)`, 等同於 `indexOf()`, 但是可以使用 RegExp。
+  * `slice(start, end)`, 複製子字串產生新字串。
+  * `split(separator, limit)`, 分割成陣列, limit 為選用的限制分割數量。
+  * `substring(start, end)`, 可以使用 `slice()` 完全取代其功能。
+  * `toLocaleLowerCase()`, 使用本地語系轉換成小寫字串
+  * `toLowerCase()`, 回傳全小寫字串
+  * `toUpperCase()`, 回傳全大寫字串
+  * `fromCharCode(char...)`, 從 code point 回傳字串。
+
+
+------------------------------
+
+
+### 第九章 - 風格
+
+
+------------------------------
+
+
+### 第十章 - 美的功能
+
+
+------------------------------
+
+
+### 附錄A - 糟糕的部分
+  * 全域變數
+  * 變數範圍
+  * 自動安插的分號
+  * Unicode, 特殊字元使用32位元表達時，JavaScript 會把他視為2個字元。
+  * 不可靠的 `typeof`
+  * 不可靠的 `parseInt()`, 1. 遇到非數字不會有錯誤訊息而是停止, 2. 內建預設的數字基底轉換。
+  * 數字運算的 `+` 容易被任意字串給汙染，最好先確保型別。
+  * 浮點數 IEEE 754標準，需要精確計算時不要使用浮點數。
+  * NaN 的比較。
+  * 假的陣列，雖然易於使用，但是效能不佳。以及某些假陣列，例如 `arguments`。
+  * falsy 值, `0`, `NaN`, `''`, `false`, `null`, `undefined`
+  * 可以任意 override 原生的函式，導致可怕的錯誤。
+  * 空物件仍然帶有很多預設的特性，導致使用 `for in` 時可能取出非預期的東西。
+
+
+------------------------------
+
+
+### 附錄B - 不良的部分與風格
+  * `==` 與 `!=`, 規則複雜的強制轉換型別比較。
+  * `with`
+  * `eval`
+  * `continue`
+  * `switch` case fall through
+  * 省略 `{ }` 的單行敘述。
+  * 刻意使用的 `++` 與 `--` 
+  * Bitwise 運算子, 對於 JavaScript 來說位元運算，只是模擬出來的，沒有任何效能益處。
+  * 單獨存在的 `function functionName() {}`，如同一般變數一樣會變成全域的。
+  * 避免使用 `new`，因為在忘記使用 `new` 時呼叫建構子函式，會變成全域變數，並且沒有任何警告。
+  * `void`
+
+
+------------------------------
+
+
+### 附錄C - JSLint
+
+
+------------------------------
+
+
+### 附錄D - 語法圖
+
+
+------------------------------
+
+
+### 附錄E - JSON
+  * 來自於 JavaScript 物件實字，但是規則獨立。
+  * 解析時使用 `JSON.parse()`
