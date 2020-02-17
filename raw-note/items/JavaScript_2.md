@@ -308,3 +308,78 @@
 
 
 ### 第八章 - AJAX 與 JSON
+
+#### AJAX 請求與回應
+  * `var xhr = new XMLHttpRequest()`
+  * `xhr.open()`
+  * `xhr.send()`
+  * `xhr.onload = callback_function`
+
+#### 常見資料格式
+  * JSON
+    * `JSON.stringify()`, 將 JavaScript 物件轉成 JSON 字串
+    * `JSON.parse()`, 解析 JSON 字串
+    * `responseText`, 取得回傳值
+    * `data/data.json`
+  * HTML
+    * `responseText`, 取得回傳值
+    * `data/data.html`
+  * XML
+    * `responseXML`, 取得回傳值
+    * `data/data.xml`
+
+#### 跨網域資料請求, 同源政策
+  * 自己的伺服器做代理 (proxy)
+  * JSON-P，藉由預先呼叫，伺服器端傳來的函數，不太安全。
+  * Cross-Origin Resource Sharing (CORS) 藉由設定 HTTP header 允許瀏覽器執行。
+
+#### jQuery AJAX
+  * 請求
+    * `.load()`, 配合選擇器, 直接把相對路徑的內容 Ajax 到指定的選擇器上。
+    * `$.get()`
+    * `$.post()`
+    * `$.getJSON()`
+    * `$.getScript()`
+    * `$.ajax()`
+  * 回應
+    * `status`
+    * `statusText`
+    * `responseText`
+    * `responseXML`
+    * `.done()`
+    * `.fail()`
+    * `.always`, 無論成功與否都執行
+    * `.abort`, 中止
+  * 使用 jQuery `serialize()` 與 `$.post` 送出表單資料。
+
+
+------------------------------
+
+
+### 第九章 - APIS 應用程式介面
+
+#### HTML5 JavaScript API
+  * 可以利用第三方 Modernizer 函式庫做支援度檢查。
+  * `geolocation`, 地理位置資訊
+    * `geolocation` 物件, 
+    * `Position` 物件, 
+    * `PositionError` 物件
+  * `localStorage`, `sessionStorage`
+    * 同源政策保護, key-value pair storage, `setItem()`, `getItem()`, `removeItem()`, `clear()`, `length`
+  * `history`, SPA 也可以操作歷史紀錄，來實現換URL、加入最愛、回上一頁功能。
+    * `history.pushState()`, `history.replaceState()`, `history.back()`, `history.forward()`, `history.go()`, `length`, `window.onpopstate` 事件
+
+#### 第三方函式庫
+  * jQuery 外掛, jQuery UI
+  * AngularJS, MVC 架構, View, Controller, Model
+
+#### 其他平台 API
+  * Google Map API
+  * Facebook API
+  * twitter API
+
+
+------------------------------
+
+
+### 第十章 - 錯誤處理與除錯
