@@ -383,3 +383,157 @@
 
 
 ### 第十章 - 錯誤處理與除錯
+  * 執行順序
+  * 執行環境, 變數範圍 context
+  * function stack
+
+#### exception 與 Error 物件
+  * `Error` 物件,
+    * `name`, 錯誤類型
+    * `message`,
+    * `fileNumber`,
+    * `lineNumber`,
+  * 其他 Error 物件
+    * `SyntaxError`,
+    * `ReferenceError`,
+    * `TypeError`,
+    * `RangeError`,
+    * `URIError`, `encdoeURI()` 或 `decodeURI()` 類似方法產生的錯誤
+    * `EvalError`
+
+#### Debug
+  * 在瀏覽器中開發者工具設置中斷點，可以查看四周的變數內容。
+  * 為中斷點加上條件。
+  * 直接在程式碼中加入 `debugger` 設置中斷點。
+  * `console.log()`
+  * `console.info()`
+  * `console.warn()`
+  * `console.error()`
+  * `console.table()`
+  * `console.assert()`
+
+#### 例外處理
+  * `try {}`
+  * `catch(exception) {}`
+  * `finally {}`
+  * `throw new Error('message')`, 拋出客製化的錯誤訊息
+
+
+------------------------------
+
+
+### 第十一章 - 內容控制面板
+  * 使用 jQuery 實作常見的 UI 樣式。
+  * 收折 (Accordion)
+  * 標籤面板 (Tabbed Panel)
+  * 浮動視窗 (Modal Window)
+  * 相片檢視器 (Photo Viewer)
+  * 滑動輪播 (Carousel)
+
+
+------------------------------
+
+
+### 第十二章 - 過濾篩選、搜尋與排序
+
+#### JavaScript 陣列方法
+  * `push()`
+  * `pop()`
+  * `unshift()`
+  * `shift()`
+  * `forEach()`
+  * `some()`
+  * `every()`
+  * `concat()`
+  * `filter()`
+  * `sort()`
+  * `reverse()`
+  * `map()`
+
+#### jQuery 陣列方法
+  * `add()`
+  * `not()`
+  * `each()`
+  * `filter()`
+  * `toArray()`
+
+#### 實作範例
+
+
+------------------------------
+
+
+### 第十三章 - 表單強化與驗證
+
+#### 表單元件 `<form>`
+  * 特性
+    * `action`, URL
+    * `method`, POST, GET
+    * `name`
+    * `elements`
+  * 方法
+    * `submit()`
+    * `reset()`
+  * 事件
+    * `onSubmit`
+    * `onReset`
+
+#### `<input>`
+  * 特性
+    * `value`
+    * `type`
+    * `name`
+    * `defaultValue`
+    * `form`
+    * `disabled`
+    * `checked`
+    * `defaultChecked`
+    * `selected`
+  * 方法
+    * `focus()`
+    * `blur()`
+    * `select()`
+    * `click()`
+  * 事件
+    * `onBlur`
+    * `onFocus`
+    * `onClick`
+    * `onChange`
+    * `onInput`
+    * `onKeydown`, `onKeyup`, `onKeypress`
+
+#### `<select>` 下拉式選單
+  * 配合子代 `<option>` 作為選項
+  * 特性
+    * `options`
+    * `selectedIndex`
+    * `length`
+    * `multiple`
+    * `selectedOptions`
+  * 方法
+    * `add(option, before)`
+    * `remove(index)`
+
+#### HTML5 input type 與屬性
+  * type
+    * `search`
+    * `email`
+    * `url`
+    * `telephone`
+    * `number`
+    * `range`
+    * `color`
+    * `date`, `month`, `week`, `time`, `datetime`
+  * 屬性
+    * `autofucus`
+    * `placeholder`
+    * `required`
+    * `min`
+    * `max`
+    * `step`
+    * `value`
+    * `autocomplete`
+    * `pattern`
+    * `novalidate`
+
+#### 正規表示式 Regex
