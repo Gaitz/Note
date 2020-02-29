@@ -117,7 +117,7 @@
   * 不要使用 `new Object()`。
   * 自訂 constructor 函式
     * `new ConstructorFunction()`
-    * 建構子，只是一個函式。
+    * 建構子，只是一個函式物件。
     * `new` 算子會指定 `this` 為空物件，並且繼承指定的原型，最後未指定回傳時，會隱含的回傳 `this`。
     * 共用的方法最好使用原型鍊附加 `ObjectName.prototype.functionName` ，避免多份相同的函式被建立。
     * 永遠不要不使用 `new` 直接呼叫建構子函式，會導致 `this` 綁到全域，並且汙染全域變數。
@@ -269,3 +269,179 @@
 
 
 ### 第六章 - 程式碼重用模式
+  * 分清楚物件中以下的差別
+    1. `constructor` function, 
+    1. `__proto__` object, property of a class instance
+    1. `constructor.prototype` object, property of a class constructor
+    1. `new Constructor()`
+    1. `Object.create()`
+
+#### 類 class 繼承模式 (classical inheritance)
+  * 類 class 性質的繼承模式
+  * 經驗法則 1. 可重用的成員都放在原型裡。
+
+##### 預設模式 
+  * `Child.prototype = new Parent()`, 通過原型練產生繼承模式。
+  * 缺點
+    1. 沒辦法為子物件提供建構子函式。
+    1. 父物件的 property 只屬於父物件。
+
+##### 借用建構子函式
+  * `function Child () { Parent.apply(this, arguments) }`
+  * 彌補預設模式的兩個缺點
+    1. 可以傳遞建構子參數
+    1. 父物件的 property 變成子物件本身的 property。
+  * 缺點
+    1. 無法使用 Parent.prototpye 裡的共用成員
+
+##### 借用並設定原型
+  * 同時使用預設模式與借用建構子模式
+    1. `function Child () { Parent.apply(this, arguments) }`
+    1. `Child.prototype = new Parent()`
+  * 缺點
+    1. 建構時呼叫了 Parent constuctor 兩次，效能較差。
+
+##### 分享原型
+  * `Child.prototype = Parent.prototype`
+  * 缺點
+    1. 新增共用成員時，會影響整個原型鏈上的物件。
+
+##### 原型 proxy 模式
+  * proxy 借用原型，並且提供 sup 成員指向父物件原型
+    1. `var Proxy = function () {}`
+    1. `Proxy.prototype = Parent.prototype`
+    1. `Child.prototype = new Proxy()`
+    1. `Child.sup = Parent.prototype`
+
+#### 原型繼承 (prototype inheritance)
+  * 無 class 式的思考，單純思考重用另一個物件。
+    1. `function Proxy () {}`
+    1. `Proxy.prototype = parentInstance`
+    1. `childInstance = new Proxy()`
+  * ESCMAScript 5 標準之後可以使用 `Object.create()` 做到一模一樣的效果而不用自己建立 Proxy 建構子。
+
+##### 使用複製成員的方式繼承
+  * 直接走訪父物件的成員，複製給子物件。
+  * 複製的方式可以分成淺層複製 (shallow copy) 與深層複製 (deep copy)
+
+##### Mix-in
+  * 複製指定成員
+
+##### 借用方法
+  * 通過 `Function.apply`, `Function.call`，直接借用其他物件的方法成員給自身物件使用。
+  * 使用 closure 來綁定函式中的 `this`，避免在其他地方呼叫時的 `this` 變成全域變數。
+  * ESCMAScript 5 標準之後可以使用 `Function.bind` 達到綁定 `this` 的功能。
+
+
+------------------------------
+
+
+### 第七章 - 設計模式
+  * 物件導向的 design pattern 大多數被開發於強型別、使用靜態 Class 的物件導向語言。
+  * JavaScript 是弱型別、動態、以原型為基礎的物件導向語言。
+
+#### Singleton 模式
+  * 讓特定 class 永遠只有一個 instance object 。
+  * 對於 JavaScript 中沒有特別意義。
+
+#### Factory 模式
+  * 目的是建立物件 (instance object)，通常是 class 的一個靜態方法 (static method)，提供在執行期才決定物件型別的功能。
+  * JavaScript 中可以利用 factory 模式，決定最後要被呼叫的建構子函式。 
+  * JavaScript 中 `Object()` 建構子即是 factory 模式，但是不應該被使用。
+
+#### Iterator 模式
+  * 操作資料結構中的資料，但是不需要知道資料結構的實作細節，而是提供統一的介面 `next()`, `hasNext()`。
+  * 介面中常見的函式
+    1. `next()`, 取出下一個資料。
+    1. `hasNext()`, 下一個資料存在。
+    1. `current()`, 重複回傳當前資料。
+    1. `rewind()`, 指標重回到開頭。
+
+#### Decorator 模式
+  * 新功能在執行期動態的加入物件中，一步步增加功能。
+  * 在 JavaScript 中物件本身就是動態可變的。
+  * 以 queue 實作，存放各個 decorator 函式，在需要時才從 queue 中取出執行。
+  * `instance.decorate()`
+
+#### Strategy 模式
+  * 提供相同的介面 (interface) 但是在執行期才依據 context 選擇執行的演算法。
+  * 範例: 表單的 `validator` 存放 config，使用統一的介面 `validate()`。
+
+#### Facade 外觀模式
+  * 提供另外的介面打包現有的方法，組合。
+
+#### Proxy 模式
+  * 實作中間層，保護實際運作的對象。在中間層提供一些優化，例如 batch, cache。
+  * 範例: 為 http request 做 batch 。
+
+#### Mediator 模式
+  * 相關功能的物件之間常常會互相呼叫導致 (tight copuling)，為了取消個別物件之間的耦合 (loose coupling)，只把耦合綁給中間者 (mediator)。
+
+#### Observer 模式, Subscriber/publisher 模式
+  * Event-based 常用的實作方式
+  * publisher 需要包含
+  * `subscriber`
+  * `subscribe()`
+  * `unsubscribe()`
+  * `publish()`
+  * 缺點
+    1. 使用這個模式比較難追蹤執行順序。
+
+
+------------------------------
+
+
+### 第八章 - DOM 和瀏覽器的模式
+
+#### 關注點分離 (separation of concerns)
+  * 內容 (content), HTML
+  * 表現 (presentation), CSS
+  * 行為 (behavior), JavaScript
+
+##### 實際應用
+  * 可以配合漸進式增強 (progressive enhancement)
+  * 關閉 CSS 時是否可用
+  * 關閉 JavaScript 時是否可用
+  * 不使用 inline event 與 style
+  * 使用有意義的 (semantic) HTML 元素
+  * 使用功能檢測 (captability detection)
+
+#### DOM Scripting
+  * Document Object Model (DOM) 樹的操作，通常效能相當昂貴。
+
+##### 存取 DOM
+  * 最低限度的存取 DOM
+  1. 避免在迴圈中存取 DOM
+  1. 存成區域變數
+  1. 快取 length 值，避免重複呼叫 DOM 來取得 length
+  1. 使用 `getElementById`, `querySelector`, `querySelectorAll` 來取得元素
+
+##### 操作 DOM
+  * 更新 DOM 可能會導致重新繪製 (repaint) 或者重新排版 (reflow) 都非常影響效能與使用者體驗。
+  * 盡可能 batch 操作，甚至使用 shadow DOM 來運算後才一次變化實際的 DOM。
+
+#### 事件 (event)
+  * 事件處理，只使用 `addEventListener()`
+  * 事件委派 (delegatation)，減少事件監聽器的數量，只使用一個事件處理器在上層處理相同的事件。
+
+#### 長時間執行的 Scripts
+  * JavaScript 沒有 threads 只有使用一個 main threads，當有一個 Script 執行很久時會停止其他所有的功能。
+  * 使用 `setTimeout()` 做 time sharing
+  * 推薦使用 Web Workers ，提供第二個執行續可以在背景執行
+    * 配合 `postMessage()` 與 `onmessage event` 來與 main thread 互相傳遞資訊。
+
+#### 遠端操作 Ajax
+  * `XMLHttpRequest`, 發送 http request, 需處理同源問題。
+  * JSONP (JSON with padding)，不需處理同源問題，但是要小心安全性問題。
+  * `iframe` 和 `img` 的 `src` 都會發送 request。範例: 使用 image beacon 做 tracking。
+
+#### 發佈 JavaScript
+  * 合併 JS ，減少 http request
+  * 最小化與壓縮 (minify and gzip everything)
+  * 為 http response 加上快取標頭
+  * 使用 Content Delivery Network (CDN) 服務
+  * `<script>` 最佳位置為 `</body>` 之前
+  * 動態下載 `<script>` 實際會用到時才加到 DOM 上。
+  * 使用 `defer`, `async` 屬性
+  * 延遲載入 (lazy load), 快要使用時才載入。
+  * 預先載入 (preload), 預先載入下個頁面需要使用的 script。
