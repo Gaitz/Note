@@ -62,9 +62,61 @@
   * 變數永遠先宣告才使用
   * 永遠不使用 `with`
   * 了解並且善用 `closure`
+  * 使用具名函式有助於提升 Error 物件的可閱讀性
+  * 避免使用 `eval`
 
 #### 了解 variable hoisting
   * var 變數是 lexical scoping 並沒有 block scoping `{}` 範圍是函式空間 (function-scoped)。
   * 把變數的宣告與賦值變成兩個步驟 (JavaScript 程式碼解析與執行)，宣告會被 hoists 至所屬的函式空間開頭。
 
 #### 利用 IIFE 建立 scope
+  * closure 所儲存的是外部變數的參考 (reference) 而非值。
+  * 利用 IIFE 創造出區域變數，儲存上層的值。
+
+
+------------------------------
+
+
+### 第三章 - 函式的使用
+  * 在 JavaScript 中 `function` 代表著函式、物件方法、建構式。
+  * 熟悉 Higher-order functions (接收函式為參數或者回傳函式) 並且用於減少重複的程式碼。
+  * 善用 `Funciton.call()` 指定 `this`
+  * 以 `Function.apply()` 配合 `arguments` 創造參數不定數量函式。
+  * 傳遞函式時可藉由 `Function.bind()` 先指定好 `this` 的對象。
+  * 以 `bind()` 實作 currify function。
+  * 避免使用功能不一或非標準化的 `toString()`, `arguments.caller`, `arguments.callee`
+
+#### arguments
+  * arguments 是類 array 物件，在 strict mode 與非 strict mode 時行為不同。
+  * 避免直接修改 arguments。
+  * 如果要操作改用 `[].slice.call()` 複製一份。
+  * 每個 function 都有自己的 `arguments`，因此如果要在 nested functions 操作時要小心對象。
+
+
+------------------------------
+
+
+### 第四章 - 物件和原型
+  * 把能共用的方法存在 `prototype` 上。
+  * 如果需要私有 (private) 資料則使用 closure 實作。
+  * prototype 只應該放置能被共用的資料。
+  * 注意每個方法被呼叫時的 `this`，如果需要外層的 `this` 可以創建區域變數 (self, that) 儲存或者使用 `bind()`。
+
+#### 了解 prototype, getPrototypeOf, __proto__
+  * `ConsturcterFunction.prototype`
+  * `Object.getPrototypeOf( objectInstance )`, ES5語法取得所屬的 `ConsturcterFunction.prototype`
+  * `objectInstance.__proto__`, 非標準的取得所屬的 `ConsturcterFunction.prototype`
+  * 優先使用標準化的 `getPrototypeOf()` 取代 `__proto__`，並且永不修改 `__proto__` 以 `Object.create()` 取代。
+
+#### 子類別
+  1. contructor function 中呼叫 `Parent.call(this, )` 
+  1. `Child.prototype = Object.create(Parent.prototype)`
+  * 避免子類別使用與父類別相同的特性名稱，否則會取得相同的 reference。
+  * 不要利用內建的標準類別 (Array, Function, Number, String, Boolean, Date, RegExp) 建立子類別，容易產生不可預期的錯誤。
+    * 只取出特定的方法來使用就好
+
+
+------------------------------
+
+
+### 第五章 - 陣列與字典
