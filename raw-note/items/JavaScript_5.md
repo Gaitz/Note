@@ -269,3 +269,28 @@
 
 
 ### 第九章 - 物件與物件導向程式設計
+  * 陣列有序，物件無序。
+
+#### 列舉
+  * for...in, 需配合 `hasOwnProperty()`, 不推薦使用。
+  * 傳統的 for
+  * `Object.keys().forEach()` 
+
+#### 建立類別與實例 (ES6)
+  * `class className { constructor() {} methods() {} get propertyName() {} set propertyName() }`, 配合 `new` 建立物件。(建構子函式的語法糖)
+  * `class` 裡的原型 prototype method 不需要逗號間隔 (`,`)，配合 `get` 與 `set` 提供慣例語法。
+  * `class` 裡的 `static functionName() {}` 靜態方法，直接以 class.method 的方式呼叫。
+  * 繼承 `extends` 可以透過 `super()` 呼叫父層的建構子, 使用 `extends` 繼承來的成員也會通過 `hasOwnProperty()` 驗證，小心父層使用 `prototype` 再次新增的原型成員，for...in 配合 `hasOwnProperty()` 會有，但是不存在 `Object.keys()` 裡。
+  * ES6 keywords: `class`, `constructor(){}`, `get`, `set`, `static`, `extends`, `super()`
+  * override `toString()` 提供有用資訊。
+
+#### Mixin pattern
+  * Mixin function, `function mixinName (obj) { obj.mixinMethod = function () {} }`, `mixinName(Class.prototype)`，建立混用函式之後動態掛載給物件。
+  * Mixin pattern 無法用 `instanceof()` 判斷，因為只是動態加入成員。只能通過 duck typing 判斷。
+  * Mixin pattern 也會有 name collision，需要小心，或者使用 `Symbol` 作為 key，因為 Symbol 是唯一的。
+
+
+------------------
+
+
+### 第十章 - Map 與 Set
