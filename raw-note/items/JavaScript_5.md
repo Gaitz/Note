@@ -293,4 +293,61 @@
 ------------------
 
 
-### 第十章 - Map 與 Set
+### 第十章 - Map 與 Set (ES6)
+
+#### 物件的缺點
+  * 具有 prototype，不是單純乾淨的資料集。
+  * 沒有 size 或 length 方法
+  * key 限定為 String 或 Symbol
+  * 無序
+
+#### Map (ES6)
+  * `new Map()`
+  * `set()`
+  * `get()`
+  * `has()`
+  * `size`
+  * `keys()`
+  * `values()`
+  * `entries()`
+  * `delete()`
+  * `clear()`
+  * 配合擴張算子展開城陣列 Example: `[...mapName.keys()]`
+ 
+#### Weak Map (ES6)
+  * key 必須為物件 (object)
+  * key 會被垃圾回收 (GC)
+  * 無法被 delete 或迭代
+
+#### Set (ES6)
+  * 不重複的資料集合
+  * `add()`
+  * `size`
+  * `delete()`
+
+#### Weak Set (ES6)
+  * 只能存放物件
+  * 會被垃圾回收 (GC)
+  * 無法迭代
+
+
+------------------
+
+
+### 第十一章 - 例外與錯誤處理
+  * Error 物件 `new Error("error message here")`
+  * `try`
+  * `catch`
+  * `throw`
+  * `finally`
+  * 錯誤被丟出但是未被 catch 之前會一直往上傳遞，直到未被 catch 後直接停止程式運行。
+  * 可以通過 Error 物件的 `stack` 成員取得 function call stack。
+  * **丟出例外必須被捕捉處理，否則程式會中止**
+  * 以判斷式 (if..else..) 處理預期的錯誤
+  * 無法預期的錯誤則丟出例外
+
+
+------------------
+
+
+### 第十二章 - 迭代器與生產器
