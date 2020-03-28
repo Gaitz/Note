@@ -350,4 +350,177 @@
 ------------------
 
 
-### 第十二章 - 迭代器與生產器
+### 第十二章 - 迭代器與生產器 (ES6)
+
+#### 迭代器 (iterator) (ES6)
+  * `for...of` 可以適用於所有擁有 iterator 的物件。
+  * `next()`
+  * `[Symbol.iterator] () { return { next(){} }}` 實作 iterator，利用 Symbol.iterator 回傳的是擁有 `next()` 函式的物件。
+
+#### 生產器 (generator) (ES6)
+  * 提供可以雙向溝通的函式。
+  * `function*` 宣告方式如一般函式，只是多了 `*`
+  * `yield`, 傳出值並且把執行順序交還給呼叫者。
+  * 呼叫生產器函數會回傳一個 iterator 可以通過 `next()` 執行內部工作並且傳值
+  * `next()` 傳入，`yield` 傳出。
+  * `return` 一樣可以傳出值，但是會中止 `next()` 的運行。但是 `return` 出來的值並不屬於 iterator，所以在使用 `for...of` 時不會取得。
+  * 因此使用 `return` 時，最好只當成中止執行，並不回傳有意義的值。
+
+
+------------------
+
+
+### 第十三章 - 函式與抽象思考的威力
+  * 無回傳的函式
+  * 有回傳的函式
+  * 純函式
+  * Immediately Invoked Function Expression (IIFE)
+  * 函式是第一類物件 (functions are first-class objects)
+  * 可以通過 `typeof` 確認 JavaScript 函式
+
+#### 純函式 (pure function)
+  1. 沒有副作用 side effect
+  1. 相同的輸入一定會有相同的輸出
+  * 去耦合、容易測試
+  * 試著優先使用純函式
+
+#### JavaScript 函式是第一類物件
+  * JavaScript 中的函式都是物件，因此可以被傳遞與存放在變數中。
+  * 函式存放在物件、陣列、其他資料結構中
+  * 函式作為參數傳入另一個函式
+  * 函式作為其他函式的回傳值
+
+
+------------------
+
+
+### 第十四章 - 非同步程式設計
+  * 回呼函式 callback function
+  * Promise (ES6)
+
+#### 回呼模式
+  * `setTimeout()` 
+  * `setInterval()`, `clearInterval()`
+  * 注意傳入的回呼函式存在的變數範圍 (scope) 
+  * 在 Node.js 中的慣例，呼叫回呼函式的第一個參數為錯誤處理。
+  * 如果非同步的回呼函式之間具有相依性，會產生 callback hell。
+
+#### Promise (ES6)
+  * Promise 是個物件，resolve 和 reject 只會則一發生並且發生後工作即完成。
+  * `new Promise( function (resolve, reject) {} )`
+  * `then()`, 傳入處理 resolve 時的函式
+  * `catch()`, 傳入處理 reject 時的函式
+  * Promise chaining, 壓平 callback hell。
+    * 在 `then()` 傳入另一個產生 Promise 的函式，即可再用 `then()` 串接具有相依性的工作。
+  * 可以實作一個 `addTimeout` 函式來加工 Promise 用來保證會執行 resolve 與 reject。
+
+#### 生產器 (Generator) (ES6)
+  * 通過 generator 函式與 Promise 互動
+  * 第三方函式庫, Q promise, co, Koa
+
+#### await, async (ES7)
+
+
+------------------
+
+
+### 第十五章 - 日期與時間
+  * 內建的 `Date` 物件，無法指定時區。
+  * 時區由作業系統
+  * 處理時間可以使用的第三方函式庫, `Moments.js`
+  * 要在瀏覽器端與伺服器端中傳遞時間，需要特別小心時區問題。
+  * Unix Epoch (UTC 1970/1/1)
+
+
+------------------
+
+
+### 第十六章 - 數學
+  * 沒有整數型別，全部都是 IEEE754 64bits (double)
+  * 要計算複數、大數、複雜運算，需要尋求第三方函式庫的幫忙。
+
+#### 數字轉換字串
+  * `toFixed()`, 四捨五入
+  * `toExponential()`, 四捨五入
+  * `toPrecision()`, 四捨五入
+  * `toString()`, 可以指定 base
+
+#### Math 物件
+  * Math 裡的方法都是靜態方法，Math 類似於 namespace 存在。
+  * 各種常數, `E`, `PI`, `LN2`, `LN10`, `LOG2E`, `LOG10E`, `SQRT1_2`, `SQRT2`
+
+
+------------------
+
+
+### 第十七章 - 正規表達式
+
+#### 字串處理
+  * 字串原生的功能
+  * `startWith()`, `endsWith()`, `includes()`, `indexOf()`, `replace()`, 大小寫有別。
+
+#### Regular Expression
+  * `/ /`, `new RegExp()`
+  * 使用正規表達式的方法
+    * 字串呼叫 `match()`, `search()`, `replace()`
+    * 正規表達式呼叫 `test()`, `exec()`
+  * 正規表達式是消化 (consuming) 非尋找 (finding)
+  * `|`, `[]`, `^[]`, 常用集合 `\d`,`\D` (digit), `\s`, `\S` (space), `\w`, `\W` (word)
+  * flag `i`, `g`, `m`
+  * 次數 `{}`, `{n,}`, `{n, m}`, `?`, `*`, `+`
+  * 萬用字元 `.` (換行字元除外), 
+  * 跳脫字元 `\`
+  * 定位 `^`, `$`
+  * 分組 (grouping), 會記憶的分組 `()`, 不會記憶的分組 `(?:)`
+  * lazy match, greedy match, 預設是 greedy。
+    * greedy match: 尋找最長的
+    * lazy match: 遇到符合的即停止。在任何次數選擇後加上問號則進入 lazy match, `*?`, `+?`, `??`, `{n}?`, `{n,}?`, `{n,m}?`
+  * 替換群組 `$1`, `$2`, ..., $\` : 符合對象之前所有的, `$&` 符合對象本身, `$'` 符合對象之後所有的。
+  * `replace(//, function)`, 替換函式替換的對象可以傳入函式用來與正規表達式互動替換。
+  * Lookahead, 辨識但不消化, `(?=)` 包含, `(?!)`, 不包含
+
+
+------------------
+
+
+### 第十八章 - 瀏覽器中的 JavaScript
+  * DOM 與 DOM API
+    * `nodeName`, `nodeType`, `parentNode`, `childNodes`
+    * get `document.getElementById`, `document.getElementsByClassName`, `document.querySelector`, `document.querySelectorAll`
+    * `textContent`, `innerHTML`
+    * `createElement()`, `insertBefore()`, `appendChild()`
+    * `classList.add()`, `classList.remove()`
+  * 事件
+    * `addEventListener`, `preventDefault()`, 控制事件傳遞方向 capturing (外向內) 與 bubbling (內向外), `stopPropagation`
+  * Ajax
+    * CORS, reponse header: `Access-Control-Allow-Origin`
+    * XMLHttpRequest
+    * fetch
+
+
+------------------
+
+
+### 第十九章 - jQuery
+  * 幫忙處理瀏覽器相容性問題
+  * `$`, namespace
+  * ready `$(function () { });`, `$(document).ready( function (){} );`
+  * jQuery Object 與方法
+
+
+------------------
+
+
+### 第二十章 - Node
+  * 伺服器端的 JavaScript
+  * Node 與 npm, `npm install`
+  * 模組
+    * `module.exports`, `require()`
+  * 檔案系統 (fs)、作業系統 (os)、主程序 (process)、子程序 (child_process), 串流 (stream), Web Server 
+  * 伺服器端框架 Express, Koa
+
+
+------------------
+
+
+### 第二十一章 - 物件特性設置與代理器
