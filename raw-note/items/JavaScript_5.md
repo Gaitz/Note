@@ -524,3 +524,41 @@
 
 
 ### 第二十一章 - 物件特性設置與代理器
+
+#### Getter and Setter (ES6)
+  * 語法糖，`set`, `get` 可獨立使用
+  * `class { set propertyName get propertyName() }`, 使用同名的 propertyName，在賦值時會自動調用 setter，取值時會自動調用 getter。
+
+#### 物件成員屬性
+  * `Object.getOwnPropertyDescriptor( objectName, propertyName )`
+  * `Object.defineProperty( objectName, propertyName, {  })`
+  * `Object.defineProperties()`
+  * 屬性
+    * `writable`, 控制值是否可以被寫入
+    * `enumerable`, 是否被 `for...in`, `Object.keys`, `...` 帶出
+    * `configurable`, 
+  
+#### 物件保護 freeze, seal, preventExtensions
+  * `Object.freeze()`, `Object.isFrozen()`, 只能讀取，無法新增、修改、刪除。適合只有資料的物件。
+  * `Object.seal()`, `Object.isSealed()`, 可以讀取、修改現有的成員，無法新增與刪除。
+  * `Object.preventExtensions()`, `Object.isExtensible()`, 可以讀取、修改、刪除，無法新增。
+
+#### 代理 Proxy (ES6)
+  * 類似 aspect oriented programming (AOP)，通過 Proxy 物件攔截物件的 property getter 與 setter。
+  * `new Proxy(objectName, { get () {} set () {} })`
+
+
+------------------
+
+
+### 第二十二章 - 其他資源
+
+#### Reference and uptodate 
+  * 網站
+    * MDN
+    * WHATWG, 整理過的官方標準
+    * W3C, 官方標準
+  * 期刊
+    * JavaScript Weekly
+    * Node Weekly
+    * HTML5 Weekly
