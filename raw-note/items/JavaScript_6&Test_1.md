@@ -31,3 +31,30 @@
 
 
 ### 第一章 - 什麼是重構?
+  * 確保行為不變
+    * 單元測試 (Unit Test)
+    * 版本控制 (Version Control)
+  * 重構只在有測試的前提之下有意義，測試包含手動測試與自動測試。
+  * 只測試我們希望正常的功能，包含特定的極端案例、效能...。
+  * 程式碼品質
+    * SOLID: Single responsibility, Open/closed, Kiskov substitution, Interface segreation, Dependency inversion
+    * DRY: Don't repeat yourself
+    * KISS: Keep it simple, stupid
+    * GRASP: General responsibility assignment software patterns
+    * YAGNI: Ya ain't gonna need it
+
+
+------------------
+
+
+### 第二章 - 你用的是哪一種 JavaScript?
+  * JavaScript 標準: ECMAScript 規格書
+  * 平台與實作: caniuse
+  * 預處理: Babel.js, minifier
+  * 框架與函式庫: jQuery, React, Angular, Ember, Underscore.js, ...
+
+
+------------------
+
+
+### 第三章 - 測試
