@@ -58,3 +58,48 @@
 
 
 ### 第三章 - 測試
+  * 測試的目的是帶來信心
+
+#### 功能性測試
+  * 手動測試 (Manual Testing)
+  * 含有文件的手動測試 (Documented Manual Testing)
+  * 驗收測試 (Acceptance Testing)
+  * 點對點測試 (End-to-End Tests), 避免使用 mocking 與 stubbing。
+  * 單元測試 (Unit Tests), 盡量使用 mocking 與 stubbing。
+
+#### 非功能性測試
+  * 效能測試
+  * 易用性測試
+  * 安全性測試
+  * 無障礙測試
+  * 本土化測試
+
+#### 提升品質的實務
+  * 團隊共同使用的風格標準
+  * 定期招開的技術債審視會議、工程品質會議，適時地把重構工作加進時程。
+  * Pair Programming, 知識共享、更快的反饋、更少的 bug
+  * Code Review, 
+  * Test-driven Development (TDD)
+  * Behavior-driven development (BDD), 從 End-to-end 的角度做 TDD。
+
+#### 相關工具
+  * 版本控制 (version control), 
+  * 測試框架 (framework), 
+  * 斷言語法庫 (assertion syntax libraries), 
+  * 特定領域函式庫 (domain-specific libraries), 
+  * 工廠方法 (factories and fixtures) fake/faker
+  * Mocking/stubbing 函式庫
+  * 建置打包工具 (build/task/packaging tools)
+  * 載入器與監聽器 (loaders and watchers)
+  * 測試平行運行 (test run parallelizers)
+  * 持續整合 (continuous integration, CI)
+  * 覆蓋率回報器 (coverage reporters)
+  * Linters
+  * Debugger / loggers
+  * staging 環境
+
+
+------------------
+
+
+### 第四章 - 測試實戰
