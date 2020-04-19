@@ -35,6 +35,7 @@
     * 單元測試 (Unit Test)
     * 版本控制 (Version Control)
   * 重構只在有測試的前提之下有意義，測試包含手動測試與自動測試。
+  * **重購的前提是擁有測試**，否則只是在改變程式碼。
   * 只測試我們希望正常的功能，包含特定的極端案例、效能...。
   * 程式碼品質
     * SOLID: Single responsibility, Open/closed, Kiskov substitution, Interface segreation, Dependency inversion
@@ -59,6 +60,7 @@
 
 ### 第三章 - 測試
   * 測試的目的是帶來信心
+  * 把測試分成快速測試與緩慢測試。
 
 #### 功能性測試
   * 手動測試 (Manual Testing)
@@ -103,3 +105,36 @@
 
 
 ### 第四章 - 測試實戰
+  * Node debugger, `node debug`, `debugger`
+  * Node aseert library, `require('assert')`
+  * 第三方斷言函式庫, **wish**, `npm install wish`, `require('wish')`
+  * 第三方測試框架, **mocha**
+  * 讓每次 git commit 之間的差別小一點，可以方便 revert/reset。
+
+#### Test-driven development (TDD)
+  * Red / Green / Refactoring
+  * baby steps
+
+#### Mocha
+  * `describe('description_here', function () {})`
+  * `it('description_here', function() {})`
+
+#### Testing
+  * 利用 Regular expression 測試隨機性的輸出
+
+
+------------------
+
+
+### 第五章 - 基本的重構目標
+
+#### 函式
+  * 體積
+    * 複雜度 (路徑分支的數量)
+    * 行數
+  * 顯性輸入
+    * 
+  * 輸出
+  * 副作用 (side-effect)
+  * 隱性輸入 (this)
+  * 隱私 (privacy)
