@@ -133,8 +133,32 @@
     * 複雜度 (路徑分支的數量)
     * 行數
   * 顯性輸入
-    * 
+    * 盡量使用顯示輸入的是 (Functional Programming 風格)
+    * 盡量使用隱性輸入 (this) 的是 (Object-Oriented Programming 風格)
+    * 越少輸入就越好控制體積，也越容易測試。
   * 輸出
+    * 預設回傳 `undefined`
+    * 就算是利用 side-effect 的函式也盡可能傳出一些有意義的訊息或者 `this`。
+    * 回傳值最好保持單一型別
   * 副作用 (side-effect)
+    * 理想上副作用越少越好，副作用越少越好測試。
+    * 就算有副作用也需要控制好範圍。
   * 隱性輸入 (this)
   * 隱私 (privacy)
+    * JavaScript 還未有真正的 private，只有刻意控制的作用域 (scope)。
+    * 利用 immediately invoked function expressions (IIFE) 產生的 closure
+    * 使用 `class` 要實現 private 需要配合 module 的使用。
+
+#### 結論
+  * 減少體積 (複雜度與行數)
+  * 減少輸入總數
+  * 使用顯式輸入與隱性輸入，取決於風格。
+  * 回傳真實且有意義的回傳值，比默默地只產生副作用好。
+  * 副作用越小越好
+  * 控制好作用域
+
+
+------------------
+
+
+### 第六章 - 重構簡單的結構
