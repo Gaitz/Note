@@ -1,5 +1,5 @@
 ## 重構 JavaScript
-### BOOK resource, JavaScript
+### BOOK resource, JavaScript, JavaScript/Testing
 
 ------------------
 
