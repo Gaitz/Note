@@ -46,6 +46,7 @@
   * 可維護的程式碼是清楚、前後一致、標準化導向的
   * 可測試的程式碼是鬆散耦合、短小、獨立的
   * 正確分離出程式碼複雜的區塊，應該複雜的地方 (複雜的核心演算法) ，與可以降低複雜度的程式碼區塊。
+  * 目標是最小化複雜度
 
 #### 程式碼大小 (Code Size)
   * 分離 command 與 query。對應則是 setters (do something); getters (return something)。
@@ -79,3 +80,67 @@
   * 數字越高重用度越高
 
 #### 耦合 (Coupling)
+  * 內容耦合 (Content Coupling), 5, 修改外部變數
+  * 共用耦合 (Common Coupling), 4, 兩個物件共用同一個外部變數
+  * 控制耦合 (Control Coupling), 3, 傳遞 flag 或 parameter 影響外部物件運作
+  * 戳記耦合 (Stamp Coupling), 2, 傳遞不會被使用到的資訊給外部物件
+  * 資料耦合 (Data Coupling), 1, 物件之間的資料傳遞
+  * 無耦合 (No Coupling), 0,
+  * 生成新物件 (Instantiation), `new`, 非常緊密的耦合關係
+  * 耦合越多會造成單元測試必需建構更多的 mock 和 stub 去分離測試。
+
+#### 相依性注入 (Dependency Injection)
+  * 取代在建構子中實體化其他物件 (instantiation)，更改為注入的方式 (injection)
+  * 利用注入的方式把實體化物件的工作都留在應用程式的最初期，方便控制物件實體的範圍與共用 (scope)。
+
+#### 註解 (Comments)
+  * 撰寫註解最重要的是要隨時更新註解
+  * 結構化註解 (structured comments) 可以配合其他工具輕易的生成註解文件。
+  * 文件生成工具 YUIDoc, JSDoc, Docco/Rocco, ...
+
+#### 人為測試 (The Human Test)
+  * 人為實際 review 程式碼與註解
+
+
+------------------------------
+
+
+### 第三章 - 事件導向架構 (Event-Based Architectures)
+  * 避免實體化與維護外部變數，消除 tight coupling
+  * event and listener
+  * call and return
+  * 資料與模組是分離的
+  * **socket.io** 函式庫 (Real time, Event-based architectures, Node.js)
+
+#### 事件集線器 (The Event Hub)
+  * 事件管理中心, listen and fire
+  * 單純的傳遞事件，簡單的 controller。domain-independent
+
+#### 回應丟出的事件
+  1. 不需要回傳值，fire 事件即可。
+  2. 需要處理回傳值, fire 事件並且傳入 callback 處理結果
+
+#### event-based architectures 與 MVC
+#### event-based architectures 與 OOP
+
+#### Web 應用程式
+  * http server 當初只是單純的單向處理協定與靜態資料
+  * 雙向通訊改用 Web Sockets
+
+#### 事件導向架構注意事項
+  * 擴展性 (Scalability), event hub 作為中心 controller 需要多組來做 load balance 增加服務可靠度。
+  * 廣播 (Broadcasting), 注意事件的傳送，避免廣播造成的流量浪費。
+  * 執行期確認 (Runtime Checking), 事件名稱的傳遞，應該使用 enumerations 或 hashes 而非單純的字串 (String)
+  * 安全性 (Security), 需要實作權限管理與傳遞加密, 避免有疑慮的註冊與執行。
+  * 狀態 (State), session cookie 傳遞
+
+#### 更聰明的事件處理中心, 事件交換器 (The Event Switch)
+  * Deployment, 控制事件註冊與廣播，在不需要關閉 Http service 的情況下升級模組。
+  * 單播事件 (Unicast events), 事件只有唯一一個 listener
+  * 廣播事件 (Broadcast events), 通知所有的 listeners 然後關閉事件。
+
+
+------------------------------
+
+
+### 第四章 - 單元測試 (Unit Tests)
