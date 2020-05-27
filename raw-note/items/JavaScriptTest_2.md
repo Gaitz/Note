@@ -144,3 +144,102 @@
 
 
 ### 第四章 - 單元測試 (Unit Tests)
+  * 選用測試框架
+
+#### 寫出好的測試程式
+  * 獨立 (isolation), 測試的獨立性, 使用 mocks, stubs 去模擬外部相依。
+  * 範圍 (scope), 盡可能的小範圍, 單一個 method。
+
+#### 定義函式
+  1. 撰寫函式開頭註解, 確定函式規格 (specification)
+  1. 撰寫測試程式
+    * 正面測試 (Positive Testing),
+    * 邊界測試 (Bounds Testing), corner
+    * 負面測試 (Negative Testing), 
+
+#### 相依性 (Dependencies)
+  * Mock, 模擬命令執行 (command)
+  * Stub, 模擬回傳 (query)
+
+#### 非同步測試 (Asynchronous Testing)
+
+#### 測試 client-side 程式 
+  * PhantomJS (headless)
+  * Selenium (web driver)
+  * 測試 mobile 裝置
+
+#### 測試 server-side 程式
+  * Jasmine
+
+
+------------------------------
+
+
+### 第五章 - 程式碼涵蓋率 (Code Coverage)
+  * 過高的測試覆蓋率並不代表可靠性，測試覆蓋率是有誤導可能的。
+  * 測試覆蓋率只是良好的測試帶來的成果，而非追求的目標。
+
+
+------------------------------
+
+
+### 第六章 - 整合 (Integration)、效能 (Performance) 以及負載 (Load) 測試
+
+#### 整合測試 (Integration Testing)
+  * Selenium + web driver
+  * CasperJS (headless)
+
+#### 效能測試 (Performance Testing)
+  * HAR, HTTP Archive
+  * Browser 內建的開發者工具
+  * 深入了解瀏覽器運作
+
+#### 負載測試 (Load Testing)
+  * 目標是找到可接受的最長回應時間
+  * Apache Bench
+  * nodeload (Node.JS)
+
+#### 追蹤資源使用率
+  * 監測 CPU 與 memory
+  * 需要被監測的情況為
+    1. 長時間開啟的 client-side 應用程式 (SPA)
+    1. 伺服器端程式 (daemon)
+  * Memory leak
+  * CPU usage
+  * Client-side, 使用瀏覽器提供的工具檢測
+  * Server-side (Node.js), webkit-devtools-agent, heapdump, 
+
+
+------------------------------
+
+
+### 第七章 - 除錯 (Debugging)
+
+#### 瀏覽器內的除錯 (In-Browser Debugging)
+  * 各家瀏覽器的開發者工具
+
+#### Node.js 除錯
+
+#### 行動裝置除錯
+  * Android, 配合 Android Software Developer Kit (SDK), 連到桌機版除錯
+  * iOS, 使用 safari 開發者工具連結桌機版 safari
+
+
+------------------------------
+
+
+### 第八章 - 自動化 (Automation)
+  * 自動化所有的事情
+  * 持續整合 (Continuous Integration, CI)
+
+#### 自動化開發環境 (Code)
+  * Editor, 選用適合的編輯器，更多自動化功能的。
+  * Unit Test, 能夠快速自動執行單元測試的工具
+  * Pre-commit hook, 自動執行 unit test, Lint, ...
+  * Post-commit hook, 
+
+#### 自動化建置環境 (Build) 
+  * Jenkins
+  * minify, uglify, unit testing, integration testing,
+
+#### 自動化怖署 (Deploy)
