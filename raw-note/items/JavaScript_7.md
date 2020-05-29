@@ -215,18 +215,157 @@
 
 
 ### 第六章 - 未來的函式：生成器與約定
+  * 生成器函式 (generator), 特殊的函式, 在 Python, PHP, C# 中也有此功能。
+  * 約定 (promise), 對未來的封裝。
+
+#### 生成器函式 (generator)
+  * 可以生成多個值，但是每次請求只會回傳一個。
+  * 每次回傳值之後，函式只是暫停，等待下一個請求後才繼續執行。
+  * `function* generatorFunction() { }`, 
+  * `function*`,
+  * `yield`, 回傳值
+  * generator 函式可被用在 `for...of`。 `for (let aValue of generatorFunction())`
+
+#### 呼叫生成器函式 (generator)
+  * 呼叫生成器函式，會產生新的一個 iterator 用來與 generator 互動。
+  * `const aIterator = generatorFunction();`
+  * `next()`, 取得下一個 `yield` 的值
+  * `done`, 屬性確認是否結束
+
+#### 生成器回傳另一個生成器 (generator)
+  * `function* outerGenerator() { yield* otherGenerator(); }`
+  * `yield*`, 串接另一個生成器
+
+#### 生成器使用範例 (generator)
+  * id 生產器，yield 配合無窮迴圈。
+  * 走訪 DOM, 遞迴的生成器, yield, yield*, 配合 for...of 取值。
+
+#### 生成器函式引數 (generator)
+  * 如同一般函式一樣，生成器函式也能傳入引數，藉此可以達到雙向溝通。
+  * 傳入時機
+    1. 第一次呼叫生成器函式時, `generatorFunction(  )`;
+    1. 呼叫 `next()` 函式時, `next(  )`
+
+#### 生成器函式與例外處理 (generator)
+  * 通過 `iterator.throw()` 傳遞例外給生成器函式，因此在生成器函室內也能捕捉到外部傳入的例外。
+
+#### 生成器原理 (generator)
+  * 使用 function execution context 與 lexical environment 解析生產器原理。
+  * 與一般函式不同在於 yield 後 execution context 從 stack pop 出來後並沒有消失。
+  * iterator 抓著執行到一半的 lexical environment 所以不會被垃圾回收，直到下次呼叫 `next()` 又會生成一次 function execution context 放到 stack 上配合 iterator 先前暫存的 lexical environment。
+
+#### 約定 (promise)
+  * 用來處理非同步行為 (asynchronous)
+  * `new Promise( (resolve, reject) => { resolve(); reject(); })`
+  * 以簡單的 callback function 實作非同步功能時的缺點， 1. 錯誤不好捕捉, 2. 具有相依性時的 callback hell, 3. 等待多個同步執行後的結果不易
+  * 未解決狀態 -> 通過 resolve 或 reject 變為已完成狀態。只會則一觸發並且不會多次觸發。
+
+#### resolve()
+  * 對應 `.then()`
+
+#### reject()
+  * 對應 `.catch()`
+  1. 使用 `reject()` 明確的拒絕
+  1. 當例外發生並且沒有被 try-catch 捕捉處理時，隱含的拒絕
+
+#### Promise 的串接
+  * 利用 `then()` 的串接解決非同步的相依性產生的 callback hell。
+
+#### 等待多個 Promise 完成
+  * `Promise.all([])`, 解決多個平行的非同步呼叫時的等待。
+  * Promise.all() 回傳的也是一個 Promise 因此可以使用 `then()`, `catch()` 繼續處理。
+  * `Promise.all()`, 會等待所有的 Promise 都完成。
+  * `Promise.race([])`, 只要其中有一個 Promise 被 resolve 或 reject 則 `race()` 回傳的 promise 也會完成。
+
+#### Promise 與 generator 共同使用
+
+#### `async` 與 `await`
+  * `async` 指出函式是非同步的
+  * `await` 指出此處需要等待回傳，但是程式不應該被停下來。 
 
 
 ------------------------------
 
 
 ### 第七章 - 以原型來實現物件導向
+  * 重用程式碼的方法之一，繼承
+
+#### 了解原型 (prototype)
+  * 每個物件都有一個原型 (reference)
+  * 物件原型 `[[prototype]]` 是內部屬性，無法直接存取。
+  * `Object.setPrototypeOf`, 可以指定物件的原型
+  * 原型鍊 (prototype chain), 物件原型之間互相連接，因此可以在原型練上搜尋所要的屬性，以實現繼承功能。
+
+#### 建立物件
+  * 實字建立 `{ }`
+  * 建構子函式建立 `function ConstructorName() { }`, 配合 `new` 創建。
+  * 在建構子函式中 `this.` 所創建的是 instance 屬性，屬於各個物件自己的。
+  * 建構子函式的 `prototype` 屬性 (只有函式才有的屬性)，可以直接存取原型，並且會影響所有原型鍊上的物件。因此共用的方法最好放在原型上。
+
+#### 動態修改建構子函式原型時的副作用
+  * `ConstructorFunction.prototype = {}`
+  * 直接覆蓋建構子函式的 prototype 時，並**不會影響到**已經被建構出來的舊物件。
+  * 只有在新建立的物件才會使用新的原型
+
+#### 物件的 constructor 屬性
+  * 每個物件上都有 `constructor` 屬性指向他的建構子函式。
+  * 可以被任意修改, 呼叫。
+  * 甚至呼叫用來創建另一個物件 `const object2 = new object1.constructor()`
+
+#### 實現繼承
+  * `ChildConstructor.prototype = new ParentConstructor();`
+  * 藉由原型鍊的串接產生正確的繼承關係。可由 `instanceof` 正確判斷繼承關係。
+  * 缺點是子物件的 constructor 變成了父物件建構子函式。
+
+#### 物件屬性的細節控制項 (property descriptor)
+  * configurable,
+  * enumerable, 
+  * value,
+  * writable,
+  * get, getter function
+  * set, setter function
+  * 使用 `Object.defineProperty()` 設定以上屬性控制項
+  * 通過手動補上 `constructor` 解決子物件的建構子連結關係, `Object.defineProperty(Child.prototype, "constructor", { enumerable: false, value: Child, writable: true });`, 重點在於 `value` 指向子物件建構子函式。
+
+#### JavaScript `instanceof`
+  * `instanceof` 檢查的是原型鍊 (prototype chain)，而非 `constructor` 屬性
+  * 因此當原型鍊被動態修改時, `instanceof` 的結果可能會跟著改變。 
+
+#### JavaScript `class`
+  * ES6 語法糖, `class`,  `constructor()`, `static`
+  * `class ClassName { constructor () {} static aStaticMethod () {} }`,
+  * static method 在 ES5 中只是在建構子函式物件上的新增方法。`ConstructorFunction.aStaticMethod = function () {}`
+
+#### JavaScript `extends`
+  * ES6 語法糖, `extends` 實現繼承, `super()` 呼叫父層建構子函式
+  * `class Child extends Parent {}`
 
 
 ------------------------------
 
 
 ### 第八章 - 控制物件存取
+  * getter, setter, proxy
+
+#### 定義 getters 和 setters
+  * 以函式的方式定義，以屬性的方式操作。關鍵字 `get`, `set`, 同時是方法也是屬性。隱性的呼叫函式
+  1. 物件實字建立, `obj = { get name() {}, set name() {} }`, `obj.name`, `obj.name = `
+  1. `class` 建立, `class ClassName { get name(){} set name(){} }`
+  1. `Object.defineProperty()` 建立屬性並賦予 getter 和 setter 函式, 在建構子函式中 `Object.defineProperty(this, name, { get: () => {}, set: () => {} });`
+  * 使用時機之一: 如果一個值是依據物件內部狀態，可以把他視為一個屬性，而非方法取用。
+
+#### 使用 Proxy 控制物件的存取和擴充功能
+  * 更全面的 getter 與 setter 攔截並且控制物件, 與一般的 getters, setters 無異, 都是隱含的函式呼叫。
+  * 建立一個代理物件, `new Proxy(target, { get: ,set: })`
+  * 使用時機為整個物件添加功能，例如 logger, 處理 null 自動建立, 插入效能檢測, ..., 類似 middleware
+  * handlers, 
+    * `get`, 攔截所有屬性的 getter
+    * `set`, 攔截所有屬性的 setter
+    * `apply`, 攔截所有的成員函式呼叫
+
+#### 使用 Proxy 的成本
+  * 因為每次都需要經過 proxy 中的函式呼叫，會產生大量的效能成本。
+  * proxy 需小心使用，避免造成效能問題。
 
 
 ------------------------------
