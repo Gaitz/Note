@@ -1,6 +1,8 @@
 ## JavaScript 學習手冊
 ### BOOK resource, JavaScript
 
+不錯的 JavaScript 入門書籍, 內容包含 ES6, 可以很全面的了解語法。
+
 ------------------
 
 第一章 - 你的第一個應用程式

@@ -1,6 +1,8 @@
 ## 可測試的 JavaScript
 ### BOOK resource, JavaScript/Testing
 
+太多實際範例，內容容易過時。
+
 ------------------
 
 第一章 - 可測試的 JavaScript 程式 (Testable JavaScript)

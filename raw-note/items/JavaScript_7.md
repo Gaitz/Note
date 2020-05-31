@@ -1,6 +1,8 @@
 ## 忍者 JavaScript 開發技巧探祕
 ### BOOK resource, JavaScript
 
+非常不錯的 JavaScript 進階書籍，內容包含 ES6，並且深入底層講解原理。
+
 ------------------
 
 第一章 - 無所不在的 JavaScript
@@ -373,17 +375,175 @@
 
 ### 第九章 - 處理資料集合
 
+#### 陣列 (array)
+  * 建立陣列
+    * 建構子建立, `new Array()`
+    * 實字建立, `[]`, 推薦使用
+  * 自動擴張, 取邊界外的值只會回傳 `undefined` 而非報錯，因為 JavaScript 中的 array 只是個物件。
+  * 新增與移除元素
+    * `push`
+    * `unshift`
+    * `pop`
+    * `shift`
+    * 效能考量, (push, pop) 只修改最後一位效能明顯比 (unshift, shift) 快速。
+  * 隨機新增與移除
+    * by index, `[index]`
+    * `delete`
+  * 陣列迭代
+    * `for (let i = 0; i < anArray.length; i++) {}`
+    * `forEach( function )`
+  * 陣列對應
+    * `map( function )`
+  * 測試陣列資料
+    * `every( function )`, 全部都符合則 true
+    * `some( function )`, 其中有一項符合則 true
+  * 搜尋陣列
+    * `find( function )`
+    * `filter( function )`
+    * `indexOf( element )`
+    * `lastIndexOf( element )`
+    * `findIndex( function )`
+  * 陣列排序
+    * `sort( function )`
+  * 陣列資料整合
+    * `reduce( function )`
+  * 在其他物件中重複使用陣列內建函式
+    * `Array.prototype.functionName.call()`
+    * `Array.prototype.functionName.apply()`
+
+#### 對應表 (Map)
+  * 使用物件 (object) 作為對應表時的缺點,
+    1. key 只能是字串, 使用非字串時也會隱含的呼叫 `toString()`
+    1. 可能會遇到名稱與原生屬性重複的狀況, 例如 `constructor`, ... 
+  * 建立 `Map`
+    * `new Map()`
+    * `set()`
+    * `get()`
+    * `size`
+    * `has()`
+    * `delete()`
+  * 迭代 `Map`
+    * `for...of`
+
+#### 集合 (Set)
+  * 不重複的資料集合
+  * 建立 `Set`
+    * `new Set()`
+    * `add()`
+    * `has()`
+  * 迭代 `Set`
+    * `for...of`
+  * 聯集 (union)
+    * `unionSet = new Set([...setA, ...setB])`
+  * 交集 (intersection)
+    * `intersectionSet = new Set([...setA].filter(e => setB.has(e) ))`
+  * 差集 (difference)
+    * `differenceSet = new Set([...setA].filter(e => !setB.has(e) ))`
+
 
 ------------------------------
 
 
 ### 第十章 - 正規表達式
 
+#### 建立正規表達式 (regular expression)
+  * 實字建立, `/ /`, 推薦使用
+  * 建構子建立, `new RegExp()`, 只有當表達式是執行期才動態決定的時候才使用。(runtime)
+
+#### 旗標 (flags)
+  * `i`, case insensitive, 不區分大小寫 
+  * `g`, global, 全部匹配
+  * `m`, multiple line, 多行文字匹配
+  * `y`, sticky matching, 
+  * `u`, 對 Unicode point 跳脫
+
+#### 詞彙 (term) 與 運算子 (operator)
+  * `[]`
+  * `[^]`
+  * `[-]`
+  * `\`, 跳脫字元
+  * `^`, 行首
+  * `$`, 行尾
+  * `^$`, 同時使用時則表示要比對整個字串
+  * 量詞
+    * `?`, 0, 1
+    * `+`, > 1
+    * `*`, >= 0
+    * `{}`, 
+    * `{,}`
+    * greedy mode 預設是貪婪的, 量詞配合 `?` 變成不貪婪模式 (nongreedy), 例如 `a+?`
+  * 預設字彙集合
+    * `.`, 換行字元 (\n, \r, \u2028, \u2029) 以外的所有字元
+    * `\d`, `[0-9]`
+    * `\D`, `[^0-9]`
+    * `\w`, `[A-Za-z0-9_]`
+    * `\W`, `[^A-Za-z0-9_]`
+    * `\s`, 任意空白, 空格, tab, 換行等等
+    * `\S`, 空白字元以外的字元
+  * 分組, `()`
+  * 或, `|`
+  * 分組參照, `\1`, `\2`, ...
+
+#### 編譯與執行
+  * 每個正規表達式的宣告都是獨一無二的就算內容相同也是。
+  * 每一次的宣告都會進行一次編譯。因此如果需要重複使用的正規表達式，最好存為變數以提昇效能。
+
+#### 捕捉 (capture) 與分組 (grouping)
+  * `match()` 配合 `()`, 會把捕捉到的內容存為陣列。
+  * 全域 flag `g` 與多次捕捉 `exec`
+  * `replace()` 中使用參照, `$1`, `$2`, ... 
+  * 分組與捕捉共用相同的語法 `()`, 可以使用 `(?:)` 被動次表達式 (passive subexpression) 強制指定為分組而非捕捉
+  * 使用 `(?:)` 強制區分捕捉與分組，可以減少不必要的記憶體儲存。
+
+#### `replace()` 使用函式取代
+  * `replace( regularExpression, function )`, 取代的內容可以傳入一個函式而非固定的字串。
+  * 延伸功能可以使用 replace 傳入函式作為字串的迭代, `sourceString.replace(, function () { return ""; })`, 搜尋+處理但是不改寫。
+
+#### 常見問題與解法
+  * 匹配全部字元包含換行字元, `[\S\s]` 或 `(?:.|\s)`
+
 
 ------------------------------
 
 
 ### 第十一章 - 程式模組化技術
+  * 其他語言通過名稱空間 (namespace, C++, C#) 或者套件 (package, Java)解決模組化問題
+
+#### ES6 以前
+  * 使用物件提供界面, 閉包與立即執行函式提供隱藏實作。
+  * 缺點 1. 擴充時無法使用先前的細節, 2. 無法自動化管理相依性
+  * module pattern
+
+####  AMD 與 CommonJS 模組標準
+  * Asynchronous Module Definition (AMD), 特別針對瀏覽器環境
+  * CommonJS, 更適合一般性執行環境, 例如 Node.js
+  * AMD, 
+    * 適用於瀏覽器環境
+    * 最受歡迎的實作 RequireJS, 
+    * `define`, 
+    * 自動解析相依性, 
+    * 非同步載入模組, 
+    * 可把多個模組定義在單一檔案內
+  * CommonJS, 
+    * 一個模組一個檔案, 
+    * `require`, `module.exports`, 
+    * 模組同步載入, 
+    * Node.js 預設的模組格式, 
+    * 無法直接使用在瀏覽器環境上
+
+#### ES6 之後原生的模組語法
+  * 類似 CommonJS 的語法, 並且也是一個檔案一個模組
+  * 類似 AMD 的非同步載入。
+  * 新語法 `export`, `import`
+  * `export` 慣例是在檔案結尾一次匯出
+  * `import` 慣例是在檔案開頭一次匯入
+  * `import * as  from `
+  * `import {} from `, 具名匯入
+  * `import from `, 預設匯入
+  * `import { A as B} from`, as 更名匯入
+  * `export default `, 預設匯出
+  * `export `, 具名匯出
+  * `export { A as B}`, as 更名匯出
 
 
 ------------------------------
