@@ -1,7 +1,7 @@
 ## 可測試的 JavaScript
 ### BOOK resource, JavaScript/Testing
 
-太多實際範例，內容容易過時。
+測試實例容易過時，但是複雜度與 event-based architecture pattern 概念仍然很實用。
 
 ------------------
 

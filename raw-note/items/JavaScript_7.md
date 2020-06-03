@@ -550,12 +550,58 @@
 
 
 ### 第十二章 - 文件物件模型
+  * `getComputedStyle()`, `getPropertyValue()`
+  * `offsetWidth`, `offsetHeight`, 可見元素的長寬
+  * 修改 DOM 最重要的是減少 layout thrashing，讀取跟寫入 DOM 都極消耗效能。務必使用批次處理, Example: React virtual DOM。
 
 
 ------------------------------
 
 
 ### 第十三章 - 搞懂事件
+  * 
+
+#### 深入 event loop
+  * Event loops 被定義在 HTML 標準中，而非 ECMAScript。
+  * 大型任務 (macrotask) queue, 例如解析 HTML, 執行 mainline JavaScript 程式, 網路事件, 鍵盤事件, 滑鼠事件, 逾時事件, 間隔事件
+  * 微型任務 (microtask) queue, DOM 變動, Promise callback
+  * 基本原則, 1. 一次處理一項任務, 2. 一項任務必須一直執行到完成，不能被另一項任務所中斷。
+  * 一次 Event loop 的執行順序, 
+    1. 大型任務只執行**一個** (queue 可能還有其他任務，但是最多只執行一個) -> 
+    1. 微型任務全部執行 (清空 queue) -> 
+    1. 更新頁面。
+
+#### 逾時 (timeout) 與間隔 (interval)
+  * `setTimeout`, `setInterval`
+  * `clearTimeout`, `clearInterval`
+  * 如果下一次的間隔時間又到了，但是前一次的還沒執行到，則不會加入新的間隔事件。 (瀏覽器不會把相同間隔處理器的不同實例放進佇列中)
+  * `setInterval`, 固定間隔時間**嘗試**加入事件佇列。
+  * 遞迴的 `setTimeout`, `setTimeout(function repeat() { doSomething(); setTimeout(repeat, ); }, )`, 執行後在加入一次佇列
+
+#### 切割長時間的執行任務
+  * 切割單個巨大的執行任務到多個大型任務，讓瀏覽器可以在間隔中觸發頁面更新。
+  * 利用遞迴的 `setTimeout`, delay 0 和記錄 iteration times。
+
+#### 處理事件
+  * `event.target` object (事件觸發的 object), 與 event `this` (事件處理器的 this) 的差別
+  * event capturing, 事件觸發由外而內, (Netscape)
+  * event bubbling, 事件觸發由內而外, (Microsoft)
+  * W3 標準中，兩種做法都支援分成兩階段, 1. capturing phase, 2. bubbling phase。
+  * addEventListener 時可以選擇使用哪種方式觸發事件。(預設是 bubbling)
+  * 把事件委派給共同父層處理，減少註冊多個事件處理器。
+
+#### 自訂事件
+  * 利用已經存在的 event-based architecture 實現 loose-coupling (分離事件觸發與事件執行)。
+  * 利用內建函式, `new CustomEvent()`, `EventTarget.dispatchEvent()`, `EventTarget.addEventListener()`。
+  * 
+    ```JavaScript
+    function triggerEvent(target, eventType, eventDetail) {
+      const event = new CustomEvent(eventType, { 
+        detail: eventDetail
+      });
+      target.dispatchEvent(event);
+    }
+    ```
 
 
 ------------------------------
