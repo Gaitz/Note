@@ -654,11 +654,52 @@
 
 ### 附錄A - ES6 的額外功能
 
+#### 字串模板 (template literal)
+  * 單行或多行, 配合 `${}` 傳入 JavaScript expression。
+  * ```
+    const name = "world";
+    const stringTemplate = `Hello ${name}`;
+    ```
+
+#### 解構 (deconstructuring)
+  * 物件解構, `const {a, b, c} = {a, b, c}`
+  * 物件解構與重新命名, `const { a: newA, b: newB, c: newC } = {a, b, c}`
+  * 陣列解構, `const [] = []`
+  * 陣列解構與剩餘算子 (`...`), `const [first, ...remaining] = []`
+
+#### 強化版物件實字建立
+  * 可省略名稱 (key)
+  * ```JavaScript
+    {
+      name,
+      getName() { }
+    }
+    ```
+
 
 ------------------------------
 
 
 ### 附錄B - 用測試和除錯技術裝備自己
+  * 測試 (testing)
+  * 除錯 (debug)
 
+#### Web 開發者工具
+  * 各家瀏覽器的開發者工具
 
-478
+#### 除錯
+  * logging
+  * breakpoint, 通過瀏覽器開發者工具.
+    * step into, 進入函式
+    * step over, 下一步但是不進入函式
+    * step out, 繼續執行
+    * 條件式中斷點, breakpoint 設置 expression
+
+#### 測試
+  * 可重現
+  * 簡單
+  * 獨立
+
+#### 自動化測試
+  * 斷言庫 (assertion), `assert`, `console.assert()`
+  * 測試框架, *QUnit*, *Jasmine*
