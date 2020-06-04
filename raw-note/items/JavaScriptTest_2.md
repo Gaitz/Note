@@ -1,6 +1,8 @@
 ## 可測試的 JavaScript
 ### BOOK resource, JavaScript/Testing
 
+測試實例容易過時，但是複雜度與 event-based architecture pattern 概念仍然很實用。
+
 ------------------
 
 第一章 - 可測試的 JavaScript 程式 (Testable JavaScript)
