@@ -156,6 +156,14 @@
 
 
 ### 第六章 - 建置應用程式
+  * `this.refs` 跳脫 React 取得原始 DOM 元素
+
+#### ES6 class component
+  * `constructor (props) { super(props); this.state = {}; }` 取代 `getInitialState({})`
+  * Event handler function bind 的三種方法
+    * `this.method.bind(this)`
+    * 箭頭函式自動綁定
+    * 建構式中一次性綁定, `constructor(props){ this.method = this.method.bind(this); }`
 
 
 ------------------------------
@@ -163,11 +171,57 @@
 
 ### 第七章 - Lint, Flow, 測試, 重複
 
+#### Node.js
+  * package.json, 
+  * node.js scripts
+
+#### ESLint
+  * 由預設標準開始，慢慢增加客製化標準。
+
+#### Flow
+  * 在編譯期檢查型別
+  * 可以取代 React propTyps (執行期檢查)
+
+#### 測試
+  * React 使用 Jest 測試工具
+  * Jest 基於 Jasmine 框架
+  * 測試 React 需要配合 `react-addons-test-utils` 工具包, 模擬渲染, 使用者互動, ... 配合 `ReactDOM.findDOMNode()` 來取值 assert
+  * Jest 預設全部 mock，需要明確指出不需要 mock 的部分。
+
 
 ------------------------------
 
 
 ### 第八章 - Flux
+  * 元件溝通管理, 資料傳遞管理
+  * React 做為單向資料流，有時候需要把資料傳遞很多層，會造成很多重覆的程式碼。
+  * 傳遞也會讓函式簽名變得複雜並且增加測試複雜度。
+  * 把資料傳遞從 React component 中分離，React component 只負責 View 層的渲染。
+  * 清楚的管理與界定哪些 component 會有 side-effect (non-pure)
+
+#### 基本想法
+  * 所有資料被存在 Store 中
+  * View 層即 React component，從 Store 取出資料並且 render。
+  * 使用者觸發 Action ， Action 觸發 Store 的資料更新。
+  * Store -> View -> Action -> Store
+
+#### Store
+  * 初始化資料 (Initialize)
+  * 資料更新 (update) 使用 event subscription pattern 達成。
+  * 提供資料的 getters 與 setters
+
+#### Action
+  * 提供 create, update, delete 的動作，會觸發 Store 的資料更新。
+  * 提供任何會影響 Store 的動作，例如搜尋資料, 排序資料, ...
+
+#### 加入 Dispatcher module
+  * 把 Action 的權責分解成，定義動作與觸發 Store 改變。
+  * 新的 Action 只負責定義動作並且呼叫 dispatcher 。
+  * Dispatcher 才負責使 Store 資料更新。
+
+#### 使用 Immutable
+  * 移除所有的 side-effect，讓資料全部變成 immutable
+  * 使用 Node.js 上的第三方函式庫，提供 immutable data types 與 methods。
 
 
 210
