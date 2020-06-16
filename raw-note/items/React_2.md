@@ -212,6 +212,51 @@
 
 
 ### 第三章 - 解讀 React 原始程式
+  * React 15.0
+
+#### 檔案架構
+  * addons
+  * isomorphic
+  * shared
+  * test
+  * core/tests
+  * renderers
+    * dom: client, server, shared
+    * shared: event, reconciler (Virtual DOM 的核心)
+
+#### Virtual DOM 模型
+  * Virtual DOM 中的節點稱為 ReactNode, 分成 ReactElement (ReactComponentElement, ReactDOMElement), ReactFragment, ReactText。
+  * ReactElement = { type, props, key, ref }
+  * 建立 React element `React.createElement()`
+    * `ReactElement.createElement = function (type, config, children) { }`
+    * `return ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props)`
+  * 初始化 React component, `function inistantiateReactComponent(node, parentCompositeType)` 分類並且初始化 `return instance;`
+    * 空元件 **ReactEmptyComponent**, `ReactEmptyComponent.create(instantiateReactComponent);`
+    * DOM 原生元素 **ReactDOMComponent**, `ReactNativeComponent.createInternalComponent(element);`
+    * 自定義元件 **ReactCompositeComponent**, `new ReactCompositeComponentWrapper();`
+    * 字串或數字節點 **ReactTextComponent**, `ReactNativeComponent.createInstanceForText(node);`
+  * 文字元件 **ReactTextComponent**
+    * ReactTextComponentFactory (mountComponent 掛載, construct 創建, receiveComponent 更新)
+      * construct -> transaction.useCreateElement (openingComment + stringText + closingComment, escapedText)
+    * `var ReactDOMTextComponent = function (text)`
+  * DOM 原生元素 **ReactDOMComponent**
+    * mountComponent -> `_createOpenTagMarkupAndPutListeners (transaction, props)` -> `_createContentMarkup`
+    * updateComponent -> `_updateDOMProperties (lastProps, nextProps, transaction)` ->  `_updateDOMChildren (lastProps, nextProps, transaction, context)`
+    * unmountComponent
+  * 自定義元件 **ReactCompositeComponent**
+    * 更新方式等同於 ReactDOMComponent
+    * 生命週期 
+
+#### 生命週期 (React Component Life Cycle)
+  * 元件, 有限狀態機 (FSM), 生命週期
+  * 初次掛載, `getDefaultProps()` -> `getInitalState()` -> `componentWillMount()` -> `render()` -> `componentDidMount()`
+  * 移除元件, `componentWillUnmount()`
+  * 重新掛載, `getInitalState()` -> `componentWillMount()` -> `render()` -> `componentDidMount()`
+  * Props 改變, `componentWillReceiveProps()` -> `shouldComponentUpdate()` -> `componentWillUpdate()` -> `render()` -> `componentDidUpdate()`
+  * State 改變, `shouldComponentUpdate()` -> `componentWillUpdate()` -> `render()` -> `componentDidUpdate()`
+  * 主要的三個階段, mountComponent, updateComponent, unmountComponent
+  
+
 
 
 ------------------------------
