@@ -255,8 +255,48 @@
   * Props 改變, `componentWillReceiveProps()` -> `shouldComponentUpdate()` -> `componentWillUpdate()` -> `render()` -> `componentDidUpdate()`
   * State 改變, `shouldComponentUpdate()` -> `componentWillUpdate()` -> `render()` -> `componentDidUpdate()`
   * 主要的三個階段, mountComponent, updateComponent, unmountComponent
-  
+  1. 使用 `createClass` 建立, ReactClass.createClass == extends React.Component
+    * `new ReactClassComponent()`
+  1. Mounting
+    * `mountComponent()`, `performInitialMountWithErrorHandling()`, `performInitialMount()`
+    * `_pendingStateQueue`, `_pendingReplaceState`, `_pendingForceUpdate`
+    * 遞迴 render
+  1. updateComponent, Receive_Props
+    * `receiveComponent()`, `updateComponent()`, `_performComponentUpdate()`, `_updateRenderedComponent`
+    * 遞迴 render
+  1. Unmounting
+  * 在 React 中盡可能使用無狀態元件 (stateless component) 以提升效能。
 
+#### 無狀態元件 (stateless component)
+  * 只是一個 render 方法，並沒有產生實體過程，也沒有實例回傳。因此沒有狀態、沒有生命週期。
+  * 簡單、高效、盡可能使用。
+
+#### `setState()`
+  * 使用 `this.state` 讀取，使用 `this.setState()` 寫入。永遠不要直接修改 `this.state`。
+  * 使用 queue 來實現 state 批次更新機制。
+  * `ReactComponent.prototype.setState`, `enqueueSetState()`
+  * `enqueueUpdate()`, `batchingStrategy`, `transaction.perform()`
+
+#### Transaction
+  * transaction 與 batching
+  * initialize, perform, close, closeAll, notifyAll
+
+#### diff (Virtual DOM)
+  * diff 與 Virtual DOM
+  * 傳統的 tree diff 演算法效能 O(n^3)
+  * 目的是從 Virtual DOM 轉換到 actual DOM 使用最少的操作。
+  * O(n^3) -> O(n)
+  * tree diff, component diff, element diff
+  * tree diff, 分層比較, 不存在即刪除子樹。 
+  * component diff, 用 component 類型來分類，Type 不同即刪除。
+  * element diff, 同一層的節點使用 key id 去做區別並且新增移動或刪除, `INSERT_MARKUP`, `MOVE_EXISTING`, `REMOVE_NODE`
+  * Best Pratice:
+    * 保持 DOM 的穩定，盡可能使用 CSS 隱藏或顯示，而非移除或新增節點。
+    * 避免最後一個節點移動到開頭的操作。
+
+#### React patch
+  * 更新到真實的 DOM 節點。
+  * `processUpdates()`
 
 
 ------------------------------
