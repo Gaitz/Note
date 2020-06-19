@@ -303,12 +303,141 @@
 
 
 ### 第四章 - 認識 Flux 架構模式
+  * Facebook 開源的 Application Architecture for Building User Interface
+  * 分離顯示邏輯與資料邏輯
+  * 視為一種 design pattern
+  * 缺點, 有各家實作並且對設計有自己的解釋。
+
+#### React 獨立架構
+  1. 分離資料邏輯
+      * container component, 含有抽象資料，沒有業務邏輯。
+      * presentational component, 沒有資料請求，只有業務邏輯。
+  2. 使用 HOC 抽象化，資料請求邏輯。
+
+#### MV* 與 Flux
+  * MVC, 
+    * Model, 與業務資料有關，負責處理資料同步。
+    * View, 目前狀態的顯示。
+    * Controller, 連接 View 與 Model。
+    * 缺點: 資料流複雜
+  * MVVM, (Angular), 使用雙向 data binding 取代 controller
+    * View,
+    * ViewModel,
+    * Model,
+  * Flux, 資料和邏輯永遠單向流動
+    * Action -> Dispatcher -> Store -> View -> Action
+    * React 做為 View 層每次變動都修改 Virtual DOM，可以避免 actual DOM 重覆修改的效能問題。
+
+#### Flux 基本概念
+  * 3大部分
+    * dispatcher, 分發事件
+    * store, 儲存資料
+    * view, 依據 store 的資料顯示
+  * dispatcher,
+    * `register(callback)`
+    * `dispatch(action)`
+    * action 只是單純的 type 與 payload。
+  * store,
+    * 負責儲存資料, 並且定義修改資料的邏輯
+    * 註冊在 dispatcher 中，讓 `dispatch(action)` 觸發時能收到。
+    * 對外只有唯獨的 getters。
+  * controller-view, 
+    * 監聽 store 能收到更新事件。
+    * 通過 store getters 取得資料傳遞給 view
+  * view, 
+    * 顯示層
+    * 限制修改資料，只能通過 dispatcher 發送 action 的方式。
+  * actionCreator,
+    * 介於 view 與 dispatcher 之間。
+    * view 不需要直接呼叫 dispatcher 而是透過 actionCreator。
+
+#### Flux 應用範例
+  * 基本檔案結構,
+    * css/
+    * js/ actions, components, constants, dispatcher, stores, app.js
+  * 權衡需要管理的資料 (state) 需不需要透過 flux 系統託管。
+  * 單元測試, 模擬 dispatcher 觸發 action ，然後檢查 store 的改變。
 
 
 ------------------------------
 
 
 ### 第五章 - 深入 Redux 應用架構
+  * 一個架構思想
+  * Flux + Functional Programming
+  * Redux = reduce + flux
+  * 可預測的狀態容器 (predictable state container)
+
+#### Redux 三大原則
+  * 單一資料來源
+  * 狀態是唯讀的
+    * 狀態由 reducer 生成
+  * 狀態修改通過 pure function 完成
+    * reducer 皆是 pure function
+
+#### Redux 核心 API
+  * 單一 store 由 `createStore(reducers[,initialState])` 產生
+  * 回應 action 生成新資料的 reducer，本質上是一個純函式 `reducer(previousState, action)` => newState
+  * store 包含四個方法
+    * `getState()`, 取得 store 目前狀態
+    * `dispatch(action)`, 唯一能改變 store 的地方，發送一個 action 並且回傳這個 action。
+    * `subscribe(listener)`, 註冊監聽, 讓 store 改變時能收到通知。與外部系統結合的地方。
+    * `replaceReducer(nextReducer)`, 更新 reducer。
+
+#### 與 React 綁定
+  * Redux 做到與平台無關, 因此需要使用 **react-redux**。
+  * 通過 React component, `<Provider />` 與 `connect()`
+    * `<Provider />`, 以 props 傳入 store
+    * `connect()`, 取得 store 中的資料
+
+#### Redux middleware
+  * 提供介入 dispatch action 與 reducer 之間的能力。
+  * middlewares -> dispatch -> action -> reducer
+  * `applyMiddleware()`
+  * functional programming 中的 currying 與 compose。
+
+#### Redux 非同步流
+  * 實現非同步請求
+  * 使用 Redux middlewares
+  * **redux-thunk**, Thunk 函數型式, 開源
+  * **redux-promise**, 開源
+  * **redux-composable-fetch**, 自行時做出有 loading 狀態的非同步請求。
+  * polling, `setRafTimeout()`
+  * 非同步串聯
+  * **redux-saga**, 使用 generator 取代 promise。
+
+#### Redux 與 router
+  * SPA 中的前端 routing
+  * 整合 **React Router** 的狀態到 **Redux** 中。
+  * **React Router**
+    * 保障 View 與 URL 同步
+    * 可以被瀏覽器 history 記錄
+    * React, `view component(props)`; 
+    * React Router, `view router(location)`
+    * 使用 JSX 語法，宣告式設定 Router 與 Route。
+    * 支援 hashChange 或 history.pushState
+    * 支援巢狀式路由, 配合 SPA 只改變頁面中的部分元件
+  * **React Router Redux**
+    * 把路由狀態整合到 Redux store 中。
+    * `syncHistoryWithStore()`, 連結 
+    * `routerMiddleware()`, 創造 middleware 允許 store 發送 routing action。
+
+#### Redux 與 component
+  * container component, Flux 中對應 store 的 component; Redux 中使用 connect() 的 component。
+  * presentational component, 只管顯示, 不管資料來源。
+  * Redux 中的 component 分類,
+    * Layouts, 描述頁面結構
+    * Views, Routing 入口並且連接 Redux store 。
+    * Components, 顯示層的 components
+
+#### Redux SPA 應用實例
+  * npm: react, react-dom, redux, react-router, react-redux, react-router-redux
+  * 檔案目錄, src/, test/, build/
+  * src/, app.js, app.css, views/, components/, containers/, layouts/, redux/, routes/, utils/, styles/
+  1. 設計路由 routing
+  1. 建立對應的入口 component
+  1. ...
+  * Redux Devtools, redux-devtools, redux-devtools-log-monitor, redux-devtools-dock-monitor
 
 
 ------------------------------
