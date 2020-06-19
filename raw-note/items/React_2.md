@@ -444,36 +444,137 @@
 
 
 ### 第六章 - Redux 高階運用
+  * Redux 做為未來 Immutable App Architecture 的一部分。
+
+#### Higher Order Reducer
+  * Redux 提供 combineReducers 可以更細緻的分類 reducer 再合併。
+  * 應用範例 1, 提供 reducer type 的 namespace。因為 reducer type 需全域唯一。
+  * 應用範例 2, 加強 reducer 功能, 例如 undoable 功能, 提供儲存狀態的 state 與 action。
+
+#### Redux 與表單
+  * React 不像是 Angular 一樣雙向綁定，因此在表單操作上會有大量相似的程式碼協助處理。
+  * 套件 **redux-form-utils**, **redux-form**, **react-redux-form**
+
+#### Redux CRUD 實戰
+
+#### Redux 效能最佳化
+  * 避免不必要的重複，達到效能最佳化
+  * **reselect** 函式庫, 處理資料 selector 的 cache，避免每次 `connect()` 都重新計算。
+  * Immutable Redux, 為 reducer 的 immutable 提供更方便的寫法，使用函式庫 **redux-immutable** 或 **Immutable.js**。
+  * Reducer 效能最佳化
+    1. logSlowReducers, 檢測所有 action 的 reducer 找出執行時間過長的 reducer。
+    1. specialActions, 極致的效能最佳化時，節省 reducer 中大型 switch 造成的效能。
+    1. batchActions, 合併多個 actions 一次發送，避免多次渲染。
+
+#### 解讀 Redux
+  * version, Redux 3.5.2
+  * 核心函式 `createStore(reducer, initialState, enhancer)`
+    * 初始化與提供 `getState()`
+    * 提供 `subscribe(listener)` 以註冊 callback, 被 `connect()` 所使用。
+    * 提供 `dispatch(action)`
+  * replaceReducer
+
+#### 解讀 react-redux
+  * version, react-redux@4.4.5
+  * `<Provider store />`,
+  * `connect(mapStateToProps, mapDispatchToProps, mergeProps, options = {})`
+    * mapStateToProps, 連結 component 與 Redux state。
+    * mapDispatchToProps, 
+    * mergeProps,
+    * options, `pure` default true, `withRef` default false
+  * hot replace,
+    * `Connect.prototype.componentWillUpdate`
 
 
 ------------------------------
 
 
 ### 第七章 - React 伺服器端繪製
+  * Airbnb 的解決方案 **hypernova**
+
+#### server-side rendering (SSR)
+  * 更好的 SEO
+  * 加速提供首次繪製的畫面
+  * server-side 與 client-side 程式碼重用
+
+#### React SSR
+  * 因為 React 分離 react component 與 ReactDOM.render() 宣告與實際渲染無關。
+  * 以 react-dom/server 上的 `renderToString()` 和 `renderToStaticMarkup()` 取代實際渲染到 DOM 的 `ReactDOM.render()`。
+  * `React.renderToString`, 回傳 HTML 字串並且標示好 reactid ，可以實現 React server-side 與 client-side 的 isomorphism 。
+  * `React.renderToStaticMarkup`, 回傳靜態的 HTML，節省 reactid 。
+
+#### react-view
+  * React 的 JSX 完全是 view template 並且可以充分使用 JavaScript 。
+  * Node.js 外掛程式 **react-view**
+  * 伺服器端的 babel。
+
+#### React 伺服器端渲染
+  * Node.js 
+  * 以 Koa 框架為例
+  * 統一 server-side routing 與 client-side rounting。
+  * 共用資料處理介面，分別以 server-side 處理資料與 client-side Ajax 實現細節。
+  * server-side Redux
 
 
 ------------------------------
 
 
 ### 第八章 - 玩轉 React 視覺化
+  * 常見技術, SVG, Canvas, WebGL
+  * SVG 巢狀的標籤 
+  * Canvas, 通過 JavaScript 操作的畫布。
+  * SVG 與 CSS transition。
+
+#### React 結合 Canvas 和 SVG
+  * React component 生命週期整合其他函式庫的生命週期。
+
+#### 視覺化函式庫
+  * **echarts**, **Highcharts**, **c3**, **chartist**
+  * 視覺化基礎函式庫, 
+    * **Raphael**, SVG 界的 jQuery
+    * **D3**, 資料與節點綁定
+
+#### 整合 React 與 D3
+  1. 通過 React component 直接操作 DOM，缺點是無法利用 Virtual DOM 帶來的好處。
+  1. 函式庫演算法提供資料，通過 React 渲染。元件庫 **react-d3**, **react-d3-components**
+  * React 元件庫 **Recharts**, **Victory**
 
 
 ------------------------------
 
 
 ### 附錄 A - 開發環境
+  * 執行開發環境 **Node.js**
+  * ES6 編譯工具 **Babel**
+    * 編譯 + polyfill
+    * 支援 JSX
+  * CSS 前處理器 **Sass** 與後處理器 **postcss**
+  * 測試環境 **Karma**
+    * 測試管理工具
+  * 建置工具 **webpack**
+    * module bundler
+    * 配合 webpack loader 打包不同種類的原始檔
+    * 支援破快取檔名
+    * 各種最佳化工具, code spliting, minifing, uglifying
+    * 解決合併、打包、壓縮的需求。
+  * Node.js 安裝 React 環境
+    * **react**, **react-dom**
 
 
 ------------------------------
 
 
 ### 附錄 B - 程式開發標準
+  * 使用 **ESLint**
+    * **babel-eslint**, **eslint**, **eslint-plugin-react**
+  * 規範編輯器標準 EditorConfig, `.editorconfig` 共用 config 配合各個編輯器的外掛程式實現統一標準。
 
 
 ------------------------------
 
 
 ### 附錄 C - Koa middleware
+  * Node.js 實現 web 服務的框架
 
 
 434 = 58 + 108 + 62 + 30 + 62 + 44 + 16 + 26 + 20 + 4 + 4 
