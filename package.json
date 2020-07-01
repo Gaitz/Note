@@ -2,11 +2,11 @@
   "name": "game-note",
   "version": "1.0.0",
   "description": "Game Note web APP",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --open --mode development"
+    "start": "webpack-dev-server --open --hot --mode development"
   },
   "repository": {
     "type": "git",

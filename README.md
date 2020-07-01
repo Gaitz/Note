@@ -9,3 +9,8 @@ old website articles.
 * React
 * Webpack
 * Babel
+
+##### Todo
+* ESLint
+* React testing, Jest
+* Git hook
