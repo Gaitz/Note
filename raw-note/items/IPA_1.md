@@ -72,5 +72,3 @@ Other Elements of IPA
   * Word stress, 重音記號 `ˈ`, 次重音記號 `ˌ`
   * Diacritics, 變音
   * Broad vs narrow transcription, `/ /` broad, `[ ]` narrow. 廣義與窄義音素
-
-------------------------------
