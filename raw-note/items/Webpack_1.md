@@ -272,27 +272,62 @@
 
 
 ### 第十二章 - The Manifest
-
-
+  * Webpack 產生 runtime 時的 manifest，在 runtime 實現 Webpack 模組運作機制。
+  * 例如模組之間的載入順序與連接, 或者 lazy-loading 的實現。
+  * 在最佳化效能時使用的 hash 版本 cache 可能會因為 Manifest 而被破掉，需要額外設置 Output 機制避開這個問題。
 
 
 ------------------------------
 
 
-### 第十三章 - Hot Module Replacement
+### 第十三章 - Hot Module Replacement (HMR)
+  * 在 Runtime 改變或新增模組
 
-
+#### 運作機制
+  * 對於 Application, 需要定期詢問 HMR 更新，並且下載更新，完成更新。
+  * 對於 Compiler, 需要更新 Manifest (JSON), 與實際的資料 chunks (JavaScript)
+  * 對於 Module, HMR 是選用的機制，必須額外引入輔助的程式碼才能實現。
+  * 對於 Runtime, 需要追蹤模組的 `parents` 與 `children`，通過管理的函式, `check` 與 `apply`。
+    * `check`, 發送 http request 去詢問 HMR 查看 manifest 是否有更新。有更新則下載新的 chunks 直到 `ready`。
+    * `apply` 去停止並且更新所有相關的模組。update handler, dispose handler, accept handler, ...
 
 
 ------------------------------
 
 
 ### 第十四章 - Why webpack
-
+  * Browser 上的 JavaScript
+    1. 多檔案 JavaScript 產生 network bottleneck, 單一大檔案不容易開發與管理。
+    1. 使用 IIFE 串接多檔案 JavaScript 進入單一檔案。單純的串接成大檔案依舊不容易管理，例如更新, 最佳化, lazy-loading。
+    1. Node.js 的出現, 與使用 CommonJS 實現模組化。然而瀏覽器不支援這種模組化運作。
+    1. ECMAScript module, 標準化的 module 出現，然而瀏覽器支援度目前不佳。
+  * Webpack 提供完整的 module 解決方案並且注重效能，有很多最佳化效能的功能選項。
 
 
 ------------------------------
 
 
 ### 第十五章 - Under The Hood
+  * bundling 只是一個 function, input 一些檔案, output 一些檔案。
+  * Modules 形成 `ModuleGraph` 
+  * Module 分割成 chunks
+  * Chunks 集合成 chunk groups
+  * Chunk groups 形成 `ChunkGraph`
+
+#### Entry points
+  * 單一入口的 config, `entry: './index.js'`, 產生 1 個 chunk group 與 1 個 chunk。這個 chunk group 預設的名稱是 `main`
+  * 多入口的 config, ` entry: { home: './home.js', about: './about.js' }`, 產生多個 chunk group 並且有指定的名稱。
+
+#### Chunks
+  * 分成 `initial` 與 `non-initial` 兩種
+    * `initial` chunk 包含所有模組的 dependencies 資訊，預設名稱是 `main.js`
+    * `non-initial` chunk 可以被 lazy-loaded 的。預設名稱是 ID，可額外指定名稱。
+
+#### Output
+  * `output.filename`, `initial` chunks 輸出的檔案
+  * `output.chunkFilename`, `non-initial` chunks 輸出的檔案
+  * 常用的 placeholder 
+    * `[id]`, chunk id
+    * `[name]`, chunk name，如果沒有名稱則會使用 ID
+    * `[contenthash]`, 檔案內容的 md4-hash
 
