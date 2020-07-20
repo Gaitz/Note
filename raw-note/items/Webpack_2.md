@@ -256,14 +256,164 @@
 
 ### 第六章 - Caching
 
+#### Output filenames
+  * 把輸出檔案加上 hash, 使用 substitutions, `[contenthash]` 
+
+    ```javascript
+    output: {
+      filename: '[name].[contenthash].js'
+    }
+    ```
+
+#### 避免 Webpack 內建工作破壞 cache
+  * 明確的區分打包 vendor pacakges 
+    ```javascript
+    optimization: {
+      runtimeChunk: 'single',
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all'
+          }
+        }
+      }
+    }
+    ```
+  * 避免 Module Identifiers 破壞 vendor cache
+    ```javascript
+    optimization: {
+      moduleIds: 'hashed'
+    }
+    ```
+
 
 ------------------------------
 
 
 ### 第七章 - Authoring Libraries
+  * 打包 library
+  * 明確的設置 externals libraries, 設置單個 object 或者 array
+    ```javascript
+    externals: {
+      lodash: {
+        commonjs: 'lodash',
+        commonjs2: 'lodash',
+        amd: 'lodash',
+        root: '_'
+      }
+    }
+    ```
+
+
+------------------------------
+
+
+### Environment Variables
+  
 
 
 ------------------------------
 
 
 ### 第八章 - Build Performance
+
+
+------------------------------
+
+
+### 第九章 - Content Security Policies
+
+
+------------------------------
+
+
+### 第十章 - Development - Vagrant
+
+
+------------------------------
+
+
+### 第十一章 - Dependency Management
+
+
+------------------------------
+
+
+### 第十二章 - Installation
+
+
+------------------------------
+
+
+### 第十三章 - Scaffolding
+
+
+------------------------------
+
+
+### 第十四章 - Hot Module Replacement
+
+
+------------------------------
+
+
+### 第十五章 - Tree Shaking
+
+
+------------------------------
+
+
+### 第十六章 - Production
+
+
+------------------------------
+
+
+### 第十七章 - Lazy Loading
+
+
+------------------------------
+
+
+### 第十八章 - Shimming
+
+
+------------------------------
+
+
+### 第十九章 - TypeScript
+
+
+------------------------------
+
+
+### 第二十章 - Progressive Web Application
+
+
+------------------------------
+
+
+### 第二十一章 - Public Path
+
+
+------------------------------
+
+
+### 第二十二章 - Integrations
+
+
+------------------------------
+
+
+### 第二十三章 - Asset Modules
+
+
+------------------------------
+
+
+### 第二十四章 - Advanced entry
+
+------------------------------
+
