@@ -311,7 +311,25 @@
 
 
 ### Environment Variables
-  
+  * 從 webpack CLI 傳入環境變數給 webpack.config.js 使用
+  * `webpack --env.NODE_ENV=local --env.production --progress`
+  * ```javascript
+    const path = require('path');
+
+    module.exports = env => {
+      // Use env.<YOUR VARIABLE> here:
+      console.log('NODE_ENV: ', env.NODE_ENV); // 'local'
+      console.log('Production: ', env.production); // true
+
+      return {
+        entry: './src/index.js',
+        output: {
+          filename: 'bundle.js',
+          path: path.resolve(__dirname, 'dist'),
+        },
+      };
+    };
+    ```
 
 
 ------------------------------
@@ -319,47 +337,206 @@
 
 ### 第八章 - Build Performance
 
+#### General
+  1. 使用最新版的 webpack 和最新版的 npm 
+  1. 盡可能減少 loader test 的作用域，例如指定檢查的路徑 `include`
+  1. 每個 loader 或 plugin 都會增加啟動時間，使用盡可能少的工具
+  1. Resolving 效能, 
+    * 減少 Node.js 的 filesystem 呼叫，
+    * 沒用到 symlinks (`npm link`)則設置 `resolve.symlinks: false`, 
+    * 如果使用客製化的 resolving plugins 可以考慮設置 `resolve.cacheWithContext: false`
+  1. 使用 `DllPlugin` 分割較少改變的程式碼, 壞處是增加複雜度
+  1. **Smaller = Faster**,
+    * 減少或更小的函式庫
+    * Multi-Page Applications 啟用 `SplitChunksPlugin`, 並且設置成 `async`
+    * 移除廢碼 (unused code)
+    * 只編譯正在開發的程式碼
+  1. Worker Pool, 適度的使用 `thread-loader` 把負擔重的 loader 丟給 worker 執行。過多的 worker 和 IPC 仍然會導致效能問題。
+  1. Persistent cache, `cache-loader`, package.json `postinstall`
+  1. 自製的 plugins/loaders 小心效能問題
+  1. 停用 `ProgressPlugin` 也會提高效能，但不顯著，需衡量利弊。
+
+#### Development
+  1. 使用 webpack 原生的 watch mode, 減少其他類似的功能。
+  1. Compile in Memory, 使用任一種皆可
+    * `webpack-dev-server` 
+    * `webpack-hot-middleware`
+    * `webpack-dev-middleware`
+  1. `stats.toJson()` speed 優化, 使用 `webpack-dev-server`, 
+  1. 注意各種 Devtool 之間的效能差異, 大多數情況使用 `eval-cheap-module-source-map` 是最佳選擇
+  1. 關閉那些只有在 production 才需要的工具, 例如 `TerserPlugin`, `ExtractTextPlugin`, `[hash] / [chunkhash]`, `AggressiveSplittingPlugin`, `AggressiveMergingPlugin`, `ModuleConcatenationPlugin`
+  1. 避免在 development 不需要的 optimization, 例如
+      ```javascript
+      optimization: {
+        removeAvailableModule: false,
+        removeEmptyChunks: false,
+        splitChunks: false
+      }
+      ```
+  1. 關閉 Output path info
+      ```javascript
+      output: {
+        pathinfo: false
+      }
+      ```
+  1. 使用新版的 Node.js, ES6 中新的資料結構 Map, Set 被 webpack 所使用並且有效能提昇功能。
+  1. TypeScript loader, 避免在 loader 階段做 type checking, 使用 `ForkTsCheckerWebpackPlugin` 取代。更多細節要參考 `ts-loader` 文件
+      ```javascript
+      {
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true
+        }
+      }
+      ```
+
+#### Production
+  * 不要犧牲品質換取執行效能, 在 production 階段尤其重要。
+  1. 平行處理, `parallel-webpack`, `cache-loader`
+
+#### 注意各工具的效能選項
+  * Babel 減少 preset/plugins
+  * TypeScript,
+  * Sass,
+
 
 ------------------------------
 
 
 ### 第九章 - Content Security Policies
+  * `nonce`
+  * `__webpack_nonce__` 必須是 base64-encoded 字串
+  * Content-Security-Policy (CSP) 並不是預設啟用, 需要自行增加 meta header
+    * CSP 提供瀏覽器一些限制指示, 希望降低 XSS 被執行的風險。
 
 
 ------------------------------
 
 
 ### 第十章 - Development - Vagrant
+  * 開發的時候使用 Vagrant 或 nginx proxy server
 
 
 ------------------------------
 
 
 ### 第十一章 - Dependency Management
+  * ES6 modules, commonjs, amd
+  * Dynamic `require()`, 單純用字串組合變數
+  * `require.context()`, 明確設置 context
+    * ```javascript
+      require.context(directory, useSubdirectories = true, rexExp = /^\.\/.*$/, mode = 'sync');
+      ```
+    * context module API, `resolve` function, `keys` function, `id`
 
 
 ------------------------------
 
 
 ### 第十二章 - Installation
+  * Prerequisties, Node.js
+  * Local installation, (most cases)
+    * `npm install --save-dev webpack`
+    * `npm install --save-dev webpack@<version>`, 安裝特定版本
+    * `npm install --save-dev webpack-cli`, 安裝 webpack CLI
+    * package.json, 
+      ```javascript
+      "scripts": { 
+        "build": "webpack --config webpack.config.js" 
+      }
+      ```
+  * Global installation
+    * 不推薦, 因為會綁定 webpack 版本
+  * Beta 版本安裝
+    * `npm install --save-dev webpack@next`
+    * `npm install --save-dev webpack/webpack#<tagname/branchname>`
 
 
 ------------------------------
 
 
 ### 第十三章 - Scaffolding
+  * 通過 webpack-cli 客製化 config 建立的 scaffold。需要釐清為何需要使用。
+  * 建立: 參考 CONTRIBUTE 中的 [Writing a Scaffold](https://webpack.js.org/contribute/writing-a-scaffold/)
+  * 使用: `webpack-cli init <your-scaffold>`
 
 
 ------------------------------
 
 
 ### 第十四章 - Hot Module Replacement
+  * Hot Module Replacement (HMR), 在 runtime 更新 module
+  * 此功能主要用在 development 環境
+  * 啟用, 通過 `webpack-dev-server` 或 `webpack-hot-middleware`
+  * webpack.config.js
+    ```javascript
+    devServer: {
+      contentBase: '',
+      hot: true
+    }
+    ```
+  * `webpack-dev-server --hotOnly`
+  * ```javascript
+    if (module.hot) {
+      module.hot.accept()
+    }
+    ```
+
+#### 或配合 Node.js API 啟動
+  * [dev-server.js](https://webpack.js.org/guides/hot-module-replacement/#via-the-nodejs-api)
+
+#### HMR with Stylesheets
+  1. `npm install --save-dev style-loader css-loader`, 安裝 loaders
+  1. webpack.config.js 使用 loaders
+      ```javascript
+      devServer: {
+        contentBase: '',
+        hot: true
+      },
+      module: {
+        rules: [
+          {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+          }
+        ]
+      }
+      ```
+
+#### 其他支援 HMR 的工具
+  * React Hot Loader
+  * Vue Loader
+  * Elm Hot webpack loader
+  * Angular HMR
+  * Svelte Loader
 
 
 ------------------------------
 
 
 ### 第十五章 - Tree Shaking
+  * 偵測未 import 使用到的廢碼 (dead code) 並且自動從 bundle 中移除。
+  * 注意事項, 
+    1. 必須使用 ES2015 modules `import()`, `export()`,
+    1. 小心不要被 babel 轉義成 commonjs
+    1. `mode` 設置成 `production` 實現打包最佳化。(tree shaking)
+    1. 在 `package.json` 中提供 `sideEffects` array
+
+#### Development mode
+  * 啟動 webpack.config.js
+    ```javascript
+    mode: 'development',
+    optimization: {
+      usedExports: true
+    }
+    ```
+  * 輸出後會在 bundle.js 中看到未被使用的程式碼被加上註解, Ex. `unused harmony export`
+
+#### 處理 side-effect function
+  * 如果整個專案的 export 都是 pure 則可以在 package.json 中設置 `"sideEffect": false`
+  * 如果有 sideEffect 則可以提供檔案路徑的 array, `"sideEffect": [ "*.css" ]`, 允許相對路徑/絕對路徑/glob 語法。
+  * `sideEffects` 與 `usedExport` optimizations
+  * 設置註解提供 webpack 知道是 pure, `/*#__PURE__*/`
 
 
 ------------------------------
