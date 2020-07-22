@@ -543,18 +543,60 @@
 
 
 ### 第十六章 - Production
+  * Development 環境, 希望原始檔容易被定位除錯, 有 live reloading 或 HMR 的 local server。
+  * Production 環境, 最小化 bundle, 最佳化 assets 以達到最佳的載入時間
+  * 藉由分開兩個 webpack.config 直接區分 production 與 deveopment
+
+#### Setup
+  * 把設定檔案分成多份, 例如: `webpack.common.js` 放置共用的內容, `webpack.dev.js`, `webpack.prod.js`。
+  * 使用 `webpack-merge` 工具合併設定檔, `npm install --save-dev webpack-merge`
+  * 範例程式碼請參考[文件](https://webpack.js.org/guides/production/#setup)
+  * 設定 NPM scripts, 
+    ```javascript
+    "scripts": {
+      "start": "webpack-dev-server --open --config webpack.dev.js",
+      "build": "webpack --config webpack.prod.js"
+    }
+    ```
+
+#### Specify the Mode
+  * 在 webpack v4, webpack.config 中設定的 `mode` 會自動使用 `DefinePlugin` 去設置 `process.env.NODE_ENV` 讓其他工具有一致性的參照。
+
+#### Minification
+  * 在 webpack v4+ 在 production mode 時 minify 是預設的。
+  * 其他可以使用的 minification 相關 plugins
+    * `TerserPlugin`
+    * `BabelMinifyWebpackPlugin`
+    * `ClosureWebpackPlugin`
+  * 記得提供 tree shaking 功能, 通過 `optimization.minimizer` 設定。
+  * Minimize CSS, 通過 `optimize-css-assets-webpack-plugin`
+
+#### Source Mapping
+  * 在 production 中也啟用 source mapping 幫助除錯
+  * 設定 webpack.config `devtool: 'source-map'`, 避免使用 `inline-` 或  `eval-` 會增加 bundle 大小。
+
+#### CLI Alternatives
+  * Webpack CLI 工具也可以做指定。
+  * 推薦使用 config 的方式。
 
 
 ------------------------------
 
 
 ### 第十七章 - Lazy Loading
+  * Lazy loading, 用邏輯切分程式碼 bundle, 提昇最初渲染時間。
+  * 配合各家框架所推薦的方式實現
+    * React: [Code Splitting and Lazy Loading](https://reactrouter.com/web/guides/code-splitting)
+    * Vue: [Dynamic Imports in Vue.js for better performance](https://vuedose.tips/dynamic-imports-in-vue-js-for-better-performance/)
+    * Angular: [Lazy Loading route configuration](https://angular.io/guide/router#milestone-6-asynchronous-routing) and [AngularJS + webpack = lazyLoad](https://medium.com/@var_bin/angularjs-webpack-lazyload-bb7977f390dd)
 
 
 ------------------------------
 
 
 ### 第十八章 - Shimming
+  * 提供 modules 變成 global dependency 的方法, 破壞 webpack 初衷管理 dependency，非必要不要使用。
+  * 細節參考[文件](https://webpack.js.org/guides/shimming/)
 
 
 ------------------------------
@@ -562,35 +604,67 @@
 
 ### 第十九章 - TypeScript
 
+#### Setup
+  * `npm install --save-dev typescript ts-loader`
+  * 設置 `tsconfig.json`, 基本設定請參考[Webpack文件](https://webpack.js.org/guides/typescript/)與[TypeScript文件](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+
 
 ------------------------------
 
 
 ### 第二十章 - Progressive Web Application
 
+#### Setup
+  * webpack dev server 預設是 in-memory，並不會把資源寫入 disk。因此需要起其他 server 來模擬 PWA 運作 (瀏覽器與 server 互動，而非 Filesystem)。
+  * `npm install --save-dev http-server`, 安裝 local server
+  * `"scripts": { "start": "http-server dist" }`
+  * 使用 google 的 [Workbox](https://github.com/GoogleChrome/workbox) 幫助設定, Webpack 使用 `workbox-webpack-plugin` 配合。自動生成 `service-worker.js`
+  * config 細節設定請參考[文件](https://webpack.js.org/guides/progressive-web-application/)
+
 
 ------------------------------
 
 
 ### 第二十一章 - Public Path
+  * `publicPath`, 
+  1. 通過 webpack.config 配合 `DefinePlugin` 設定
+  1. 通過在 entry point 設定 `__webpack_public_path__`
 
 
 ------------------------------
 
-
 ### 第二十二章 - Integrations
+  * Webpack 是 module bundler 與 task runner (Make, Grunt, Gulp) 不同。
+  * Webpack 最常配合的 task runner 是 NPM `scripts`
+  * Webpack + Grunt, 使用 `grunt-webpack` package
+  * Webpack + Gulp, 使用 `webpack-stream` package
+  * Webpack + Mocha, 使用 `mocha-webpack`
+  * Webpack + Karma, 使用 `karma-webpack` package
 
 
 ------------------------------
 
 
 ### 第二十三章 - Asset Modules
+  * 不需要額外設定 loaders, 即可完成 asset modules 的功能。
+  * **實驗性功能**, 通過 webpack.config `experiments: { asset: true }` 開啟。
+  * 取代常見的 `raw-loader` (讀取檔案字串), `url-loader` (變為 inline data), `file-loader`
+  * 改成使用 module types:
+    * `asset/resource`, 等同於 file-loader
+    * `asset/inline`, 等同於 url-loader
+    * `asset/source`, 等同於 raw-loader
+    * `asset`, 依據檔案大小自動處理成 resource 或 inline, 檔案大小可以在 webpack.config 設定 
+  * 使用方式請參考[文件](https://webpack.js.org/guides/asset-modules/)
 
 
 ------------------------------
 
 
 ### 第二十四章 - Advanced entry
+  * 多個入口與多個輸出, 輸出非單個 bundle
+  * 例如多頁應用程式，擁有不相依的 js 與 css 想要分離成各自一份。
+  * Wepback config 範例請參考[文件](https://webpack.js.org/guides/entry-advanced/)
+
 
 ------------------------------
 
