@@ -49,7 +49,7 @@ What’s a minimal pair test?
   * Height, vowel chart 的 y 軸
   * Rounding, vowel chart 上面左邊是 unrounded, 右邊是 rounded
   * Backness, vowel chart 的 x 軸
-  * 母音符號在各種語言的發音中位置會有些許不同，需要正確的學習。例如義語的 /o/ 跟德語的 /o/ 是不一樣的。
+  * **母音符號在各種語言的發音中位置會有些許不同**，需要正確的學習。例如義語的 /o/ 跟德語的 /o/ 是不一樣的。
   * 但是相同語言中的 IPA 符號代表相同的發音。
 
 #### Pronunciation Tutorial 4: How to improve your pronunciation using IPA (French Pronunciation)

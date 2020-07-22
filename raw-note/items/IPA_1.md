@@ -31,8 +31,8 @@ Other Elements of IPA
 #### 3 Reasons
   1. Get words right the first time. 知道正確的發音藉由閱讀 IPA。從學習的一開始就有正確的發音
   1. Speak (with good pronounciation) from day one. 
-    * 學習新語言時先查閱該語言的 IPA 表，找出以前從沒發過的聲音。找出需要花時間特別學習的聲音。
-    * 沒有出現的則是不應該被發出的聲音。可以找出細微的差別，而不是用相近的聲音。
+      * 學習新語言時先查閱該語言的 IPA 表，找出以前從沒發過的聲音。找出需要花時間特別學習的聲音。
+      * 沒有出現的則是不應該被發出的聲音。可以找出細微的差別，而不是用相近的聲音。
   1. Gain a deeper understanding of phonetics. 深入了解發聲系統
 
 
@@ -42,8 +42,8 @@ Other Elements of IPA
 ### How to Learn the International Phonetic Alphabet
   * IPA 包含 163 個符號，並不需要全部學習。只需要學習需要使用的。
   1. 首先學習母語所使用到的 IPA。
-    * 子音
-    * 母音
+      * 子音
+      * 母音
 
 
 ------------------------------
@@ -62,7 +62,7 @@ Other Elements of IPA
 
 
 ### IPA Consonant Chart
-  * 子音表, 發音方式 (row)) + 發音位置 (column) + 長短音 (unvoiced 左, voiced 右)
+  * 子音表, 發音方式 (row) + 發音位置 (column) + 長短音 (unvoiced 左, voiced 右)
 
 
 ------------------------------
