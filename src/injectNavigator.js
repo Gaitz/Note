@@ -2,8 +2,8 @@
   'use strict'
 
   /* main process */
-  const pageTitle = document.title;
-  const navigatorElementOnPage = document.getElementsByTagName("nav").item(0);
+  const pageTitle = document.title
+  const navigatorElementOnPage = document.getElementsByTagName("nav").item(0)
   navigatorElementOnPage.innerHTML = `
   <nav class="websiteNav">
     <div class="navigatorBar">
@@ -61,5 +61,5 @@
       </ul>
     </div>
   </nav>
-  `;
-})();
+  `
+})()

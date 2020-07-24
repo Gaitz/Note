@@ -4,9 +4,15 @@
   "description": "Game Note web APP",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run lint",
     "build": "webpack --config webpack.prod.js",
-    "start": "webpack-dev-server --config webpack.dev.js"
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "lint": "eslint . --ext .js,.jsx --ignore-path .gitignore"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
   },
   "repository": {
     "type": "git",
@@ -27,6 +33,7 @@
     "eslint-loader": "^4.0.2",
     "eslint-plugin-react": "^7.20.3",
     "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "webpack": "^4.43.0",

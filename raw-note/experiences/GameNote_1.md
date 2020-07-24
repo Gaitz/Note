@@ -27,4 +27,6 @@
     1. `npm install --save-dev eslint-loader`, install webpack loader
     1. Webpack config add eslint-loader follows [the document](https://webpack.js.org/loaders/eslint-loader/)
     1. Setup basic eslint rules, `semi`, `indent`
-    
+  * Git hook by Husky
+    1. `npm install --save-dev husky`
+    1. package.json add husky config, [husky github](https://github.com/typicode/husky)

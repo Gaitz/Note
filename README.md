@@ -10,7 +10,7 @@ old website articles.
 * Webpack
 * Babel
 * ESLint
+* Git hook
 
 ##### Todo
 * React testing, Jest
-* Git hook
