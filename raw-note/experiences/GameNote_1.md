@@ -2,7 +2,7 @@
 
 ### Setup
   * Node.js
-    1. nvm install Node.js, npm
+    1. nvm install latest version Node.js and npm
     1. `npm init` 
   * Git repository
     1. git clone
@@ -20,5 +20,11 @@
     1. `npm install react react-dom`
   * Webpack config details
     1. `npm install --save-dev webpack-merge`
-    * details follow [the document](https://webpack.js.org/guides/production/#setup)
+    * Details follow [the document](https://webpack.js.org/guides/production/#setup)
+  * ESLint
+    1. `npm install --save-dev eslint`
+    1. `npx eslint --init`, create eslint config
+    1. `npm install --save-dev eslint-loader`, install webpack loader
+    1. Webpack config add eslint-loader follows [the document](https://webpack.js.org/loaders/eslint-loader/)
+    1. Setup basic eslint rules, `semi`, `indent`
     
