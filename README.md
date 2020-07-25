@@ -1,16 +1,18 @@
-Note
-==
+# Note
 
 old website articles.
 
 #### Develop environment
-* Node.js (nvm install)
-* Git (GitHub repository)
-* React
-* Webpack
-* Babel
+
+- Node.js (nvm install)
+- Git (GitHub repository)
+- React
+- Webpack
+- Babel
+- ESLint
+- Git hook
+- Prettier
 
 ##### Todo
-* ESLint
-* React testing, Jest
-* Git hook
+
+- React testing, Jest
