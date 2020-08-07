@@ -323,6 +323,204 @@ Delete collections
 
 ### 第五章 - Read data
 
+#### Get data once
+
+讀取資料
+
+- 呼叫函式 `get()`
+- 設置 listener
+
+Get a document
+
+- `get()` 回傳 promise
+- 設置 Source Options 用來支援離線功能, 讀取 cache, `get(config)`, 傳入 config 物件, 設置 `source` property
+- 讀取 Custom objects 中的資料, 需要透過實作 Firestore data converter, 呼叫 document reference `.withConverter(customConverterObject).get()`, [範例程式碼](https://firebase.google.com/docs/firestore/query-data/get-data#custom_objects)
+
+Get from collection
+
+- 讀取一個 collection 中的多個 documents 通過 `where()` 做 querying, collection reference `.where().get()`, [範例程式碼](https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection)
+- 讀取 collection 中所有的 documents, 不需要通過 `where()`, 直接呼叫 `get()`, collection reference `.get()`, [範例程式碼](https://firebase.google.com/docs/firestore/query-data/get-data#get_all_documents_in_a_collection)
+- 讀取同名 sub-collection 中的資料, 通過 compound queries
+- 讀取一個 document 中所有的 sub-collections, web/mobile client-side 不支援, 可信任的 server-side 有提供 API
+
+#### Listen for realtime updates
+
+註冊 `onSnapshot()` listener
+
+- document reference `.onSnapshot((doc) => { doc.data() })`
+
+Event for local changes
+
+- 在客戶端觸發 write 時, 會立即觸發 `onSnapshot` event, 就算在 server-side 還沒改變時
+- 可以通過 `metadata.hasPendingWrites` 屬性來做區分, `onSnapshot( (doc) => { doc.metadata.hasPendingWrites ? 'Local' : 'Server' })`
+
+Event for metadata changes
+
+- 預設不會監聽 metadata 改變
+- 可以通過傳入 config 開啟, `onSnapshot({ includeMetadataChanges : true }, (doc) => {} )`
+- 例如 local change 時 metadata `pending writes` 會改變成 `true`, 成功寫入後端後會回傳並且改變狀態 `pending writes` 成 `false`
+- 如果只是單純需要監聽寫入成功與否, 可以通過 write 動作的 Promise 做判斷即可 (`.then()`)。
+
+Listen to multiple documents in a collection
+
+- Listen to query, 監聽 query 並且在每次搜尋結果變更時收到通知, 使用 `onSnapshot()`, 取代 `get()`
+- `.where().onSnapshot( (querySnapshot) => { querySnapshot.forEach( (doc) => { doc.data() }) })`, [範例程式碼參考](https://firebase.google.com/docs/firestore/query-data/listen#listen_to_multiple_documents_in_a_collection)
+
+View changes between snapshots
+
+- 只讀取改變的資料, 並且可以通過 type 去做區分, `.docChanges()`, `.type`, [範例程式碼](https://firebase.google.com/docs/firestore/query-data/listen#view_changes_between_snapshots)
+- 第一次讀取時就算資料沒有改變也會觸發 `add` type change, 方便初始化畫面時使用。
+
+Detach a listener
+
+- 取消監聽, 通過執行註冊 onSnapshot 時的回傳函式, [範例程式碼](https://firebase.google.com/docs/firestore/query-data/listen#detach_a_listener)
+
+Handle listen errors
+
+- `onSnapshot()` 可以傳入處理 error 的函式, 但是 listen fail 並不需要手動取消 listener
+
+#### Perform simple and compound queries
+
+Simple queries
+
+- Create a query, reference `.where()`
+- Execute a query, query `.get()`, `.then( (querySnapshot) => { querySnapshot.forEach( doc => doc.data() ) })`
+- Execute a query with snapshot listener, query `.onSnapshot()`
+- Query operators, `where( field, comparison_operation, value)`,
+  - comparison operations, `<`, `<=`, `==`, `>`, `>=`, `array-contains`, `in`, `array-contains-any`
+
+Array membership
+
+- `array-contains`,
+- `in`, OR 關係, 完全相等才會納入
+- `array-contains-any`, OR 關係, 包含則納入, 回傳是 de-duped 的 array
+- Limitations,
+  - `in` 跟 `array-contains-any` 最多 10 個比較值
+  - `in` 跟 `array-contains-any` 不能同時使用
+  - `array-contains` 可與 `in` 同時使用, `array-contains-any` 則不能
+  - 使用 `=` 和 `in` 時回傳結果不能排序
+
+Compound queries
+
+- Chained `where()`, AND 關係
+- Range filters (`<`, `<=`, `>`, `>=`) 只能作用在一個欄位上，即不能有多個不同欄位使用到 range filters
+
+Collection group query
+
+- 搜尋跨 documents 的同名 sub-collections
+- `collectionGroup( collectionId ).where()`, [範例程式碼](https://firebase.google.com/docs/firestore/query-data/queries#collection-group-query)
+- 使用 collection group query 之前需要先手動建立 index
+
+Query limitations
+
+- 多個不同欄位的 range filters 同時使用是不支援的
+- 沒有 `!=` 關係, 需要針對同欄位組合 range filters 達成
+- 沒有廣泛的支援 OR 關係, 希望建立多個 query 並且在客戶端組合
+- `in` 跟 `array-contains-any` 無法同時使用
+- `array-contains` 跟 `array-contains-any` 無法同時使用
+- 無法排序 `=` 或 `in` 的結果
+
+#### Order and limit data
+
+Order amd limit data
+
+- query ordering 的預設是 document ID 的 ascending order
+- 使用 `orderBy()` 改變排序使用的欄位和順序 `desc` for descending order
+- 使用 `limit()` 改變取得的數量
+- 串連 `orderBy()` 排序多個欄位
+
+Limitations
+
+- 使用 `orderBy()` 時, 不包含指定欄位的 document 會被省略。
+- 組合使用 range comparison `where()` 時, 第一個連接的 `orderBy()` 必須是相同欄位
+- `=` 和 `in` query 無法使用 ordering
+
+#### Paginate data with query cursors
+
+Add a simple cursor to a query
+
+- 使用 `startAt()` 或 `startAfter()` 去指定 query 結果的開頭
+- 使用 `endAt()` 或 `endBefore()` 去指定 query 結果的結尾
+
+Use a document snapshot to define the query cursor
+
+- 把已經讀取到的 document snapshot 用於 query
+- [範例程式碼](https://firebase.google.com/docs/firestore/query-data/query-cursors#use_a_document_snapshot_to_define_the_query_cursor)
+
+Paginate a query
+
+- 配合 `startAfter()` 與 `limit()` 分頁讀取 query 結果
+- [範例程式碼](https://firebase.google.com/docs/firestore/query-data/query-cursors#paginate_a_query)
+
+Set cursor based on multiple fields
+
+- `startAt()` 或 `beforeAt()` 使用準確的值
+- 當單個欄位搜尋不精確時, 可以組合多個欄位使用 `orderBy()` 和 `startAt()` 值來取得所需的內容。
+- [範例程式碼](https://firebase.google.com/docs/firestore/query-data/query-cursors#set_cursor_based_on_multiple_fields)
+
+#### Access data offline
+
+藉由 cache Cloud Firestore data 在 client-side 達成 offline 功能 (寫入, 讀取, 註冊監聽, 搜尋結果)
+
+- 在恢復連線後會自動同步
+- 客戶端只支援 Android, iOS, web apps
+- 只要開啟離線功能, 線上離線資料管理與同步會由 library 自動完成
+
+Configure offline persistence
+
+- Android, iOS 預設開啟, Web 預設關閉
+- Web 啟動 `firebase.firestore().enablePersistence()`, 由於資料不會自動清除, 如果有敏感資料時, 最好經過用戶授權確認是可信任的機器。
+- Cache size 預設是 40MB 超過會自動刪減, 可以通過 settings 設定 cache size, [範例程式碼](https://firebase.google.com/docs/firestore/manage-data/enable-offline#configure_cache_size)
+
+Listen to offline data
+
+- 使用 `onSnapshot()` 監聽時, 如果是離線的狀態下會從 cache 中取得, 可以通過 `SnapshotMetadata` 中的 `fromCache` 去判斷這次的事件資料來自於伺服器或者 cache
+- [範例程式碼](https://firebase.google.com/docs/firestore/manage-data/enable-offline#listen_to_offline_data)
+
+Get offline data / Query offline data
+
+- 離線且沒有 cache 的狀態下,
+  - query a collection, 會回傳空值
+  - query a document, 會回傳 error
+- 離線的狀態下, 也可以創建新的 query, 結果會建立在 cache 上
+
+Disable and enable network access
+
+- 可以通過 API 去控制客戶端的連線狀態
+- Write operations 會在儲存在 queue 中等待連線恢復
+- `firebase.firestore().disableNetwork()`, `firebase.firestore().enableNetwork()`, 皆回傳 Promise
+- [範例程式碼](https://firebase.google.com/docs/firestore/manage-data/enable-offline#disable_and_enable_network_access)
+
+#### Manage indexes
+
+- Cloud Firestore 為了效能因此所有的 query 都是使用 index 來進行的。
+- 基本的 query 所使用的 index 會自動生成。
+- 如果執行沒有設置 index 的 query 時會丟出 error。
+
+Create a missing index through an error message
+
+- 錯誤訊息中會含有 Firebase console 的連結, 可以從 Firebase Web console 中新增或刪除 indexes
+- [操作範例](https://firebase.google.com/docs/firestore/query-data/indexing#use_the_firebase_console)
+
+Use the Firebase CLI
+
+- 通過 [Firebase CLI](https://firebase.google.com/docs/cli), 也可以設置 indexes
+- [範例參考](https://firebase.google.com/docs/firestore/query-data/indexing#use_the_firebase_cli)
+
+1. Setup, `firebase init firestore`
+1. 編輯 JSON 設置 indexes
+1. Deploy `firebase deploy`
+
+Index build time
+
+- 監控 index build time
+- [操作流程參考](https://firebase.google.com/docs/firestore/query-data/indexing#index_build_time)
+
+Index building errors
+
+- 最常見的錯誤是達到 index 數量上限
+- Console 中會有錯誤訊息
+
 ---
 
 ### 第六章 - Secure and validate data
