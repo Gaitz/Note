@@ -845,9 +845,157 @@ Collection group queries and security rules
 
 ### 第八章 - Usage, limits, and pricing
 
+#### Usage and limits
+
+Monitor your usage
+
+- Firebase web console, Cloud Firestore `Usage` tab
+- Google Cloud Platform (GCP) 界面也可以查看 [App Engine Quotas](https://console.cloud.google.com/appengine/quotadetails)
+
+Free quota
+
+- 免費額度, [參考文件](https://firebase.google.com/docs/firestore/quotas#free-quota)
+
+Standard limits
+
+- [Collections, documents, and fields](https://firebase.google.com/docs/firestore/quotas#collections_documents_and_fields)
+- [Writes and transactions](https://firebase.google.com/docs/firestore/quotas#writes_and_transactions)
+- [Realtime updates](https://firebase.google.com/docs/firestore/quotas#realtime_updates)
+- [Indexes](https://firebase.google.com/docs/firestore/quotas#indexes)
+- [Export/Import](https://firebase.google.com/docs/firestore/quotas#exportimport)
+- [Security Rules](https://firebase.google.com/docs/firestore/quotas#security_rules)
+
+Manage spending
+
+- 避免超過預期的花費, 可以設定每個月預算與通知
+- 可以通過 GCP 界面設定 Cloud Firestore 每日花費上限
+
+#### Monitor usage
+
+Usage dashboard
+
+- GCP 或 Firebase 都有界面可以查看
+
+Security rule usage
+
+- Firebase console 查看 Security rules 的執行情況, Cloud firestore -> Rules -> Monitor rules
+
+Daily quotas
+
+- 從 GCP App Engine Quotas 界面查看每日使用量
+
+Cloud Monitoring
+
+- 通過 GCP 界面設定 Cloud Monitoring workspace, 創建 dashboard, 圖表, 警告通知條件
+- [操作流程說明](https://firebase.google.com/docs/firestore/monitor-usage#cloud-monitoring)
+
+#### Understand Cloud Firestore billing
+
+Pricing overview 計費依據, 每日計費
+
+- 執行 讀 ,寫 ,刪除的數量
+- 資料庫使用到的容量, 包含 metadata 與 indexes 所佔用的空間
+- 網路流量
+
+Pricing by location
+
+- 依據所選擇的 region 讀寫刪跟容量有不同的[計費價格](https://firebase.google.com/docs/firestore/pricing#select-region)
+
+Reads, writes, and deletes
+
+- 每次的 `set`, `update` 都會紀錄一次 write
+- 使用 listening 讀取資料, 只要資料有 `add` 或 `update` 都會紀錄一次 read
+- 善用 `Cursors`, `Page token`, `Limits`, `Offsets` 讓每次精準取得所需的資源, 避免不必要的消耗
+- 使用 `Cursors` 優於 `Offsets`, `Offsets` 被略過的數量也會被計費
+- 每次使用 `query` 都有最小計費, 就算回傳的值是空的也會計費
+- Cloud Firestore Security Rules, 使用 `exits()`, `get()`, `getAfter()` 也會計費
+
+Storage size
+
+Network bandwidth
+
+Manage spending
+
+- 設定每月預算與通知
+
+#### Example Cloud Firestore costs
+
+#### Storage size calculations
+
+- storage size 計費細節
+- [文件](https://firebase.google.com/docs/firestore/storage-size)
+
+#### Best practices for Cloud Firestore
+
+Database location
+
+- 選擇與使用者最接近的地方
+
+Document IDs
+
+- 避免 `.`, `..`, `/`
+- 不要使用數字遞增減作為名稱, 例如 `Customer1`, `Customer2`, ..., 會造成大量讀寫時的延遲 (hotspotting)
+
+Field Names
+
+- 避免使用 `.`, `[`, `]`, `*`, **`**, 這些符號需要額外的跳脫
+
+Indexes
+
+- 避免使用太多的 indexes, 會造成寫入延遲與佔用空間
+- 小心單調成長的值, 例如 timestamps, 可能會造成 hotspotting
+- 消除特定案例的 indexes 來減少空間消耗,
+  - 不需要搜尋的大型字串欄位
+  - 不需要搜尋的大型陣列或物件欄位
+  - 不需要搜尋的高速寫入連續值, 例如高速寫入 timestamp
+  - [參考資源](https://firebase.google.com/docs/firestore/best-practices#index_exemptions)
+
+Read and write operations
+
+- 避免寫入單一 document 速度快於 1 秒 1 次
+- 使用非同步呼叫
+- 不要使用 `offsets` query, 改用 [`cursors`](https://firebase.google.com/docs/firestore/query-data/query-cursors)
+- Transactions retires, 使用 SDKs 和 client libraries 會自動 retry, 如果使用其他方式直接呼叫的話, 需要自行實現 retry
+- Realtime updates, 最佳化 snapshot listener 效能
+  - 讓 document 盡可能小,
+  - 控制讀取速度
+  - 避免頻繁的註冊刪除相同的 listener, 最佳實務 snapshot listener 的生命週期起碼要有 30 秒以上
+  - 限制每個 client 的 listener 數量小於 100
+  - 限制每個 collection 的寫入速度低於每秒 1000 個寫入
+  - ...
+  - 參考文件 [checklist](https://firebase.google.com/docs/firestore/best-practices#realtime_updates)
+
+Designing for scale
+
+Updates to a single document
+
+- 更新速率必須小於每秒一次，否則會造成延遲
+
+High read, write, and delete rates to a narrow document range
+
+- 避免高速度的 hotspotting, 會造成延遲
+- [常見案例](https://firebase.google.com/docs/firestore/best-practices#high_read_write_and_delete_rates_to_a_narrow_document_range)
+
+Ramping up traffic
+
+- 慢慢遞增的讀寫速度
+- 從每秒 500 個動作, 以每五分鐘增加 50% 的速度提昇最大速率
+- [文件參考](https://firebase.google.com/docs/firestore/best-practices#ramping_up_traffic)
+- Migrating traffic to a new collection, 大量讀寫的 collection 切換, 會造成延遲, [文件說明](https://firebase.google.com/docs/firestore/best-practices#migrating_traffic_to_a_new_collection)
+- 使用 [Parallel reads](https://firebase.google.com/docs/firestore/best-practices#parallel_reads),
+  - 利用使用者 ID 去控制一定比例的使用者可以創建新 document, 避免一次同時
+  - Batch 搬移舊資料到新的 collection 後才刪除舊的 documents
+  - Batch 時避免順序上連續的資料, 小心造成 hotspotting
+
+Prevent unauthorized access
+
+- Security Rules 必須設定得更嚴謹, 避免惡意的使用者有權限大量寫入或讀取資料庫
+
 ---
 
 ### 第九章 - Cloud Firestore integrations
+
+#### Use the Cloud Firestore REST API
 
 ---
 
