@@ -525,9 +525,321 @@ Index building errors
 
 ### 第六章 - Secure and validate data
 
+- Mobile / Web, 通過 Firebase Authentication 與 Cloud Firestore Security Rules 去實現權限管理
+- Server Client libraries, 通過 Identity and Access Management (IAM) 去管理權限
+
+#### Get started
+
+- 要做到 user-based 權限管理需要配合 Firebase Authentication
+- 使用新版的 Security rules, `rules_version = '2';` 來啟用 recursive wildcards `**`, [說明參考](https://firebase.google.com/docs/firestore/security/get-started#security_rules_version_2)
+
+Writing rules
+
+- `match`, 指定 documents
+- `allow`, `if <condition>`, 權限設定
+- mobile/web client library 在執行讀取或寫入前都會先經過 rules 檢查, 只要違反任一權限都會讓整個請求失敗。
+
+Testing rules
+
+- 通過 Firebase Cloud Firestore console, 可以從 Rules Playground 測試寫好的 rules
+
+Deploying rules
+
+- 部屬 rules 到所有 listeners 完成更新, 需要花 1 ~ 10 分鐘
+- 通過 Firebase console, 點選發佈 (Publish) 即可
+- 通過 Firebase CLI, `firebase deploy --only firestore:rules`, 如果使用 CLI 部屬會直接覆蓋掉 Firebase Console 上的 Rules
+- 如果同時使用 Firebase console 與 Firebase CLI 時需要手動同步設定檔至本地端。
+
+#### Structure Security Rules
+
+Service and database declaration
+
+- 開頭的宣告是固定的
+- `service cloud.firestore {`, 表明是 cloud firestore 所使用的 rules
+- `match /databases/{database}/documents {`, 指定 rules 影響 project 中所有的 databases, (目前限制一個專案只有一個資料庫)
+
+Basic read/write rules
+
+- `match`, 指定適用的 documents 路徑, 指定明確的單一 document, 或者不定數量的多個 documents
+- `allow <operations> :if <condition>;`, 指定動作與限制條件
+- 沒有明確設定 rules 的其他 documents 權限預設是 deny
+- [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-structure#basic_readwrite_rules)
+
+Granular operations
+
+- 除了設定 `read` 與 `write` 之外，可以設定更細緻的動作權限
+- `read` 可以分成 `get`, `list`
+- `write` 可以分成 `create`, `update`, `delete`
+
+Hierarchical data
+
+- 針對 document 的權限設定並不會自動套用到 sub-collections 中，子代的 documents 需要額外的明確設定規則才能開通。
+- 如果子代的權限跟父層的權限永遠相依,
+  1. 可以使用單一路徑整合權限,
+  1. 使用 recursive wildcards `{document=**}` 表明所有 documents 包含所有子代
+- Recursive wildcards 的行為跟 rules 版本有關, Version 2 才能設定 collection group 的權限
+- [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-structure#hierarchical_data)
+
+Overlapping match statements
+
+- 一個 document 如果適用多組 `match`, 只要有任一組允許 (true) 則權限開啟, 與 rules 順序無關
+
+Security rule limits
+
+- 各種數量與容量限制
+- [參考文件](https://firebase.google.com/docs/firestore/security/rules-structure#security_rule_limits)
+
+#### Writing conditions for Security Rules
+
+Authentication
+
+- 有登入的使用者, `if request.auth != null;`
+- 使用者只能讀取本身的資料,
+- 通過變數 `request.auth` 取得更多資訊來做判斷, [request.auth 文件](https://firebase.google.com/docs/reference/rules/rules.firestore.Request#auth)
+- [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-conditions#authentication)
+
+Data validation
+
+- 依據 document 欄位的值，動態設置權限 `if resource.data.`, [resource.data 文件](https://firebase.google.com/docs/reference/rules/rules.firestore.Resource)
+- 資料驗證可以使用 `request.resource.data.<fieldName>`, 比對資料是否要被接受
+- 資料驗證也可以通 `resource.data.<fieldName>`, 取得現有資料來做比對
+- [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-conditions#data_validation)
+
+Access other documents
+
+- 使用其他 document 的資料來協助判斷, `get()`, `exists()`, 需要使用 rules `match` 路徑方式表達
+- Access call limits, 請求動作是有數量限制的, 超過數量會回報錯誤, 細節參考[文件](https://firebase.google.com/docs/firestore/security/rules-conditions#access_call_limits)
+- Pricing, 這些 read 動作也會被記入帳單, 無論資料最後有沒有被接受。
+- [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-conditions#access_other_documents)
+
+Custom functions
+
+- 越來越複雜的 rules 設定, 可以利用 domain-specific language 撰寫 function 來重用。
+- 類似 JavaScript function 但是有以下限制
+  - Function 內部只是一個 `return` 敘述, 並且不能呼叫外部服務 (service) 與使用迴圈 (loop)
+  - Function 可以依據定義時的 context 產生可以使用的 build-in function 與全域變數
+  - Function 可以呼叫其他函式, 但是無法遞迴呼叫並且 call stack 上限是 10 個
+  - 在 rules `v2` 版本, 可以使用至多 10 個 `let` 定義變數
+
+Rules are not filters
+
+- 不要使用 rules 來省略 query 時的 `where()` 條件
+- [範例](https://firebase.google.com/docs/firestore/security/rules-conditions#rules_are_not_filters)
+
+#### Fix insecure rules
+
+Understand your Cloud Firestore Security Rules
+
+- 預設 deny 所有權限, 需要時才明確的開啟權限
+- 在實際 apply 之前, 可以先通過模擬器做過權限測試
+
+Common scenarios with insecure rules
+
+- Open access, 無任何限制的權限
+  - 解法, 依據 Firebase Authentication, 去設定讀寫權限, [範例程式碼](https://firebase.google.com/docs/firestore/security/insecure-rules#open_access)
+- Access for any authenticated user, 任何 logged-in 使用者能任意讀寫完整的資料庫
+  - 解法, 依據屬性或不同的使用者來限制讀寫權限, [範例程式碼](https://firebase.google.com/docs/firestore/security/insecure-rules#access_for_any_authenticated_user)
+- Closed access, 關閉所有客戶端權限
+  - Firebase Admin SDKs 和 Cloud functions 仍然可以讀取資料庫, 只有在 Cloud Firestore 提供給 server-only 的情況下採用這種 rules [設定](https://firebase.google.com/docs/firestore/security/insecure-rules#access_for_any_authenticated_user)
+
+Check your Cloud Firestore Security Rules
+
+- 在發佈前先經過 Cloud Firestore emulator 模擬測試
+- Firebase web console 中 Cloud Firestore Security Rules, **Rules Playground**
+
+#### Test your Security Rules
+
+- 使用 CLI 在本地端操作 local emulator 是 bata 版的功能
+
+Understand Cloud Firestore Security Rules
+
+- 權限控管實現由 Firebase Authentication 與 Cloud Firestore Security Rules 設定實現
+- Firebase Authentication 實現 user-based / role-based 使用者驗證
+- Cloud Firestore Security Rules 實現 Web/mobile client libraries 讀寫限制與寫入資料驗證
+
+Install the emulator
+
+- 通過 [Firebase CLI](https://firebase.google.com/docs/cli/) 在本地端啟用 firestore local emulator,
+- `firebase setup:emulators:firestore`
+
+Run the emulator
+
+- `firebase emulators:start --only firestore`, 啟動後不會自動關閉
+- `firebase emulators:exec --only firestore "./my-test-script.sh"`, 啟動後執行完測試後自動關閉
+- 預設執行在 8080 port, 可以通過在 `firebase.json` 中設置項調整 `"emulators: { "firestore": { "port": "8080" } }"`
+
+Before you run the emulator
+
+Run local tests
+
+- [範例參考](https://firebase.google.com/docs/firestore/security/test-rules-emulator#run_local_tests)
+- `initializeTestApp({ projectId: string, auth: Object }) => FirebaseApp`, 假定測試權限
+- `initializeAdminApp({ projectId: string }) => FirebaseApp`, 假定使用 admin 權限
+- `apps() => [FirebaseApp]`, 列出所有執行中的 test 與 admin apps, 可以用來清除已經完成的測試。
+- `loadFirestoreRules({ projectId: string, rules: Object }) => Promise`, 載入新規則 (security rules)
+- `assertFails(pr: Promise) => Promise`, 驗證 deny
+- `assertSucceeds(pr: Promise) => Promise`, 驗證 allow
+- `clearFirestoreData({ projectId: string }) => Promise`, 清除現有測試資料
+  - emulator 執行任何指令都不會自動清除存在記憶體中的測試資料庫, 如果有資料相依性的問題, 需要手動呼叫清除 `clearFirestoreData`
+
+Generate test reports
+
+- 通過瀏覽器開啟測試報告, 預設連結[參考](https://firebase.google.com/docs/firestore/security/test-rules-emulator#generate_test_reports)
+
+Differences between the emulator and production
+
+- 不需要實際創造新的 Cloud Firestore project. Local emulator 會自動創建測試用資料庫
+- 不需要實際通過 Firebase Authentication 登入流程, 通過 `initializeTestApp()` 即可設置測試使用者。
+
+Troubleshoot known issues
+
+- 常見問題與解決方案, [參考文件](https://firebase.google.com/docs/firestore/security/test-rules-emulator#troubleshoot_known_issues)
+- Test behavior is inconsistent, 測試時好時壞
+- Test only pass the first time you load the emulator, 測試只有在第一次載入時成功
+- Test setup is very complicated, 複雜的測試權限設定
+
+#### Securely query data
+
+- Cloud Firestore Security Rules 限制 query 的範例, 包含有 `limit` 和 `orderBy` 的 query 。
+- Rules are not filters, 不要使用 Security Rules 作為 get filters,
+  - 讀取全部或失敗, 沒有部份讀取
+  - 以提昇效能與資源利用
+
+Queries and security rules
+
+- Secure and query documents based on **auth.uid**
+
+  - 依據使用者, `request.auth.uid` 跟 `resource.data.` 裡存的使用者 id 比對
+  - query 時也需要在 `where` 上加上正確的 `uid`, 否則 query 不會成功, 因為 query 整個 collection 下的 documents 會包含非使用者的內容。
+  - [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-query#secure_and_query_documents_based_on_authuid)
+
+- Secure and query documents based on field
+
+  - 讀寫條件可以使用 `||` or 關係，達成多重條件
+  - [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-query#secure_and_query_documents_based_on_a_field)
+
+- `in` and `array-contains-any` queries
+
+  - 會獨立比對所有的值, 只要出現任何 deny 的狀況, 都會導致 query fail
+
+- Evaluating constraints on queries
+
+  - 權限限制由 query 條件欄位決定, [`request.query`](https://firebase.google.com/docs/reference/rules/rules.firestore.Request) 下的變數
+  - 可以把 `read` 權限區分成 `get` (取得單一) 與 `list` (取得多個), 設置不同的權限
+  - [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-query#evaluating_constraints_on_queries)
+
+Collection group queries and security rules
+
+- Collection group queries 一次取得所有同名的 sub-collections
+- Secure and query documents based on collection groups
+
+  1. 確定使用 `rules_version = '2';` 否則無法使用 collection group queries
+  1. Collection group query rule template `match /{path=**}/[COLLECTION_ID]/{doc}`
+
+  - [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-query#secure_and_query_documents_based_on_collection_groups)
+
+- Secure collection group queries based on field
+
+  - 依據欄位值決定 collection group 的權限
+  - Query 時需要加上正確的 `where()` 來通過 rules
+  - [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-query#secure_collection_group_queries_based_on_a_field)
+
+- Secure and query documents based on collection group and document path
+
+  - 因為是 NoSQL 同名的資料集合會存在多個地方，如果無條件的使用 collection group 取得，會有些不適合的情境。
+  - [範例程式碼](https://firebase.google.com/docs/firestore/security/rules-query#secure_and_query_documents_based_on_collection_group_and_document_path)
+
 ---
 
 ### 第七章 - Solutions
+
+- 提供更複雜情境的解決方案與限制
+
+#### Aggregation queries
+
+- 如果需要存取的屬性是需要走訪整個 collection 中所有的 documents 時
+- 解決方案: aggregation 的屬性存成單個屬性, 每次存取不需要重新走訪整個 collection
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/aggregation)
+
+實現方式 1. Client-side transactions
+
+- 把邏輯寫在 client-side transaction 中
+
+實現方式 2. Cloud Functions
+
+- 把邏輯寫在 Cloud functions 中
+
+#### Distributed counters
+
+- 單個 document 的存取速度上限是 1 秒 1 次, 對有些應用程式來說可能太慢
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/counters)
+
+解決方案 distributed counters
+
+- 把單 counter 屬性分開存放成多個 documents, 讓讀寫速度上限可以依據分開的數量而加速
+- 寫入時隨機選擇一個 document 儲存
+- 讀取時取得所有的 documents 後在 client-side 整合。
+- 類似 map 與 reduce
+
+#### Full-text search
+
+- Cloud firestore 不提供原生的 full-text search, 在客戶端讀取所有的文件也不現實
+
+解決方案: Algolia - 第三方服務
+
+- 配合 Cloud Functions 使用 Algolia 實現 index 與全文搜尋
+- Algolia 並不是唯一的第三方服務, 可以使用其他類似的服務
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/search#solution_algolia)
+
+#### Build presence
+
+- 偵測在線 detecting presence
+- 沒有原生支援
+
+解決方案: 使用 Cloud Functions 組合 Realtime database
+
+- Realtime database 擁有連線狀態的資訊, 配合 Cloud Functions 作為橋樑
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/presence#solution_cloud_functions_with_realtime_database)
+
+#### Secure data access for users and groups
+
+- 使用者群組與個別的權限管理
+
+解決方案: Role-Based Access Control
+
+- 增加 roles 屬性儲存 uid 對應的 role, Security Rule 中轉換 `request.auth.uid` 到 role 再來限制
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/role-based-access#solution_role-based_access_control)
+
+#### Delete data with a callable Cloud Function
+
+- 由於刪除功能沒有提供原生的遞迴刪除
+
+解決方案: 通過 Cloud Function 實作遞迴刪除
+
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/role-based-access#solution_role-based_access_control)
+
+#### Schedule data exports
+
+- 使用 Cloud Functions 與 Cloud Schedular 實現定期輸出資料庫
+- 輸出資料庫時每個 document 都會經過 read operation 是需要計費的
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/schedule-export#before_you_begin)
+
+#### Sharded timestamps
+
+- document 寫入有每秒 500 writes 速度上限, 使用 Sharded timestamps 突破這個限制
+- [範例](https://firebase.google.com/docs/firestore/solutions/shard-timestamp)
+
+#### Automating database creation
+
+- 通過 REST APIs, gcloud, Terraform 三種方法自動建置 Cloud Firestore database
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/automate-database-create)
+
+#### Reduce index costs with map fields
+
+- 作為最佳實務, 移除不必要的 indexes 提昇寫入效能與減輕空間
+- 然而消除 single-field index 有數量上限每個資料庫最多 200 個
+- 使用 grouping map field 打包所有不必要 index 的欄位，變成消除一次即可。
+- [範例程式碼](https://firebase.google.com/docs/firestore/solutions/index-map-field#solution_use_map_fields_to_help_manage_indexes)
 
 ---
 
