@@ -997,12 +997,85 @@ Prevent unauthorized access
 
 #### Use the Cloud Firestore REST API
 
+- 在無法使用完整的 client library 的情況下，可以使用 REST API 直接與 Firestore 互動
+
+Authentication and authorization, 兩種認證方式
+
+- Firebase Authentication ID token, 受 Cloud Firestore Security Rules 權限控管
+- Google Identity OAuth 2.0, 受 Identity and Access Management (IAM) 管理
+
+Working with Firebase ID tokens, 取得 token 的兩種方式
+
+- [Firebase Authentication REST API](https://firebase.google.com/docs/reference/rest/auth/)
+- [Firebase Authentication SDK](https://firebase.google.com/docs/auth/admin/verify-id-tokens#retrieve_id_tokens_on_clients)
+
+Working with Google Identity OAuth 2.0 tokens, 取得 token 的兩種方式
+
+- Google API Client library 的 service account
+- OAuth 2.0 server to server application
+- [參考文件](https://firebase.google.com/docs/firestore/use-rest-api#working_with_google_identity_oauth_20_tokens)
+
+Authenticating with an access token
+
+- 取得 token 後在 `Authorization` header 設定 `Bearer {YOUR_TOKEN}`
+
+Making REST calls
+
+- Base URL `https://firestore.googleapis.com/v1/`
+- [參考 API 文件](https://firebase.google.com/docs/firestore/reference/rest/)
+- [範例程式碼](https://firebase.google.com/docs/firestore/use-rest-api#making_rest_calls)
+
+Error Codes
+
+- 正確回應 `200`, 錯誤回傳 `4xx` or `5xx`
+- 參考[文件](https://firebase.google.com/docs/firestore/use-rest-api#error_codes)對應錯誤的處理方法
+
+#### Use Cloud Firestore and Realtime Database
+
+- 同時使用 Firebase Realtime Database 與 Cloud Firestore
+- 搬移資料從 Realtime Database 到 Cloud Firestore 的步驟與最佳實務
+- [參考文件](https://firebase.google.com/docs/firestore/firestore-for-rtdb#make_your_primary_database_for_the_migrated_data)
+
+#### Extend with Cloud Functions
+
+- Beta 版功能
+- 通過 Cloud Functions 可以部屬 Node.js 程式碼用來完成 server-side 工作
+- 可以偵測到 Cloud Firestore Database event 並且觸發函式
+- [參考文件](https://firebase.google.com/docs/firestore/extend-with-functions)
+
+#### Third-party library integrations
+
+- 其他第三方函式庫整合 Firebase 到其他框架
+- `AngularFire`, Web Angular library
+- `FirebaseUI`, Android and iOS
+- `React Native Firebase`, Android and iOS, React Native library
+
 ---
 
 ### 第十章 - API reference
 
+- 與 Firestore 互動的各 API
+- Android
+- iOS - Swift
+- iOS - Objective-C
+- Web
+- Cloud Functions
+- Node.js
+- Java
+- Python
+- Go
+- C#
+- PHP
+- Ruby
+- REST
+- RPC
+
 ---
 
 ### 第十一章 - Samples
+
+- 範例練習, Web, iOS, Android
+
+Cloud Firestore Web Codelab
 
 ---
