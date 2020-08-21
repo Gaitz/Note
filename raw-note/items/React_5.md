@@ -324,7 +324,7 @@ Hook 簽名
 
 ##### useReducer
 
-- 用來與 Flux 架構互動, 例如 Redux
+- React 原生的方式實現, state, dispatch, reducer 的類 Flux 架構
 
 Hook 簽名
 
@@ -335,7 +335,7 @@ Hook 簽名
 ##### useCallback
 
 - 提供避免 re-render 的機制, 效能最佳化工具
-- 等價於 `useMemo()`, 呼叫方式不同
+- 類似於 `useMemo()`, 一個記憶值, 一個記憶函式
 
 Hook 簽名
 
