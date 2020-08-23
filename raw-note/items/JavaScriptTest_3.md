@@ -286,6 +286,55 @@ pretty-format
 
 ### 第九章 - Snapshot Testing
 
+- 通過 Snapshot 自動化建立測試比對
+- 適合 UI 測試, API 測試
+
+Snapshot Testing with Jest
+
+- [範例程式碼](https://jestjs.io/docs/en/snapshot-testing), 使用 Snapshot 測試 React component
+- 通過 `react-test-renderer` package 建立 Snapshot, `create().toJSON()`, `expect().toMatchSnapshot()`
+- 可以通過不同的 props 建立不同的 snapshot 讓 React component 有更完整的測試
+
+Updating Snapshots
+
+- 當實作改變時, 過去的 snapshot 已經不符合使用時, 可以通過 `jest --updateSnapshot` 更新成新的 snapshot
+- 在更新 snapshot 前, 得先確定失敗的 snapshot testing 是因為實作更新, 而非 bug 否則會 snapshot 出有 bug 的版本
+- 或者可以配合 `--testNamePattern` 指定更新的測試
+
+Interactive Snapshot Mode
+
+- 通過 watch mode 可以互動式更新失敗的 snapshot 
+- 互動式一筆一筆查看結果後, 選擇跳過或更新
+
+Inline Snapshots
+
+- Powered by `Prettier`. 並且要指定 prettier 路徑給 Jest
+- Snapshot 會生成在測試檔案裡 (`.test.js`), 而非另開新檔 (`.snap`)
+- `toMatchInlineSnapshot()`
+
+Property Matchers
+
+- 比較動態的值, 例如 Date 與 id
+- 可以通過優先測試 property 後才比較 Snapshots
+- `toMatchSnapshot({ propertyName: expect.any(Type) })`
+- [程式碼範例](https://jestjs.io/docs/en/snapshot-testing#property-matchers)
+
+Best Practices 最佳實務
+
+1. Treat snapshot as code, 
+    - 把快照視為程式碼的一部分, 同樣需要 code review
+    - 確保 snapshot readable, 可以通過其他工具輔助
+    - 把 snapshot 視為程式碼的好處, 在於遇到錯誤時應該試著找 bug, 而非直接重新生成
+1. Tests should be deterministic, 
+    - 測試應該要是確定的, 不能依據 platform 或容易變動的值導致測試失敗
+    - 善用 mock function, 取代容易變動的值或 API
+1. Use descriptive snapshot names, 
+    - 測試名稱需要有足夠的描述性, 並且測試的內容要與描述一致, 如同程式碼註解一般
+
+Frequently Asked Questions 常見問題
+
+- [Q&A](https://jestjs.io/docs/en/snapshot-testing#frequently-asked-questions)
+
 ---
 
 ### 第十章 - An Async Example
