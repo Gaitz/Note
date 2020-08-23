@@ -1,6 +1,6 @@
 ## React Official Documents - React Hooks
 
-### [Website resource](https://reactjs.org/docs/hooks-intro.html), React
+[Website resource](https://reactjs.org/docs/hooks-intro.html), React
 
 ---
 
