@@ -175,16 +175,97 @@ Changes are made with pure functions
 
 ### 第六章 - Prior Art
 
+- 相關但不同的技術與模式
+
+Flux
+
+- 抽離狀態邏輯
+- Redux 也是一種 Flux 架構
+- Redux 增加了 **pure function** `reducer` 的限制
+- Redux 假定 `state` 是不可變的, 每次 reduce 的結果都是新的一份, (符合 pure function 定義)
+
+Elm
+
+- 一種函數式程式語言, (會轉譯成 JavaScript, 使用於瀏覽器上), 強型別, Immutable data, pure functional language
+- 強制使用 model view update architecture, updaters 等同於 Redux 中的 reducer
+- Redux 受到 Elm 的啟發, 學習 Elm 有助於撰寫更好的 Redux 
+
+Immutable
+
+- 實現 immutable data structure 的 JavaScript library
+- Immutable 與 Redux 很適合一起使用
+- Redux 本身並不規範 state 是如何儲存的, 不管是用一般物件或者其他資料結構, 重要的是 state 是不可變並且唯讀的
+
+Baobab
+
+- 實現 immutable data structure 的 JavaScript library
+- Baobab 沒有效能最佳化, 因此與 Redux 一同使用並沒有得到額外的好處
+
+RxJS
+
+- 管理非同步複雜度的一種 pattern 實現, `observable`
+- Redux 可以與 RxJS 一起運作得很好
+- 但是 Redux 與 RxJS 一起使用並不是必須的, 甚至直接在 RxJS 上實現 Redux pattern 是容易的
+
 ---
 
 ### 第七章 - Learning Resources
+
+外部學習資源, 分類成
+
+- Basic Introductions, 基本原則與基本使用
+- Using Redux With React, React-Redux binding 介紹與使用
+- Project-Based Tutorials, 實作類型的 tutorial
+- Redux Implementation, 解釋 Redux 的實作細節
+- Reducers, 討論如何撰寫 Reducer function
+- Selectors, 為什麼使用 selector function 與如何使用
+- Normalization, 如何對 Redux store 作資料正規化
+- Middleware, Redux middleware 如何使用與實作
+- Side Effects - Basic, 如何在 Redux 中處理非同步
+- Side Effects - Advanced, 進階的工具與技巧處理非同步
+- Thinking in Redux, 探討如何使用 Redux 以及何時使用
+- Redux Architecture, 大型 Redux 專案中的模式與實務
+- Apps and Examples, 
+- Redux Docs Translations, 文件翻譯
+- Books, 書籍
+- Courses, 課程
+- More Resources,
 
 ---
 
 ### 第八章 - Ecosystem
 
+Redux 是個小型的函式庫, 擁有很多外部的工具與擴充
+
+Ecosystem 的分類
+
+- Library Integration and Bindings, 與其他前端框架的整合工具
+- Reducers, Reducer 相關工具
+- Actions, Actions 相關工具
+- Utilities, 工具庫, 例如 selector 相關, Normalize 相關
+- Store, 儲存庫相關工具, 例如 subscriptions, batching, persistence
+- Immutable Data, 不可變資料相關工具, 例如 data structures, immutable update utilities, immutable/redux interop
+- Side Effects, 處理副作用, 非同步的工具, 工具簡介與推薦使用時機
+- Middleware, Redux Middleware 相關, 例如 networks and sockets, async behavior, analytics
+- Entities and Collections, 資料 CRUD 相關工具
+- Component State and Encapsulation, 元件狀態與封裝相關工具
+- Dev Tools, 開發者工具, 例如 debuggers and viewers, DevTools monitors, logging, mutation detection
+- Testing, 測試工具
+- Routing, 整合 routing 狀態的工具
+- Forms, 表單相關工具
+- Higher-Level Abstractions, 
+- Community Conventions, 慣例, 例如符合 Flux 標準, Duck pattern,
+
 ---
 
 ### 第九章 - Examples
 
+範例與其程式碼
 
+- Counter 類型
+- Todos 類型
+- Shopping Cart 類型
+- Tree View
+- Async
+- Universal
+- Real World
