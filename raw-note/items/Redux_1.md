@@ -1,6 +1,6 @@
 ## Redux official introduction
 
-### [Website resource](https://redux.js.org/introduction/getting-started), React/Redux
+### [Website resource](https://redux.js.org/introduction/getting-started), Redux
 
 ---
 
