@@ -149,6 +149,44 @@ Providing the Store
 - React-Redux 提供 `Provider`, context element 包含 `store`
 
 #### Basic Redux Data Flow
+
+Project Setup
+
+- Social Media Feed App 範例 setup, 可以 clone github repository
+- 新專案推薦使用 Create-React-App Redux template
+- 範例檔案結構 `/src`
+  - `index.js`, 入口檔案, 包含呼叫 App element 與 Redux store
+  - `App.js`, React Top component
+  - `index.css`, 共用樣式
+  - `/api/client.js`, AJAX request API methods
+  - `/api/server.js`, mock server-side api
+  - `/app`
+    - `/Navbar.js`
+    - `store.js`, Redux store 實體化
+
+Creating the Posts Slice
+
+- 需求: 取得 posts data, 儲存在 Redux store, 渲染 data 到頁面上
+- 使用 `import { createSlice } from '@reduxjs/toolkit'`, 利用 `createSlice()` 建立
+  - slice 的 `export default` 為該 slice 的 `reducer` (duck pattern)
+- 在 `app/store.js` 中使用 `import { configureStore } from '@reduxjs/toolkit'`, 利用 `configureStore()` 組合 reducers 且建立 store
+  - `store.js` 的 `export default` 為 store, 即 `configureStore()` 的回傳值
+
+Showing the Posts List
+
+- 使用 `import { useSelector } from 'react-redux'`, 利用 `useSelector` hook 取得 Redux store 裡的資料
+  - `useSelector` 需要傳入一個 selector function 協助從整個 state 中取得特定的資料 (getter function)
+- 在 `App.js` 中利用 `react-router-dom` 設定 Router
+
+Adding New Posts
+
+- 需求: 給予表單能新增內容, 新內容需要存入 Redux store, 渲染新內容到頁面上
+- 使用 `import { createSlice } from '@reduxjs/toolkit'`, 利用 `createSlice()` 新增 `reducer`
+  - 會自動產生 `action` 與 `action creator`
+  - `action` 使用 `payload` 傳遞相關資訊
+- 使用 `import { useDispatch } from 'react-redux'`, 利用 `useDispatch()` hook 取得 store `dispatch` 函式
+- 使用 `import { nanoid } from '@reduxjs/toolkit'`, 利用 `nanoid()` 取得隨機 id
+
 #### Using Redux Data
 #### Async Logic and Data Fetching 
 #### Performance and Normalizing Data
@@ -178,4 +216,4 @@ Providing the Store
 
 ---
 
-20
+6.6 + 20 = 26.6
