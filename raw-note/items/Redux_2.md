@@ -188,6 +188,51 @@ Adding New Posts
 - 使用 `import { nanoid } from '@reduxjs/toolkit'`, 利用 `nanoid()` 取得隨機 id
 
 #### Using Redux Data
+
+- 為範例新增新 Features, 查看單一文章內容, 編輯舊文章, 查看使用者與文章, 排序, 按讚
+
+Show Single Posts
+
+- 需求: 一次查看一個完整的文章
+- `useSelector()` 所取得的 store state 如果更新, component 也會自動重新渲染
+  - 因此 component 應該只引用會使用到的 state, 避免不必要的 re-rendering
+- React Router, `<Router>`
+  - `<Switch>`
+  - `<Route>`
+  - `<Redirect>`
+  - `<Link>`
+  - 渲染的 component 通過 `match` 取得 routing request parameters
+
+Editing Posts
+
+- 需求: 修改過去文章
+- 擴充 postSlice 增加新的 `reducer`
+- 使用 `import { useHistory } from 'react-router-dom'`, 利用 `useHistory()` hook 取得 history 利用 `push` API routing 到新的顯示頁
+- 使用 `import { Link } from 'react-router-dom'`, 利用 `<Link>` element 引導到編輯頁, 渲染編輯 component
+- 使用 `createSlice` 定義 `reducer` 通過選用的 `prepare()`, callback function 客製化 `action creator`
+  - `prepare()` callback function 需要回傳一個含有 `payload` 的物件
+  - 通過 `prepare()` 函式準備 `payload` 把可能會有 `side-effect` 的行為在這裡處理, 而非 reducer 內部 (需保持為純函式)
+  - 例如, 生成隨機數產生 id
+
+Users and Posts
+
+- 需求: 使用者功能
+- 創造新的 slice, `features/users/userSlice.js`
+- 在 `app/store.js` 裡的 `configureStore()` 裡新增新創造的 `reducer`
+- 在實際的 App 中會需要固定追蹤 `currentUser` state
+- 把 component 切小使用 `useSelector` 取得盡可能少的資料, 精準控制每個 component 必要的渲染期
+
+More Post Features
+
+- 需求: 排序 (sorting)
+- Redux state 應該存放的內容只有 primitives, 物件, 陣列, 能被序列化的值. 其他不允許
+- 因此 Date 的值應該被序列化與反序列化, `new Date().toISOString()`
+  - 使用 `import { parseISO, formatDistanceToNow } from 'date-fns'` 協助時間的計算與反序列化
+
+- 需求: 按讚功能
+- 盡可能的讓 `action.payload` 越小越好, 沒有副作用的計算放在 `reducer` 中做, 有副作用的準備放在 `prepare()` callback function 裡
+  - `reducer` 應該放置最多的邏輯
+
 #### Async Logic and Data Fetching 
 #### Performance and Normalizing Data
 
