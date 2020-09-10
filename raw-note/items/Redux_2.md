@@ -234,6 +234,46 @@ More Post Features
   - `reducer` 應該放置最多的邏輯
 
 #### Async Logic and Data Fetching 
+
+-  設置 mock server-side api
+
+Thunks and Async Logic
+
+- Redux store 是同步的, 非同步的行為不應該發生在 store 裡, 
+  - 包含 `dispatch` 呼叫 `reducer`, 
+  - `reducer` 運算且更新 `state`, 
+  - `store` 通知 listeners `state` 改變
+- 藉由 `Redux middleware` 去介入以上 store 的運作流中間
+  - 可以存在非同步邏輯與 store 互動的空間
+  - 最常見的 Redux middleware 是 `redux-thunk`, Redux Toolkit 的 `configureStore` 已經預設使用, 推薦做為處理非同步邏輯的標準方式
+- Thunk Functions, 引入 `redux-thunk` middleware 之後, 允許傳遞 thunk function 給 `dispatch`
+  - thunk function, input: `(dispatch, getState)`
+  - thunk function 做為處理函式用來介入 `dispatch` 的觸發時間
+  - 為了維持一致性, 同步但是需要傳值的 `dispatch` 也可以通過 thunk function 來實現
+  - thunk functions 通常存放在相關的 slice 檔案裡 (duck pattern)
+- 非同步的 thunk function, 
+  - thunk function 允許包含非同步邏輯, 例如 `setTimeout`, `Promise`, `async/await`
+  - 常見的非同步取的資料的處理流程,
+    1. 觸發開始, 並且修改 request 狀態為進行中
+    1. 執行取得資料的非同步 request,
+    1. 依據非同步的回傳結果, 分別處理成功 (success) 與失敗 (failure) 的狀態
+- Redux Toolkit 裡的 `createAsyncThunk` API, 提供實作 async thunk function 的協助
+  - 由於非同步行為常見的流程, async thunk function 實作上很相似, 因此 Redux Toolkit 提供方便建置的方法 (`createAsyncThunk`)
+
+Loading Posts
+
+- 需求: 由 API 取得 component 初始化的狀態, 並且實現 progressing
+- `useSelect()` 所需要的 selector function 也可以實作在 slice 裡共用相同的邏輯
+  - 減少取值時重複的程式碼
+  - 甚至常用函式可以使用 `useMemo` 或 `useCallback` 做效能最佳化
+- selector function 是需求導向, 只有需要使用到特定的值才實作, 不需要為了 state 實作沒用到的函式
+- Request 狀態分成四種, 尚未開始, 進行中, 成功, 失敗
+  - 狀態的保存與錯誤訊息保存, 可以使用 enum 與物件而非單純的 boolean
+- 使用 async thunk function 實現非同步 fetching 資料, [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#fetching-data-with-createasyncthunk)
+- 使用 `async/await` 配合 `try/catch` 取代 `Promise` 與 `then/catch`
+- component dispatch 非同步的 action, 如同其他的 action 一樣, [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#dispatching-thunks-from-components)
+- 
+
 #### Performance and Normalizing Data
 
 ---
