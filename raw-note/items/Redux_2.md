@@ -272,9 +272,74 @@ Loading Posts
 - 使用 async thunk function 實現非同步 fetching 資料, [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#fetching-data-with-createasyncthunk)
 - 使用 `async/await` 配合 `try/catch` 取代 `Promise` 與 `then/catch`
 - component dispatch 非同步的 action, 如同其他的 action 一樣, [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#dispatching-thunks-from-components)
-- 
+- 使用 `import { createAsyncThunk } from '@reduxjs/toolkit'`, 利用 `createAsyncThunk` 自動生成非同步 request 所需的 dispatch function
+  - [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#fetching-data-with-createasyncthunk)
+  - `createAsyncThunk()`, 
+    - input: action type 的字串前綴, 
+    - input: 非同步的 payload creator function, 回傳 `Promise` 的結果
+- 當一個 reducer function 是依據其他 action 觸發的時候, 需要使用額外的欄位 `extraReducers`, 用來監聽 action 的觸發並且執行對應的工作, 例如修改 state
+  - 例如, 需要監聽執行中狀態 (in progress), 非同步成功後把資料存進 state, 非同步失敗後的處理
+  - `extraReducers` 物件中的 key 需為監聽的 `action type` string, value 為一般的 reducer function
+  - 如果使用 `createAsyncThunk` 所生成的 action 在 `extraReducers` 可以使用 ES2015 的實字計算 key 語法, 與自動生成的 action creators, `pending`, `fulfilled`, `rejected`, 作為 key, [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#reducers-and-loading-actions)
+
+Loading Users
+
+- 需求: 載入使用者
+- 一樣使用 `async thunk` 實現, 但是只需要在 `index.js` 入口呼叫一次該 dispatch 即可
+
+Adding New Posts
+
+- 需求: 實際把新增的內容送到後端
+- 一樣使用 `async thunk` 實現非同步 request 來傳遞資訊給後端, 使用 `POST`, [範例](https://redux.js.org/tutorials/essentials/part-5-async-logic#sending-data-with-thunks)
+- 需求: 控制儲存按鈕, 在觸發過一次並且 request 還在執行時, 需暫時取消按鈕功能
+- 使用 `import { unwrapResult } from '@reduxjs/toolkit'`, 利用 `unwrapResult` 處理 `createAsyncThunk()` 所產生的 `action` 結果
 
 #### Performance and Normalizing Data
+
+- 最佳化效能
+- 資料正規化
+
+Adding User Pages
+
+- 需求: 建立使用者頁
+- 建立新的 `slice` 來處理 user feature
+
+Adding Notifications
+
+- 需求: 通知功能, 實務上會由後端伺服器傳送通知
+- 建立新 feature, notification 與對應的新 slice `features/notifications/notificationSlice.js`
+- 使用 `createAsyncThunk()` 建立 thunk function 的話, 可以通過隱含的 `thunkAPI` 取得一些常用的工具, 例如
+  - `dispatch`, `getState`, thunk function 預設的函式
+  - `extra`, `requestId`, `signal`, `rejectWithValue`
+- 問題: `dispatch()` 有多餘的呼叫, 雖然不影響功能
+
+Improving Render Performance
+
+- 針對 component re-rendering 的最佳化
+- 調查現有的 rendering 行為
+  - 使用 React DevTool 裡的 Profiler record 調查更新 state 時的 re-rendering 狀
+  - 特別注意使用 `useSelector()` 時的行為, 因為在回傳值的不嚴格等於時都會重新渲染. 注意回傳值的 reference
+- 問題: `useSelector()` 在 selector function input 沒有變動時仍重新渲染
+- 解決方案: 使用 memorization 避免 `selector` function 不必要的渲染時機
+  - 確保在真正變動值的時候才重新計算, 而非每次呼叫時. (functional programming 裡面純函式是可以使用回傳值取代函式呼叫)
+  - [Reselect](https://github.com/reduxjs/reselect) 函式庫, 提供 selector function 的 memorization 實現, Redux Toolkit 已經預設包含這個函式庫
+  - 使用 `import { createSelector } from '@reduxjs/toolkit'`, 利用來自 Reselect 的 `createSelector` function, 會自動依據 input 作到 memorization
+  - `createSelector` function, input: 1. input selectors, 2. output selector, 只有在 input selectors 的回傳值變動時, 才會重新執行 output selector
+  - 使用 memoized selector function 是很有價值的效能最佳化實務, 避免不必要的重新渲染
+- React 的預設行為, 當父層 component 被渲染時, 所有子代 component 也會被重新渲染
+- 問題: 不必要的子代重新渲染
+- 解決方案: 使用 `React.memo()`, 包裝子代 component, 使得只有在該 component 的 props 改變時才重新渲染
+- Redux Toolkit 裡有 `createEntityAdapter` 函式協助最佳化效能
+
+Normalizing Data
+
+- 為資料建立 index, 避免每次取值都要依序尋找, 提升取值時的效率
+- Normalize 正規化資料, 避免重複的資料出現, 並且建立 lookup table, 讓取值變成 `O(1)`
+- 使用 Redux Toolkit 裡的 `createEntityAdapter` 協助 lookup table 的建置與管理
+  - `createEntityAdapter`, 可以傳入一個客製化物件, 包含 `sortComparer` 指定排序函式
+  - 回傳值是一個物件, 包含 adding, updating, removing 的 `reducers`, `getInitialState()`, `getSelectors()`
+  - [使用範例](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#updating-the-posts-slice)
+  - Normalized state 像是 `{ids: [], entities: {}}` 的結構
 
 ---
 
