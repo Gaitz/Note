@@ -346,23 +346,125 @@ Normalizing Data
 ### 第三章 - Basic Tutorial
 
 #### Basic Tutorial: Intro
+
+- 尚未更新比較舊的教學
+
 #### Actions
+
+Actions
+
+- 單純的 payload 資訊, 描述發生了什麼
+- 唯一會修改 `store` 的來源
+- 由 `store.dispatch()` 傳遞 `action` 給 `store`
+- 單純的 JavaScript object, 必須擁有 `type` 字串屬性來描述
+
+Action Creators
+
+- 生成 `action` 用的函式
+- 通常不會手動撰寫要傳遞的 action 而是通過呼叫 `action creator` function
+
 #### Reducers
+
+Reducers
+
+- 一個函式, `(previouseState, action) => nextState`
+- 描述 `action` 如何改變 `state`
+- 主要的狀態修改邏輯
+- 最重要的是 `reducer` 應該永遠是純函式 (pure function)
+- reducer 在沒有 input 時可以回傳 `initialState`
+- reducer 應該依據 feature 而切分成小的 reducer 負責管理自己一部份的 state
+- 多個 reducers 在由 `combineReducers()` 組合傳遞給 `createStore()` 使用
+
 #### Store
+
+- 一個物件, 負責以下工作
+  - 持有整個應用程式的 `state`, 唯一的一個
+  - 包含成員函式 `getState()` 提供讀取
+  - 包含成員函式 `dispatch(action)` 提供發送 `action` 來更新 `state`
+  - 包含成員函式 `subscribe(listener)` 提供監聽 `state` 改變, 與取消監聽功能
+- 使用 `createStore()` 函式來生成 `store`
+  - input: `reducer`, initialState (選用)
+
 #### Data flow
+
+- Redux 結構主要希望解決嚴格的單向資料流
+- 改成從單一的地方集中管理
+
+Redux 資料流
+
+- 呼叫 `store.dispatch(action)` 描述發生的事情, 並且可能修改 `state`
+- Redux store 呼叫 `reducer` 來處理 `action`
+  - 由於 reducer 是純函式, 所以狀態的改變是可預測的
+- Redux store 整合出單一的 `state` tree
+- Redux store 觸發 `listener` 通知 `state` 改變
+
 #### Usage with React
+
+- Redux 與 React 是無關的
+- Redux 可以跟任意的顯示層函式庫一起使用
+- 通過 `react-redux` 函式庫來協助連接 React 與 Redux
+- Presentational Component, 純顯示
+- Container Component, 管理資料連接 Redux, 通過 `react-redux` 的 `connect()` 函式協助
+
 #### Example: Todo List
 
 ---
 
 ### 第四章 - Advanced Tutorial
+
 #### Advanced Tutorial: Intro
+
 #### Async Actions
+
+Actions
+
+- 一個非同步 request 通常會有以下三個 action
+  - Request 已經開始的 state
+  - Request 成功, 回傳的資料要放進 state, 並且修改 request 狀態為結束
+  - Request 失敗, 處理錯誤訊息與修改 request 狀態為結束
+
+Synchronous Action Creators, Designing the State Shape, Handling Actions
+
+Async Action Creators
+
+- 標準的非同步 action creator 作法是使用 Redux Thunk Middleware (`redux-thunk`)
+- 特殊的 action creator 回傳的是一個 function 而非 `action`, 這種類型稱為 thunk
+- Thunk 所回傳的函式由 `redux-thunk` middleware 所執行, 函式可以不需要是 pure 的, 因此可以包含副作用, 例如非同步呼叫.
+- 作為慣例, 處理非同步請求時 thunk function 會回傳 `Promise` 的結果
+- redux-thunk middleware 在 `creatStore()` 時傳入 `applyMiddleware(thunkMiddleware)`
+- Redux-thunk 並不是唯一處理非同步 action 的作法, 其他還有例如 `redux-promise`, `redux-observable`, `redux-saga`, `redux-pack`, ...
+
+Connecting to UI
+
+- 非同步的 action creator 使用方式與原本的一模一樣
+
 #### Async Flow
+
+- 不使用 `middleware` 時, Redux 工作流程只支援同步執行
+- 通過使用 `applyMiddleware()`, 介入 Redux store 的工作流程
+
 #### Middleware
+
+- 概念來自於 Express 與 Koa framework
+- Middleware 最棒的是它可以被組合並且各自互相獨立
+- Redux middleware 讓第三方工具可以介入 `dispatch(action)` 與 `reducer` 的觸發
+
+Problem: logging
+
+Problem: crash reporting
+
+- 範例說明 Redux middleware 實現的概念
+
 #### Usage with React Router
+
 #### Example: Reddit API
+
 #### Next Steps
+
+Perform Asynchronous dispatch
+
+- 選擇一個處理非同步的工具
+- `redux-thunk`, `redux-saga`, `redux-observable`
 
 ---
 
