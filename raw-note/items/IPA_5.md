@@ -6,9 +6,13 @@
 
 Introduction
 
+Part I
+
 第一章 - Retraining the articulation muscles
 
 第二章 - The International Phonetic Alphabet
+
+Part II
 
 第三章 - The consonant th (θ/ð)
 
@@ -38,9 +42,13 @@ Introduction
 
 第十六章 - The vowels a and oʊ
 
+Part III
+
 第十七章 - Syllable stress within words
 
 第十八章 - Word stress within sentences
+
+Part IV
 
 第十九章 - Marking a business speech
 
@@ -79,6 +87,15 @@ Introduction
 ---
 
 ### 第一章 - Retraining the articulation muscles
+
+The articulators of speech
+
+- 發聲部位可以分成
+  - 下顎肌肉群 (jaw muscle group)
+  - 上顎 (soft palate)
+  - 舌後根 (the back of the tongue)
+  - 舌尖 (the tip of the tongue)
+  - 嘴唇 (the lips)
 
 ---
 
