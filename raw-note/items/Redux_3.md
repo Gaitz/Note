@@ -222,9 +222,51 @@ Priority C: Recommend
 
 ### 第四章 - Redux Toolkit overview
 
+- Redux Toolkit 是官方工具庫, 提升 Redux 開發體驗並且依循最佳實務
+- 包含 Store 建立
+- 定義 Reducers
+- Immutable update
+- 一次性建立 Slice 自動生成 actions 與 action creators
+- 包含常用工具, 例如 Redux Thunk 處理非同步, Reselect 處理 memorized selector function
+
+Installation
+
+- NPM `npm install @reduxjs/toolkit`
+- YARN
+
+Purpose
+
+- Redux core 本身是非常隨意的, 可以自行處理任何的事情
+- 靈活性有時候並不是必須的
+- Redux Toolkit 協助處理三個主要的問題
+  - 建立 Redux Store 太過複雜
+  - 必需要引入很多外部資源才能讓 Redux 更容易使用
+  - Redux 需要太多的樣板程式碼
+- 提供官方推薦的最佳實務, 減少設定與決策
+
+Why You Should Use Redux Toolkit
+
+- 更容易撰寫好的 Redux 應用程式, 加速開發, 遵循最佳實務
+
+What's Included
+
+- `configureStore()`, 簡單的設定建立 store, 包含自動組合 slice reducers, 載入常用的 middleware
+- `createReducer()`, 協助建立 reducer 不需要使用 switch, 自動使用 `Immer` 來處理 immutable update 問題
+- `createAction()`, 自動生成 action creator function
+- `createSlice()`, 一次性生成 slice, 傳入 reducers, slice name, initial state 自動建立 action 與 action creators
+- `createSelector()`, 使用 `Reselect` 協助建立重複使用的 selector function
+
+Documentation
+
+- [連結](https://redux-toolkit.js.org/)
+
 ---
 
 ### 第五章 - Redux Toolkit Introduction
+
+Purpose
+
+
 
 ---
 
