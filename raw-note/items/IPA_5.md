@@ -97,6 +97,9 @@ The articulators of speech
   - 舌尖 (the tip of the tongue)
   - 嘴唇 (the lips)
 
+- 配合附贈的 App 作影片練習, 練習時需要鏡子配合觀察或觸碰發音器官
+- 第一個練習下顎肌肉群 (jaw muscle group)
+
 ---
 
 ### 第二章 - The International Phonetic Alphabet
