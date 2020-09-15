@@ -298,6 +298,66 @@ Help and Discussion
 
 ### 第六章 - Redux Toolkit Basic Tutorial
 
+Introduction: Writing a Counter Application
+
+Redux "Counter-Vanilla" Example
+
+- 使用純 redux library
+- [範例程式碼](https://redux-toolkit.js.org/tutorials/basic-tutorial#redux-counter-vanilla-example)
+
+A More Typical Counter Example
+
+- 純 Redux library 實作
+- 使用 ES6
+- dispatch action 以 dispatch action creator 取代
+- 以 constants 建立 action type 
+
+Introducing: `configureStore`
+
+- 使用 `configureStore` 取代 `createStore`, `combineReducers`
+- 並且自動啟用 ReduxDevTool 與使用數個 [middleware](https://redux-toolkit.js.org/api/getDefaultMiddleware)
+- `configureStore()` 
+  - Input: 一個物件, 物件包含各個 slice reducers
+  - Output: Redux `store`
+- [範例](https://redux-toolkit.js.org/tutorials/basic-tutorial#introducing-configurestore)
+
+Introducing: `createAction`
+
+- 使用 `createAction` 取代手動建立 action 與 action creator
+- `createAction()`
+  - Input: Action Type 的字串
+  - Output: 該 Action 的 Action Creator function
+- 生成的 action creator function 的 `toString` 被 override 成回傳 action type 字串
+- 生成的 action creator function 含有 `type` property 會回傳 action type 字串
+- [範例](https://redux-toolkit.js.org/tutorials/basic-tutorial#introducing-createaction)
+
+Introducing: `createReducer`
+
+- 使用 `createReducer` 取代手動建立 reducer 函式
+- `createReducer()`
+  - Input: initial state, 處理 object
+  - Output: reducer function
+- 使用 object 取代 switch case 來處理 action 分類
+  - key 為 action type
+  - value 為 handle function
+- 使用 ES6 Computed properties 語法 `[]` 可以直接把 `createAction()` 生成的 action creator function 傳入作為 key
+- [範例](https://redux-toolkit.js.org/tutorials/basic-tutorial#introducing-createreducer)
+
+Introducing: `createSlice`
+
+- 使用 `createSlice` 取代 `createAction`, `createReducer` 一次建立完成整個 slice
+- `createSlice()` 
+  - Input: 一個 object 包含 name, initialState, reducers
+  - Output: 一個 object 含有 `reducer`, `actions` property
+- 通常使用 ES6 destructing syntax 取值成類似
+  - `const { actions, reducer } = createSlice()`
+  - `const { actionCreator1, actionCreator2 } = actions`
+- [範例](https://redux-toolkit.js.org/tutorials/basic-tutorial#introducing-createslice)
+
+Summary
+
+- Redux Toolkit 提供建立 redux 相關的程式碼
+
 ---
 
 ### 第七章 - Redux Toolkit Intermediate Tutorial
