@@ -266,7 +266,33 @@ Documentation
 
 Purpose
 
+- 嘗試標準化建立 Redux
+- 解決以下問題
+  - Redux store 建置太過複雜
+  - Redux 需要引入很多其他的工具才能符合常見需求
+  - Redux 需要太多樣版程式碼
 
+What's Included
+
+- `configureStore()`, 簡易設定, 自動組合 slice 與引入常用 middleware 例如 `redux-thunk`
+- `createReducer()`, 建立 reducer 不需要使用 switch, 並且使用 `Immer` 處理 immutable updates
+- `createAction()`, 自動建立 action creator
+- `createSlice()`, 快速建立 slice, 需傳入 reducer, slice name, initial state, 自動生成 action 與 action creators
+- `createAsyncThunk`, 快速建立常見的非同步呼叫 thunk, 自動生成 action 
+- `createEntityAdapter`, 協助生成 normalized data 並且生成對應的 selectors 與 reducer
+- `createSelector`, 使用 `Reselect` 建立 memorized selector function
+
+Installation
+
+- Using Create React App, 通過 Create React App 的 redux Template, 快速生成專案且引用 redux toolkit
+  - `npx create-react-app "app-name" --template redux`
+- NPM 安裝或 YARN 安裝
+  - `npm install @reduxjs/toolkit`
+
+Help and Discussion
+
+- 使用 `Reactiflux` Discord 討論群
+- 在 Stack Overflow 使用 #redux 問問題
 
 ---
 
