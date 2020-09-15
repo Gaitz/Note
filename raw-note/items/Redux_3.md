@@ -362,9 +362,105 @@ Summary
 
 ### 第七章 - Redux Toolkit Intermediate Tutorial
 
+- 使用 Redux Toolkit 建立 React Redux Todos example app
+
+#### Reviewing the Redux Todos Example
+
+- 現有的 todos example 程式碼類型描述與改進方向
+
+#### Initial Conversion Steps
+
+Adding Redux Toolkit to the Project
+
+- 使用 NPM 加入 dependency, `npm install @reduxjs/toolkit`
+
+Converting the Store to Use `configureStore`
+
+- 使用 `configureStore()` 取代 `createStore()`
+- 自動啟用 Redux DevTools
+
+#### Creating the Todos Slice
+
+- 建立 Slice
+
+Understanding Slices
+
+- 配合 duck pattern 整合 action 與 reducer 在同一個檔案裡
+- 直接使用 `createSlice()` 一次建立 reducer 與 action
+- 每個 slice 都放置在 `/features/` 下個別的資料夾中
+
+Writing the Slice Reducer
+
+- `createSlice()` input:
+  - `name`, 字串, slice 的名稱
+  - `initialState`, slice 的初值
+  - `reducers`, 物件, key 為 action type, value 為處理函式 (handle function)
+- `createSlice()` 的 reducer 如果被 dispatch 未定義的 action 時預設是回傳當前的 state
+- `createSlice()` 裡的 reducers 區塊, 等同於 `createReducer()` 內部的函式可以使用 mutable 語法, 會透過 `Immer` 自動轉換成 immutable update
+- `export default` 為創建出來的 `reducer`
+- `export const` 自動創建出的 `action creators`
+- [duck pattern](https://github.com/erikras/ducks-modular-redux)
+
+Updating the Todos Tests
+
+- 修改舊的測試, 以符合 `createSlice()` 所生成出來的 action type 與結構
+
+Implementing Todo IDs
+
+- 使用 `createAction()` 裡選用的 `prepare` callback function
+- `prepare` callback function 會回傳一個含有 `payload` 的物件, `meta` 則是選用的欄位 (依循 Flux 標準)
+- 如果使用 `createSlice()` 建立時使用 `prepare` function, 則在 `reducers` object 中該 action 對應的 value 改成 object 包含兩個函式 `reducer` 與 `prepare`
+- [範例](https://redux-toolkit.js.org/tutorials/intermediate-tutorial#implementing-todo-ids)
+
+#### Using the New Todos Slice
+
+Updating the Root Reducer
+
+Updating the Add Todo Component
+
+- 使用 `react-redux` `connect()`
+
+Updating the Todo List
+
+#### Creating and Using the Filters Slice
+
+- 實現塞選功能
+
+Writing the Filters Slice
+
+- 作為新功能, 因此創建另外的 slice 來處理所屬的邏輯
+- [範例](https://redux-toolkit.js.org/tutorials/intermediate-tutorial#writing-the-filters-slice)
+
+Using the Filters Slice
+
+#### Optimizing Todo Filtering
+
+- 解決 selector function 每次都回傳不同的 reference 產生多餘的 re-rendering 問題
+- 使用 `createSelector()` 內建 `Reselect` 實現 memorized selector function
+- `createSelector()`, input:
+  - 一個 array, 包含所有相依的值, 以 selector functions 方式表示
+  - 一個 function, 實際的 selector 邏輯
+- 回傳 memorized selector function
+
+#### Cleanup
+
+- 移除不必要的檔案
+- 專案從 folder-by-type 改成 feature folder 結構了
+
+#### Summary
+
+- 使用 RTK 在 React 專案中
+- 知道如何使用 mutable reducer, prepare function, memorized selector function
+- 使用 feature folder 檔案結構
+
 ---
 
 ### 第八章 - Redux Toolkit Advanced Tutorial
+
+- 關於採用 Redux 在一般的 React 專案中
+- 使用 RTK 撰寫 async logic
+- 同時使用 RTK 與 TypeScript
+- 採用 react-redux hook API 取代傳統的 `connect()`
 
 ---
 
