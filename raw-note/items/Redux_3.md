@@ -581,6 +581,180 @@ Fetching the Issue Comments
 
 ### 第九章 - Redux Toolkit Usage Guide
 
+#### Store Setup
+
+常見流程
+
+- 建立 root reducer
+- 設定處理 async logic 的 middleware
+- 啟用 Redux DevTools
+- 其他設定, 例如開發時期的 HMR
+
+Manuel Store Setup
+
+- 使用 `createStore()` 的設定
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#manual-store-setup)
+
+Simplifying Store Setup with `configureStore`
+
+- Input 使用 object 方式, 需指定明確的 key, 因此有更好的可閱讀性
+- 引用 middleware 只需要傳入 middleware array 其他細節由 `configureStore` 處理
+- 自動啟用 Redux DevTool
+- 預設使用 `redux-thunk` middleware
+- 預設在 development 階段啟用檢查常見錯誤, 例如 mutating update, non-serializable values
+- 使用 `configureStore` 建立 store 的[範例](https://redux-toolkit.js.org/usage/usage-guide#simplifying-store-setup-with-configurestore)
+- 提供簡單設定也提供擴充性
+
+#### Writing Reducers
+
+常見流程
+
+- 依據 action `type` 去區分更新的機制, 最常見的實現方式是 `switch`, 再來是使用 object 實現 lookup table
+- 藉由複製 state 實現 immutable update 
+
+Simplifying Reducers with `createReducer`
+
+- 由於 lookup table 方式受到歡迎, 因此 RTK 內部也使用相同的作法
+- Immutable update 則藉由 `Immer` library 提供的功能, 可以撰寫 mutable 語法, 會通過 proxy 自動轉成 immutable update
+  - 由於使用 copy 時實作往往過於複雜, 並且表達能力上也沒有 mutable 語法來的清楚
+
+Defining Functions in Objects
+
+- 各種定義 JavaScript object key 與 function value 的方式, 參考[範例](https://redux-toolkit.js.org/usage/usage-guide#defining-functions-in-objects)
+  - `"Key": () => {}`, 明確的字串 key 與 arrow function
+  - `Key: function () {}`, 隱性 key 與 function 實字
+  - `Key () {}`, 命名函式, 名稱即為 key
+  - `[Key]: () => {}`, 可計算的 key 
+
+Considerations for Using `createReducer`
+
+- mutable update 只能用在 `createReducer` 裡才會正確轉換成 immutable update
+- Immer 並不會實際汙染 state
+
+#### Writing Action Creators
+
+- Redux 十分推薦使用 action creator 取代手動撰寫 action
+- 依循 Flux Standard Action, Action 函有 `type`, `payload` 
+
+Defining Action Creators with `createAction`
+
+- RTK `createAction` 傳入 action type 字串, 會字動生成 action creator.
+- 生成的 action creator 傳入的值會被存放在 action `payload` 裡
+- `createAction` 可以傳入選用的 `prepare` function, 允許客製化一些 `payload` 內容, 也可以傳入選用的 `meta` 欄位
+
+Using Action Creators as Action Types
+
+- `createAction` 創建的 action creator function 被 override `toString()` 改成回傳 action `type` string, 也可以明確使用 `type` 欄位取得
+- 因此使用 RTK `createReducer` 時, action key 的欄位可以直接使用 `createAction` 創造出來的 action creator 取代, `createReducer({}, { [actionCreator]: (state, action) => { doSomething() }})`
+
+#### Creating Slices of State
+
+- Redux state 常常會依據 feature 被切成各個 slices
+- duck pattern 讓我們把 slice 定義在單一個 JavaScript 檔案中
+
+Simplifying Slices with `createSlice`
+
+- 使用 `createSlice()` 協助建立 reducer 與 actions
+- `createSlice()`, 需要傳入一個 object 含有欄位 `name`, `initialState`, `reducers`, Example: `{ name, initialState, reducers }`
+- reducers 建立如同 RTK 的 `createReducer()`, 並且內部會呼叫 `createAction()` 自動生成與 reducer key 相同的 action creators 與 actions
+
+Exporting and Using Slices
+
+- 從 `createSlice()` 回傳的物件中取值的方式, 推薦使用 ES6 destructing 方式
+- `{ actions, reducer } = createSlice()`, `{ action1, action2 } = actions`
+- 可以配合 `export` 與 `export default` 使用
+- 需注意如果不同檔案的 reducer 參照其他檔案裡的 action 時, 可能會造成 `circular reference` 導致 dispatch 時的行為不正常
+  - 解決方案通常為取出共用的部份存為另外的檔案, 在共同引用該檔案
+  - [參考文章](https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de)
+
+#### Asynchronous Logic and Data Fetching
+
+Using Middleware to Enable Async Logic
+
+- 常見的解決方案 middlewares
+  - `redux-thunk`, 直接實作 thunk function 傳入 dispatch, 由 `redux-thunk` 控制執行時機
+  - `redux-saga`, 使用 generator
+  - `redux-observable`, 使用 RxJS observable 
+- RTK 推薦使用 `redux-thunk` 作為標準作法, 可以配合 `async/await` 語法取得更好的閱讀性
+- RTK 的 `configureStore()` 預設已經載入 `redux-thunk` middleware, 可以直接使用
+
+Defining Async Logic in Slices
+
+- RTK 目前沒有提供其他快速建置 thunk function 的方式, 並且無法定義在 `createSlice()` 中, 需要自行撰寫
+- 配合 duck pattern, thunk function 應該實作在同個 slice 檔案裡集中管理
+
+Redux Data Fetching Patterns
+
+- 由於使用非同步 fetching 的邏輯有固定的模式, [範例](https://redux-toolkit.js.org/usage/usage-guide#redux-data-fetching-patterns)
+- 因此 RTK `createAsyncThunk` 提供快速建置這個 fetching pattern 
+
+Async Requests with `createAsyncThunk`
+
+- `createAsyncThunk` 需要傳入 action type string 作為前墜, 回傳一個 Promise 的 payload callback function
+- `createAsyncThunk` 會回傳一個 thunk function 並且含有定義好的 action, `fulfilled`, `pending`, `rejected` 可以使用在 `createSlice()` 裡的 `extraReducers` 欄位, 撰寫對應的 reducer 行為
+
+#### Managing Normalized Data
+
+- 大部份應用程式處理的資料是 nested 或者 relational 的, 可以通過 normalize 成 table 的形式, 提升使用方便性與效能
+
+Normalizing by hand
+
+- 手動把資料轉換成 object key-value 的模式, 轉換成 `state.entities`, `state.ids` 的形式
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#normalizing-by-hand)
+
+Normalizing with `normalizr`
+
+- 使用受歡迎的函式庫 `normalizr`, `import { normalize, schema } from 'normalizr'`
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#normalizing-with-normalizr)
+
+Normalizing with `createEntityAdapter`
+
+- 使用 RTK 的 `createEntityAdapter` 把資料轉換成 `{ ids: [], entities: {} }` 的形式
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#normalizing-with-createentityadapter)
+
+Using `createEntityAdapter` with Normalization Libraries
+
+- 使用 `createEntityAdapter` 配合其他的 normalization 函式庫
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#using-createentityadapter-with-normalization-libraries)
+
+Using selectors with `createEntityAdapter`
+
+- `createEntityAdapter` 會自動生成幾個常用的 selector functions, 
+  - `selectById`, 
+  - `selectIds`, 
+  - `selectEntities`, 
+  - `selectAll`, 
+  - `selectTotal`,
+- 可以直接配合 React-Redux 的 `useSelector` 從 Redux store 中取值
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#using-selectors-with-createentityadapter)
+
+Specifying Alternate ID Fields
+
+- `createEntityAdapter` 假定資料中已經有 `id` 欄位
+- 指定客製化的欄位作為 id, 可以在 `createEntityAdapter()` 傳入 `selectId` 來指定特定的欄位
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#specifying-alternate-id-fields)
+
+Sorting Entities
+
+- `createEntityAdapter` 提供 `sortComparer` 欄位, 可以指定排序函式 (sort function) 來客製化資料的排序
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#sorting-entities)
+
+#### Working with Non-Serializable Data
+
+- 原生 Redux 不允許在 state 與 action 中使用 non-serializable 的值
+- 但是實務上是有可能發生的, 但使用時機應該非常的少
+- RTK 的 `configureStore()` 預設包含的 `serializableCheck` middleware 會出警告, 可以客製化指定忽視
+
+Use with Redux-Persist
+
+- 使用 `redux-persist` 函式庫
+- [範例與討論](https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist)
+
+Use with React-Redux-Firebase
+
+- 使用 React-Redux-Firebase (RRF) 
+- [範例](https://redux-toolkit.js.org/usage/usage-guide#use-with-react-redux-firebase)
+
 ---
 
 ### 第十章 - Redux Toolkit Usage With TypeScript
