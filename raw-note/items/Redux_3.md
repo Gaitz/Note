@@ -22,6 +22,8 @@
 
 第九章 - Redux Toolkit Usage Guide
 
+第十章 - Redux Toolkit Usage With TypeScript
+
 ---
 
 ### 第一章 - Recipes index
@@ -462,8 +464,125 @@ Using the Filters Slice
 - 同時使用 RTK 與 TypeScript
 - 採用 react-redux hook API 取代傳統的 `connect()`
 
+#### Reviewing the Starting Example Application
+
+- 範例應用程式是 GitHub Issue viewer
+- 使用 React, TypeScript, CSS Modules
+- 使用 feature folder structure
+  - `/api`, 
+  - `/app`, React top component
+  - `/components`, shared component
+  - `/features`, 
+  - `/utils`,
+
+#### Setting up the Redux Store
+
+- 首次引入 Redux
+- 安裝 Redux Toolkit, React-Redux
+- 因為使用 TypeScript 所以需要引入 `@types/react-redux`
+- 設置 root reducer, Redux store, `<Provider>` context
+- 啟用 React 的 Hot Module Replacement 協助開發流程
+- 設置 `app/rootReducer.ts`, `app/store.ts`, `index.ts`, [範例](https://redux-toolkit.js.org/tutorials/advanced-tutorial#setting-up-the-redux-store)
+
+Creating the Root Reducer
+
+- 使用 TypeScript 的 `ReturnType` 功能指定 state 的 Type
+
+Store Setup and HMR
+
+- 在 `app/store.ts/` 配合 `module.hot` HMR 與 `store.replaceReducer` store 自動載入開發時新的 reducer 
+
+Rendering the `Provider`
+
+- 在 `index.ts` 配合 `module.hot` HMR 在開發時自動重新渲染 ReactDOM
+
+#### Converting the Main App Display
+
+- 分辨哪些值應該被放入 Redux, 哪些應該保留在 local 
+
+Creating the Initial State Slices
+
+- 抽出 initialState 與 Types 建立第一個 slice, `features/issueDisplay/issuesDisplaySlice.ts`
+  - `import { PayloadAction } from '@reduxjs/toolkit'` 使用 RTK `createSlice` 時可以使用 RTK 提供的 Type 協助實現 type-safe
+- 改寫 React component, 通過 `import { useSelector, useDispatch } from 'react-redux'` hooks 與 Redux store 互動
+- 確認更改後的行為與預期相同並且開啟 Redux DevTools 查看 Redux 如期運作
+
+#### Converting the Issues List Page
+
+- 原本的 fetch 使用 `React.useEffect` 與資料儲存使用 `React.useState` 
+- 把兩個邏輯試著使用 Redux 抽離出 component 交由 Redux 處理
+
+Review the Issues List Component
+
+- [範例](https://redux-toolkit.js.org/tutorials/advanced-tutorial#reviewing-the-issues-list-component)
+
+Thinking in Thunks
+
+- Redux store 原生是 synchronous, 預設所有的 asynchronous logic 應該存放在 store 之外
+- 如果要整合 asynchronous logic 到 Redux 中則需要 Redux Middleware 協助介入 store dispatch action 時的行為
+- 最常見的 middleware 是 `redux-thunk` 也是 Redux Toolkit 預設的作法
+- Thunk 是用來延遲執行的函式 (lazy), 在處理非同步 action 時則是延遲到非同步行為完成後才實際 dispatch action
+- 概念上以 thunk function 取代 action; 實務上則是以 function return thunk function 取代 action creator function
+- 細節可參考 [redux-thunk 文件](https://github.com/reduxjs/redux-thunk#why-do-i-need-this)
+- 另外兩個常見的非同步處理 middleware 是 `redux-saga` (使用 generator 語法), `redux-observable` (使用 Rx 概念)
+- RTK 裡 thunk function 無法被定義在 `createSlice()` 中需要另外定義
+  - 遵循 duck pattern 因此 thunk function 也定義在相同的 slice file 裡
+
+Logic for Fetching Github Repo Details
+
+- Adding a Reusable Thunk Function Type
+  - `import { ThunkAction } from 'redux-thunk'` 使用 `redux-thunk` 提供的 Type 
+- Adding the Repo Details Slice
+  - 建立新的 slice 處理 details 頁 `features/repoSearch/repoDetailsSlice.ts`
+- Async Error Handling Logic in Thunks
+  - `async/await` 配合 `try/catch` 處理 error handling
+
+Fetching Repo Details in the Issue List
+
+- 把 `useEffect` 中原本的 fetch Github repo 改成使用 dispatch async action 的方式實現
+
+Logic for Fetching Issues for a Repo
+
+- 建立新 slice 處理 issue list, `features/issuesList/issueSlice.ts`
+- 手動建立 lookup table 儲存 issue data 成 normalized data
+
+Fetching Issues in the Issues List
+
+- `useEffect` 中移除 fetch issues 的實作, 改成 dispatch async action
+  - 因此 `useEffect` 只剩下 dispatch async action
+- 實現的方式沒有對錯之分, 取決於 logic 與 data 應該被存放在哪裡, 作法容不容易維護
+
+#### Converting the Issue Details Page
+
+Reviewing the Issue Details Component
+
+- 類似 `IssueDetailsPage`, 以 `useState` 保存資料, `useEffect` 並且實作 async function 來發送 API 取值
+
+Fetching the Current Issue
+
+- 改用 Redux store, `useSelector`, `useDispatch` 取代 `useState`
+- 在重新載入新的 issues list 時渲染並且自動拉到頁首 `window.scrollTo({ top: 0 })`
+
+Logic for Fetching Comments
+
+- 一貫作法, 建立新的 slice `features/issueDetails/commentsSlice.ts` 處理
+- `createSlice()`, initialState, async 行為用 thunk function
+
+Fetching the Issue Comments
+
+- 處理 `useSelector` 時的效能問題, 解決方案有
+  - 使用各個分別的 `useSelector`
+  - 通過 RTK `createSelector()` 使用 `Reselect` 實現 memorized selector function
+  - 使用 React-Redux `shallowEqual` 作為選用參數傳遞給 `useSelector()`
+
+#### Summary
+
 ---
 
 ### 第九章 - Redux Toolkit Usage Guide
+
+---
+
+### 第十章 - Redux Toolkit Usage With TypeScript
 
 ---
