@@ -759,4 +759,14 @@ Use with React-Redux-Firebase
 
 ### 第十章 - Redux Toolkit Usage With TypeScript
 
+- Redux Toolkit 是使用 TypeScript 實作的, 因此 RTK API 很容易與 TypeScript 應用程式合作
+- 提供同時使用 Redux Toolkit 與 TypeScript 時的範例
+
+#### Using `configureStore` with TypeScript
+#### `createAction`
+#### `createReducer`
+#### `createSlice`
+#### `createAsyncThunk`
+#### `createEntityAdapter`
+
 ---
