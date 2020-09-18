@@ -560,7 +560,7 @@ history is mutable
   - `<Route component>`, 作為 props 傳遞, `this.props.location`
   - `<Route render>`, 作為 function input 傳遞, `({ location }) => ()`
   - `<Route children>`, 作為 function input 傳遞, `({ location }) => ()`
-  - 來自 Router 本身, 作為 props 傳遞, `this.props.location`
+  - withRouter, `this.props.location`
 - 以上方式取得的 location 是 immutable 的, 因此可以放心的使用
 
 
@@ -579,15 +579,47 @@ history is mutable
 
 描述
 
-參數
+- match object, 包含 `<Route path>` 在進行 match 時的資訊, `{ params, isExact, path, url }`
+  - `params`, object, 比對時的路徑參數
+  - `isExact`, boolean, 是否符合 exact match
+  - `path`, string, 用來比對的 path, 即 `<Route path>`
+  - `url`, string, 受驗證的 URL
+
+取得 match object
+
+- `<Route component>`, 以 `this.props.match`
+- `<Route render>`, 以 `({ match }) => ()`
+- `<Route children>`, 以 `({ match }) => ()`
+- withRouter, 以 `this.props.match`
+- `matchPath` 的回傳值
+- `useRouteMatch` 的回傳值
+- 當 `<Route>` 沒有 path 屬性時, 會取得最近的父層 match
+
+null matches
+
+- `<Route>`, 一定會呼叫 `children` function 就算 path 沒有 match, 這時候 `match` 的值會是 `null`
+- 當使用 `match.url` 組合 nested path 時, 可能會因為 `null` 產生 TypeError
+- 並且這種 `null` match 會被傳遞到所有子代 `<Route>` 的 `match`, 需要額外處理
 
 #### `matchPath`
 
-- API 文件含有範例, [文件連結](
+- API 文件含有範例, [文件連結](https://reactrouter.com/web/api/matchPath)
 
 描述
 
+- 取得 `<Route>` 的 path match 驗證方式
+- 可以在不新增 `<Route>` 的情況下測試路徑
+- `match matchPath(pathname, props)`, function, 
+
 參數
+
+- 參數 `pathname`, string, 想要驗證的 path
+- 參數 `props`, object, 驗證標準, 即 `<Route path>` 欄位, props 物件結構為 `{ path, strict, exact }`
+  - `path`, 等同於 `<Route path>`
+  - `strict`, 選用, 比對時的 strict mode
+  - `exact`, 選用, 比對時的 exact mode
+- 回傳值, `match` object, 驗證成功時回傳 `{ params, isExact, path, url }`
+  - 驗證失敗時回傳 `null`
 
 #### `withRouter`
 
@@ -595,4 +627,15 @@ history is mutable
 
 描述
 
-參數
+- `withRouter`, function, React 的 hight-order component (HOC), 提供連結 React Router `history` 與最近的 `<Route> match` 的能力
+- 使用 `withRouter` 連結 React Router 的資訊, 在變動時不會觸發 re-rendering, 即資料與 `setState` 無關, 為單純的取值功能
+
+Component.WrappedComponent
+
+- 使用 `withRouter` 包覆回傳的 component, 可以通過 `.WrappedComponent` 取得原始的 Component
+- 可以用在測試
+
+wrappedComponentRef
+
+- 通過 `wrappedComponentRef` 參數取得原始物件的 ref, 以 callback function input 的方式取得
+- Example: `<OuterComponent wrappedComponentRef={( componentRef ) => ()} />`
