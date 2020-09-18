@@ -206,4 +206,71 @@ React Testing Library
 
 ### 第二章 - Examples
 
+Basic
+
+- 基本的三頁 routing
+
+URL Parameters
+
+- 通過 `useParams()` 取得 URL 資訊
+
+Nesting
+
+- 通過子代 component 擁有自己的 Routing 設定 `<Switch>`, `<Route>` 實現 nested routing
+- 使用 `{ path, url } = useRouteMatch()` 取得 `path` 與 `url` 用來協助實作 nested routing
+
+Redirect (Auth)
+
+- 實現授權與 Login Redirect
+- 使用 `useHistory()` 取的 history object, 利用 `history.push` 與 `history.replace` 改變路由狀態
+- 使用 Dynamic routing 實現授權與非授權的 Routing 差別
+
+Custom Link
+
+- 客製化 `<Link>` 標籤
+- 使用 `useRouteMatch()` API 取得 Routing 狀態, 協助渲染不同樣式
+
+Preventing Transitions
+
+- 使用 `import { Prompt } from "react-router-dom";` 實現 navigation blocking
+
+No Match (404)
+
+- 使用 `<Route path="*"></Route>` 提供 404 頁
+- 使用 `useLocation()` 取得 location 資訊協助呈現 404 資訊 (`location.pathname`)
+
+Recursive Paths
+
+- 通過 dynamic routing 在動態依據資料產生新的 routing 設定
+- 使得 URL 可以持續的成長成 recursive paths
+- 例如檔案系統的路由實現
+
+Sidebar
+
+- 兩個 component 共用相同的 routing 設定, 實現分開但是同步的
+
+Animated Transitions
+
+- 利用 Location 的參數實現動態渲染
+- 範例使用 URL 參數的顏色生產器
+
+Route Config
+
+- 通過自訂的 Route config 實現實際的路由行為
+- 由於 Route Config 只是單純的設定資料, React Router 即 React Component, 因此只需要傳遞給 `<Route>` 即可實現
+
+Modal Gallery
+
+- 前後視窗互動同時改變 URL 路由
+
+StaticRouter Context
+
+- 試用 StaticRouter 並且以 staticContext 協助傳遞訊息
+- 通常在 server-side rendering 時使用
+
+Query Parameters
+
+- 使用瀏覽器內建的 `new URLSearchParams()` API 協助分析 query string
+- 使用 `useLocation().search` 取的 query string 的值
+
 ### 第三章 - API
