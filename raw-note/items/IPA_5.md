@@ -91,6 +91,7 @@ Part IV
 The articulators of speech
 
 - 發聲部位可以分成
+
   - 下顎肌肉群 (jaw muscle group)
   - 上顎 (soft palate)
   - 舌後根 (the back of the tongue)
@@ -99,6 +100,7 @@ The articulators of speech
 
 - 配合附贈的 App 作影片練習, 練習時需要鏡子配合觀察或觸碰發音器官
 - 第一個練習下顎肌肉群 (jaw muscle group)
+- 第二個練習上顎 (soft palate)
 
 ---
 
@@ -173,3 +175,5 @@ The articulators of speech
 ### 第十九章 - Marking a business speech
 
 ---
+
+23 + 273 = 296
