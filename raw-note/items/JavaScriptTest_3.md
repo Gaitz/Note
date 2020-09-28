@@ -95,9 +95,9 @@ Work with TypeScript
 - 斷言工具
 - Expectation object 呼叫 Matchers 呈現斷言
 
-Common Matchers 
+Common Matchers
 
-- `expect(2 + 2).toBe(4)`, `expect()` 回傳 expectation  object, `toBe()` 斷言
+- `expect(2 + 2).toBe(4)`, `expect()` 回傳 expectation object, `toBe()` 斷言
 - `toBe()` 使用 `Object.is()` 作判斷
 - `toEqual()`, deep equal, 比較物件內容時使用
 - `.not`, 實現相反邏輯
@@ -155,7 +155,7 @@ Callbacks
 Promises
 
 - 把 Promise 的測試放在測試函式的 `return` 會 Jest 會自動等待 Promise 的處理
-- `reject` 會產生 test fail 
+- `reject` 會產生 test fail
 - Promise 補捉錯誤斷言, 需要配合 `expect.assertions()` 和 `catch()`
 
 `.resolves` / `.rejects`
@@ -195,7 +195,7 @@ Order of execution of describe and test blocks, `describe` 區塊與測試執行
 
 General Advice, 建議
 
-- 當測試失敗時, 可以通過 `test.only()` 只執行單個測試, 
+- 當測試失敗時, 可以通過 `test.only()` 只執行單個測試,
 - 可以避免測試全部重跑加快執行和確認沒有 side-effect 影響
 - 如果是 side-effect 影響導致測試失敗, 可以通過 `beforeEach` 加上 log 來作 debug
 
@@ -241,7 +241,7 @@ Mock Names
 Custom Matchers
 
 - mock function 斷言時的語法糖
-- `expect(mockFunc).toHaveBeenCalled()`, 
+- `expect(mockFunc).toHaveBeenCalled()`,
 - `expect(mockFunc).toHaveBeenCalledWith(arg1, arg2)`,
 - `expect(mockFunc).toHaveBeenLastCalledWith(arg1, arg2)`,
 - `expect(mockFunc).toMatchSnapshot()`,
@@ -303,7 +303,7 @@ Updating Snapshots
 
 Interactive Snapshot Mode
 
-- 通過 watch mode 可以互動式更新失敗的 snapshot 
+- 通過 watch mode 可以互動式更新失敗的 snapshot
 - 互動式一筆一筆查看結果後, 選擇跳過或更新
 
 Inline Snapshots
@@ -321,15 +321,15 @@ Property Matchers
 
 Best Practices 最佳實務
 
-1. Treat snapshot as code, 
-    - 把快照視為程式碼的一部分, 同樣需要 code review
-    - 確保 snapshot readable, 可以通過其他工具輔助
-    - 把 snapshot 視為程式碼的好處, 在於遇到錯誤時應該試著找 bug, 而非直接重新生成
-1. Tests should be deterministic, 
-    - 測試應該要是確定的, 不能依據 platform 或容易變動的值導致測試失敗
-    - 善用 mock function, 取代容易變動的值或 API
-1. Use descriptive snapshot names, 
-    - 測試名稱需要有足夠的描述性, 並且測試的內容要與描述一致, 如同程式碼註解一般
+1. Treat snapshot as code,
+   - 把快照視為程式碼的一部分, 同樣需要 code review
+   - 確保 snapshot readable, 可以通過其他工具輔助
+   - 把 snapshot 視為程式碼的好處, 在於遇到錯誤時應該試著找 bug, 而非直接重新生成
+1. Tests should be deterministic,
+   - 測試應該要是確定的, 不能依據 platform 或容易變動的值導致測試失敗
+   - 善用 mock function, 取代容易變動的值或 API
+1. Use descriptive snapshot names,
+   - 測試名稱需要有足夠的描述性, 並且測試的內容要與描述一致, 如同程式碼註解一般
 
 Frequently Asked Questions 常見問題
 
@@ -394,6 +394,34 @@ Frequently Asked Questions 常見問題
 ---
 
 ### 第二十四章 - Testing React Apps
+
+with Create React App
+
+- 加上 `react-test-renderer` 協助 snapshot testing 即可
+
+without Create React App
+
+- 使用 `babel-jest`, `@babel/preset-env`, `@babel/preset-react`, `react-test-renderer`, 作為 dev-dependency
+- babel config, `presets: ['@babel/preset-env', '@babel/preset-react']`
+
+Snapshot Testing
+
+- 使用 snapshot testing 測試 React component,
+- `import renderer from 'react-test-renderer'` 使用 `renderer.create()` 傳入要測試的 component,
+- 配合 component `.toJSON()` 與 matcher `toMatchSnapshot()` 實現比對
+- 手動觸發 event handler, re-rendering 後再次觸發 `toJSON()` 與 `toMatchSnapshot()` 進行比對
+- 執行 snapshot testing 並且在錯誤的時候檢查 snapshot code 和進行 snapshot update
+- 同時使用 Jest snapshot testing, Enzyme, React 16+ 時可能會遇到的問題與解決方案
+
+DOM Testing
+
+- 不使用 snapshot testing 時手動建立測試案例, 則一使用 `react-testing-library`, `Enzyme`, `react-dom/test-utils`
+- 文件包含 `react-testing-library` 範例與 `Enzyme` 範例
+- React [官方推薦](https://reactjs.org/docs/test-utils.html#overview)使用 `react-testing-library` 取代 `react-dom/test-utils`
+
+Custom transformers
+
+- 建立客製化的 transformer 取代 `babel-jest`
 
 ---
 
