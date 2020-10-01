@@ -103,6 +103,8 @@ The articulators of speech
 - 第二個練習上顎 (soft palate)
 - 第三個練習舌後根 (the back of the tongue)
 - 第四個練習舌尖 (the tip of the tongue)
+- 第五個練習嘴唇 (the lips)
+- 第六個練習爆破音 (Stop plosive consonants)
 
 ---
 
