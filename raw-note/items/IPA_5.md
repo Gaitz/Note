@@ -110,6 +110,25 @@ The articulators of speech
 
 ### 第二章 - The International Phonetic Alphabet
 
+- 19 世紀末, 語言學家創造的
+- 英文使用 48 個聲音, 24 個子音 24 個母音, 母音分成 12 個純母音, 10 個雙連母音, 2 個三連母音
+
+子音
+
+- 子音是一種在發音時會中斷或阻斷的聲音
+- 可以分成 voiced 與 voiceless, 發音時聲帶 (vocal folds) 振動則是 voiced, 沒有振動則是 voiceless
+- 所有的子音都是由 7 個發生器官中的 2 個所組合成,
+- 7 個發聲器官分別是嘴唇 (lips), 舌尖, 舌中, 舌後, 牙床 (alveolar ridge), 前上顎 (hard palate), 後上顎 (soft palate)
+
+母音
+
+- 母音則是發生時不會被中斷的聲音
+
+#### 子音介紹
+
+- 子音可以依據阻斷聲音的方法分成 6 大類, `stop plosives`, `nasals`, `lateral`, `fricatives`, `glides`, `affricates`
+- 相同發聲器官與發生位置和方法, 只有聲帶是否振動 (voiced or voiceless) 的差別的兩個聲音被稱為 cognate pairs
+
 ---
 
 ### 第三章 - The consonant th (θ/ð)
