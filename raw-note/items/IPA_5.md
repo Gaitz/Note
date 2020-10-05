@@ -129,6 +129,51 @@ The articulators of speech
 - 子音可以依據阻斷聲音的方法分成 6 大類, `stop plosives`, `nasals`, `lateral`, `fricatives`, `glides`, `affricates`
 - 相同發聲器官與發生位置和方法, 只有聲帶是否振動 (voiced or voiceless) 的差別的兩個聲音被稱為 cognate pairs
 
+Stop plosives
+
+- 氣息會停止 (stopped) 然後爆出 (exploded)
+- 英文有 6 個 stop plosives consonants
+  - `b` `d` `ɡ`, voiced
+  - `p` `t` `k`, voiceless
+
+Nasals
+
+- 聲音通過鼻腔產生
+- 英文有 3 個 nasal consonants
+  - `m` `n` `ŋ`, voiced
+- `ŋ` 不會出現在字首
+
+Lateral
+
+- 聲音從旁邊發出, 舌尖抵住牙床聲音從兩旁發出, 一定是 voiced
+- 英文只有 1 個 lateral consonant
+  - `l`
+
+Fricatives
+
+- 聲音藉由兩個發聲器官摩擦產生
+- 英文有 9 個 fricatives consonants
+  - `v` `ð` `z` `ʒ` voiced
+  - `f` `θ` `s` `ʃ` `h` voiceless
+- `h` 不會初現在字尾
+
+Glides
+
+- 單個發聲器官藉由移動位置產生的聲音
+- 必是 voiced 並且永遠接在母音 (vowel) 之後
+- 英文有 3 個 glides consonants
+  - `w` `j` `r` voiced
+- `w` `j` `r` 皆不會出現在字尾
+
+Affricates
+
+- 藉由混合 stop plosive 與 fricative 方法產生單一的聲音
+- 英文有 2 個 affricates consonants
+  - `dʒ` voiced
+  - `tʃ` voiceless
+
+Consonant overview
+
 ---
 
 ### 第三章 - The consonant th (θ/ð)
