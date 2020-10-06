@@ -128,6 +128,7 @@ The articulators of speech
 
 - 子音可以依據阻斷聲音的方法分成 6 大類, `stop plosives`, `nasals`, `lateral`, `fricatives`, `glides`, `affricates`
 - 相同發聲器官與發生位置和方法, 只有聲帶是否振動 (voiced or voiceless) 的差別的兩個聲音被稱為 cognate pairs
+- 書中有提供範例字
 
 Stop plosives
 
@@ -173,6 +174,27 @@ Affricates
   - `tʃ` voiceless
 
 Consonant overview
+
+- 書中針對每個子音有發音方式描述
+
+#### 母音介紹
+
+- 母音是不會被中斷的聲音
+- 多數的母音發音, 舌頭都是躺平並且舌尖頂住下排牙齒的, 母音發音時需放鬆舌頭, 避免舌頭拉回的動作
+- 母音可以分成三類 `pure vowel`, `diphthong`, `triphthong`
+- `pure vowel` 可以再分成三類 `front vowel`, `middle vowel`, `back vowel`
+
+The vowels
+
+- 英文有 12 個 `pure vowel`
+  - `i`, `ɪ`, `e`, `æ` (Front vowels)
+  - `ɝ`, `ɚ`, `ə`, `ʌ` (Middle vowels)
+  - `u`, `ʊ`, `ɔ`, `ɑ` (Back vowels)
+- 英文有 10 個 `diphthong`
+  - `eɪ`, `aɪ`, `ɔɪ`, `oʊ`, `aʊ`
+  - `ɪɚ`, `eɚ`, `ʊɚ`, `ɔɚ`, `ɑɚ` (Diphthong of `r`)
+- 英文有 2 個 `triphthong`
+  - `aɪɚ`, `aʊɚ`
 
 ---
 
