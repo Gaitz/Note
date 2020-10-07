@@ -200,6 +200,14 @@ The vowels
 
 ### 第三章 - The consonant th (θ/ð)
 
+- `th` sound, 分成 `ð` voiced 與 `θ` voiceless
+- `th` sound 幾乎只有在英文使用, 因此需要額外的學習, 容易與 `d` `t` 搞混, 發音的舌尖位置不同
+- `th` 舌尖位置在上排牙齒下方, `d` `t` 舌尖位置在牙床
+
+練習 1. 學習正確的發生位置
+
+練習 2.
+
 ---
 
 ### 第四章 - The consonant r
