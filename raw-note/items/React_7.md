@@ -154,9 +154,65 @@ Development and Testing Tools
 
 ### 第二章 - Code-Splitting
 
+- 如果使用 Create React App, Next.js, Gatsby 等工具, 已經內建 webpack 打包工具
+
+Code Splitting
+
+- 當單一個 bundle 太大時造成效能問題, 因此需要 Code Splitting 拆解成多個 bundle. 並且實現 lazy-load
+
+Dynamic `import()`
+
+- 主動使用 dynamic `import()` 由 webpack 所支援的 module lazy load
+- Create React App 與 Next.js 有內建啟動. 自行使用 Webpack 則需要參考[設定](https://webpack.js.org/guides/code-splitting/)
+- 配合 Babel 使用實則需要開啟 `@babel/plugin-syntax-dynamic-import`
+
+React.lazy
+
+- `React.lazy` 與 Suspense 目前並不支援 SSR. SSR 的 code splitting 推薦使用第三方的 [Loadable components](https://github.com/gregberge/loadable-components), [教學文件](https://loadable-components.com/docs/server-side-rendering/)
+- 使用 `React.lazy()` 配合 dynamic `import()` 自動在第一次渲染時載入相關程式碼達到 lazy load 與 code splitting
+- `React.lazy()` input: 動態呼叫 import() 的函式
+- 被 `React.lazy()` 所載入 component 使用時需要被 `React.Suspense` component 所包住, 並且使用 fallback function 達到 lazy load 時的預設值或預設 component.
+- 使用 `Error Boundaries` 捕捉 lazy load 時產生的錯誤
+- [範例程式碼](https://reactjs.org/docs/code-splitting.html#reactlazy)
+
+Route-based code splitting
+
+- 決定如何分割 bundle 希望分割的比較平均並且不影響使用者體驗
+- code splitting 的理想起點是配合 route 做 lazy load, 因為在切換 route 時, 通常代表頁面的切換, 因此使用者有可預期的等待空間.
+- 參考使用 React.lazy 與 React Router 的[程式碼範例](https://reactjs.org/docs/code-splitting.html#route-based-code-splitting)
+
+Named Exports
+
+- `React.lazy()` 目前只支援讀取 default export 的 component
+- 如果想要 lazy load 的 component 是 named export 時需要做中間處理, 轉換成 default export.
+- [參考範例](https://reactjs.org/docs/code-splitting.html#named-exports)
+
 ---
 
 ### 第三章 - Context
+
+- Context 提供一個跨層 component 傳遞資料的方式
+- React 傳統上使用一層一層的父層傳遞給子層的單向資料流達成 component 資料傳遞.
+
+When to Use Context
+
+- Context 被設計用來傳遞被視為 global 的資料, 例如權限狀態, 使用者偏好設定
+
+Before You Use Context
+
+- 小心使用 Context 因為會造成副作用導致降低重用性, 不要僅僅因為傳遞資料太麻煩而選用.
+- 傳遞資訊的方法可以參考 [Composition vs Inheritance](https://reactjs.org/docs/composition-vs-inheritance.html)
+
+#### API
+
+`React.createContext()`
+
+- Input: 預設值, 只有在使用時找不到 Provider 才會提供.
+- Output: Context object
+
+Context.Provider
+
+- Context 物件中的 Provider component, `<CustomContext.Provider value={}>`
 
 ---
 
