@@ -204,9 +204,20 @@ The vowels
 - `th` sound 幾乎只有在英文使用, 因此需要額外的學習, 容易與 `d` `t` 搞混, 發音的舌尖位置不同
 - `th` 舌尖位置在上排牙齒下方, `d` `t` 舌尖位置在牙床
 
-練習 1. 學習正確的發生位置
+練習 1. 學習正確的發生位置 Feeling
 
-練習 2.
+練習 2. 聽出差別並且錄音比較
+
+- `d` voiced `t` voiceless
+- `ð` voiced `θ` voiceless
+
+練習 3. 應用練習
+
+- 練習 `ð` `θ` 的單字表 (vocabulary)
+- 練習 `ð` `θ` 的詞組 (phrases)
+- 練習 `ð` `θ` 的句子 (sentences)
+- 練習 `ð` `θ` vs. `d` `t` 的詞組 (phrases)
+- 練習 `ð` `θ` vs. `d` `t` 的句子 (sentences)
 
 ---
 
