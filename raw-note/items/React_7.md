@@ -244,6 +244,47 @@ Before You Use Context
 
 ### 第四章 - Error Boundaries
 
+- React 16 之後提供的錯誤處理功能, `Error Boundary`
+- 是一種 React component 用來捕捉子代的 JavaScript Error, 避免造成整個 React App 崩潰
+- Error Boundary 不可以處理的例外
+  - 事件處理 Event handlers
+  - 非同步程式碼 Asynchronous code
+  - 伺服器端渲染 SSR
+  - 由 Error Boundary component 自己丟出的錯誤
+
+Class component
+
+- 通過 `static getDerivedStateFromError()` 處理錯誤並且觸發渲染 fallback UI
+- 通過 `componentDidCatch()` 產生 log 並且印出錯誤訊息
+- 利用自建的 Error Boundary component 包裹一般的 component
+- 使用概念類似於 JavaScript 的 `catch()`
+
+Where to Place Error Boundaries
+
+- 放置 Error Boundary 的位置可以自行決定, 依據想要處理的錯誤粒度
+
+New Behavior for Uncaught Errors
+
+- React 16 增加的 Error Boundary 帶來更好的使用者體驗
+- 並且更容易捕捉錯誤並且修正
+
+Component Stack Traces
+
+- React DevTool 會在 console 中印出錯誤發生時的 component tree 協助除錯與放置 Error Boundary
+- 如果使用 Create React App 會附加印出錯誤的檔案與行數
+- 或者通過 [Babel Plugin](https://www.npmjs.com/package/@babel/plugin-transform-react-jsx-source) 在 development 環境開啟
+
+How About try/catch?
+
+- try/catch 只適合使用在執行命令式的情況 (imperative)
+- React 的概念是宣告式的, 因此使用宣告式的 Error Boundary 更為適合
+
+How About Event Handlers?
+
+- Error Boundary 捕捉不到在 event handler 裡產生的錯誤
+- 因為 event handler 發生時機不會在 React render method 或 lifecycle methods 裡, 因此 React component 本身仍舊能使用 `try/catch` 捕捉的到
+- Event handler 對於 React 來說就是一般的 function 可以在 function 內部使用 JavaScript 的 `try/catch` 處理錯誤
+
 ---
 
 ### 第五章 - Forwarding Refs
