@@ -210,9 +210,35 @@ Before You Use Context
 - Input: 預設值, 只有在使用時找不到 Provider 才會提供.
 - Output: Context object
 
-Context.Provider
+`Context.Provider`
 
 - Context 物件中的 Provider component, `<CustomContext.Provider value={}>`
+- Input: `value`, 傳遞給 consumers 的值
+- 所有 consumers 在 Provider 的 `value` 變化時都會觸發 re-render, 並且不受 `shouldComponentUpdate` 影響
+- `value` 的比較函式是 `Object.is`
+
+`Class.contextType`
+
+- Consumer class component 使用 `Class.contextType` 指定註冊 context, 在 consumer class 內部可以使用 `this.context` 取得
+
+`Context.Consumer`
+
+- Consumer function component 使用 `<Context.Consumer>{() => {}}</Context.Consumer>` 註冊 context 並且取用
+
+`Context.displayName`
+
+- 創造出來的 Context 可以指定 displayName 字串, 協助 React DevTool 除錯時使用
+
+#### Examples
+
+- Dynamic Context, 基本用法 (class), `React.createContext()`, `Class.contextType`, `Context.Provider`
+- Updating Context from a Nested Component, 基本用法 (function), `React.createContext()`, `Context.Consumer`, `Context.Provider`
+- Consuming Multiple Contexts, 使用多組 Context
+
+#### Caveats
+
+- 由於 context 會依據 reference 去處發 re-render, 因此有很多陷阱會造成不必要的 renders
+- `Provider` 的 value 要小心不要每次都是創建新的 Object
 
 ---
 
