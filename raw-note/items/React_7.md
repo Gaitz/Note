@@ -289,6 +289,31 @@ How About Event Handlers?
 
 ### 第五章 - Forwarding Refs
 
+- 一種技術用於自動傳遞 `ref` 到子代 component, 大多數應用程式不需要用到此功能, 多使用於函式庫
+
+Forwarding refs to DOM components
+
+- React component 包裹實際的 DOM element 多數時不用通過 `ref` 從外部操作 component 內部的 DOM element, 提昇封裝與去耦合
+- 通過內建的 `Ref Forwarding` 機制, 可以在外部使用 `React.createRef()` 與內部建立 `React.forwardRef()` 實現取得 `ref` 來操作底層的 DOM element
+- forwarding 代表向子代傳遞
+- 要使用 `ref forwarding` 必須配合 `React.forwardRef()` 定義才有效
+- 範例與建立步驟[參考](https://reactjs.org/docs/forwarding-refs.html#forwarding-refs-to-dom-components)
+
+Note for component library maintainers
+
+- library 啟用 `forwardRef` 應該視為破壞性更新, 因為會改變程式行為.
+
+Forwarding refs in higher-order components
+
+- Forwarding refs 在配合 HOC 使用時, `ref` 並不會像 props 一樣被傳遞
+- `ref` 與 `key` 類似是 props 外的屬性, 由 React 另外控管
+- 需要在 HOC 裡明確的使用 `React.forwardRef` 傳遞 `ref` 才能正常運作,
+- [參考範例](https://reactjs.org/docs/forwarding-refs.html#forwarding-refs-in-higher-order-components)
+
+Displaying a custom name in DevTools
+
+- `React.forwardRef()` input: 一個 render function, 如果使用命名函式定義, 則名稱會出現在 DevTools 裡.
+
 ---
 
 ### 第六章 - Fragments
