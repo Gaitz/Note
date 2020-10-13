@@ -334,6 +334,60 @@ Keyed Fragments
 
 ### 第七章 - Higher-Order Components
 
+- React component 進階用法,
+- Higher-order component 是一個 function
+  - Input: 一個 component
+  - Output: 一個新的 component
+- 在第三方函式庫時常使用
+
+Use HOCs for Cross-Cutting Concerns
+
+- 舊時 React 使用 Mixin 來切割功能, 但是有很多壞處已經被棄用
+- 為了從 component 中抽出常用的邏輯, 可以使用 HOC 的方式把共用邏輯寫在 HOC 裡來分離關注點.
+- HOC 是 pure function, 使用 compose 來實現重用
+
+Don't Mutate the Original Component. Use Composition.
+
+- 不要試圖改變傳入的 component, HOC 應該要是 pure function
+- 有 side-effect 會破壞封裝, 讓使用者必須了解副作用後才能安全的使用
+- Higher-order component 與 container component pattern, 在解決相同的問題.
+
+Convention: Pass Unrelated Props Through to the Wrapped Component
+
+- HOC 不應該改變傳入 component 的 interface, 必須讓他保有原本的功能.
+- 因此在 HOC 沒有使用到的 `props` 也要依舊傳遞給新生成的 component 繼續帶給下層 component.
+- 確保 `props` 在通過 HOC function 時不會漏掉
+
+Convention: Maximizing Composability
+
+- 善用大量的函式組合 (function composition)
+- 以 Relay 和 React-Redux function 為例
+- 可使用第三方提供的 `compose` 來協助實現 functional programming 最重要的函式組合功能, 例如 `Redux`, `Ramda` 都有提供這個函式。
+
+Convention: Wrap the Display Name for Easy Debugging
+
+- 盡可能的提供有意義的名稱給 React Developer Tools 可以協助除錯
+
+#### Caveats
+
+Don't Use HOCs Inside the render Method
+
+- React 核心通過 diff 演算法比較 `render()` 回傳的結果來判斷，要如何改變 DOM
+- 如果在 `render()` 裡呼叫 HOCs 會導致每次都會重新 unmount 與 mount, 導致效能問題並且影響整個 subtree
+- 因此要注意 HOCs 所呼叫的位置, 讓 component 只建立一次並且在每次 render 時保持一致性.
+
+Static Methods Must Be Copied Over
+
+- 由於 static methods 是跟著定義的 class, 因此使用 HOCs 時, 回傳的 component 會無法使用原本的 static methods.
+- 所以必須明確的在 HOCs 中複製 static methods 到新的 component 上。
+- 可以使用第三方的 [hoist-non-react-statics](https://github.com/mridgway/hoist-non-react-statics) 協助複製 static methods
+- 或者不把 static method 綁定在 class 上, 而是直接 export function
+
+Refs Aren't Passed Through
+
+- 與 Static Methods 類似的問題也會發生在 `ref` 上
+- 解決方案要參考 `React.forwardRef` API 文件
+
 ---
 
 ### 第八章 - Integrating with Other Libraries
