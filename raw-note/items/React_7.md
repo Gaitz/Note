@@ -392,33 +392,289 @@ Refs Aren't Passed Through
 
 ### 第八章 - Integrating with Other Libraries
 
+Integrating with DOM Manipulation Plugins
+
+- 當有其他函式庫調整 DOM 時會導致 React 無法變識
+- 常見的作法是建立 React 永遠不需要更新的 DOM element 然後再操作. 例如 `<div />` 空的 `div` element
+
+How to Approach the Problem
+
+- 建立一個獨立的 element 並且配合 `ref` 傳遞 DOM element 給第三方的 library
+- 以 [jQuery 為例](https://reactjs.org/docs/integrating-with-other-libraries.html#how-to-approach-the-problem)
+- 需要注意 component unmount 時的 cleanup, 避免 event listener 產生的 memory leak
+
+Integrating with jQuery Chosen Plugin
+
+- React 仍舊推薦盡可能的使用 React component 去實現功能, 對於 React application 會有更好的整合與重用性
+- 在配合第三方函式庫的時候, 必須注意要讓 React 無法去處碰到被第三方函式庫所操作的 DOM
+- 讓 React component 與第三方函式庫有 listener 的雙向綁定
+- 參考 `Chosen` [範例](https://reactjs.org/docs/integrating-with-other-libraries.html#integrating-with-jquery-chosen-plugin)
+
+Integrating with Other View Libraries
+
+- 藉由靈活的 `ReactDOM.render()` 可以很容易的把 React 整合在其他頁面中, `ReactDOM.render()` 甚至可以呼叫多次, 生成多個 React piece.
+- 很容易與 server-side rendered 頁面互動
+- 更靈活的去思考 React 與網頁應用程式的實作
+
+Replacing String-Based Rendering with React
+
+- 移植 jQuery 類型的網頁應用程式到 React component
+- 一次移植一點到 React component, 建立多個 React piece 之後在整合成大的 React piece
+
+Embedding React in a Backbone View
+
+- 移植 Backbone View 實作到 React component
+
+Integrating with Model Layers
+
+- 推薦使用單向流的狀態管理, 例如 React state, Flux, Redux,
+- 在 React component 中註冊外部的 value onChange 並且手動觸發 re-render
+- 讓資料集中管理, React 通過 HOC 或 Hook 去連結外部資料
+
 ---
 
 ### 第九章 - JSX In Depth
+
+- JSX 就是 `React.createElement(component, prpos, ...children)` 的語法糖.
+- JSX syntax 通過 babel 編譯成 `React.createElement()`
+
+React Must Be in Scope
+
+- 為了要讓 JSX 編譯成 `React.createElement`, React library 必須能被引用得到, 不管是 bundle import 或者 global
+
+Using Dot Notation for JSX Type
+
+- JSX element 是一個單純的 function, 因此可以被包含在 object 裡作為 function member, 所以可以使用 `Class.Method` 作為 React component 呼叫
+
+User-Defined Components Must Be Capitalized
+
+- 使用小寫開頭的 element 會被 JSX 視為內建的 HTML element 而傳遞給 `React.createElement()`
+- 使用大寫開頭的 element 會被視為客製化的 element, 並且在傳遞給 `React.createElement()` 時會 import 定義的 JavaScript
+- 因此客製化的 element 必須使用大寫開頭作為 element 的命名
+
+Choosing the Type at Runtime
+
+- 動態建立 element Type, 無法直接把表達式寫在 JSX 括號中
+- 可以把表達式令存為大寫開頭的變數, 就可以使用動態變數選擇 element Type
+- [範例參考](https://reactjs.org/docs/jsx-in-depth.html#choosing-the-type-at-runtime)
+
+#### Props in JSX
+
+JavaScript Expressions as Props
+
+- 可以使用 JavaScript 表達視作為 Props, 使用 `{}` 包裹
+- if/else 與 loops 可以作為 function 的內部使用並且回傳 JSX element 即可. (Everything is JavaScript)
+
+String Literals
+
+- 字串作為 Props, 使用 `""` 或 `{""}` 都可以
+
+Props Default to "True"
+
+- 當 Props 只有名稱沒有給值時, 預設是 `{true}`
+- JSX 不推薦不給值, 預設是 `true` 只是為了與原生的 HTML 行為一致
+
+Spread Attributes
+
+- 使用 object 儲存 props 時可以直接使用 ES6 的 spread operator `...` 展開賦值, `<CustomElement {...propObject} />`
+- 配合 ES6 spread operator, 可以方便的塞選父層傳來的 props 並且傳遞不需處理的部份.
+- [參考範例](https://reactjs.org/docs/jsx-in-depth.html#spread-attributes)
+
+#### Children in JSX
+
+- 特殊的 `props.children` 用來傳遞 children
+
+String Literals
+
+- 字串作為 JSX element 的 children
+- JSX 中的字串不需要做 HTML 跳脫字元, 會自動轉義
+- 如同 HTML 一般 JSX 會自動移除換行與開頭結尾的空白
+
+JSX Children
+
+- 其他的 JSX element 作為 children
+
+JavaScript Expressions as Children
+
+- 使用 `{}` 包裹 JavaScript 表達式作為 children
+- 可以善用 JavaScript 的能力, 動態的產生不同的 children
+
+Functions as Children
+
+- 傳入 function 作為 children
+- 即使用 `props.children` 傳遞函式
+- 使用情況不多, 不過也代表了 JSX 可以最大限度的使用 JavaScript 達成各種不同的應用
+- [參考範例](https://reactjs.org/docs/jsx-in-depth.html#functions-as-children)
+
+Booleans, Null, and Undefined Are Ignored
+
+- 如果 children 傳入 `{false}`, `{null}`, `{undefined}`, `{true}` element 都會被視為不渲染
+- 非常適合在條件渲染時使用, 可以配合 `&&` 達成條件渲染
+- 小心有些 JavaScript 的 `falsy` values, 也會被渲染, 例如 `0`
 
 ---
 
 ### 第十章 - Optimizing Performance
 
+- 雖然 React 已經有針對 DOM 操作做優化, 仍然有些方式可以進一步提昇 React Application 的效能
+
+#### Use the Production Build
+
+- 在做效能調校時, 確定測試的是 minified 過的 production build
+- React 在開發者環境 (development) 會有很多協助開發的功能, 相對的會讓程式變大與變慢, 需要正確的區分 production 與 development build
+- 通過 React Developer Tools Chrome extension 可以協助判斷目前使用的 React 環境
+
+Create React App
+
+- 使用 Create React App 時, `npm run build` 會產生 production 版本, `npm start` 會產生 development 版本
+
+Single-File Builds
+
+- 使用 `.production.min.js` 版本的 React 與 ReactDOM CDN
+
+Brunch
+
+- 使用 Brunch 建置時
+- 使用 [terser-brunch](https://github.com/brunch/terser-brunch) plugin 協助建立 production build
+
+Browserify
+
+- 使用 Browserify 建置時
+- 依序使用 `envify`, `uglifyify`, `terser` plugins 協助產生 production build, 順序是重要的
+
+Rollup
+
+- 使用 Rollup 建置時
+- 依序使用 `rollup-plugin-replace`, `rollup-plugin-commonjs`, `rollup-plugin-terser` plugins 協助產生 production build, 順序是重要的
+- 詳細設定可以參考[文件](https://reactjs.org/docs/optimizing-performance.html#rollup)
+
+Webpack
+
+- 使用 Webpack 建置時
+- 使用 Create React App 已經設置只需要使用正確的指令即可
+- 自行設定 webpack 則需要使用 `optimization` 設定 `TerserPlugin`, 詳細設置參考[文件](https://webpack.js.org/guides/production/)
+
+#### Profiling Components
+
+Profiling Components with the Chrome Performance Tab
+
+- 使用 Chrome DevTools 的 Performance 功能協助效能調校
+  - 使用步驟參考[文件](https://reactjs.org/docs/optimizing-performance.html#profiling-components-with-the-chrome-performance-tab)
+- 偵測是否有不必要的 component mount, update, unmount 行為
+
+Profiling Components with the DevTools Profiler
+
+- 使用 React DevTool 裡的 Profiler 協助效能調校
+- 參考[文件](https://reactjs.org/blog/2018/09/10/introducing-the-react-profiler.html)與[影片](https://www.youtube.com/watch?v=nySib7ipZdk)
+
+#### Virtualize Long Lists
+
+- 大量資料載入時, 可以配合 lazy load 提昇效能
+- 可以使用函式庫 [react-window](https://react-window.now.sh/#/examples/list/fixed-size) 或 [react-virtualized](https://bvaughn.github.io/react-virtualized/#/components/List)
+- 參考 Twitter 針對 React 頁面做的性能調校[文章](https://medium.com/@paularmstrong/twitter-lite-and-high-performance-react-progressive-web-apps-at-scale-d28a00e780a3)
+
+#### Avoid Reconciliation
+
+- 通過 `shouldComponentUpdate(nextProps, nextState)` 避免特定情況的 re-render 以提昇效能
+- 使用 React Hooks 時可以參考[文件](https://reactjs.org/docs/hooks-faq.html#performance-optimizations)使用 `useCallback` 與 `useMemo` 實現類似的效能優化
+- 使用 `React.PureComponent` 等同於在 `shouldComponentUpdate()` 做 shallow comparison
+- [shouldComponentUpdate In Action](https://reactjs.org/docs/optimizing-performance.html#shouldcomponentupdate-in-action)
+
+Examples
+
+- [範例](https://reactjs.org/docs/optimizing-performance.html#examples)
+- 在 `shouldComponentUpdate()` 只是單純的使用 shallow comparison 可以利用 `extends React.PureComponent` 協助自動實現
+- 如果需要比較的是更複雜的資料結構, 例如 object, array 時要小心 PureComponent 的 shallow comparison 可能帶來錯誤的結果, 因為使用 mutating 資料結構時 reference 沒有改變, 會導致 shallow comparison 永遠都是 true 而不會正確的 re-render.
+
+The Power Of Not Mutating Data
+
+- 使用 shallow comparison 提昇效能時, 改變 props 或 states 值時, 必須使用 immutable data, 使用複製取代 mutating.
+- 使用 ES6 spread operator `...` 可以協助快速複製 array 與 object
+- 或者使用 `Object.assign()` 實現 object 複製與賦值
+- 或者使用第三方函式庫 [Immer](https://github.com/immerjs/immer), [immutability-helper](https://github.com/kolodny/immutability-helper) 協助實現 immutable 操作
+
 ---
 
 ### 第十一章 - Portals
+
+- `ReactDOM.createPortal(child, container)`
+
+Usage
+
+- 直接放置 props.children 到指定的 DOM 位置
+- 通常使用時機在於包裹的 element 擁有不必要的 `overflow: hidden` 或者 `z-index` 可以避開父層元素
+- 需要特別注意 keyboard focus 是否正確
+
+Event Bubbling Through Portals
+
+- React Event 運作仍舊是依據 Virtual DOM 上的 React tree 而非實際的 DOM tree
+- 因此使用 Portals 時實際的 DOM tree 會沒有預期的 element 導致無法正確的捕捉到 event 發生
+- 解決方式參考[文件範例](https://reactjs.org/docs/portals.html#event-bubbling-through-portals)
 
 ---
 
 ### 第十二章 - Profiler
 
+- 通過 Profiler API 協助觀察 React 應用程式 render 時的效能消耗, 找到瓶頸可以使用 memoization 做效能最佳化
+- Profiler 不應該在 production build 中使用
+
+Usage
+
+- `<Profiler id={string} onRender={function}></Profiler>`
+- 可以任意放置單個或多個在 React Tree 裡, input: id 與 onRender callback function
+
+`onRender` Callback
+
+- 通過 onRender callback function 會傳入些有用的值協助偵測效能瓶頸
+  - `(id, phase, actualDuration, baseDuration, startTime, commitTime, interactions) => {}`
+  - `id`: 字串, Profiler 的名稱
+  - `phase`: mount 或 update 字串, 協助知道階段
+  - `actualDuration`: 數字, 子代更新所花的時間, 也代表如果使用 memorization (`React.memo`, `useMemo`, `shouldComponentUpdate`) 可以提昇的時間
+  - `baseDuration`, 數字, 渲染時所花的時間, 也代表 worst-case, 通常是指 initial mount 時所花的時間
+  - `startTime`, 數字, 開始時間戳
+  - `commitTime`, 數字, commit 更新的時間戳
+  - `interactions`, 集合, 透過 interactions 可以追蹤 update 的原因, 參考[文章](https://gist.github.com/bvaughn/8de925562903afd2e7a12554adcdda16),
+
 ---
 
 ### 第十三章 - React Without ES6
+
+- 通常使用 `class` 語法協助定義 React component
+- 不使用 ES6 時, 可以使用 `createReactClass()` 取代, 但是有些許不同.
+
+Declaring Default Props
+
+- `class` 時使用 `.defaultProps = {}` 協助定義
+- `createReactClass()` 時使用 `getDefaultProps: function () {}` 協助定義
+
+Setting the Initial State
+
+- `class` 時使用 `constructor(props) { this.state = {} }` 協助定義
+- `createReactClass()` 時使用 `getInitialState: function () {}` 協助定義
+
+Autobinding
+
+- `class` 時需注意 method `this` binding 問題
+- `createReactClass()` 時不需要特別 binding `this`
+- 在 `class` 的 `constructor` 階段一次性綁定好 `this` 在大型應用程式中可以提昇些許效能
+- `class` 時的 `this` 多種解決方案可以參考[文件](https://reactjs.org/docs/react-without-es6.html#autobinding)
 
 ---
 
 ### 第十四章 - React Without JSX
 
+- 使用 JSX 是建立 React component 最方便的方式
+- 然而 JSX 只是語法糖, 仍然可以手動撰寫 `React.createElement(component, props, ...children)` 取代 JSX 編譯
+
 ---
 
 ### 第十五章 - Reconciliation
+
+- React 設計 diffing 演算法與控制 UI 更新的決策
+
+Motivation
+
+-
 
 ---
 
