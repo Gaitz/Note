@@ -318,6 +318,18 @@ Displaying a custom name in DevTools
 
 ### 第六章 - Fragments
 
+- 在不生成額外的 DOM element 的情況下打包一組 element
+- `<React.Fragment></React.Fragment>` or `<></>` for short syntax
+
+Motivation
+
+- 因為 React component 只能回傳一個 render element, 因此在分割 component 的時候無論如何都必須包裹成一個 element, 可能會因此在 DOM 上產生不必要的 element.
+- 以上問題可以藉由 React Fragment 解決
+
+Keyed Fragments
+
+- `<React.Fragment key={}></React.Fragment>`, 目前唯一允許的屬性是 `key`
+
 ---
 
 ### 第七章 - Higher-Order Components
