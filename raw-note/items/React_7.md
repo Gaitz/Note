@@ -670,39 +670,343 @@ Autobinding
 
 ### 第十五章 - Reconciliation
 
-- React 設計 diffing 演算法與控制 UI 更新的決策
+- React 設計 diffing 演算法與控制 UI 更新的設計決策
 
 Motivation
 
--
+- `render()` 會產生一個 React element 的 tree, 在 state 或 props 更新時 `render()` 會在產生另一個 React element tree, 在相互比較後才決定用最有效率的方式更新實際的 UI
+- 樹狀結構的轉換 tree transformation, 在一般的狀態需要 `O(n^3)` 的複雜度 (太慢了)
+- 在 2 個前提之下 React 把複雜度降到 `O(n)` 足夠使用的程度
+  - 不同 type 的 element 即產生不同的 tree
+  - 讓使用者通過設置 `key` 作為提示子代可是不需要改變的
+- 在實務上, 對於 DOM tree 的變化, 上面兩個假設是合理的。
+
+The Diffing Algorithm
+
+- 首先比較 root 的 type
+
+Elements of Different Types
+
+- 如果 root 的型別 (type) 不同, React 會直接放棄舊的 tree 建立新的 tree (rebuild), 不管是 HTML 原生的 element 或者是 custom 的 React element 都是如此
+- 移除舊的 DOM tree 並且觸發所有相關的 `componentWillUnmount()` 並且移除所有舊的 state
+- 建立新的 DOM tree 並且依序觸發 `componentWillMount()` 與 `componentDidMount()`
+
+DOM Elements of The Same Type
+
+- 當型別 (type) 一樣時, 會比較 element attributes, 保持一樣的 DOM node 然後更新有差異的 attribute.
+- 之後 React 會遞迴的往子代比較
+
+Component Elements of The Same Type
+
+- 在型別 (type) 一樣的客製化 component 更新時, 會依序觸發 `componentWillReceiveProps()` 與 `componentWillUpdate`, 然後才觸發 `render()`
+- 之後 React diff 演算法會遞迴的像子代執行
+
+Recursing On Children
+
+- DOM node 的子代預設是依序比較並且更新差異 (mutate), 因此如果是插入元素在最前頭, 會產生 worst-case.
+- 為了解決這個問題, 使用者必須提供 `key` 來優化更新流程
+
+Keys
+
+- 提供 `key` attribute 讓 React diff 演算法通過比較 `key` 來判斷更新
+- `key` 值不需要是全域唯一 (globally unique), 只要能區別相連的元素即可.
+- 由於 `key` 是作為 React diff 演算法更新的依據, 因此如果使用 index 作為 `key` 時, 在很多操作例如 Reorder 時, 會產生不好的效能或者不預期的行為.
+- 因此盡量不要使用 index 作為 `key` 值
+
+Tradeoffs
+
+- React Diff 演算法, 目標是在一般情況下能取得最快的效能.
+- 因此在不符合兩個前提的情況下, 效能可能會受影響
+  - 在切換 type 時會導致子代全部 re-render
+  - Key 應該要是穩定且獨特的, 不適當的 key 會導致不必要的 recreated 會造成效能問題並且所有子代的 state 會因此而遺失.
 
 ---
 
 ### 第十六章 - Refs and the DOM
 
+- `Ref` 是 React 提供取得實際 DOM node 的方式
+- 一般的 React dataflow 中, 父層 component 只會使用 `props` 與子代 component 互動
+
+When to Use Refs
+
+- 常見的使用案例
+  - 管理 focus 狀態, text selection,
+  - 觸發命令式的 animation
+  - 整合其他第三方 DOM library
+- 在能使用宣告式的 React component 時就不要使用 `ref`
+
+Don't Overuse Refs
+
+- 避免濫用 `ref` 在使用之前應該先思考 state 最適合的存放位置
+
+Creating Refs
+
+- 使用 `React.createRef()` 建立並且透過 `ref` attribute 傳遞給子代.
+- [範例](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs)
+
+Accessing Refs
+
+- 當在 `render()` 階段時, `ref` 變數可以通過 `current` attribute 取值
+- [範例](https://reactjs.org/docs/refs-and-the-dom.html#accessing-refs)
+- 依據型別 (type) 的不同, `ref` 的值也會不同
+  - 如果 `ref` 被連接在 HTML element 上, 則會取得 DOM element.
+  - 如果 `ref` 被連接在 custom class component 上, 則會取得該 component 的 mount 實體
+  - `ref` 不應該被用在 function component 上, 因為沒有 instance
+
+Adding a Ref to a DOM Element
+
+- [參考範例](https://reactjs.org/docs/refs-and-the-dom.html#adding-a-ref-to-a-dom-element)
+
+Adding a Ref to a Class Component
+
+- [參考範例](https://reactjs.org/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component)
+
+Refs and Function Components
+
+- 一般情況不能把 `ref` attribute 加在 function component 上
+- 但是可以使用 `forwardRef()` 與 `useRef()` 達到類似的功能
+
+Exposing DOM Refs to Parent Components
+
+- 在少數的情況下父層希望能取得子代的 DOM node
+  - 使用案例: focus 管理, size 偵測
+- 這是不推薦的模式, 因為會破壞 React component 的封裝, 讓狀態改變不可預期.
+- `Ref` 使用在 custom component 時, 最好使用 `ref forwarding` 技術手動綁定 `ref`
+- 最差的情況還有 React `findDOMNode()` 可以使用, 但是這個作法在 `StrictMode` 下不被允許.
+
+Callback Refs
+
+- 不使用 `React.createRef()` 而是在 `ref` attribute 傳遞一個 callback function, 讓 React 在適當的時機呼叫.
+- 注意事項: 如果 `ref` 傳遞的 callback function 使用 inline function 的形式, 在更新時會被呼叫兩次, 可以使用 class 預先定義 method 的方式傳遞.
+
 ---
 
 ### 第十七章 - Render Props
+
+- `render prop` 是一個共用程式邏輯的技巧, 在 prop 中傳遞 render function
+- Component 傳遞 `render` attribute 是一個回傳 React element 的 function, 取代實際實作的 `render()`
+
+Use Render Props for Cross-Cutting Concerns
+
+- Component 作為 React 裡主要的元件, 有時候要共用邏輯並不適合單純的使用 component 組合.
+- 單純使用 component 共用邏輯時, 會需要因應不同需求一直建立新的 component
+- 因此讓 `render()` 不必寫死, 而是由外部傳入 (`this.props.render(this.state)`), 只利用該 component 中的其他邏輯與 state.
+-
+- Render Props 與 Higher-order component (HOC) 解決類似的問題, 並且可以交互使用.
+- [參考範例](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
+
+Using Props Other Than render
+
+- `render props` 這個技術不一定要透過 `render` attribute, 任何的 props 傳遞 function 都可以達成.
+- 甚至可以使用隱性的 `props.children` 直接傳遞 function 在 children 的位置.
+
+Caveats: Be careful when using Render Props with React.PureComponent
+
+- 由於 `React.PureComponent` 使用 props 做 shallow comparison, 因此如果 `render props` 使用 inline function 定義時永遠都會是 `false` 即每次都會更新 component.
+- 解決方式: render function 不使用 inline function 定義, 或不使用 `React.PureComponent`
 
 ---
 
 ### 第十八章 - Static Type Checking
 
+- Static type checking, 可以協助編譯期除錯, 和 auto-completion 自動補完功能.
+- 在大型專案中推薦使用 `Flow` 或 `TypeScript` 取代 React 內建的 `PropTypes` 功能
+
+#### Flow
+
+- 由 Facebook 開發的 JavaScript static type checker
+- [Flow Document](https://flow.org/en/docs/getting-started/)
+
+Adding Flow to a Project
+
+- 使用 `Yarn` 或 `npm` 加入 dev dependency, `flow-bin`
+- 使用 `flow` script 執行
+- flow 初始化執行 `init`
+
+Stripping Flow Syntax from the Compiled Code
+
+- 在 production build 中移除 flow 語法
+- Create React App, 已經內建正確的 production build.
+- Babel, 手動設置 babel 時, 需要配合 `@babel/preset-flow` 並且在 `babelrc` 中的 `presents` 加入 `@babel/preset-flow`
+- 其他編譯工具可以通過第三方工具 [`flow-remove-types`](https://github.com/facebookarchive/flow-remove-types) 協助去除
+
+Running Flow
+
+- 通過 `npm run flow` 或 `yarn flow` 執行 Flow 檢查
+
+Adding Flow Type Annotations
+
+- Flow 預設只會檢查包含 `// @flow` 的 JavaScript 檔案
+- 可以通過 option 設置檢查所有的檔案
+
+Documents
+
+- Flow documents [Type Annotations](https://flow.org/en/docs/types/), [Editors](https://flow.org/en/docs/editors/), [React](https://flow.org/en/docs/react/)
+- [Linting in Flow](https://medium.com/flow-type/linting-in-flow-7709d7a7e969)
+
+#### TypeScript
+
+- Microsoft 所開發的程式語言, 是 JavaScript 的超集合, 擁有自己的 compiler
+- 在 React 使用 TypeScript 參考[文件](https://github.com/Microsoft/TypeScript-React-Starter#typescript-react-starter)
+
+Using TypeScript with Create React App
+
+- 使用 `npx create-react-app --template typescript`
+- 或參考[文件設置](https://create-react-app.dev/docs/adding-typescript/)
+
+Adding TypeScript to a Project
+
+- 手動設定 TypeScript 通過 `Yarn` 或 `npm` 增加 dev dependency `typescript`
+- 取得使用 `tsc` typescript compiler 的指令
+
+Configuring the TypeScript Compiler
+
+- 設定 `tsconfig.json`
+- 初始化 TypeScript 使用 `tsc --init` 指令
+- 參考 option [文件](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)設置其他選項
+- 設置入口與編譯後的資料夾 `rootDir`, `outDir`
+- 把 build 後的檔案加入 `.gitignore` 中
+
+File extensions
+
+- `.ts` 作為 TypeScript 預設的副檔名
+- `.tsx` 作為使用 TypeScript + JSX 時的副檔名
+
+Running TypeScript
+
+- 執行 `yarn build` 或 `npm run build`
+
+Type Definitions
+
+- 加入定義檔 (declaration file)
+- Bundled, 有些函式庫已經包含了定義檔方便直接使用, 可以通過查看 `index.d.ts` 或 `package.json` 下的 `typings/types` 欄位
+- [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped), 查詢由 Microsoft 所管理的 type repository, 直接安裝相關的 `@types/`
+- Local Declarations, 通過建立 `declarations.d.ts` 手動設定定義檔
+
+Documents
+
+- TypeScript Documents, [Basic Types](https://www.typescriptlang.org/docs/handbook/basic-types.html), [Migrating from JavaScript](https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html), [React and Webpack](https://webpack.js.org/guides/typescript/)
+
+#### Others
+
+Reason
+
+- 新的語法, 以類似 `OCaml` 的語法, 由 Facebook 所開發
+
+Kotlin
+
+- 由 JetBrains 所開發的強形別語言, 可以編譯成 JVM, Android, LLVM, JavaScript
+
+Other Languages
+
+- 也有其他型別語言可以編譯成 JavaScript 使用
+
 ---
 
 ### 第十九章 - Strict Mode
+
+- 概念類似 JavaScript 的 `"use strict"`, 使用一個不影響 UI 的 element, `<React.StrictMode></React.StrictMode>`, 協助抓出潛在錯誤, 並且不影響 production build.
+- `StrictMode` element 可以插入在任何地方, 只會協助抓出子代的錯誤.
+- 目前支援抓出
+  - 使用不安全的 lifecycle function
+  - 使用過時的 string ref 功能
+  - 使用過時的 findDOMNode 功能
+  - 偵測不預期的 side effects
+  - 偵測使用過時的 context API
+
+Identifying unsafe lifecycles
+
+- 有些舊的 lifecycle function 對於非同步的 React 應用程式會有錯誤
+- [參考文章](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html)
+
+Warning about legacy string ref API usage
+
+- 舊的 ref 有兩種使用方式 string ref 與 ref callback function
+- string ref 有很多不好的地方, [參考文件](https://github.com/facebook/react/issues/1373)
+
+Warning about deprecated findDOMNode usage
+
+- `findDOMNode` 不好用且有害, 相同的問題使用 `ref` 相關解法更好
+
+Detecting unexpected side effects
+
+- 原則上來說, React 的工作分成兩個階段, render (呼叫生成 React DOM 與 diffing) 與 commit (實際更新 DOM, 與 `componentDidMount`, `componentDidUpdate`)
+- commit 階段通常很快, 但是 render 階段有可能很慢
+- 未來的 `concurrent` mode 希望解決 render 階段可能很慢的問題
+- Render 階段包含了呼叫以下的函式
+  - `constructor`,
+  - `componentWillMount`
+  - `componentWillReceiveProps`
+  - `componentWillUpdate`
+  - `getDerivedStateFromProps`
+  - `shouldComponentUpdate`
+  - `render`
+  - `setState`
+- 由於 render 階段的函式有可能被呼叫數次, 因此要確保這些函式沒有 side-effect 否則會造成不可預期的問題 (包含 memory leak, 不正確的 state 等等)
+- StrictMode 沒有辦法直接偵測是否有不可預期的 side effects, 所以是利用在 development 時直接呼叫兩次以上的函式, 希望能提早觸發問題發生.
+
+Detecting legacy context API
+
+- 舊的 context API 容易產生問題, 並且會在未來的版本淘汰, 因此會偵測是否使用
 
 ---
 
 ### 第二十章 - Typechecking with PropTypes
 
+- `React.PropTypes` 已經從核心函式庫移出, 移到 `prop-types` [函式庫](https://www.npmjs.com/package/prop-types)
+- 當應用程式越來越複雜時, static type checking 機制可以協助提早抓出很多問題.
+- 常用的 static type checking 機制, `Flow`, `TypeScript`, React 內建的 `PropTypes`
+- proTypes 檢查機制只會在 development 階段檢測
+
+PropTypes
+
+- 參考[文件](https://reactjs.org/docs/typechecking-with-proptypes.html#proptypes)定義型別
+
+Requiring Single Child
+
+- 指定必須含有單一個 children 欄位
+- [參考範例](https://reactjs.org/docs/typechecking-with-proptypes.html#requiring-single-child)
+
+Default Prop Values
+
+- 使用 `defaultProps` 定義 component 預設的 props 值
+- 實現語法參考[範例](https://reactjs.org/docs/typechecking-with-proptypes.html#default-prop-values)
+
 ---
 
 ### 第二十一章 - Uncontrolled Components
 
+- 在多數的情況下, 推薦使用 controlled components 去管理 form, 即 React 會管理 form data
+- Uncontrohttps://goshakkk.name/controlled-vs-uncontrolled-inputs-react/以參考[文件](https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/)
+
+Default Values
+
+- 針對 uncontrolled component 的預設值, 可以使用 `defaultValue` attribute 讓 React 協助提供.
+- 參考[範例](https://reactjs.org/docs/uncontrolled-components.html#default-values)
+
+The file input Tag
+
+- `<input type="file">` 通過 `File API` 讓使用者上傳單個或多個檔案至瀏覽器
+- 在 React 中 file input 一定是 uncontrolled component, 因此需要自行通過 `ref` 和 File API 去處理
+- 參考[範例](https://reactjs.org/docs/uncontrolled-components.html#the-file-input-tag)
+
 ---
 
 ### 第二十二章 - Web Components
+
+- React 與 Web Components 標準, 試圖解決不同的問題.
+- Web Components 提供封裝並且重用 component.
+- React 提供宣告式的函式庫協助處理 DOM 與資料
+- 兩者是互補的, 因此可以同時使用
+
+Using Web Components in React
+
+- 在 React component 中使用 Web Component element
+- 需要自行管理 Web Component 產生的 DOM, 並且連接 React component
+
+Using React in your Web Components
+
+- 自行定義的 HTMLElement 即 Web Components, 內部也可以呼叫 `ReactDOM.render()` 來連接 React component
 
 ---
 
