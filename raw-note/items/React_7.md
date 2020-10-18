@@ -1012,6 +1012,143 @@ Using React in your Web Components
 
 ### 第一章 - React
 
+- 整個 React 函式庫的 entry point
+
+#### Overview
+
+Components
+
+- 分割 UI 成獨立可重用的獨立區塊
+- 可以繼承 (extends) `React.Component` 或 `React.PureComponent` 創建
+- 或者使用 `create-react-class()` 函式建立
+- React component 也可以使用 `React.memo` 函式建立
+
+Creating React Elements
+
+- 推薦使用 JSX 語法糖取代 `React.createElement()` 的呼叫
+- 不使用 JSX 時使用 `React.createElement()`, `React.createFactory()` 函式建立 React element
+
+Transforming Elements, React 提供一些 API 可以操作 elements
+
+- `cloneElement()`
+- `isValidElement()`
+- `React.Children`
+
+Fragments, 打包多個 elements
+
+- `React.Fragment`
+
+Refs, `ref` 相關 API
+
+- `React.createRef`
+- `React.forwardRef`
+
+Suspense, 渲染前的等待 API, 目前只用於 component lazy load
+
+- `React.lazy`
+- `React.Suspense`
+
+Hooks, React 16.8+ 才提供的功能
+
+- `useState`
+- `useEffect`
+- `useContext`
+- `useReducer`
+- `useCallback`
+- `useMemo`
+- `useRef`
+- `useImperativeHandle`
+- `useLayoutEffect`
+- `useDebugValue`
+
+#### Reference
+
+React.Component
+
+- React component 的基礎, 通常使用 `class extends` 語法互動
+
+React.PureComponent
+
+- 類似 `React.Component`, 但是不包含 `shouldComponentUpdate()`, 取得代之的是使用 shallow prop and state comparison 決定是否 re-render
+- 如果 React component 的 `render()` 結果只依據 prop 與 state 時, 可以使用 `React.PureComponent` 提昇效能
+- shallow prop and state comparison, 只單純比較值, 因此深度的資料結構例如 Array, Object, 比較時需要額外注意
+  - 解決方式可以使用 `immutable objects`, `forceUpdate()`
+- 使用 `React.pureComponent` 時, shallow comparison 的判斷更新會影響整個 subtree, 因此最好要確保所有子代都是 pure component, 才不會有無法正常更新的問題出現
+
+React.memo
+
+- `React.memo` 是一個 higher order component
+- 如果一個 function component 是 pure 的, 即 `render()` 的結果只依據傳入的 props 時, 可以通過 `React.memo` 包裹提供 memoizing 以提昇效能.
+- 如果 `React.memo` 包裹的 function component 中, 使用到 `useState` 或 `useContext` 時, 在 state 與 context 改變時, 也會正常的重新計算 `render()`.
+- 預設 `React.memo` 的 props compare function, 是一般的 shallow compare, 因此如果 props 是 object 時, 可以傳入自訂的 compare function 取代 `function areEqual (prevProps, nextProps) {}`, 回傳 boolean
+- `React.memo` 這個功能只能視為效能最佳化的方式, 不保證一定能避免 render 的觸發. (不可以把邏輯建立在 `React.memo` 一定會避免 render 上)
+
+createElement()
+
+- `React.createElement(type, [props], [...children]`
+- 創造 React element
+- 使用 JSX 語法糖會自動轉譯為 `createElement()` 呼叫
+
+cloneElement()
+
+- `React.cloneElement(element, [props], [...children])`
+- clone 且回傳 React element
+- 新的 children 會取代舊的, `key` 與 `ref` 會被保留, `props` 會做 shallow merge
+- 幾乎等價於 `<element.type {...element.props} {...props}>{children}</element.type>`
+
+createFactory()
+
+- `React.createFactory(type)`
+- 類似 `React.createElement()`
+- 推薦使用 JSX 或者 `React.createElement()` 即可
+
+isValidElement()
+
+- `boolean React.isValidElement()`
+- 判斷是否是 React element 回傳 boolean
+
+React.Children
+
+- 提供處理 `this.props.children` 的操作工具
+- `React.Children.map(children, function([thisArg]))`, 回傳 array / `null` / `undefined`
+- `React.Children.forEach(children, function[(thisArg)])`,
+- `React.Children.count(children)`, children component 的數量
+- `React.Children.only(children)`, 判斷是否只有唯一一個 React element 並且回傳該 element, 否則會丟初例外
+- `React.Children.toArray(children)`, 把 children 轉換成 flat array
+- children 是 Fragment 時會被視為單個 element
+
+React.Fragment
+
+- 包裹多組 elements 並且在 render 時不會生成額外的 DOM element
+- `<React.Fragment></React.Fragment>`, 或 `<></>`
+
+React.createRef
+
+- 生成 `ref` 變數並且可以通過 `ref` attribute 傳遞給其他 element
+
+React.forwardRef
+
+- `React.forwardRef()` 是一個 function,
+  - Input: `(props, ref) => {}` function component,
+  - Output: React node
+- 協助明確定義 `ref` 參數的綁定對象, 上層函式可以通過 `React.createRef()` 與 `ref.current` 創建且取值
+
+React.lazy()
+
+- React lazy load component
+- `const SomeComponent = React.lazy(() => import('./SomeComponent'));`
+- 定義 component 成動態載入, 作為 code splitting 的實現方式之一
+- 參考 [code splitting 文件](https://reactjs.org/docs/code-splitting.html#reactlazy) 與[說明文章](https://medium.com/hackernoon/lazy-loading-and-preloading-components-in-react-16-6-804de091c82d)
+- 需配合 `React.Suspense` 一起使用
+
+React.Suspense
+
+- `<React.Suspense fallback={}></React.Suspense>`
+- 代表子代可能尚為準備好 render 需要等待, 目前唯一使用案例是配合 `React.lazy()` 實現 component 動態載入
+- `React.lazy()` 產生的 component 不需要是直接子代
+- `React.Suspense` 放置的位置, 推薦在任何想要看到 loading 提示的地方
+- 在未來會提供除了 component 動態載入以外的使用案例, 例如 data fetching 時的等待.
+
 ---
 
 ### 第二章 - React.Component
