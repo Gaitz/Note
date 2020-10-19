@@ -1153,37 +1153,522 @@ React.Suspense
 
 ### 第二章 - React.Component
 
+#### Overview
+
+- React component 可以使用 function 或 class 定義
+- 使用 class 定義 React component 目前擁有更多功能
+- `class extends React.Component { render() {} }`
+- class 裡必須擁有 `render()` function, 其他函式都是選用的
+- 在 React 世界裡高度推薦只使用 composition 取代任何的 inheritance
+- 語法上使用 ES6 `class` 或者 `create-react-class()` 皆可
+
+The Component Lifecycle
+
+- 每個 component 都有各自的 lifecycle functions, 可以任意的 override 注入行為
+
+Mounting, 初始階段, component 建置並且 insert 到 DOM
+
+- `constructor()`, 常用
+- `static getDerivedStateFromProps()`
+- `render()`, 常用
+- `componentDidMount()`, 常用
+
+Updating, 更新階段, 當 props 或 state 改變時, 會觸發以下流程
+
+- `static getDerivedStateFromProps()`
+- `shouldComponentUpdate()`
+- `render()`, 常用
+- `getSnapshotBeforeUpdate()`
+- `componentDidUpdate()`, 常用
+
+Unmounting, 移除階段, component 將從 DOM 中移除
+
+- `componentWillUnmount()`, 常用
+
+Error Handling, 在 rendering, lifecycle, constructor 階段出現錯誤時會觸發
+
+- `static getDerivedStateFromError()`
+- `componentDidCatch()`
+
+Other APIs
+
+- `setState()`
+- `forceUpdate()`
+
+Class Properties
+
+- `defaultProps`
+- `displayName`
+
+Instance Properties
+
+- `props`
+- `state`
+
+#### Reference
+
+- [React lifecycle diagram](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+
+render(), 常用
+
+- `render()`
+- 對於 class component 來說唯一必要的 method
+- `render()` 應該要是 pure 的, 只依據 `this.props` 和 `this.state` 去產生以下類型的結果
+  - React elements, 通常通過 JSX 語法定義, 會被 React 渲染到 DOM 中
+  - Array and fragments, 多數個 elements
+  - Portals, 直接渲染 children 到指定的 DOM subtree 中
+  - String and numbers, 作為 text nodes 被渲染到 DOM 中
+  - Booleans or `null`, 不會渲染任何東西, 可以作為條件渲染的實現方式之一
+- 保持 `render()` 的 pure 性質, 需要與瀏覽器互動的功能需要寫在其他 lifecycle methods 中, 例如 `componentDidMount()`
+
+constructor(), 常用
+
+- 如果不需要初始化 state 和綁定 methods, 可以不額外建立 constructor()
+- 建立 `constructor(props) { super(props); }` 必須呼叫 `super(props)`, 讓 `React.Component` class 先行初始化
+- 常用情境
+  - 初始化 local state, `this.state = {}`,
+  - 綁定 event handler, `bind(this)`
+- 不應該在 `constructor()` 裡呼叫 `setState()`, 必須使用 assign `=` 去初始化, 並且也是唯一可以合法使用 assign `this.state` 的地方
+  - 在其他情況, 修改 `state`, 就需要呼叫 `setState()`
+- 不要讓 `constructor()` 有副作用
+- 常見錯誤, 複製 props 到 state 中, 會導致更新錯誤, 參考[文件說明](https://reactjs.org/docs/react-component.html#constructor)
+
+componentDidMount(), 常用
+
+- `componentDidMount()`
+- 在 component 被 insert 到 DOM 之後會立即執行 `componentDidMount()`
+- 需要配合 DOM tree 的初始化可以放在這個函式中,
+  - 像是發送請求取值 (request)
+  - 註冊 event handler, 記得在 `componentWillUnmount()` 裡執行 unsubscribe 避免產生 memory leak
+- 在 `componentDidMount()` 裡可以呼叫 `setState()`, 並且更新會在下一次 UI 更新時一起實現,
+  - 使用案例: 需要測量 DOM node 的 size 或 position 時
+
+componentDidUpdate(), 常用
+
+- `componentDidUpdate(prevProps, prevState, snapshot)`
+- 在更新玩後會立即觸發, 在第一次 render 時不會觸發
+- 一樣可以作為操作 DOM 和發送 request 的地方, 並且可以呼叫 `setState()` 但是必須要有條件式的呼叫不然會產生無窮迴圈 (infinite loop)
+- 如果 component 有實作 `getSnapshotBeforeUpdate()` 時, 也會接收到 snapshot 參數
+- 如果 `shouldComponentUpdate()` 回傳 false 時, 不會觸發 `componentDidUpdate()`
+
+componentWillUnmount(), 常用
+
+- `componentWillUnmount()`
+- 在 component 被從 DOM 移除或消除之前, 會先觸發. 通常作為 cleanup 的處理時機
+- 在 `componentWillUnmount()` 呼叫 `setState()` 是不必要且無意義的
+
+shouldComponentUpdate()
+
+- `shouldComponentUpdate(nextProps, nextState)`, 預設是回傳 `true`
+- 藉由此函式告知 React 依據當前的 props 與 state 可以不重新渲染 UI (re-render / update)
+- 此函式在 initial render 和 `forceUpdate()` 的情況下不會觸發
+- 這個函式唯一的用途是效能最佳化, 多數情況可以使用 `extends React.PureComponent` 取代手動撰寫 `shouldComponentUpdate()`
+- `React.PureComponent` 會自動使用 shallow compare 作為比較函式, 只依據 props 與 state 的 shallow comparison 作為更新的依據
+- 當 `shouldComponentUpdate()` 回傳 `false` 時會一同影響所有的子代 component
+- 非常不推薦使用 deep comparison 在這個函式中, 會造成效能問題
+- 在未來的 React 中 `shouldComponentUpdate()` 只會被作為效能提昇的"參考", 而不保證一定會被執行.
+
+static getDerivedStateFromProps()
+
+- `static getDerivedStateFromProps(props, state)`
+- 在 `render()` 被呼叫之前會先呼叫 `getDerivedStateFromProps`, 包含第一次 render, 會回傳 object 或 `null`
+- 只有非常少的使用案例, [參考文件](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#when-to-use-derived-state), 例如實現 transition 的動畫觸發
+- 作為 pure function 和 static function, 因此並不允許讀取當前的 component instance
+
+getSnapshotBeforeUpdate()
+
+- `getSnapshotBeforeUpdate(prevProps, prevState)`
+- 在 render 產生 output 放到 DOM 後會呼叫 `getSnapshotBeforeUpdate()`, 通常用來取得 DOM 上的資訊, 取得的資訊會被傳遞給 `componentDidUpdate()`
+- 使用案例非常少, 通常用來操作 UI 時使用, 例如依據 DOM 做 scroll
+
+Error boundaries
+
+- 用來捕捉 JavaScript error
+- 如果一個 class component 實作了 `static getDerivedStateFromError()` 或 `componentDidCatch()` 時, 就會形成 error boundary
+- 只能捕捉子代的 error 不包含本身, 只作為錯誤處理使用, 而非作為正常流程的一部分
+- 參考 [Error Handling 文件](https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html)
+
+static getDerivedStateFromError()
+
+- `static getDerivedStateFromError(error)`
+- 捕捉到任何子代 component 丟出的錯誤, 並且回傳一個值來更新 state, 影響 UI 顯示
+
+componentDidCatch()
+
+- `componentDidCatch(error, info)`
+- 任何子代丟出 error 時觸發, 會接收 error 參數與 info 參數 (物件包含 `componentStack` 的資訊)
+- `componentDidCatch()` 會在 commit 階段觸, 因此可以有 side-effect 例如 log 錯誤訊息
+- 在這個函式裡使用 `setState` 影響 UI 在未來會被移除, 使用 `static getDerivedStateFromError()` 取代呼叫 `setState()`
+
+Other APIs
+
+- 另外可以在 class component 中呼叫的函式 `setState()` 與 `forceUpdate()`
+
+setState()
+
+- `setState(updater, [callback])`, 這是 React 最主要觸發更新與回應的方式
+- 會把改變放進佇列中 (enqueue), 告知 React 這個 component 與子代需要更新了.
+- `setState()` 視為 request, 而非立即執行的命令, 為了效能, React 可能會延遲並且整合數個更新才一次執行. 因此 React 並不保證更新會立即執行.
+- 因為可能會延遲執行導致 `setState()` 與 `this.state` 的值改變可能會不可預期的時間差, 因此可以通過 `componentDidUpdate` 或 `setState(updater, callback)` 的方式保證在更新後執行取得預期中的 state
+- `setState()` 一定會觸發 re-render 除非 `shouldComponentUpdate()` 回傳 `false`.
+- updater function: `(state, props) => stateChange`, Input 的 state 與 props 保證是最新的, Output 會與 `state` 做 shallow merge
+- 選用的 callback function 基本上等價於 `componentDidUpdate()` 的觸發時機與使用情境
+- `setState()` 是非同步執行的, 因此在同個 cycle 裡的 `setState()` 可能會被合併後一起執行, 合併是 shallow merge
+
+forceUpdate()
+
+- `component.forceUpdate(callback)`
+- 預設 component 是依據 state 和 props 的改變來觸發 re-render, 但是可以通過 `forceUpdate()` 主動告知 React 需要執行 re-render
+- 使用 `forceUpdate()` 會忽略 `shouldComponentUpdate()` 的觸發, 但是所有子代的 lifecycle methods 包含 `shouldComponentUpdate()` 仍然會正常執行.
+- 並不推薦使用 `forceUpdate()` 破壞 React 原本的工作流程
+
+Class Properties: defaultProps
+
+- 通過 `defaultProps` 參數設定, component 的預設 props
+
+Class Properties: displayName
+
+- 通過設定 `displayName`, 提供 React debugger 資訊
+
+Instance Properties: props
+
+- `this.props`, 包含 component 被呼叫時傳入的 props 值
+- `this.props.children` 則是特殊的 prop, 代表 element 所包裹的子代
+
+Instance Properties: state
+
+- `this.state`, 代表 component 內在所包含的狀態, 可能會隨著時間改變, 通常是單純的 JavaScript object.
+- 與 UI 顯示無關的資料, 不應該放在 state 中, 可以作為 component instance 中的其他變數
+- 永遠不要直接修改 `this.state`, 應該要透過 `setState()`, 並且把 `this.state` 視為 immutable 的資料
+
 ---
 
 ### 第三章 - ReactDOM
+
+#### Overview
+
+- `react-dom` 提供 DOM 相關的方法, 用來與 React model 溝通
+- `render()`
+- `hydrate()`
+- `unmountComponentAtNode()`
+- `findDOMNode()`
+- `createPortal()`
+
+Browser Support
+
+- React 支援主流的瀏覽器, 包含 IE9+, IE9 和 IE10 需要其他的補釘
+- 並且不直接支援不提供 ES5 以上語法的瀏覽器, 需要額外加裝補釘
+
+#### Reference
+
+render()
+
+- `ReactDOM.render(element, container[, callback])`
+- 觸發 React element 渲染到指定的 DOM `container` 上, 並且回傳 reference 或者 `null`
+- 如果已經觸發過一次, 再次呼叫相同的 `ReactDOM.render()` 到相同的 `container` 時會變成更新
+- 選用的 callback function 會在 component 完成渲染或更新後執行
+- React DOM 更新是通過 React diffing 演算法比較後執行的
+- `ReactDOM.render()` 並不會影響 container DOM 本身, 只是修改 container 的子代
+- 回傳值的 reference 功能在未來會被淘汰, 不要使用
+- 在 server-side 使用 `ReactDOM.render()` 的功能在未來也會淘汰, 使用 `hydrate()` 取代.
+
+hydrate()
+
+- `ReactDOM.hydrate(element, container[, callback])`
+- 類似於 `render()`, 但是注入的 container 是由 ReactDOMServer 產生的, 而非純瀏覽器的 DOM element.
+- React 希望渲染的內容可以達到前後端一致, 只需要補上差異的地方
+- 在 development mode, React 在 `hydrate()` 前後端不一致的情況下會提供警告, 並且應該修正.
+- 如果有些值, 前後端本來就會不一樣時, 可以關閉警告 `suppressHydrationWaring={true}`
+- 其他情況如果前後端渲染必須不同時, 可以通過在 `componentDidMount()` 裡使用 `this.state.isClient` 去做條件渲染, 但是這種方式會造成效能問題, 因為會觸發 render 兩次
+- 主要考慮使用者體驗與連線問題
+
+unmountComponentAtNode()
+
+- `ReactDOM.unmountComponentAtNode(container)`
+- 從指定的 DOM container 中移除 React component 並且 cleanup event listener 與 state.
+- 如果 container 裡沒有 React element 則不會有反應, 並且回傳 `false`, 反之成功移除則回傳 `true`
+
+findDOMNode()
+
+- `ReactDom.findDOMNode(component)`
+- 取得指定的 React element 的 DOM reference
+- 無法使用在 function component 上
+- 不推薦使用 `findDOMNode()`, 相同的需求可以使用 `ref` 相關解決方案
+
+createPortal()
+
+- `ReactDOM.createPortal(child, container)`
+- 建立 portal, 提供直接渲染 child 到指定的 DOM container 中
+- [參考文件](https://reactjs.org/docs/portals.html)
 
 ---
 
 ### 第四章 - ReactDOMServer
 
+- 提供渲染 component 到靜態頁面上, 通常運行在 Node.js 上
+- `import ReactDOMServer from "react-dom/server`
+
+#### Overview
+
+- 可以同時使用在 server 與 browser 的渲染
+  - `renderToString()`
+  - `renderToStaticMarkup()`
+- 配合 `Stream` 並且只能運行在 server 上的渲染
+  - `renderToNodeStream()`
+  - `renderToStaticNodeStream()`
+
+#### Reference
+
+renderToString()
+
+- `ReactDOMServer.renderToString(element)`
+- 渲染成 HTML string, 可以在 server-side 快速渲染出基本的 html 以提昇 SEO
+- 如果在 node 上使用 `ReactDOM.hydrate()` 已經渲染出 server-rendered markup 時, React 會重用並且註冊 event handler 以提昇使用者體驗
+
+renderToStaticMarkup()
+
+- `ReactDOMServer.renderToStaticMarkup(element)`
+- 類似於 `renderToString()`, 但是不會創造使用在 React 內部的額外 DOM 屬性,
+- 常用於生成純靜態的頁面 (simple static page generator), 頁面上不需要 React 再去互動
+- 如果希望 React 能在 client-side 繼續運作的話, 使用 `renderToString` 在 server-side 配合 `ReactDOM.hydrate()` 在 client-side.
+
+renderToNodeStream()
+
+- 生成初始化的 HTML 並且回傳承 [Readable Stream](https://nodejs.org/api/stream.html#stream_readable_streams) 的格式
+- 生成的結果等同於 `ReactDOMServer.renderToString`
+- 使用情境也類似於 `ReactDOMServer.renderToString`, 在 server-side 動態生成 HTML 後作為 response 回傳提昇 SEO.
+- 可以配合 `ReactDOM.hydrate()` 使用達成前後端一致的 React application
+- Stream 預設是 `utf-8`, 這個 API 只能使用在 server-side
+
+renderToStaticNodeStream()
+
+- 類似於 `renderToNodeStream`, 但是輸出結果等同於 `ReactDOMServer.renderToStaticMarkup`, 回傳的結果不包含 React 相關的屬性, 因此在 client-side 無法使用 React 功能.
+
 ---
 
 ### 第五章 - DOM Elements
+
+- React 自行實作了 DOM elements 解決跨瀏覽器相容性與效能問題
+- 在 React 中所有的 DOM 屬性都要使用 camelCased, 除了 `aria-*` 和 `data-*` 之外
+
+#### Differences In Attributes
+
+- React element 與 HTML element 不同之處
+
+checked
+
+- `checked`, 作為 `<input>` type `checkbox` 和 `radio` 使用
+- 可以用於 controlled component,
+- 使用 `defaultChecked` 屬性則是 uncontrolled, 可以提供 first mount 並且在 React 接管以前的預設值
+
+className
+
+- `className`, 主要用於提供樣式 class, 可以作用於所有常見的 DOM element 與 SVG element
+- 在 React 與 Web Components 一同使用時, 要改回使用 `class`
+
+dangerouslySetInnerHTML
+
+- `dangerouslySetInnerHTML`, 等價於 `innerHTML`.
+- React 取名為 `dangerouslySetInnerHTML`, 因為直接放入 html 會產生被 cross-site scripting (XSS) 攻擊的機會
+- 因此在 React 中呼叫時, 有更繁瑣的宣告, 用來提醒工程師, 參考[範例](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml)
+
+htmlFor
+
+- `htmlFor`, 等價於 `for`
+- 由於 `for` 是 JavaScript 的保留字, 因此 React 命名為 `htmlFor`
+
+onChange
+
+- `onChange`, 只要任意的 form 表單內容改變都會觸發
+- 屬於 controlled component 由 React 所控制的 form
+
+selected
+
+- 配合 `<option>` 使用, [參考文件](https://reactjs.org/docs/forms.html#the-select-tag)
+
+style
+
+- `style` 在 React 中接收 object 包含 camelCased 的樣式名稱
+- 實務上樣式比較推薦使用 `className` 去綁定, 而非 inline 的 `style`
+- 樣式名稱並不會自動加上瀏覽器的 prefix, 如果需要支援舊版的瀏覽器需要自行加上前綴, [參考文件](https://www.andismith.com/blogs/2012/02/modernizr-prefixed/)
+- React 會自動加上 `px` 給數值, 如果使用其他單位需要明確撰寫, 除了[清單](https://github.com/facebook/react/blob/4131af3e4bf52f3a003537ec95a1655147c81270/src/renderers/dom/shared/CSSProperty.js#L15-L59)內的樣式例外
+
+suppressContentEditableWarning
+
+- `suppressContentEditableWarning`, 會關閉 `contentEditable` 警告
+- 當 element 被設置 `contentEditable` 時會出現警告
+- 除非是要建立自行管理 `contentEditable` 的函式庫, 否則不應該關閉這個警告
+
+suppressHydrateWarning
+
+- `suppressHydrateWarning`, 關閉 mismatches 警告
+- 在使用 server-side rendering 時, 配合 `ReactDOM.hydrate()` 渲染 client-side, 如果不一致時會提出警告.
+- 只有當值真正無法在前後端一致時才需要關閉, 例如 timestamp
+
+value
+
+- `value`, 給 `<input>`, `<select>`, `<textarea>` 使用的 attribute.
+- 用來提供 controlled component 的值
+- 對於 uncontrolled component 則使用 `defaultValue` 作為預設值指定
+
+#### All Supported HTML Attributes
+
+- 對於 React 16+ 幾乎所有的標準 attributes 都有支援, 參考說明[文件](https://reactjs.org/blog/2017/09/08/dom-attributes-in-react-16.html)
+- 包含一般的 element 與 SVG
 
 ---
 
 ### 第六章 - SyntheticEvent
 
+- React 處理 event 的方式
+
+#### Overview
+
+- 所有的 event handler 會接收到的是 `SyntheticEvent` 的 instance, 作為跨瀏覽器 event 的解決方案會包裹瀏覽器原生的 event.
+- 提供跨瀏覽器一致的 `stopPropagation()`, `preventDefault()` 函式
+- 可以通過 `nativeEvent` 取的瀏覽器原生的 event
+- 在 React 14+, event handler 回傳 `false` 不再會停止 propagation, 需要明確的呼叫 `stopPropagation()` 或 `preventDefault()`
+
+Event Pooling
+
+- `SyntheticEvent` 作為類似 String pool 的方式存在 (pooled), 意思是 `SyntheticEvent` 會因為效能最佳話而重複使用, 因此 `event` 無法被非同步的方式使用 (asynchronous)
+- 配合 `event.persist()` 則可以使用非同步方式處理 event
+
+Supported Events
+
+- React 實作跨平台的 event 保持統一的界面
+- Event handlers 會在 bubbling 的階段被觸發, 如果需要在 capture 階段觸發, 則需要使用另外的 event name, 例如 `onClick` => `onClickCapture`
+- 支援以下類型 events
+  - Clipboard Events, Composition Events, Keyboard Events, Focus Events, Form Events, Generic Events, Mouse Events, Pointer Events, Selection Events, Touch Events, UI Events, Wheel Events, Media Events, Image Events, Animation Events, Transition Events, Other Events
+
+#### Reference
+
+- [參考文件](https://reactjs.org/docs/events.html#reference) 包含 event name 與攜帶的 properties
+
 ---
 
 ### 第七章 - Test Utilities
+
+- 作為獨立測試 React 相關程式的測試工具
+- React 的測試推薦使用 React testing library 以類似使用者實際操作的方式測試
+- `import ReactTestUtils from "react-dom/test-utils";`
+
+#### Overview
+
+- 協助測試 React component 的測試工具
+- 官方更推薦使用 React Testing Library 來測試 React application
+
+#### Reference
 
 ---
 
 ### 第八章 - Test Renderer
 
+- `import TestRenderer from "react-test-renderer";`
+
+#### Overview
+
+- 函式庫提供渲染 React element 成單純的 JavaScript object 方便測試使用
+- 協助方便取得 snapshot 而不需要使用 `jsdom`
+- 可以被 React Testing Library 取代
+
 ---
 
 ### 第九章 - JS Environment Requirements
 
+- React 16+ 需要使用到 `Map` 與 `Set`
+- 在不支援 ES6 的版本需要另外加裝 polyfill, 例如 `core-js`, `babel-polyfill`
+
 ---
 
 ### 第十章 - Glossary
+
+Single-page Application, (SPA)
+
+- SPA 代表一個應用程式只使用單一個 HTML 其他所有的操作都不會讓 page reload, 而是使用 JavaScript 控制
+- React library 非常容易的與任意的 HTML 部份互動, 因此可以良好的與任何工具合作, 不管是 server-side 或 client-side.
+
+ES6, ES2015, ES2016, etc
+
+Compilers
+
+- 從 JavaScript 轉換成另外一種形式的 JavaScript, 例如 `Babel`
+
+Bundlers
+
+- 讓前端程式可以以模組化的方式撰寫, 通過把打包工具轉換成瀏覽器能方便讀取的資料集合
+- 打包工具例如 `Webpack`, `Browserify`
+
+Package Managers
+
+- 用來管理相依性的工具, 例如 `npm`, `Yarn`
+
+CDN
+
+- Content Delivery Network, 提供 cached 的資料, 並且存在世界各地的伺服器中, 提供更快的讀取時間
+
+JSX
+
+- JavaScript 的語法擴充, 類似於模板語言 (template language), 可以充分的使用 JavaScript 語法並且轉譯成 `React.createElement()`
+- attribute 使用 camelCased 取代原本 HTML 的 attribute name
+
+Elements
+
+- React element 作為 React component 的基礎, `React.createElement()`
+- React elements 是 immutable 的
+
+Components
+
+- React component 是小型且可重複使用的 UI 渲染邏輯
+- 可以分成 function component 與 class component
+- 客製化的 component, 都需要使用大寫開頭
+
+props
+
+- 作為 React component 的 input, 單一向的傳遞資料從父層到子層
+- `props` 是唯獨的 (readonly)
+
+props.children
+
+- `props.children`, 特殊的 props, 用來取得父層包裹的子代內容.
+
+state
+
+- `state`, component 內部會隨著時間改變並且影響 UI 的狀態
+- 一個 component 無法改變 props, 但是可以通過 `setState` 改變自身的 state 狀態
+- 當有 component 需要共用 state 時應該透過 [lift it up](https://reactjs.org/docs/lifting-state-up.html) 技術拉到共用的祖先, 然後透過 `props` 傳遞進去.
+
+Lifecycle Methods
+
+- 提供介入 component 不同階段的函式
+
+Controlled vs. Uncontrolled Components
+
+- React 處理 form `input` 的兩種方式
+- 如果一種 `input` 可以完全由 React 所控制則稱為 controlled component
+- React 無法控制需要自行控制的 `input` 則稱為 uncontrolled component
+
+Keys
+
+- 作為特別的字串屬性 (attribute), 用來提示 React 清單中項目的處理方式,
+- Keys 只需要相鄰的獨立 (unique among sibling) 不需要全域獨特.
+- 不要使用 `Math.random()` 作為 Keys, Keys 應該要是穩定的, 用來影響清單中的新增, 移除, 排序的處理
+
+Refs
+
+- React 中特別的 attribute, `ref` 屬性可以為使用 `React.createRef()` 所創造或者是 callback function
+- 作為 callback function 會取得所呼叫的 DOM reference
+- 盡可能減少使用 `ref` 破壞封裝, 使用 React 正常的流程操作 component 為上
+
+Events
+
+- React event handler 使用 camelCase
+- JSX 傳遞 function 作為 event handler
+
+Reconciliation
+
+- React component 通過 props 與 state 改變, 去決定 DOM UI 需要更新, 實際更新會通過比較舊的 tree 與新的 tree 是否相等 (React diffing algorithm), 然後 React 才會去更新必要的 DOM.
+- 以上過程在 React 中稱為 `reconciliation`
 
 ---
 
