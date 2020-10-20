@@ -22,7 +22,7 @@
 
 ---
 
-#### 第一章 - Introducing Hooks
+### 第一章 - Introducing Hooks
 
 - React 16.8+
 - `import { useState } from 'react'`, 引入新函式 `useState()`
@@ -52,7 +52,7 @@ Gradual Adoption Strategy
 - Hooks 可以與現有的程式碼一起使用, 慢慢的移植
 - 新 component 開始使用 Hooks
 
-#### 第二章 - Hooks at a Glance
+### 第二章 - Hooks at a Glance
 
 - React 16.8+
 - 不需要 `class` component 即可使用 state
@@ -114,7 +114,7 @@ Other Hooks
   - `useReducer()`
   - [More reference](https://reactjs.org/docs/hooks-reference.html)
 
-#### 第三章 - Using the State Hook
+### 第三章 - Using the State Hook
 
 - Equivalent Class Example, 比較 class state 與 `useState()` hook
 - Hooks and function components, Hooks 使用的位置,
@@ -145,7 +145,7 @@ Tip: Using Multiple State Variables,
 - `useState()` 可以擁有多個, 所以承載多個 state 的方式可以自由選擇。
 - 選擇用 Object 或 Array 打包, 或者註冊多個 state
 
-#### 第四章 - Using the Effect Hook
+### 第四章 - Using the Effect Hook
 
 - `useEffect()` 可以視為是 `componentDidMount()`, `componentDidUpdate()`, `componentWillUnmount()` 的組合
 
@@ -184,7 +184,7 @@ Tip: Optimizing Performance by Skipping Effects
 
 My Tip: 混用 `useState` 與 `useEffect` 時, state 作為 function component 中的**區域變數**傳入, 不用作為參數傳入 effect function。
 
-#### 第五章 - Rules of Hooks
+### 第五章 - Rules of Hooks
 
 - Hooks are JavaScript functions
 - 加上兩個額外的限制
@@ -207,7 +207,7 @@ Explanation
 - `useState()` 與 `useEffect()` 所產生的值是與順序相依的。
 - 因為每次觸發 Hooks 時都會比對 `props` 與 `states` 如果不能保證存在的話會導致錯誤, 並且不容易 debug, 因為錯誤相依不確定的 side-effect。
 
-#### 第六章 - Building Your Own Hooks
+### 第六章 - Building Your Own Hooks
 
 - 自訂 Hook function 整合 effect 邏輯並且重用
 - 過去使用 [render props](https://reactjs.org/docs/render-props.html) 與 [higher-order components](https://reactjs.org/docs/higher-order-components.html) 來達成邏輯重用
@@ -233,7 +233,7 @@ useYourImagination()
 - custom hook 提供了很大的彈性, 如同一般的 JavaScript function, 可以作到很多事情。
 - 內建的 `useReducer` Hook, 也提供了整合第三方 state library 的功能, 可以把狀態改變邏輯解構到 Flux 架構中, 方便獨立測試。
 
-#### 第七章 - Hooks API Reference
+### 第七章 - Hooks API Reference
 
 Basic Hooks
 
@@ -251,7 +251,7 @@ Additional Hooks, 應付特殊需求所存在的 Hook
 - `useLayoutEffect`, [Doc](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)
 - `useDebugValue`, [Doc](https://reactjs.org/docs/hooks-reference.html#usedebugvalue)
 
-##### useState
+#### useState
 
 - 使用 state
 
@@ -275,7 +275,7 @@ Bailing out of a state update
 - React 使用 `Object.is` 作 state 的比較, 並且在相等的時候會 skip rendering
 - 如果在 rendering 需要費時的計算, 可以使用 `useMemo` 來最佳化
 
-##### useEffect
+#### useEffect
 
 - 執行與 UI 渲染無關的 side-effect 工作
 
@@ -312,7 +312,7 @@ Conditionally firing an effect
 - 傳入 `[]` 空陣列, 會導致 effect 永遠不會在 re-rendering 時執行, 只會在第一次 render 與 component unmount 時
 - 因此這個選用的陣列需要包含**所有**被 effect 所使用到的並且會依循時間所改變的 props 與 state 才能確保運行如期, 保證資料的一致性。
 
-##### useContext
+#### useContext
 
 - 使用 React Context, 提供一個跨層的資料傳遞
 
@@ -322,7 +322,7 @@ Hook 簽名
 - input: 由 `React.createContext` 所回傳的物件
 - output: 現在的 context value, 由最近的 `<MyContext.Provider>` 所提供的參數
 
-##### useReducer
+#### useReducer
 
 - React 原生的方式實現, state, dispatch, reducer 的類 Flux 架構
 
@@ -332,7 +332,7 @@ Hook 簽名
 - input:
 - output:
 
-##### useCallback
+#### useCallback
 
 - 提供避免 re-render 的機制, 效能最佳化工具
 - 類似於 `useMemo()`, 一個記憶值, 一個記憶函式
@@ -347,7 +347,7 @@ Hook 簽名
 - input:
 - output:
 
-##### useMemo
+#### useMemo
 
 - 提供避免 re-render 的機制, 效能最佳化工具
 
@@ -359,7 +359,7 @@ Hook 簽名
 - input:
 - output:
 
-##### useRef
+#### useRef
 
 - 使用 React ref, 提供取得實際的 DOM element
 
@@ -371,7 +371,7 @@ Hook 簽名
 - input:
 - output:
 
-##### useImperativeHandle
+#### useImperativeHandle
 
 - 需配合 React [forwardRef API](https://reactjs.org/docs/react-api.html#reactforwardref) 使用
 
@@ -383,7 +383,7 @@ Hook 簽名
 - input:
 - output:
 
-##### useLayoutEffect
+#### useLayoutEffect
 
 - 功能等同於 `useEffect`, 但是觸發 effect 的時機在 DOM 合併但是 re-render 之前
 
@@ -397,7 +397,7 @@ Hook 簽名
 
 - 優先使用 `useEffect` 直到實際遇到問題時才使用 `useLayoutEffect`
 
-##### useDebugValue
+#### useDebugValue
 
 - 在 Custom Hook 中提供 React DevTools 專用的 debug message
 - 不推薦在每個 Custom Hook 都使用
@@ -410,7 +410,7 @@ Hook 簽名
 - input:
 - output:
 
-#### 第八章 - Hooks FAQ
+### 第八章 - Hooks FAQ
 
 - [link to FAQ](https://reactjs.org/docs/hooks-faq.html)
 
@@ -420,3 +420,70 @@ Hook 簽名
 - Class component 與 Hooks 的差異跟移植
 - 效能最佳化
 - React Hook 的開發
+
+#### Adoption Strategy, 改用策略
+
+Which versions of React include Hooks?
+
+- 從 React 16.8.0 開始穩定支援 React Hooks.
+- 為了使用 React Hooks 所有 React packages 都需要在 16.8.0 以上版本
+
+Do I need to rewrite all my class component?
+
+- 不必修改所有的已經存在的 class component
+- React 也沒有移除 class component 的打算
+- 推薦使用 React Hooks 在新的程式碼中
+
+What can I do with Hooks that I couldn't with classes?
+
+- Hooks 提供強大且易懂的方式去重用邏輯與功能
+- 參考[文章](https://medium.com/@dan_abramov/making-sense-of-react-hooks-fdbde8803889)
+
+How much of my React knowledge stays relevant?
+
+- React 沒有從根本的修改, 因此舊有的概念 state, lifecycle, context, refs 仍然與 React Hooks 息息相關.
+
+Should I use Hooks, classes, or a mix of both?
+
+- 不推薦沒意義的把舊的 class component 重寫成 React Hooks 方式.
+- 推薦使用 React Hooks 在新建立的 component 上.
+- 從長遠看來, 官方推薦使用 React Hooks 作為 React component 主要的實現方式.
+
+Do Hooks cover all use cases for classes?
+
+- 長遠來說會完全支援
+- 目前還不支援 `getSnapshotBeforeUpdate`, `getDerivedStateFromError`, `componentDidCatch` 以上 lifecycle
+
+Do Hooks replace render props and higher-order components
+
+- 在多數情形, React Hooks 可以完全取代 render props 與 higher-order components, 以減少 React DOM 上的 component 層數.
+
+What do Hooks mean for popular APIs like Redux connect() and React Router?
+
+- 常見的 library 會提供 React Hooks 版本的 APIs 來連接功能
+- 例如 React Redux 在 7.1.0 以上支援 Hooks, React Router 在 5.1 以上支援 Hooks
+
+Do Hooks work with static typing?
+
+- React Hooks 更容易配合 static typing, 因為 React Hooks 就是單純的 function.
+- 最新版的 Flow 與 TypeScript, 已經可以支援 React Hooks
+
+How to test components that use Hooks?
+
+- 從 React 的觀點, React Hooks component 與一般的 component 相同, 測試的方式應該也不會有所不同.
+- 如果要測試 custom Hook, 可以建立單純的測試 component 後直接測試 component.
+- 推薦使用 [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) 來協助測試
+
+What exactly do the lint rules enforce?
+
+- [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) ESLint plugin 協助偵測是否違反 rules of Hooks 來避免 bug 產生.
+- 這個 ESLint plugin 假設一個函式開頭是 `use` 並且連接著大寫開頭的字母時就代表是 React Hooks.
+- 因此是有可能誤報的, 不過在未來會進一步調整.
+
+#### From Classes to Hooks, Class component 與 Hooks 的差異跟移植
+
+How do lifecycle methods correspond to Hooks?
+
+-
+
+34 Q&A
