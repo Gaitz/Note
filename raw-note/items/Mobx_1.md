@@ -7,38 +7,55 @@
 Introduction
 
 第一章 - README
+
 第二章 - About this documentation
+
 第三章 - Installation
+
 第四章 - The gist of MobX
 
 MobX core
 
 第五章 - Observable state
+
 第六章 - Actions
+
 第七章 - Computeds
+
 第八章 - Reactions {🚀}
 
 MobX and React
 
 第九章 - React integration
+
 第十章 - React optimizations {🚀}
 
 Tips & Tricks
 
 第十一章 - Defining data stores
+
 第十二章 - Understanding reactivity
+
 第十三章 - Analyzing reactivity {🚀}
+
 第十四章 - Computeds with arguments {🚀}
+
 第十五章 - MobX-utils {🚀}
+
 第十六章 - Custom observables {🚀}
+
 第十七章 - Lazy observables {🚀}
+
 第十八章 - Collection utilities {🚀}
+
 第十九章 - Intercept & Observe {🚀}
 
 Fine-tuning
 
 第二十章 - Configuration {🚀}
+
 第二十一章 - Enabling decorators {🚀}
+
 第二十二章 - Migrating from MobX 4/5 {🚀}
 
 ---
@@ -280,9 +297,101 @@ observables 轉換成原始的 JavaScript collections
 
 ### 第七章 - Computeds
 
+- `computed` (annotaion), `computed(options)` (annotaion), `computed(fn, options?)`
+- Computed value 只受 observable state 影響, pure function
+- 計算值是 lazy 的並且 output 會被 cache
+- 應該盡量使用, 由於 computed value 的流程會被效能最佳化
+- 只有在配合 reaction 使用時才有效能最佳化, 在外不使用則會被視為一般的值, 因此會被重複觸發計算.
+
+使用方式
+
+- 使用 `class` 與 `makeObservable`, 以 `getter` 函式實現並且標註為 `computed`.
+- 可以另外使用 `makeAutoObservable`, `observable`, `extendObservable` 使所有的 getter function 都自動標註為 `computed`
+
+使用規則
+
+- 不可以有 side-effect 包括更新 observables
+- 避免建立和新的回傳 observable
+
+其他
+
+- setters 會被自動標註為 `action`
+
+Options
+
+- `name`, debug 使用的名稱
+- `equals`, 調整比較算子, 透過 comparer function 決定重新計算的時機, 預設是 `comparer.default`.
+  - MobX 有內建 4 種 `comparer` 提供選用
+  - `compaper.identity`, `===`
+  - `compaper.default`, `===` + `NaN` 與 `NaN` 視為相等
+  - `compaper.structural`, deep comparison
+  - `compaper.shallow`, shallow comparison
+- `requireReaction`, 當 `computed` 非常昂貴時推薦設置為 `true`
+  - 在 reaction 外部使用時會跳出警告.
+- `keepAlive`, 在不被使用時 `comuted` value 仍會更新, 可能會造成 memeory leak.
+
 ---
 
 ### 第八章 - Reactions {🚀}
+
+執行含有 side-effect 的工作
+
+- 依據 observable state 自動觸發含有 side-effect 的 reaction
+- 應該不常被使用
+- 使用方式為 `autorun`, `reaction`, `when`
+
+`autorun`
+
+- 函式簽名 `autorun(effect: (reaction) => void)`, 傳入一個 function
+- 每次相關的 `computed` 與 `observable` 變動時自動觸發, 並且在初次定義時也會觸發一次.
+- 參考使用[範例](https://mobx.js.org/reactions.html#example)
+
+`reaction`
+
+- 函式簽名 `reaction(() => value, (value, previousValue, reaction) => { sideEffect }, options?)`
+- 類似 `autorun` 但是提供更細微的控制, 需傳入 2 個 function, 
+  - 第一個是 data function, 作為傳入第二個 effect function 的值, 只有在 data function 裡的 `observable` 和 `computed` 值會被追蹤. 
+  - 第二是個 effect function, 執行 side-effect 的函式
+- 使用方式是藉由 data function 去控制 effect function 的觸發時機, 並且與 `autorun` 不同的是在初次宣告時不會觸發.
+- 參考使用[範例](https://mobx.js.org/reactions.html#reaction-example)
+
+`when`
+
+- 函式簽名1 `when(predicate: () => boolean, effect?: () => void, options?)`
+- 函式簽名2 `when(predicate: () => boolean, options?): Promise`
+- 只有在 predicate function 回傳 `true` 時會觸發 effect function
+- 如果不傳入 effect function 時, `when()` 會回傳一個 Promise
+- 利用 `async/await` 與 `when` promise 達到特定時機的執行, 並且可以通過 `cancel()` 提前關閉
+- 參考使用[範例](https://mobx.js.org/reactions.html#when)
+
+使用規則
+
+- 受觸發的 reaction 會在相關的 trasaction 完成後**同步**且立即的執行
+- 只作用於同步的資料更新, 追蹤不到異步的變化
+- action 本身是 untracked
+
+reaction function 的 garbage collection
+
+- reaction function 只有在所有相關的 `observable` 被移除後才會移除.
+- `autorun()`, `reaction()`, `when()`, 都會回傳一個停止追蹤的函式
+- 強烈建議當不需要持續使用時, 需手動的關閉 reaction 追蹤, 否則可能造成 memory leak.
+- 參考[範例](https://mobx.js.org/reactions.html#mem-leak-example)
+
+小心謹慎的使用 reaction 的三個原則
+
+- 只有在 event 與 effect 沒有直接相關的時候使用。
+- Reaction 不會更新其他的 observable 的值，有此情況通常可以用 `computed` value 取代。
+- Reaction 應該是 indepenant 的，MobX 不保證 reaction 的執行順序。
+
+Options
+
+- `name`, debug 所使用的名稱
+- `fireImmediately` (`reaction`), 預設是 `false`
+- `delay` (`autorun`, `reaction`), milliseconds, 預設是 0
+- `timeout` (`when`), 設置等待時間上限
+- `onError`, 預設在 reaction 內部的錯誤, 只會被 log, 並不會丟出錯誤 (throw), 可以使用這個 option 修改預設行為
+- `scheduler` (`autorun`, `reaction`), 傳入 scheduler function 設定定期重複執行. 範例 `{ scheduler: run => { setTimeout(run, 1000) }}`
+- `equals` (`reaction`), `comparer.default` 為預設值, 用來操作 data function 的比較與觸發 effect function 的時機.
 
 ---
 
@@ -292,9 +401,53 @@ MobX and React
 
 ### 第九章 - React integration
 
+基本連接 React 與 MobX observables
+
+- `import { observer } from 'mobx-react-lite'`, 使用 mobx-react-lite 較輕量化適用於 function components
+- `const MyComponent = observer(props => ReactElement)`, observer 作為 HoC 封裝所有會使用到 MobX observables 的 React Component.
+
+External state (global state)
+
+- MobX observable state 可以很自由的作為 global state 傳遞
+- 傳遞方式
+  - 使用 props, 單純把 observables reference 以 prop 的方式傳遞給要使用的 React component
+  - 直接使用 global reference 的方式取得. (較不推薦雖然可以運行但是難以執行單元測試, 因為相依全域資源)
+  - 使用 React Context 傳遞, 直接使得整個 React tree 可以跨層取值, (推薦使用)
+- 參考[範例](https://mobx.js.org/react-integration.html#using-external-state-in-observer-components)
+
+Local state
+
+- 使用 MobX 的 observables state 作為 local state 的更新機制，MobX observables 配合 `React.useState` 使用
+- 參考使用[範例](https://mobx.js.org/react-integration.html#using-local-observable-state-in-observer-components)
+- 不推薦使用 MobX observables 來處理 local state.
+- 推薦單純使用 React.useState 作為 local state 的解決方案，未來才容易相容於 React Suspense Mode.
+
+注意事項
+
+- 使用 MobX observables 一定要使用 `observer()` component, 才能保證 MobX 運作的正確性. 因此推薦所有的 React component 都用 `observer()` 包裹
+- 盡可能在需要的時候才直接讀取 observable state, 不需要從上層傳遞, 才能確保渲染效能最佳化, 讓 MobX 只重新渲染關鍵的 component
+- 不要傳遞 observables state 至**非** `observer()` component, 內部不會自動更新.
+- inline callback component 可以使用 `<Observer></Observer>` 包裹作為一次性使用.
+
+Tips
+
+- 配合 SSR 使用需開啟 `enableStaticRendering(true)`
+- `mobx-react` 作為 `mobx-react-lite` 的超集合, 主要需求在於配合 React class component
+- `observer()` component 會自動使用 `React.memo` 因此可以不必要額外包覆.
+- 使用命名函式定義 function component 提供 React devtool 的 debug 名稱
+- 需要套用多個 HoC 時, `observer()` 需要作為最內層才能正常運作.
+- reaction 與 useEffect 一同使用時, 記得處理 reaction 的 **disposer**, 否則在 component unmount 時會造成 memory leak.
+- React component re-rendering [troubleshooting](https://mobx.js.org/react-integration.html#troubleshooting)
+
 ---
 
 ### 第十章 - React optimizations {🚀}
+
+- 切細 component 使用小粒度的 component, 每個 component 只 render 特定的 observables state, 讓 MobX 可以精準的 re-render.
+- Render list 時, 由於 React list rendering 本身是相對耗效能的行為, 因此最好自成一個 function component, 避免不必要的觸發重新計算. 參考[範例](https://mobx.js.org/react-optimizations.html#render-lists-in-dedicated-components)
+- 不使用 array index 作為 list `key` 使用
+- 只在需要的時候才引用需要的 observables state, 減少不必要的 re-rendering.
+- 為了精準 re-rendering, 產生多個小粒度的 `observer()` component, 可以改用 function props 的方式協助開發, 參考[範例](https://mobx.js.org/react-optimizations.html#function-props-)
 
 ---
 
@@ -304,13 +457,71 @@ Tips & Tricks
 
 ### 第十一章 - Defining data stores
 
+Stores
+
+- 至少分成兩種 Domain stores 與 UI stores
+
+Domain stores
+
+- 一個應用程式應該有一個或多個 domain stores, 每個 domain store 分別負責一個概念.
+- 經驗法則, 如果兩個 stores 具有包含關係的話應該被放在同一個 domain store 中. 
+
+Domain objects
+
+- 推薦可以使用 `class` 的方式定義, `class` 可以內聚 action function 和 type,
+- 相關的 stores object 可以使用 reference 傳遞
+- 參考[範例](https://mobx.js.org/defining-data-stores.html#example-domain-store)
+
+UI stores
+
+- 通常包含所有與 UI 相關的設定值, 例如 session, i18n language, UI狀態
+- 參考[範例](https://mobx.js.org/defining-data-stores.html#ui-stores)
+
+組合 stores
+
+- 使用 `RootStore` 作為初始化和整合所有的 store
+- 與 React 使用 context 傳遞 RootStore
+
 ---
 
 ### 第十二章 - Understanding reactivity
 
+- MobX Reactivity,
+- MobX 追蹤的是連結, 而非變數.
+- MobX 無法響應在非同步行為中的 observable
+- MobX 只能作用在設定追蹤的函式中, 例如 `autorun()`, ...
+- 一系列的[範例](https://mobx.js.org/understanding-reactivity.html), 關於會成功響應與不回成功響應, 可以作為 debug 時的參考
+
 ---
 
 ### 第十三章 - Analyzing reactivity {🚀}
+
+- 使用 mobx 工具協助除錯, `trace()`, `getDebugName()`, `getDependencyTree()`, `getObserverTree()`, `getAtom()`, `spy()`
+
+`trace()`
+
+- 使用[範例](https://mobx.js.org/analyzing-reactivity.html#usage-examples)
+
+`getDebugName()`
+
+- 函式簽名, `getDebugName(thing, property?)`
+
+`getDependencyTree()`
+
+- 函式簽名, `getDependencyTree(thing, property?)`
+
+`getObserverTree()`
+
+- 函式簽名, `getObserverTree(thing, property?)`
+
+`getAtom()`
+
+- 函式簽名, `getAtom(thing, property?)` 
+
+`spy()`
+
+- 函式簽名, `spy(listener)`
+- 參考[範例](https://mobx.js.org/analyzing-reactivity.html#spy)
 
 ---
 
