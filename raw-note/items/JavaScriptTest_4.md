@@ -273,13 +273,195 @@ Call Selectors from Node.js Callbacks
 
 ### 第五章 - Interact with the Page
 
+Actions
+
+- Click, 
+- Press Key, 
+- Navigate, 
+- Type Text, 
+- Select Text, 
+- Hover, 
+- Drag Elements, 
+- Upload Files, 
+- Take Screenshot, 
+- Work with iframes, 
+- Handle Native Dialogs, 
+- Resize Window, 
+- Wait
+
+Click
+
+- 滑鼠點擊
+- `t.click()`, `t.doubleClick()`, `t.rightClick()`
+
+Press Key
+
+- 鍵盤輸入
+- `t.pressKey()`
+
+Navigate
+
+- 頁面移動到指定的 URL
+- `t.navigateTo()`
+
+Type Text
+
+- 輸入字串到指定的 input element
+- `t.typeText()`
+
+Select Text
+
+- 選取 input, `<textarea>`, `contentEditable` 元素中的文字
+- `t.selectText()`, `t.selectTextAreaContent()`, `t.selectEditableContent()`
+
+Hover
+
+- 滑鼠 hover
+- `t.hover()`
+
+Drag Elements
+
+- 拖拉
+- `t.drag()`, `t.dragToElement()`
+
+Upload Files
+
+- input 上傳檔案
+- `t.setFilesToUpload()`, `t.clearUpload()`
+
+Take Screenshot
+
+- 螢幕攝影
+- `t.takeScreenshot()`, `t.takeElementScreenshot()`
+
+Work with Iframes
+
+- 測試 iframe
+- `t.switchToIframe()`, `t.switchToMainWindow()`
+
+Handle Native Dialogs
+
+- 測試瀏覽器的原生彈窗
+- `t.setNativeDialogHandler()`, `t.getNativeDialogHistory()`
+
+Resize Window
+
+- 模擬視窗大小調整
+- `t.resizeWindow()`, `t.resizeWindowToFitDevice()`, `t.maximizeWindow()`
+
+Wait
+
+- 測試暫停
+- `t.wait()`
+
+Remarks for Touch Devices
+
+- 在觸碰裝置上，使用觸碰事件取代滑鼠事件
+- mousemove -> touchmove, mousedown -> touchstart, mouseup -> touchend
+
+Interaction Requirements
+
+- 互動只能作用於看得到的元素
+- 參考[定義](https://devexpress.github.io/testcafe/documentation/guides/basic-guides/interact-with-the-page.html#interaction-requirements)
+
 -------
 
 ### 第六章 - Assert
 
+- 斷言 assert
+- 建立在 Behavior-Driven Development (BDD) style 
+
+Assertion Structure
+
+- test controller, `t.expect()`
+
+Assert Actions
+
+- Deep Equal, `.eql()`
+- Not Deep Equal, `.notEql()`
+- Ok, `.ok()`, assert `true`
+- Not Ok, `notOk()`, assert `false`
+- Contains, `contains()`
+- Not Contains, `notContains()`
+- Type of, `typeOf()`, 型別
+- Not Type of, `notTypeOf()`
+- Greater than, `gt()`, 數值大於
+- Greater than or Equal to, `gte()`, 數值大於等於
+- Less than, `lt()`, 數值小於
+- Less than or Equal to, `lte()`, 數值小於等於
+- Within, `within()`, 數值區間
+- Not Within, `notWithin()`, 數值區間
+- Match, `match()`, regular expression
+- Not Match, `notMatch()`, regular expression
+
+Smart Assertion Query Mechanism
+
+- TestCafe, 在做斷言時會**自動** retry 和 wait，來模擬網頁行為需要等待.
+
+Options
+
+- `{ timeout }`, milliseconds, 
+- `{ allowUnawaitedPromise }`, boolean, 預設是 `false`
+
 -------
 
 ### 第七章 - Obtain Client-Side Info
+
+- 自訂 client functions 回傳可序列化的資料, 用來協助測試.
+- Client functions 無法回傳 DOM node, 需要使用 selectors API
+
+Client Function Constructor
+
+- `import { ClientFunction } from 'testcafe'`
+- `ClientFunction( () = > {} )`
+
+Run Asynchronous Client Code
+
+- Promise 作為回傳值 `ClientFunction( () => { return new Promise() })`
+
+Execute Client Functions
+
+- 配合 `await` 執行 client function
+
+Pass Parameters to Client Functions
+
+- Client function 也可以傳值
+
+Overwrite Client Function Options
+
+- 透過 `with()` 可以覆寫 option 值
+
+One-Time Client Code Execution
+
+- 一次性的立即執行 client function
+- `t.eval( () => {} )`
+
+Import Functions to be Used as Client Function Dependencies
+
+- 引用外部 function 給 Client Function 使用
+- 配合 `require()` 和 `{ dependencies: {} }`
+- 參考[範例](https://devexpress.github.io/testcafe/documentation/guides/basic-guides/obtain-client-side-info.html#import-functions-to-be-used-as-client-function-dependencies)
+
+Call Client Functions from Node.js Callbacks
+
+- 使用 Node.js 的函式回傳值, 例如 `fs`. 需要配合 option `{ boundTestRun: t }`
+- 參考[範例](https://devexpress.github.io/testcafe/documentation/guides/basic-guides/obtain-client-side-info.html#call-client-functions-from-nodejs-callbacks)
+
+Client Function Limitations
+
+- 有語法限制
+- 參考[文件](https://devexpress.github.io/testcafe/documentation/guides/basic-guides/obtain-client-side-info.html#client-function-limitations)
+
+Access Console Messages
+
+- 取得 console 中的訊息
+- `t.getBrowserConsoleMessages()`
+
+Examples
+
+- 通過 `window.location` 取得頁面的 URL
+- 通過 `navigator.userAgent` 取得瀏覽器資訊
+- 通過 `document.querySelector()`, `document.querySelectorAll()` 預處理與收集複雜的測試資料
 
 -------
 
