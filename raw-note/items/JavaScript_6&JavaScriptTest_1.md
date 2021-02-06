@@ -38,7 +38,7 @@
   * **重購的前提是擁有測試**，否則只是在改變程式碼。
   * 只測試我們希望正常的功能，包含特定的極端案例、效能...。
   * 程式碼品質
-    * SOLID: Single responsibility, Open/closed, Kiskov substitution, Interface segreation, Dependency inversion
+    * SOLID: Single responsibility, Open/closed, Kiskov substitution, Interface segregation, Dependency inversion
     * DRY: Don't repeat yourself
     * KISS: Keep it simple, stupid
     * GRASP: General responsibility assignment software patterns
@@ -109,7 +109,7 @@
 
 ### 第四章 - 測試實戰
   * Node debugger, `node debug`, `debugger`
-  * Node aseert library, `require('assert')`
+  * Node assert library, `require('assert')`
   * 第三方斷言函式庫, **wish**, `npm install wish`, `require('wish')`
   * 第三方測試框架, **mocha**
   * 讓每次 git commit 之間的差別小一點，可以方便 revert/reset。
@@ -236,7 +236,7 @@
 
 #### 物件導向式
 移除全域變數，物件導向式，包成物件。  
-  * 建構子替代初始化函式 (inital)
+  * 建構子替代初始化函式 (initial)
   * 分離資料與商業邏輯
   * 注意匿名函式中的 `this`, 善用 that, `bind`, `apply`, `call`, arrow function 處理。
       * 使用 arrow function 自動綁定外部的 this。
