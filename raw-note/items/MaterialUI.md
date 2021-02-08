@@ -313,46 +313,227 @@ Adapting based on props
 #### Advanced
 
 Theming
+- 類似 context 把 theme object 傳遞給各層的 style 使用
+- `import { ThemeProvider } from '@material-ui/core/styles'`
+- `import { useTheme } from '@material-ui/core/styles'`
+- Nested theme 要手動處理 context 複製
 
 Overriding styles - `classes` prop
+- 使用 `makeStyles` hook API, `withStyles` HOC API 要附寫同名 className 時的傳遞方式
+- 參考[範例](https://material-ui.com/styles/advanced/#overriding-styles-classes-prop)
 
 JSS plugins
+- 可以 cherry-pick 想要使用的 plugins, 
+- 可以選用官方的 plugins 在 `import { jssPreset } from '@material-ui/core/styles'` 
 
 String templates
+- 可以配合 `jss-plugin-template` 使用 string templates 撰寫 CSS, 取代 styles object 的方式
 
 CSS injection order
+- 預設 Material-UI style 會被放置在 `<head>` 的最後, 也是在其他的 style tag 之後.
+- 可以通過 `StylesProvider` 參數 `injectFirst` 放置在 `<head>` 開始處
+- `insertionPoint`, JSS plugin 可以控制 CSS 順序, 參考[範例](https://material-ui.com/styles/advanced/#insertionpoint)
 
 Server-side rendering
+- 使用 `import { ServerStyleSheets } from '@material-ui/core/styles'` 生成 SSR 所需的 inline style
 
 Class names
+- 預設使用 `@material-ui/core/styles` class name 是含有 id hash 的, 因此每次可能不同.
+- 使用 `@material-ui/core` 生成的 class name 是固定的
 
 Global CSS
+- 使用 `jss-plugin-global` 生成 global class name
 
 CSS prefixes
+- JSS 會自動偵測 feature 並且加上必要的 prefix
 
 Content Security Policy (CSP)
+- 利用 HTTP header `Content-Security-Policy` 提供允許執行的網域清單, 協助瀏覽器防止 XSS 攻擊
+- 參考[說明](https://material-ui.com/styles/advanced/#what-is-csp-and-why-is-it-useful)
+
+How does one implement CSP?
+- 使用 Material-UI (and JSS) 時的 CSP 處理, 需要使用 nonce (隨機字串)
+- 參考[範例](https://material-ui.com/styles/advanced/#how-does-one-implement-csp)
 
 #### API
+
+`createGenerateClassName()`
+- 可客製化的 class name 生成器
+
+`createStyles()`
+- 提供 TypeScript 使用的 Type 驗證
+
+`ServerStyleSheets`
+- SSR 的 helper
+
+`makeStyles()`
+- Hook pattern
+
+`styled()()`
+- Styled components pattern
+
+`withStyles()`
+- Higher-order component (HoC) pattern
+
+`withTheme()`
+- Higher-order component (HoC) pattern 提供 theme object
 
 ---
 
 ### 第五章 - System
 
+Basics
+- `@material-ui/system`
+- 使用 styled component 建立一致性的 design system
+- 參考[範例](https://material-ui.com/system/basics/)
+
+Borders
+- 快速設置 borders CSS
+
+Display
+- 快速設置 Display 可配合 media query 使用
+- `inline`, `block`, Hiding elements, Display in print, Overflow, Text Overflow, Visibility, White Space
+
+Flexbox
+- 快速設置 Flexbox 相關設定
+
+Palette
+- 有語意的顏色設定
+
+Positions
+- 快速設定 z-index
+
+Shadows
+- 快速設定 shadows
+
+Sizing
+- 快速設定 `width`, `height` 相關數值
+
+Spacing
+- 快速設定 `margin`, `padding` 相關數值
+
+Typography
+- 快速設置 `font` 相關數值
+
+API
+- `@material-ui/system` package
+
 ---
 
 ### 第六章 - Customization
+
+Theming
+- 建立客製化的 theme 保持一致性的樣式, 利用 `ThemeProvider` context 傳遞
+  - 設定包含 Palette, Typography, Spacing, Breakpoints, z-index, Globals
+  - API [reference](https://material-ui.com/customization/theming/#api)
+- Palette 設置與預設值
+- Typography 設置與預設值
+- Spacing 設置與預設值
+- Breakpoints 設置與預設值
+- Density 設置與預設值
+- z-index 設置與預設值
+- Globals 設置與預設值
+
+Components
+- 客製化 component
+- 不同的方式複寫樣式
+
+Color
+- 提供具有語意的顏色名稱
+- 建立 color system 的[教學](https://material.io/design/color/the-color-system.html)
+
+Default Theme
+- 預設 theme 的各項設定值
 
 ---
 
 ### 第七章 - Guides
 
+API Design Approach
+
+TypeScript
+
+Style Library Interoperability
+
+Minimizing Bundle Size
+
+Composition
+
+Server Rendering
+
+Responsive UI
+
+Migration From v3
+
+Migration From v0.x
+
+Testing
+
+Localization
+
+Right-to-left
+
+Flow
+- 由社群開源支援 flow-typed
+
 ---
 
 ### 第八章 - Discover More
 
+Showcase
+- 實際案例
+
+Related Projects
+- 可以一起使用的第三方專案或工具
+
+Roadmap
+- 專案開發方向地圖, 優先順序, 包含開發中的新 component 列表與實現階段
+
+Sponsors & Backers
+- 社群出資的開源專案, MIT license
+
+Vision
+- 願景: 提供優雅的 React 實作的設計準則並且能充分的客製化符合需要
+- 提供一般性, 被廣泛使用的 UI 庫
+
+Team
+- 核心團隊與社群貢獻者
+
+Changelog
+- 版本 changelog
+
+Languages
+- 各語言翻譯的文件
+
 ---
 
 ### 第九章 - Versions
+
+Released versions
+
+- 每個版都有各自的 documentation 與 release note
+
+Latest versions
+
+- 可以從 `master`, `next` branch 取得 source code 與 documentation
+
+Versioning strategy
+
+- 版本開發已穩定性為主, 盡可能的重用, 不任意棄用, 對未來的規劃都是可預期更變.
+- 版本號依據 Semantic Versioning 2.0.0 規則
+
+Release frequency
+
+- Major 一年一次, 
+- Minor 每個 Major 約 1-3 個
+- Patch 每週或任何需要時
+
+Deprecation practices
+
+- 棄用準則, 最小化, 會有移植工具協助
+- 會宣佈在 changelog, 甚至 runtime 會有警告
+- 會提供最佳的轉換方式
+- 相依性函式庫的更新只會發生在 Major 版本
 
 ---
 
