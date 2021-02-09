@@ -450,28 +450,84 @@ Default Theme
 ### 第七章 - Guides
 
 API Design Approach
+- Component API 設計思想, 正確, 一致性, 盡可能簡單
+- Rules
+  - Spread, 
+  - Native properties, 
+  - CSS Classes, 
+  - Nested components,
+  - Property naming,
+  - Controlled components, 
+  - Boolean vs enum, 採用選項只有兩個時使用 boolean 設計, 多個時採用 enum 設計
+  - Ref, 
 
 TypeScript
+- 支援使用 TypeScript
+- 配合 `withStyles` 使用時, 需要額外的技巧
+- 客製化 `Theme` 時增加屬性需要做 `declare module`
+- 配合 `component` prop 使用時, 需要額外的處理, (主要用在 component composition)
+- 處理 `value` 與 event handlers 的型別
 
 Style Library Interoperability
+- 使用其他的 CSS 樣式解決方案, 有範例說明
+- Plain CSS, 
+- Global CSS,
+- Styled Components,
+- CSS Modules,
+- Emotion
+- React JSS,
 
 Minimizing Bundle Size
+- Material-UI 對 Bundle size 嚴格審視, 並且採用 `dangerJS` 整合 CI 在每次 PR 時檢測 bundle size
+- Material-UI 可以配合 bundler 直接使用 tree-shaking
+- 開發期的 import 效能問題, 有兩個解決方案 
+  - 使用路徑 + 預設 import 取代 top level imports
+  - 使用 Babel plugin, `babel-plugin-import`, `babel-plugin-transform-imports` 後可以繼續採用 top level imports.
 
 Composition
+- Wrapping components
+  - 除了傳遞 props 外, 需要針對 `muiName` prop 作手動複製
+- `component` prop, 
+  - Material-UI 允許使用 `component` prop 更變掛載的 element
+  - 注意 inline function component 傳遞時造成的不必要 re-rendering, 可以用 `useMemo()` 解決, 參考[範例](https://material-ui.com/guides/composition/#caveat-with-inlining)
+  - 使用自動的 prop forwarding 機制簡化程式碼, 要小心 prop 同名問題.
+- Routing libraries, 整合 client-side routing 工具, 以 `react-router` 為[範例](https://material-ui.com/guides/composition/#routing-libraries)
+- 整合 Material-UI component 時遇到的 React `refs`, StrictMode warning 解決方案
 
 Server Rendering
+- Server-side rendering 時的設置流程與各框架的範例
 
 Responsive UI
+- Material-UI 推薦針對各種平台使用統一的 elements
+- 實現方式有提供以下幾種 helpers
+  - Grid, 會依照螢幕大小改變大小與展示順序
+  - Container, 最基礎的水平容器
+  - Breakpoints, 客製化 breakpoint API
+  - useMediaQuery, CSS media query hook 
+  - Hidden, 針對裝置作視覺隱藏
+- 參考[文件](https://material-ui.com/guides/responsive-ui/)
 
 Migration From v3
+- 版本更新的實務與說明
 
-Migration From v0.x
+Migration From v0.x to v1
+- 版本更新的實務與說明
 
 Testing
+- Material-UI 內部有覆蓋律非常高的測試
+- 範例測試使用 `Mocha`
+- 分成三種測試有對應的 API 支援 `@material-ui/core/test-utils'`
+  - `createMount()` Full DOM rendering
+  - `createShallow()` Shallow rendering
+  - `createRender()` Render to string
 
 Localization
+- 預設語系是 English (US)
+- Locale text 有預設的翻譯, 可以通過 `'@material-ui/core/locale'` 取得
+- 參考支援語言[列表](https://material-ui.com/guides/localization/#supported-locales)
 
 Right-to-left
+- 因應由右至左的語系, 可以通過設定讓 Material-UI components 配合順序
 
 Flow
 - 由社群開源支援 flow-typed
