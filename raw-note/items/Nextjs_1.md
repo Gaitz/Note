@@ -188,6 +188,16 @@ Learn
 
 ### 第一章 - Create a Next.js App
 
+Next.js 是一個 React framework 有以下特色
+- 頁面 Server-side routing
+- 同時支援 static generation (SSG) 與 server-side rendering (SSR)
+- 自動的 code spliting
+- 可以配合 client-side routing
+- 內建 CSS, Sass, 並且可以與任何 CSS-in-JS 工具結合
+- 開發期有 fast refresh
+- 支援 API routes 提供建立 API
+- 高度可擴充性
+
 ---
 
 ### 第二章 - Navigate Between Pages
