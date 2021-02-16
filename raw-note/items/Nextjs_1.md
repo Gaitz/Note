@@ -191,20 +191,73 @@ Learn
 Next.js 是一個 React framework 有以下特色
 - 頁面 Server-side routing
 - 同時支援 static generation (SSG) 與 server-side rendering (SSR)
-- 自動的 code spliting
+- 自動的 code splitting
 - 可以配合 client-side routing
 - 內建 CSS, Sass, 並且可以與任何 CSS-in-JS 工具結合
 - 開發期有 fast refresh
 - 支援 API routes 提供建立 API
 - 高度可擴充性
 
+官方範例
+- Next.js dev mode 有自動 fast refresh (watch mode)
+
 ---
 
 ### 第二章 - Navigate Between Pages
 
+官方範例
+
+Pages in Next.js
+- 每個頁面都會放在 `pages` 資料夾下, 並且依據路徑與檔案名稱轉換成 Route
+- `pages/index.js` 即根目錄 `/` Route
+- page component 可以任意命名, 重要是使用 `export default` 匯出
+
+Link Component
+- Next.js 提供 Link component `import Link from 'next/link`
+- 協助頁面的 `<a>` link 到其他頁面
+- 結構為
+  ```javascript
+  <Link href=''>
+    <a></a>
+  </Link>
+  ```
+
+Client-Side Navigation
+- Next.js Link component 以 client-side navigation 的方式
+- 使用 JavaScript 渲染新頁面並修改 history 
+- 自動擁有 code splitting 只會下載該頁所需的 JavaScript
+- 並且在 production mode 在 `<Link>` component 出現在 viewport 時, Next.js 會自動 prefetches 所需的 JavaScript
+- Next.js 自動最佳化並且使用 `<Link>` 就不需要使用其他 routing libraries
+
 ---
 
 ### 第三章 - Assets, Metadata, and CSS
+
+官方範例
+- Next.js 內建 CSS 與 Sass
+
+Assets
+- 使用 `public` 資料夾實現靜態檔案資料取得路徑
+
+Image component
+- 使用 Next.js 提供的 Image component, `import Image from 'next/image'`
+- 提供適應式圖片壓縮跟 Lazy load 等最佳化功能
+- 結構範例為
+  ```javascript
+  <Image
+    src=''
+    height='' // 提供高度與寬度讓壓縮時有正確的比例
+    width=''
+    alt=''
+  />
+  ```
+
+Metadata in `<head>`
+- 使用 Next.js 提供的 `<Head>` component, `import Head from ''next/Head`
+- 允許在 page component 中設置該頁的 metadata
+
+CSS Styling
+- 
 
 ---
 
