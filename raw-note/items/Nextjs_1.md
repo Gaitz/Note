@@ -257,15 +257,68 @@ Metadata in `<head>`
 - 允許在 page component 中設置該頁的 metadata
 
 CSS Styling
-- 
+- 原生支援 `styled-jsx`, 並且可以使用任意 CSS-in-JS 工具 (需另外設置)
+- 原生支援 import CSS 與 Sass, 並且支援 CSS Modules
+- Next.js code splitting 也支援 CSS Modules 讓 CSS bundle size 最小化
+- `pages/_app.js`, 可以影響所有 pages 的檔案入口, 用來引入 global state 與 global CSS 的地方
+
+Styling Tips
+- 可以使用 `classnames` [函式庫](https://github.com/JedWatson/classnames)協助修改 className, `cn()`
+- Next.js 自動使用 `PostCSS`, 可以額外客製化 PostCSS config
+- Next.js 原生支援 Sass 並且可以同時使用 CSS modules 與 Sass, `.module.sass`
 
 ---
 
 ### 第四章 - Pre-rendering and Data Fetching
 
+Pre-rendering
+- Next.js 預設每一頁都會 pre-renders, 到瀏覽器後在 hydration
+- 提昇 performance 與 SEO
+- 兩種類型的 pre-rendering, Static Generation (SSG), Server-side Rendering (SSR)
+- Static Generation 在 `build time` 完成後每個 request 提供相同的 HTML
+- Server-side Rendering 在每次 request 後才生成專屬的 HTML
+- Next.js 允許每頁使用不同的 pre-rendering 方式
+- 推薦優先使用 Static Generation 提供更好的效能, 頁面與使用者請求無關的時候.
+
+Static Generation with and without Data
+- 取決於在 build time 是否需要 request 外部資料
+- 頁面輸出 `getStaticProps` async function, `export async function getStaticProps() {}` 會在 build time 被觸發, 並且以 `props` 傳遞給 page component
+- 參考[範例](https://nextjs.org/learn/basics/data-fetching/with-data)
+- `getStaticProps` 只能使用在 `page` 即 `pages/` 下的 page component, 並且只會在 server-side 執行
+- 如果資料需要依據 request 才能取得則可以考慮使用 SSR 或直接 client-side 時 request
+
+Server-side Rendering with Data
+- 使用 `getServerSideProps` async function, `export async function getServerSideProps(context) {}`
+- 這樣在每次 request 時都會在 server-side 執行一次 `getServerSideProps()`
+- 速度會慢於 Static Generation 
+
+Client-side Rendering
+- 不使用 pre-rendering 在 server-side 取值, 交給瀏覽器發送 request
+- 通常用於與 SEO 無關且隨時間變動的資料
+- Next.js 提供一個被優化的 React Hook, `SWR` 協助在 client-side 讀取資料
+
+Other Tips:
+- markdown 可以提供 metadata 藉由 `gray-matter` library 提供 parse 取得.
+- Next.js 內建 `fetch()` polyfills 提供 client 與 server 同時使用.
+
 ---
 
 ### 第五章 - Dynamic Routes
+
+Page Path Depends on External Data
+- 依據外部資料的頁面路徑
+- 在 `pages/` 目錄下使用 `[`, `]` 作為檔名的一部分產生 dynamic routes
+- 配合 `getStaticPaths` async function, 取得 dynamic route 資訊, 必須配合 `params` key 與 `paths` key
+- Dynamic Routes + Static Generation
+  1. `getStaticPaths` 解析 dynamic path 並且回傳資訊
+  1. `getStaticProps` 依據解析後的資訊 `params`, 取值
+- Catch-all Routes, `[...]` 可以捕捉所有的子代 Routes
+- 可以藉由 `next/router` 提供的 `useRouter` hook 操作 Next.js Router
+- 新增 `pages/404.js` 可以創建客製化的 404 頁面
+
+Other Tips
+- Markdown to HTML 可以使用 `remark`, `remark-html` 兩個 library 
+- Date formatting 可以使用 `date-fns` library
 
 ---
 
