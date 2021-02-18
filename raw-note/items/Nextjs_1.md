@@ -324,19 +324,51 @@ Other Tips
 
 ### 第六章 - API Routes
 
+API Routes
+- 可以在 `pages/api/`, 形成基本的 API endpoint
+- 配合 `export default function handler (req, res) {}`
+- API endpoint 也可以如同 pages 一般使用 dynamic route
+
 ---
 
 ### 第七章 - Deploying Your Next.js App
 
+Tips:
+- `Vercel` 平台由 Next.js 作者開發的部屬平台
+- `Vercel` 有很多好處, 
+  - 包含配合 GitHub 產生 Preview 版本,
+  - 自動 Https, 
+  - SSG 形成 CDN, 
+  - SSR 與 API 形成 serverless function 更容易 scale
+  - ...
+- Next.js App 可以部屬在任何支援 Node.js 的環境上
+  - 配合 `npm run build`, `npm run start` 指令啟動 server
+
 ---
 
 ### 第八章 - TypeScript
+
+Next.js + TypeScript
+- Next.js 可以直接支援 TypeScript
+- 創建 `tsconfig.json` 重啟 dev server 後會提醒安裝所需的 packages
+- 可以從 `next` 中取得 Next.js 所配合的 Types, 例如 `GetStaticProps`, `GetStaticPaths`, `GetServerSideProps`, ...
 
 ---
 
 Documents
 
 ### 第一章 - Getting Started
+
+系統需求
+- Node.js 10.13 以上
+- MacOS, Windows, Linux
+
+Setup
+- 推薦使用 `create-next-app` 快速建立
+
+Manuel Setup
+- 需安裝 `next`, `react`, `react-dom` packages
+- Script 則是 `next dev` 啟動開發模式, `next build` 編譯, `next start` 開啟 production 伺服器
 
 ---
 
@@ -346,37 +378,192 @@ Basic Features
 
 ### 第二章 - Pages
 
+- Page 是一個輸出 React component 放在 `pages/` 目錄下的 `js`, `jsx`, `ts`, `tsx` 檔案
+- Routing 則是依據檔案名稱
+
+Pre-rendering
+- 預設 pre-renders 所有的頁面
+- 分成兩類 Static Generation (SSG), Server-side Rendering (SSR)
+- SSG 配合外部資源時 `getStaticProps`, `getStaticPaths`
+- SSR 配合外部資源時 `getServerSideProps`
+
 ---
 
 ### 第三章 - Data Fetching
+
+`getStaticProps` (Static Generation)
+- 結構
+  ```javascript
+  export async function getStaticProps(context) {
+    return {
+      props: {},
+    }
+  }
+  ```
+- 傳入的 `context` 物件, 可以取得 route 資訊, preview mode 資訊, locale 資訊
+- 傳出的物件必須包含 `props`, 
+  - 其他選用的 `revalidate`, `notFound`, `redirect`
+
+Incremental Static Regeneration
+- 配合 `revalidate` key 設置重新生成資料的時間
+- 由於 static generation 一般是由 build time 生成一次, 現在可以自動 regeneration 並且不需要重新 build
+- 享有好處, 
+  - 頁面效能跟 static generation 一樣快, 
+  - 就算 regeneration 的資料失敗, 仍然有舊版的可以使用不會停止服務
+  - 讀取資料的效能仍就是一次, 並不會依據 request 數量造成後端負擔
+
+使用檔案系統讀檔時, 使用 `process.cwd()` 取代 `__dirname`
+
+`getStaticPaths` (Static Generation)
+- 執行 dynamic route
+- 結構
+  ```javascript
+  export async function getStaticPaths() {
+    return {
+      paths: [
+        { params: {} }
+      ],
+      fallback: true or false or 'blocking'
+    }
+  }
+  ```
+- 必須含有 `paths` key, 對應解析的 dynamic routes, 參考[文件](https://nextjs.org/docs/basic-features/data-fetching#the-paths-key-required)
+- 必須含有 `fallback` key, 
+  - `false` 會有 404 頁, 
+  - `true` 則需處理 fallback 頁, 可以在失敗時回應讀取中的資訊給使用者, 並且等候 `getStaticProps` 完成
+  - `'blocking'`, 等於一次性的 SSR 
+
+`getServerSideProps` (Server-side Rendering)
+- SSR 取得外部資料的方式
+- 結構
+  ```javascript
+  export async function getServerSideProps(context) {
+    return {
+      props: {}
+    }
+  }
+  ```
+- 傳入的 `context` 物件, 可以取得 route 資訊, `req`, `res`, preview mode 資訊, locale 資訊
+- 回傳的物件必須包含 `props`,
+  - 選用的 `notFound`, `redirect`
+
+Client-side rendering 
+- 在瀏覽器端取值, 可以使用 Next.js 提供的 hook, `SWR`, 有內建很多實務
 
 ---
 
 ### 第四章 - Built-in CSS Support
 
+- 可以單純使用 `import` 傳入 CSS 檔案
+
+Global Stylesheet
+- 所有頁面共用的樣式可以在 `pages/_app.js` 中傳入
+
+Import styles from `node_modules`
+- 可以從 packages 中直接 import CSS 檔案
+
+Component-Level CSS
+- Next.js 原生支援 CSS Modules, 只需要使用檔名 `.module.css`
+
+Sass Support
+- Next.js 原生支援 Sass, 並且可以配合 CSS Modules 使用
+- 可以直接 import, `.scss`, `.sass`, `.module.scss`, `.module.sass`
+- 可以在 `next.config.js` 中使用 `sassOptions` 客製化設定
+
+Less and Stylus Support
+- 需要另外安裝 plugins
+
+CSS-in-JS
+- 可以參考各種[範例](https://nextjs.org/docs/basic-features/built-in-css-support#css-in-js)包含 `Styled JSX`, `Styled Components`, `Emotion`, `Tailwind CSS + Emotion`, `Styletron`, `Glamor`, `Cxs`, `Aphrodite`, `Fela`
+
 ---
 
 ### 第五章 - Image Optimization
+
+Image Component
+- Next.js 10.0.0 以上提供內建的 `Image` component 提供很多最佳化
+- `import Image from 'next/image'`
+- 最佳化會觸發在需要時, 支援任一種圖片格式
+- 可以在 `next.config.js` 中客製化圖片最佳化的設定, 包含
+  - Domains, 作用的網域
+  - Loader, 使用第三方的圖片最佳化工具
+
+Caching
+- 使用預設的 loader 時 expired time 由 `Cache-Control` header 控制
+
+Advanced
+- Device Sizes, 手動設置 breakpoints, 使用在 `layout='responsive'`, `layout='fill'`
+- Image Sizes, 手動設置 breakpoints, 使用在 `layout='fixed'`, `layout='intrinsic'`
 
 ---
 
 ### 第六章 - Static File Serving
 
+Static File Serving
+- 把靜態資源放在 `public/` 目錄下則可以從外部 request
+- routes 在 `/` 根目錄下, 要注意不要與 `pages` routes 相同
+- 只有 build time 時的靜態資源可以讀取得到, 因此無法在 runtime 增加新的靜態資源服務
+
 ---
 
 ### 第七章 - Fast Refresh
+
+- 在 development mode 可以快速的取得變動的內容, 並且不會讓之前的 component state 消失
+- 限制, 
+  - Fast Refresh 時的 state 保存並不作用於 class component
+  - HoC 修改也會損失 state
+  - `export default () => {}` 配合匿名函式時也不會保存 state
+- 可以使用 `// @refresh reset` 啟動 reset 而非保存 state
 
 ---
 
 ### 第八章 - TypeScript
 
+- Next.js 原生支援整合 TypeScript 使用
+- 只要在根目錄新增 `tsconfig.json` 並且重新執行 `npm run dev` 後會告知所需的 packages 並且 setup 基本的 tsconfig
+- TypeScript `strict` mode 預設是 false, 推薦依據專案在合適的時候改成 `true`
+
 ---
 
 ### 第九章 - Environment Variables
 
+Loading Environment Variables
+- 藉由 `process.env` 讀取環境變數, 檔案為 `.env.local`
+- `process.env` Next.js 因為安全性會轉換, 因此無法使用 object destructuring 取值
+
+Exposing Environment Variables to the Browser
+- 因為安全性, 讀取的環境變數, 只有在前綴為 `NEXT_PUBLIC_` 時才能被 client-side code 讀取得到
+
+Default Environment Variables
+- 預設只有一個 `.env.local` 但是可以依據所需可以分成 `.env.development`, `.env.production`
+- 記得 `.env*.local` 需要加到 `.gitignore` 中
+
+Test Environment Variables
+- 測試環境中 `NODE_ENV` 設為 `test` 時, `.env.local` 環境資訊並不會被讀取
+- 而是使用 `.env.test`
+
 ---
 
 ### 第十章 - Supported Browsers and Features
+
+Supported Browsers
+- 支援 IE11 和所有現代的瀏覽器 
+
+Polyfills
+- 針對 IE11 所用的 `fetch()`, `URL`, `Object.assign()`
+- 只有在需要時才會被使用, 因此不用擔心 bundle size
+
+Server-Side Polyfills
+- Next.js 支援在 Node.js 上使用 `fetch()`, 不需要額外使用 polyfills
+
+JavaScript Language Features
+- 支援所有最新版的功能
+
+TypeScript Features
+- Next.js 原生支援 TypeScript
+
+Customizing Babel Config (Advanced)
+- 可以客製化 Next.js 所使用的 babel 設定
 
 ---
 
@@ -384,7 +571,25 @@ Routing
 
 ---
 
-### 第十一章 - Introduction
+### 第十一章 - Routing Introduction
+
+- 依據 `pages/` 檔案路徑作為 Routing 設定
+
+Index Routes
+- `index` 會被自動轉為根目錄 `/`
+
+Nested Routes
+- 依據目錄可以生成 nested routes
+
+Dynamic Route Segments
+- 使用 `[]` 與 `[...]` 作為 dynamic routes
+
+Linking between pages
+- Next.js 提供 `Link` component 實現 client-side routing 技術
+- 不需要其他第三方工具例如 React Router
+
+Linking to dynamic paths
+-
 
 ---
 
