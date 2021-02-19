@@ -112,13 +112,9 @@ Advanced Features
 
 第四十章 - Upgrade Guide
 
-Migrating to Next.js
+第四十一章 - Migrating to Next.js
 
-第四十一章 - Incrementally Adopting Next.js
-
-第四十二章 - Migrating from Gatsby
-
-第四十三章 - FAQ
+第四十二章 - FAQ
 
 API Reference
 
@@ -589,19 +585,33 @@ Linking between pages
 - 不需要其他第三方工具例如 React Router
 
 Linking to dynamic paths
--
+- 有兩種方式, 直接使用路徑, 或者使用 URL object, [範例](https://nextjs.org/docs/routing/introduction#linking-to-dynamic-paths)
+
+Injecting the router
+- 使用 `useRouter` hook 取得 router
 
 ---
 
 ### 第十二章 - Dynamic Routes
 
+- 藉由 `[]` 命名配對 dynamic routes 
+- 可以從 `useRouter` hook 中取得 `query` object 拿到參數
+- 使用 `[...param]`, 取得所有子代的 dynamic route, 此時 `query` object 參數會用 array 儲存
+- Route 碰撞時, 優先順序為實名 Route, Dynamic Route (`[]`), catch all Route (`[...]`)
+
 ---
 
 ### 第十三章 - Imperatively
 
+- 一般情況 client-side routing 使用 `next/link` 即可完成
+- 特殊情況可以通過 `useRouter` 取得 router 後操作 client-side routing, 例如 `router.push()`
+
 ---
 
 ### 第十四章 - Shallow Routing
+
+- Shallow Routing, 在同一頁面上以 `useRouter` hook 的 `push()` 作 navigation 時, 可以開啟 shallow 參數 `{ shallow: true }` 以這種方式移動時, 頁面不會被更新也不會再次觸發 `getServerSideProps`, `getStaticProps`, `getInitialProps` 等等, 可以保留頁面狀態 (state)
+- Shallow Routing 只是用於同一個 URL 時, 即 query 可以不同
 
 ---
 
@@ -609,27 +619,71 @@ API Routes
 
 ---
 
-### 第十五章 - Introduction
+### 第十五章 - API Routes Introduction
+
+- API Routes 提供直接的方式建立 API
+- 在 `pages/api/` 下的 Route 會對應到 `/api/`
+- 結構
+  ```javascript
+  export default function handler(req, res) {}
+  ```
+- 預設的 API Routes 不會特別設置 CORS headers, 預設是 same-origin only. 其他 CORS 設置要配合 middleware 使用
 
 ---
 
 ### 第十六章 - Dynamic API Routes
 
+- Dynamic API Routes 等同於 Dynamic Page Routes 規則
+
 ---
 
 ### 第十七章 - API Middlewares
+
+- Next.js 有預設使用 `req.cookies`, `req.query`, `req.body` middleware 協助 parsing
+- 每個 API Route 都可以使用 `export const config = {}` 的方式自訂 config
+- 可以配合 express middleware 使用, 參考[文件](https://nextjs.org/docs/api-routes/api-middlewares#connectexpress-middleware-support)
 
 ---
 
 ### 第十八章 - Response Helpers
 
+- `res` 包含了一系列的 Express-like 函式協助建立 API
+- `res.state(code)`, 設定狀態碼
+- `res.json(json)`, 回傳 JSON
+- `res.send(body)`, 設置回傳 body
+- `res.redirect([status,] path)`, 使用 redirect, 預設狀態碼為 `307`
+
 ---
 
 ### 第十九章 - Deployment
 
+- 推薦使用 Vercel 平台, 由 Next.js 作者建立的部屬平台, 包含很多最佳化實務.
+- 或者任意可執行 Node.js 的平台
+
 ---
 
 ### 第二十章 - Authentication
+
+Authentication Patterns
+- 依據資料獲取的時機, client-side or server-side
+
+Authenticating Statically Generated Pages
+- SSG + Client-side fetching data
+
+Authenticating Server-Rendered Pages
+- SSR + `getServerSideProps` 取得授權
+- 要注意 `getServerSideProps` 取得授權會 block response, 因此要足夠快才行
+
+Bring Your Own Database
+- 如果已經有使用的權限資料庫, 可以配合權限機制使用不同的 Next.js packages
+- 參考[文件](https://nextjs.org/docs/authentication#bring-your-own-database)
+
+Firebase
+- 如果使用 Firebase 時推薦使用 SSG + client-side fetching 的模式
+- 可以配合 Firebase Client SDK 或 FirebaseUI
+
+Others
+- `Magic`, `Auth0`, `Supabase`, `Userbase`, ..., 參考說明[文件](https://nextjs.org/docs/authentication#magic-passwordless)
 
 ---
 
@@ -639,103 +693,240 @@ Advanced Features
 
 ### 第二十一章 - Preview Mode
 
+- SSG 配合 headless CMS 使用時的資料 Preview Mode 設定
+
 ---
 
 ### 第二十二章 - Dynamic Import
+
+- dynamic `import()` 在需要時才載入模組, 提高更好的效能
+- 可以使用 Next.js 提供的 `import dynamic from 'next/dynamic'` 協助封裝成 dynamic component
+- 可以客製化加上 loading component
+- 可以選用 NoSSR 在 server-side 不會額外載入
 
 ---
 
 ### 第二十三章 - Automatic Static Optimization
 
+- 在沒有 `getServerSideProps`, `getInitialProps` 需要 SSR 時, Next.js 會自動使用 statically optimization 預先渲染成 static HTML 並且重複使用
+- 在 build time 頁面會建置在 `.next/server/pages/` 下, Static Optimization 會產生 `html`, 如果是需要 SSR 時會產生 `js`
+
 ---
 
 ### 第二十四章 - Static HTML Export
+
+- 使用 `next export` 可以生成純 HTML 檔案, 而不需要配合 Node.js server 使用
+- 用於整個 Next 專案都不需要 SSR 時, 整個 App 為純 client-side 使用.
+- `next build && next export` 會生成在 `out/` 資料夾下
+- 使用時要注意有些 Next.js 的功能沒有完全運作, 參考[文件](https://nextjs.org/docs/advanced-features/static-html-export#caveats)
 
 ---
 
 ### 第二十五章 - Absolute Imports and Module Path Aliases
 
+- Next.js 支援 `tsconfig.json`, `jsconfig.json` 的 `paths`, `baseUrl` 選項
+- 因此可以配合使用達到 module import 的縮寫
+- 參考[範例](https://nextjs.org/docs/advanced-features/module-path-aliases)
+
 ---
 
 ### 第二十六章 - AMP Support
+
+- Next.js 支援轉換成 AMP page 的功能
+- 藉由 `next/amp` 啟動
+- styling 只有 CSS-in-JS 支援, CSS Modules 沒有支援 AMP 轉換
+- AMP 也尚未與 TypeScript 作整合, 但是未來可能會支援
+- 參考[細節](https://nextjs.org/docs/advanced-features/amp-support/introduction), 使用 AMP components, AMP validation 整合, AMP static export.
 
 ---
 
 ### 第二十七章 - Customizing Babel Config
 
+- Next.js 使用 `next/babel` preset 作為 babel 設定
+- Babel config 允許手動客製化
+- 新增 `.babelrc`, 在 presets 使用 `next/babel` 後, 其他可以客製化使用
+- 參考[範例](https://nextjs.org/docs/advanced-features/customizing-babel-config)
+
 ---
 
 ### 第二十八章 - Customizing PostCSS Config
+
+- Next.js CSS 會自動經過 Autoprefixer, ... 對於目標瀏覽器的支援
+- Next.js 允許在 `package.json` 手動設置目標瀏覽器 `browserslist`, 可以影響 compiled css 時的選擇
+- CSS Modules 不需要任何額外的設定即可啟用
+- 如果要手動設置 PostCSS 的 configuration 時, Next.js 會關閉原本的所有設定, 因此都要自行設置, 參考[文件](https://nextjs.org/docs/advanced-features/customizing-postcss-config#customizing-plugins)
 
 ---
 
 ### 第二十九章 - Custom Server
 
+- 自行設置 server 取代 `next start`
+- 注意自行設置的 server 會沒有 serverless function 與 automatic static optimization 的最佳化功能, 只有在 `next start` 無法達成需求時才考慮使用
+- 由於自行設置 server, 可以關閉 `pages` routes 設定
+- 參考[文件](https://nextjs.org/docs/advanced-features/custom-server)
+
 ---
 
 ### 第三十章 - Custom `App`
+
+- 藉由客製化 `App` 可以影響所有的 pages 初始化過程
+- 可以作到跨 pages 的功能, 例如保持資料, 使用全域資料, 共用 error handling, ...
+- 在 `./pages/_app.js` 中可以 override App
+- 客製化 App 無法使用 `getStaticProps`, `getServerSideProps`
+- 如果在客製化 App 中使用 `getInitialProps`, 會停止所有頁面的 Automatic Static Optimization 除非頁面明確標示 Static Generation
 
 ---
 
 ### 第三十一章 - Custom `Document`
 
+- 藉由客製化 `Document` 可以控制頁面的 `<html>` 與 `<body>` 結構
+- 藉由建立 `./pages/_document.js` 並且 extend `Document` 
+- 參考[文件範例](https://nextjs.org/docs/advanced-features/custom-document)
+
 ---
 
 ### 第三十二章 - Custom Error Page
+
+- 自訂 404 頁, `pages/404.js`
+- 自訂伺服器錯誤頁 5xx, `pages/_error.js`
+- 可以重用內建的 `Error` page, `import Error from 'next/error'`
+- 參考[範例](https://nextjs.org/docs/advanced-features/custom-error-page)
 
 ---
 
 ### 第三十三章 - `src` Directory
 
+- `pages/` 資料夾可以改成 `src/pages/` 以符合專案的檔案結構
+
 ---
 
 ### 第三十四章 - Multi Zones
+
+- 整合不同的 apps 進入單一個 app
+- 藉由設定 basePath 與 Http proxy 或 Next.js [Rewrites config](https://nextjs.org/docs/api-reference/next.config.js/rewrites) 設定轉導
 
 ---
 
 ### 第三十五章 - Measuring performance
 
+- Next.js Analytics 提供分析檢測效能各項指標
+- Vercel 平台可以直接使用
+- 手動建立藉由在 `pages/_app.js` 中增加 `export function reportWebVitals(metric) { }` 可以讀取數值
+- 內建數值包含 Time to First Byte (TTFB), First Contentful Paint (FCP), Largest Contentful Paint (LCP), First Input Delay (FID), Cumulative Layout Shift (CLS)
+- Next.js 提供的數據包含 `Next.js-hydration`, `Next.js-route-change-to-render`, `Next.js-render`
+- 並且可以發送分析結果到指定的 endpoint 或 Google Analytics 後台
+- 參考[文件](https://nextjs.org/docs/advanced-features/measuring-performance)
+
 ---
 
 ### 第三十六章 - Debugging
+
+- 使用 Chrome DevTools, VSCode debugger 或 Node.js debugger
+
+1. 啟動 Next.js debug mode
+  - `NODE_OPTIONS='--inspect' next dev` 
+1. 連結 debugger
+  - Chrome DevTools, `chrome://inspect`
+  - VSCode 要設定 `attach mode`, 參考文件[設定](https://nextjs.org/docs/advanced-features/debugging#using-the-debugger-in-visual-studio-code)
+1. 使用 breakpoints
+  - `debugger` statement
 
 ---
 
 ### 第三十七章 - Source Maps
 
+- 在 development 時預設開啟, Production build 預設關閉以提昇效能
+- 可以藉由 config 在 production build 時也開啟 Source Maps
+  - 參考[設定](https://nextjs.org/docs/advanced-features/source-maps)
+
 ---
 
 ### 第三十八章 - Codemods
+
+- Next.js 提供 `@next/codemod` 指令, 可以自動化升級棄用的語法
+- 參考[文件](https://nextjs.org/docs/advanced-features/codemods)
 
 ---
 
 ### 第三十九章 - Internationalized Routing
 
+- Next.js 在 v10.0.0 版以上原生支援 i18n
+- 設定 locales 後 Next.js 可以自動處理 i18n Routing 
+
+Getting Started
+- 在 `next.config.js` 中設定 `i18n: { locales:[], defaultLocale, domains }`
+- Locales 命名採用 UTS Locales Identifiers 標準
+- 參考文件[設定](https://nextjs.org/docs/advanced-features/i18n-routing#getting-started)
+
+Locale Strategies
+- i18n 的 Routing 策略可以分成兩種, 
+  - Sub-path Routing, 增加 locale 在現有的 URL path 中
+  - Domain Routing, 不同 locale 對應不同的 domain
+- 參考文件[設定](https://nextjs.org/docs/advanced-features/i18n-routing#locale-strategies)
+
+Automatic Locale Detection
+- 如果使用者訪問 `/` 根目錄時會自動依據 `Accept-Language` header 和現在 domain 去作偵測 locale.
+- 如果不是 default locale 時會依據策略執行 redirect
+- 可以在 i18n config 中關閉 automatic locale detection 的 redirect 功能, 參考[設定](https://nextjs.org/docs/advanced-features/i18n-routing#disabling-automatic-locale-detection)
+
+Accessing the locale information
+- 從 `useRouter()` 中可以取得 locale 相關資訊
+- 從 `getStaticProps`, `getServerSideProps` 中的 context 物件也可以取得 locale 相關資訊
+
+Transition between locales
+- 使用 `next/link` 或 `next/router` 可以達成在 locales 之間移動, 兩者 API 皆有 `locale` 參數可以設置
+- 參考[範例](https://nextjs.org/docs/advanced-features/i18n-routing#transition-between-locales)
+
+Leveraging the NEXT_LOCALE cookie
+- Next.js 藉由 `NEXT_LOCALE` cookie 值作為使用者設定
+
+Search Engine Optimization
+- Next.js 會依據使用者語言在 `<html>` 標籤上加入對應的 `lang` 屬性
+- 可以手動增加 `hreflang` meta 在 `<head>` 中, 參考 [hreflang](https://developers.google.com/search/docs/advanced/crawling/localized-versions?visit_id=637493400736385326-3138786548&rd=1) 說明
+
+How does this work with Static Generation?
+- i18n routing 無法使用在 `next export` 的靜態檔案中
+
+Automatically Statically Optimized Pages
+- 頁面會依據各 locale 依據 automatically statically optimized 生成對應的 html
+
+Non-dynamic getStaticProps Pages, Dynamic getStaticProps Pages
+- 可以在 `getStaticProps()` 與 `getStaticPaths()` 函式中取得 locales 資訊然後處理
+- 參考[文件](https://nextjs.org/docs/advanced-features/i18n-routing#non-dynamic-getstaticprops-pages)
+
 ---
 
 ### 第四十章 - Upgrade Guide
 
----
-
-Migrating to Next.js
-
----
-
-### 第四十一章 - Incrementally Adopting Next.js
+- React 16 to 17
+- Upgrading from version 9 to 10
+- Upgrading from version 8 to 9
+- Breaking Changes
+- Deprecated Features
 
 ---
 
-### 第四十二章 - Migrating from Gatsby
+### 第四十一章 - Migrating to Next.js
+
+移植策略
+- Incrementally Adopting Next.js, 漸進式採用策略與 Routing
+- Migrating from Gatsby
+- Migrating from Create React App
+- Migrating from React Router
 
 ---
 
-### 第四十三章 - FAQ
+### 第四十二章 - FAQ
+
+- 問題關於系統整合等等
 
 ---
 
 API Reference
 
 ### 第一章 - CLI
+
+
 
 ---
 
