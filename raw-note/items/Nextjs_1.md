@@ -926,31 +926,73 @@ API Reference
 
 ### 第一章 - CLI
 
-
+- `npx next -h`, 所有指令說明
+- `next build`, 建置 production 版
+- `next dev`, 開啟 development mode
+- `next start`, 開啟 production mode
 
 ---
 
 ### 第二章 - Create Next App
 
+- 快速建立 Next 專案
+- `npx create-next-app`, `yarn create next-app`
+- options, 
+  - 指定模板 `--example`
+  - 明確使用 npm `--use-npm`
+
 ---
 
 ### 第三章 - next/router
+
+- `import { useRouter } from 'next/router'`
+- `useRouter` hook 取得 router object
+- router APIs
+  - `.push()`
+  - `.replace()`
+  - `.prefetch()`, production only, performance improvement
+  - `.beforePopState()`
+  - `.back()`
+  - `.reload()`
+- router events
+  - 提供 router events 可以註冊 handler
 
 ---
 
 ### 第四章 - next/link
 
+- Client-side Routing, `Link` component from Next.js
+
 ---
 
 ### 第五章 - next/image
+
+- Next.js 提供的 Image Optimization, `<Image>` component
+- Props: `src`, `height`, `width`
+- Options:
+  - `layout` prop: `fixed`, `intrinsic`, `responsive`, `fill`
+  - `loader`,
+  - `sizes`, 配合 `layout='responsive'`, `layout='fill'` 時使用
+  - `quality`, 1 ~ 100, 預設是 75
+  - `priority`, boolean, 開啟時會把圖片設為高優先度並且 preload, 預設是 `false`, 
+  - `objectFit`, 配合 `layout='fill'` 使用
+  - `objectPosition`, 配合 `layout='fill'` 使用
+  - `loading`, 預設是 `lazy`
+  - `unoptimized`, 預設是 `false`
 
 ---
 
 ### 第六章 - next/head
 
+- 提供設置 `<head>` 的 component
+- `import Head from 'next/head'`
+
 ---
 
 ### 第七章 - next/amp
+
+- 啟用支援 AMP
+- `export const config = { amp: true }`
 
 ---
 
@@ -960,6 +1002,9 @@ Data Fetching
 
 ### 第八章 - getInitialProps
 
+- 推薦優先使用 `getStaticProps` 與 `getServerSideProps`
+- `getInitialProps` 用於舊版 SSR
+
 ---
 
 next.config.js
@@ -968,81 +1013,136 @@ next.config.js
 
 ### 第九章 - Introduction
 
+- `next.config.js` 提供進階的 Next.js 客製化
+- `next.config.js` 是一般的 Node.js module 並且不會經過 Webpack, Babel, TypeScript compiler
+
 ---
 
 ### 第十章 - Environment Variables
+
+- `next.config.js` 中設置環境變數
+- 設定使用 `env: {}`, 取值使用 `process.env`
 
 ---
 
 ### 第十一章 - Base Path
 
+- 如果 Next.js App 作為應用程式的 sub-path 時, 可以設定 `basePath`
+
 ---
 
 ### 第十二章 - Rewrites
+
+- 作為伺服器轉導使用, 接收到的 request 可以轉至其他路徑或其他 endpoints
+- 不影響 client-side routing
+- 可以設置動態路徑
+- 受到 `basePath`, `i18n` 設定影響  
 
 ---
 
 ### 第十三章 - Redirects
 
+- 類似於 Rewrites 但是使用方式不同並且含有 redirect 狀態碼
+
 ---
 
 ### 第十四章 - Custom Headers
+
+- 客製化 Http headers
 
 ---
 
 ### 第十五章 - Custom Page Extensions
 
+- 客製化支援的 pages 副檔名, 例如配合 `@next/mdx` 時設置 `.mdx`
+
 ---
 
 ### 第十六章 - CDN Support with Asset Prefix
+
+- 配合 CDN 設置 asset prefix
 
 ---
 
 ### 第十七章 - Custom Webpack Config
 
+- 客製化 webpack 設定
+- 可以參考 Next.js 已經支援的設定後, 有需要才自行設定
+
 ---
 
 ### 第十八章 - Compression
+
+- Next.js 預設使用 gzip 進行壓縮
+- 可以藉由設置 `compress: false` 關閉, Next.js 的壓縮
+- 通常用於把壓縮程序改到其他 HTTP proxy 上處理, 減輕 Node.js server 上的負擔
 
 ---
 
 ### 第十九章 - Runtime Configuration
 
+- 特殊情況下可以設置 runtime 時能取得的 variables
+- `serverRuntimeConfig`, 設置只有 server-side 能取值
+- `publicRuntimeConfig`, 設置 server-side + client-side 皆能取值
+
 ---
 
 ### 第二十章 - Disabling x-powered-by
+
+- Next.js 預設增加 `x-powered-by` header, 可以設置關閉
 
 ---
 
 ### 第二十一章 - Disabling ETag Generation
 
+- Next.js 預設為每一頁生成 Http ETag, 可以關閉
+
 ---
 
 ### 第二十二章 - Setting a custom build directory
+
+- 建置後的檔案預設放在 `.next` 中, 可以手動設置其他路徑
 
 ---
 
 ### 第二十三章 - Configuring the Build ID
 
+- Next.js 在每次 build time 會設置 ID, 如果 Next.js App 在多個 server 都執行 build 時 ID 不會一致, 可以手動設定 build ID
+
 ---
 
 ### 第二十四章 - Configuring onDemandEntries
+
+- 提供一些 options 來客製化 Next.js 在 production mode 時的行為
 
 ---
 
 ### 第二十五章 - Ignoring TypeScript Errors
 
+- 在 `next build` 時, 如果有 TypeScript Error 會導致失敗
+- 可以設定無視 TypeScript Error
+
 ---
 
 ### 第二十六章 - exportPathMap
+
+- `next export` 專用的設定項
+- 客製化 export static html 的路徑與檔案命名規則
 
 ---
 
 ### 第二十七章 - Trailing Slash
 
+- Next.js 預設將結尾含有 `/` 的頁面 redirect 到沒有的版本. Example: `/about/` redirect to `/about`
+- 可以藉由設定項 `trailingSlash` 改為顛倒的行為
+
 ---
 
 ### 第二十八章 - React Strict Mode
+
+- 推薦使用, 設置 `reactStrictMode: true`
+- 設定整個 Next.js App 使用 React Strict Mode
+- 只會影響 development mode 
 
 ---
 
