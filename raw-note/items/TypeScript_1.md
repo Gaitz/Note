@@ -228,25 +228,132 @@ Escape hatches 逃脫口, 盡可能不要使用
 
 ### 第七章 - 處理錯誤
 
+- TypeScript 盡可能的把錯誤移動到編譯期察覺, 但是仍然會有 runtime error 需要被處理
+- 處理方式分為 return null, throw exceptions, return exception, `Option` type
+
+Return Null
+- 無法提供錯誤資訊, 需要時常檢查 Nonnull
+
+Throw Exceptions
+- 丟出例外, 可以提供錯誤資訊
+- 使用 try-catch, 可以避開時常檢查的 Nonnull
+- 缺點是不能保證所有人都會使用 try-catch 捕捉可能的錯誤
+
+Return Exception
+- TypeScript 需要註明回傳值的型別, 因此會有例外型別的檢查, 被迫必須處理
+
+`Option` type
+- 回傳的是容器, 而非值. 
+- 無法提供錯誤資訊, 
+- `Option<T>` interface, `Some<T>`, `None`
+- `flatMap`, 在 chaining 時需要攤平每次的 return containers
+- `getOrElse()`, 
+
 ---
 
 ### 第八章 - 非同步程式設計、共時與平行處理
+
+處理 Callbacks
+- Node.js API 慣例回傳第一個參數為錯誤處理
+- 普通的 callback 只適合處理最簡單的非同步行為
+
+使用 Promise
+- 把 Callback pyramids 攤平成 Chain 的形式
+
+使用 `async` 和 `await`
+
+Async Streams
+- 處理非同步的事件串流
+- 處理模式常見的有 event emitter, reactive programming
+- Event emitter 是 JavaScript 中常見的模式
+
+多執行序處理 multithreading
+- 瀏覽器中使用 Web Workers, 取代 shared memory 使用 message passing 機制
+- Node.js 中使用 Child Processes
 
 ---
 
 ### 第九章 - 前端與後端框架
 
+前端框架
+- DOM API,
+- React, TSX = JSX + TypeScript
+- Angular
+- API 層, Swagger, GraphQL, gRPC
+
+後端框架
+- 使用 TypeScript ORM
+
 ---
 
 ### 第十章 - Namespaces.modules
+
+import, export
+
+Code splitting
+- code splitting
+- lazy-load
+
+TypeScript Module Mode vs. Script Mode
+- 檔案內有 `import` `export` 則使用 Module Mode
+
+`namespace` in TypeScript
+- 選擇使用 Module 優於 Namespace
+- `namespace { export }`
+- namespace 可以是 nested 
+- 使用時使用 `.` 連結, 在 import 時可以 alias
+- namespace 會編譯成 IIFE module 模式
+
+宣告合併 merging
+- 在同個 scope 下時, 有些元素可以對應同名合併達到功能擴充
 
 ---
 
 ### 第十一章 - 與 JavaScript 的交互作業
 
+與 legacy JavaScript codebase 合作與 immigrating 策略
+
+型別宣告 type declaration
+- `.d.ts`
+- `declare`
+- `declare let`, `declare module`
+- 在沒有 TypeScript 原始碼的情況下提供 types
+
+Migrating JavaScript to TypeScript
+1. 加入 TSC, tsconfig.json 中 `"compilerOptions": { "allowJs": true }`
+   - Optional 為現有的 JavaScript 開啟型別檢查, 由 TypeScript 自行推論, `"compilerOptions": { "checkJs": true }`
+   - Optional 使用 JSDoc Annotations, 協助 TypeScript 更精準的推論型別
+1. 一次更新一個檔案為 `.ts`, 切換 strict mode 一步一步的修正錯誤
+1. 最後關閉 JavaScript 檢查並且開啟嚴格模式
+
+第三方的 JavaScript
+- 分成幾種情況
+1. 已經內建有型別宣告
+1. 不包含型別宣告, 但是能在社群維護的 DefinitelyTyped 找到 `@types`
+1. 不包含型別宣告並且社群沒有支援, 處理方式有 `//@ts-ignore`, `.d.ts` + `declare module` without implement, `declare module` with implements
+
 ---
 
 ### 第十二章 - 建置與執行 TypeScript
+
+專案布局 project layout
+- `src/` to `dist/`
+- 生成的檔案們, `.js`, `.js.map` (source map), `.d.ts` (type declaration), `.d.ts.map` (type declaration maps)
+
+決定編譯目標 targets
+- `target` JavaScript 版本
+- `module` 設定模組模式
+- `lib` 設定額外的環境功能, 與添加 polyfills
+
+Source Map
+- 在 development mode 時開啟, production mode 時關閉
+
+tsconfig.json `extends`
+- 使用 `extends` 來切割管理 tsconfig
+
+錯誤監控
+- Sentry
+- Bugsnag
 
 ---
 
@@ -256,5 +363,10 @@ Escape hatches 逃脫口, 盡可能不要使用
 
 ### 第十四章 - 附錄
 
----
-
+- Type operators
+- Type utilities
+- Declaration and merging
+- 撰寫第三方 `.d.ts` 的策略
+- Triple-slash directives `///`
+- TSC strict flags
+- TSX, 使用 TSX 但是不使用 React 時的工作
