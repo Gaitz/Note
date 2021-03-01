@@ -455,71 +455,304 @@ Ambient enums
 
 ---
 
-### Handbook Reference
+Handbook Reference
 
 ---
 
 ### 第十五章 - Advanced Types
 
+Type Guards and Differentiating Types
+- 對於聯集型別 `|` 做型別判斷後取得窄化型別使用
+- User-Defined Types Guards, 使用者自訂的型別判別函式
+- Using the `in` operator, 使用 `in` 判斷特定屬性來區分型別
+- `typeof` type guards, 原始型別可以使用 `typeof` 協助判斷
+- `instanceof` type guards, 藉由 `instanceof` 以建構子函式來判斷型別
+
+Nullable Types
+- `--strictNullChecks`, 針對 `null` 與 `undefined` 型別作更嚴格的檢查, 必須使用聯集 `|` 明確指示可能的 `null` 與 `undefined`
+- Optional parameters and properties, `?` 選用參數視為 `undefined` 而非 `null`
+- Type guards and type assertions, 解決方案有二，1. 藉由判斷型別窄化確定非 nullable, 2. 指定型別斷言為非 nullable (`!`)
+
+Type Aliases
+- `type` 類似 `interface` 作為打包型別的工具，支援比 interface 更複雜的型別，例如包含 `|`
+- 可以配合 generics 使用 `<>`
+- 可以遞迴定義
+- 配合 intersection `&` 與遞迴定義 
+
+`interface` vs. `type`
+- 所有 `interface` 能達成的功能 `type` 皆可完成
+- 關鍵點在於 `interface` 開放擴張 (merging), `type` 無法初始化後擴張
+- `interface` 更類似於 JavaScript object
+- 官方推薦優先使用 `interface` 直到需要複雜的型別才用 `type`
+
+Enum Member Types
+
+Polymorphic `this` types
+- 物件中的函式回傳 `this` 實現 [fluent interface pattern](https://en.wikipedia.org/wiki/Fluent_interface)
+- `this` 型別會是依據 constructor, 因此配合 `extends` 實作時也能正確運行
+
+Index types
+- 把 union type 可以視為陣列操作
+- index type query, `keyof`
+- indexed access operator, `[]`
+- index types and index signatures, 定義時使用 index signatures `{ []: }` 
+
+Mapped types
+- 以 generics 實現型別的函式用來做到型別轉換
+- 某些常見的轉換很好用，因此 TypeScript 有打包成標準函式庫，例如 `Pick`, ...
+
+Conditional types
+- 型別宣告也有三元運算可以協助使用，` ? : `
+- 大多配合 `extends` 回傳 boolean 使用
+- Distributive conditional types, 
+- Type inference in conditional types, `infer` 
+
 ---
 
 ### 第十六章 - Utility Types
+
+- 內建的 type transformations
+- `Partial<Type>`, 回傳所有屬性變為 optional 的 Type
+- `Required<Type>`, 回傳所有屬性變為 required 的 Type
+- `Readonly<Type>`, 回傳所有屬性變為 `readonly` 的 Type
+- `Record<Keys, Type>`, 用來組合 keys 加上給予的 Type, 形成另外一個 Type
+- `Pick<Type, Keys>`, 只選取特定 keys 形成的 Type
+- `Omit<Type, Keys>`, 移除特定的 keys 形成的 Type
+- `Exclude<Type, ExcludedUnion>`, 執行 union type 的 exclude 形成新的 Type
+- `Extract<Type, Union>`, 指定的 Union 中所有允許的 Type 形成的新 Type
+- `NonNullable<Type>`, 移除所有的 `null` 與 `undefined` 形成的 Type
+- `Parameters<Type>`, 把函式的參數轉換成 tuple Type
+- `ConstructorParameters<Type>`, 把 constructor function 轉換成 tuple 或 Array 的 Type
+- `ReturnType<Type>`, 取得函式回傳值的型別
+- `InstanceType<Type>`, 取得建構子函式型別
+- `ThisParameterType<Type>`, 取得函式中指定的 `this` 參數型別
+- `OmitThisParameter<Type>`, 移除函式指定的 `this` 參數並且回傳乾淨的型別
+- `ThisType<Type>`, 必須配合 `--noImplicitThis` flag 使用
 
 ---
 
 ### 第十七章 - Decorators
 
+- TypeScript 中實驗性功能, JavaScript 尚未通過標準
+
 ---
 
 ### 第十八章 - Declaration Merging
+
+- 同名型別宣告合併
+
+Merging Interfaces
+- 最常見的 declaration merging
+- `interface`
+
+Merging Namespaces
+- `namespace`
+- `namespace` + `class`
+- `namespace` + `function`
+- `namespace` + `enum`
+
+Disallowed Merges
+- 不允許 `class` 合併
+
+Module Augmentation
+- 模組輸出的 `class` 擴充成員
+- 需要配合 `declare module` 讓 TypeScript 能認識擴充的成員
+
+Global Augmentation
+- 全域變數的擴充
+- 需要配合 `declare global` 讓 TypeScript 能認識新成員
 
 ---
 
 ### 第十九章 - Iterators and Generators
 
+- Iterables, `Symbol.iterator`
+- `for..of`
+- `for..in` 取 keys, `for..of` 取 values
+- Code generation, 轉譯到 ES6 以下版本使用，傳統的 C-like `for`
+
 ---
 
 ### 第二十章 - JSX
+
+- TypeScript 支援轉譯 `.tsx`
+- 需要開啟適合的 JSX options, Modes: `preserve`, `react`, `react-native`, `react-jsx`, `react-jsxdev`
+  
+The `as` operator
+- 型別斷言變成只能使用 `as`, 因為前墜的 `<>` 有語法衝突
+
+Type Checking
+- Intrinsic elements, 內建的 element 需要有被 JSX namespace 定義過才能使用
+- Value-based elements, `JSX.Element` Function component 與 class component
+- Function component, 因為是單純的 function 因此支援 declaration merging 
+
+Attribute Type Checking 
+
+Children Type Checking 
+
+React integration
+- 引用 React typing `@types/react`
+
+Configuration JSX
+- 有一些 flags 可以控制 JSX compile, `jsxFactory`, `jsxFragmentFactory`, `jsxImportSource`
 
 ---
 
 ### 第二十一章 - Mixins
 
+- Mixin pattern, 重用 OOP 的模式之一
+- 使用 `function` return class 配合 generics extends 的方式定義
+
+Alternative Pattern
+- 提供同時在 compile time 與 runtime 都適用的 Mixin pattern
+
+Constraints
+- 無法與 decorator 同時使用
+
 ---
 
 ### 第二十二章 - Modules
+
+- 在 TypeScript 中，檔案含有 `import` 與 `export` 被視為 module，都沒有的時候被視為 script
+
+Export
+- Export a declaration, `export` 任意宣告型別
+- Export statements, `export {}`, `export { as }`, 重新命名與打包
+- Re-exports, 擴充後重新命名輸出, `export { as }`, `export * from `, `export * as from `
+
+Import
+- Import a single export from a module, `import {} from `, 重新命名 `import { as } from `
+- Import the entire module into a single variable, and use it to access the module exports, `import * as from `
+- Import a module for side-effect only, `import ''`
+- Import Types, `import type {} from` 只會在 compile time 作用，Runtime 會被移除
+
+Default exports and imports
+- `export default`, `import from `
+
+`export =`, `import =`
+- TypeScript, AMD, CommonJS
+
+Code Generation for Modules 
+- 指定 module system 並且轉譯
+
+Optional Module Loading and Other Advanced Loading Scenarios
+- ...
 
 ---
 
 ### 第二十三章 - Module Resolution
 
+- Module 機制的細節、策略與控制 flags
+
 ---
 
 ### 第二十四章 - Namespaces
+
+- `namespace` 為 internal modules
+
+Namespacing 
+- 作為檔案內的 namespace 避免與第三方函式庫有名稱衝突
+
+Multi-file namespaces
+- 跨檔案的 namespace 可以被 declaration merging
+
+Alias
+- `import = `, import 時可以取部分重新命名
+- import 不使用 `require`, 避免與 module 混淆
+
+Working with Other JavaScript Libraries
+- Ambient Namespace, 如果第三方函式庫不是以 module 的方式載入，而是使用全域的方式，則很適合使用 namespace 來避免名稱衝突
 
 ---
 
 ### 第二十五章 - Namespaces and Modules
 
+- namespace 在過去的 TypeScript 中叫做 `internal module` 被作為 module system 使用
+
+Using Modules
+- 推薦優先使用 module 勝過 namespace，因為現在 module system 有原生支援的版本
+
+Using Namespaces
+- TypeScript 的管理方式
+- 如果應用程式是使用 `<script>` 一次性嵌入所有的相依性時可以使用 (作為 global 上命名碰撞的解法)
+- 不適合使用在大型專案中
+- namespace 轉換成 module 的方式，參考[文件](https://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html#needless-namespacing)
+
 ---
 
 ### 第二十六章 - Symbols
+
+- ECMAScript 2015 後 `symbol` 被作為基礎型別被加入
+
+Symbols
+- 使用 constructor 建立, `Symbol(?optionString)`
+- Symbol 是唯一且獨特的
+- 可以作為 object key 使用
+
+Symbols properties
+- 參考 mdn [文件](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
 
 ---
 
 ### 第二十七章 - Triple-Slash Directives
 
+- `///` XML 類型的語法，提供給 TypeScript compiler 使用，單一檔案的 compiler option
+
 ---
 
 ### 第二十八章 - Type Compatibility
+
+- TypeScript 使用 structural typing (duck typing) 與 Java/C# 等其他語言的 nominal typing 不同
+- 為了配合 JavaScript 的使用情境才採用 structural typing 設計
+
+Comparing two functions
+- 依據函式參數簽名作為 structural typing 依據
+
+Enums
+- 無法互相賦值
+
+Class
+- 有 structural typing 可互相賦值
+- private 與 protected members 也會被考量在 structural typing 裡
+
+Generics
+- 一樣依據內部型別的結構可以做到 structural typing
+- 考慮實體化後的內部結構
+
+Subtype vs. Assignment
+- 比較性通常考量的是 assignment
+- 在使用 `strictNullChecks` flag 時 assignment 的允許機制會有所不同
+- 參考 [assignment table](https://www.typescriptlang.org/docs/handbook/type-compatibility.html#any-unknown-object-void-undefined-null-and-never-assignability)
 
 ---
 
 ### 第二十九章 - Type Inference
 
+- 在沒有明確定義型別時，TypeScript 也會自動推論型別
+- 通常發生在初始化的階段
+
+Best common type
+- 採用最多共用的型別
+- 如果沒有時使用聯集組合 `|` 
+
+Contextual Typing
+- 會依據背景去推論參數型別
+- 當無法推論出參數型別時，會給予 `any`
+
 ---
 
 ### 第三十章 - Variable Declaration
+
+- 說明 `var`, `let`, `const`
+
+Destructing 
+- Array destructing
+- Tuple destructing
+- Object destructing, Renaming `:`, Default value `=`
+
+Spread
+- 展開元素
+- `...`
 
 ---
 
@@ -529,25 +762,67 @@ Tutorials
 
 ### 第三十一章 - ASP.NET Core
 
+- ASP.NET + TypeScript
+- Setup and basic use
+
 ---
 
 ### 第三十二章 - Gulp
+
+- build TypeScript with gulp
+- Setup and basic use with gulp + babel + uglify
 
 ---
 
 ### 第三十三章 - DOM Manipulation
 
+- TypeScript 操作 DOM
+- 要注意 DOM element 與 event 分別的型別階層
+
 ---
 
 ### 第三十四章 - Migrating from JavaScript
+
+- React 專案，優先參考 [TypeScript React Conversion Guide](https://github.com/Microsoft/TypeScript-React-Conversion-Guide#typescript-react-conversion-guide)
+- setup directories and `tsconfig.json`
+- setup configuration file `tsconfig.json`
+
+Integrating with Build Tools
+- Gulp
+- Webpack, `ts-loader`, `source-map-loader`
+
+Moving to TypeScript Files
+- `.js` to `.ts`, `.jsx` to `.tsx`
+- using compile options
+
+Weeding out Errors
+- Importing from modules, 依據使用的 module system 引入 module 與 types
+- Getting Declaration Files, 安裝第三方工具的型別宣告, `@types/`
+- Exporting from Modules
+- Too many/too few arguments, 配合 function overload 多載不同型別簽名
+- Sequentially Added Properties, 1. 直接放到初始化物件中 2. 使用 `interface` 預先定義並且使用型別斷言 `as`
+- `any`, `Object`, `{}`, 優先使用 `{}` 然後是 `any`, 記得 `any` 會損失幾乎所有的服務
+
+Getting Stricter Checks
+- 開啟越來越嚴格的審核標準
+- `noImplicitAny`, 關閉隱性推斷的 `any` 並且給出警告訊息
+- `strictNullChecks`, 嚴格審視 `null` 與 `undefined` 可能的存在
+- `noImplicitThis`, 隱性的使用 `this` 時會給出警告, 解法是在外部呼叫的函式中帶入參數 `this` 並且指定型別
 
 ---
 
 ### 第三十五章 - Using Babel with TypeScript
 
+- Babel vs. TypeScript `tsc`, 簡單的情況使用 `tsc` 複雜情況使用 Babel
+- Babel 負責轉譯，TypeScript 負責靜態型別檢查
+- Babel, preset-typescript
+- Babel 無法協助生成 `.d.ts`, 解法是在 `tsconfig.json` 中設置 options 協助 `tsc` 生成
+
 ---
 
 ### 第三十六章 - What's New
+
+- 提供所有版本的更新指南
 
 ---
 
@@ -556,6 +831,16 @@ Declaration Files
 ---
 
 ### 第三十七章 - Introduction
+
+- 手動建立 declaration files 通常用在沒有使用型別的第三方工具庫
+
+文件分類
+- Declaration Reference, 提供多個常用的 API 模式並且如何撰寫型別宣告檔案範例
+- Library Structures, 修改舊的檔案不需要, 作為撰寫新的 declaration files 提供範例與 templates
+- Do's and Don'ts, 常見錯誤，避免與修正
+- Deep Dive, 深入 declaration files 底層機制
+- Publish to NPM, 如何發布且管理 package
+- Find and Install Declaration Files, 安裝與使用其他人建立的 declaration files
 
 ---
 
