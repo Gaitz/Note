@@ -846,29 +846,119 @@ Declaration Files
 
 ### 第三十八章 - Declaration Reference
 
+Object with Properties
+- `declare namespace` 宣告物件
+
+Overloaded Functions
+- `declare function` with overload
+
+Reuseable Types 重用型別宣告
+- `interface` 
+- `type`
+
+Organizing Types
+- `declare namespace` 組織型別宣告以提高重用性與表達性
+
+Classes
+- `declare class`
+
+Global Variables
+- `declare var`
+- `declare const`, block-scoped, read-only
+
+Global Functions
+- `declare function`
+
 ---
 
 ### 第三十九章 - Library Structures
+
+- 實作函式庫的 declaration files, 最好依據文件實作  
+- 首先區分使用的方式與引入的方式
+
+Module Library
+
+Global Library
 
 ---
 
 ### 第四十章 - .d.ts Templates
 
+- 提供不同函式庫使用方式與引入方式的 declaration files 撰寫模板
+- Modules, Global
+- Plugin, Class, Function
+
 ---
 
 ### 第四十一章 - Do's and Don'ts
+
+General Types
+- 不要使用物件型 `Number`, `String`, `Boolean`, `Symbol`, `Object`
+- 使用基本型別 `number`, `string`, `boolean`, `symbol`, `object`
+
+Generics
+- 不要實作用不到 generics Type 的泛型
+
+any
+- 不要使用 `any` 作為型別，除非是在搬移 JavaScript 到 TypeScript 的過渡期
+- 使用 `any` 等同於關閉 TypeScript 的靜態檢查功能
+
+Return Types of Callbacks
+- 函式回傳值不要使用 `any`, 沒有回傳值可以使用 `void` 較為安全
+
+Optional Parameters in Callbacks
+- 在 callback function 中慎用 optional parameter
+
+Overloads and Callbacks
+- 不要因為有不同種 callback function 而使用 function overload, 十分容易造成錯誤的 load
+
+Function Overloads Ordering
+- Function overload 的採用是依據定義時的順序，要注意採用順序
+
+Function Overloads Using Optional Parameters
+- 善用 function optional parameters 取代多個固定的 function overloads
+
+Function Overloads Using Union Types
+- 優先使用 Union Types 取代固定欄位的型別差異產生的 function overloads
+- 實作 function 時不容易出現型別錯誤
 
 ---
 
 ### 第四十二章 - Deep Dive
 
+- 深入理解 declaration files 的運作規則
+
+Types
+
+Values
+
+Namespaces
+
+Simple Combinations
+
+Advanced Combinations
+
 ---
 
 ### 第四十三章 - Publishing
 
+- 上傳到 NPM 有兩個地方, 1. 自己的 npm packages, 2. `@types` 組織下的 NPM
+- npm package 設定項,
+- `///` 使用限制
+- 版本編號控制
+
 ---
 
 ### 第四十四章 - Consumption
+
+Downloading
+- `npm install`, 如果函式庫沒有提供 declaration files 時可以在 `@types` packages 尋找
+
+Consuming
+- 直接使用函式庫
+
+Searching
+- 尋找函式庫的 declaration files, [Type search](https://www.typescriptlang.org/dt/search?search=)
 
 ---
 
@@ -878,17 +968,54 @@ JavaScript
 
 ### 第四十五章 - JS Projects Utilizing TypeScript
 
+- TypeScript 的檢查有不同嚴格等級的區別
+- 從 JavaScript 到純 TypeScript + strict mode
+
+JavaScript
+- 純 JavaScript 檔案中
+  - 使用 `JSDoc` 可以提供型別給 TypeScript 使用, 
+  - `//ts-check` 註解也能提供型別給 TypeScript 使用
+- 通常用在移植過渡期
+
 ---
 
 ### 第四十六章 - Type Checking JavaScript Files
+
+- 比較 `.js` 與 `.ts` 中 TypeScript 推論型別的差異
 
 ---
 
 ### 第四十七章 - JSDoc Reference
 
+- `JSDoc` 語法
+- `@type`, 型別
+- `@filename`, import Types
+- `@typedef`, import and rename Types
+- `@param` `@returns`, 類似 `@type` 但是多提供參數名稱與說明
+- `@typedef`, 註解中定義重用的型別
+- `@callback`, 註解中定義重用的型別，主要給 function 使用
+- `@template`, generics
+- `@constructor`, 建構子標註
+- `@this`, function this 標註
+- `@extends`, 
+- `@enum`, enum 標註
+
+更多範例參考[文件](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)
+
 ---
 
 ### 第四十八章 - Creating .d.ts Files from .js files
+
+- TypeScript 3.7 版以上, 可以手動建立 declaration files, `.d.ts` 來協助 JavaScript 檔案受到 TypeScript 檢查 (可由 editor 執行)
+- 這樣可以在不使用 TypeScript 的形況下實現型別檢查
+
+流程
+- Install TypeScript 到 dev-dependency
+- 設定 `tsconfig.json`
+- 執行 compiler
+- 設定 `package.json`
+
+範例參考[文件](https://www.typescriptlang.org/docs/handbook/declaration-files/dts-from-js.html)
 
 ---
 
