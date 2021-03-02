@@ -1025,32 +1025,125 @@ Project Configuration
 
 ### 第四十九章 - What is a tsconfig.json
 
+- `tsconfig.json` 作為 TypeScript 的設定檔被放在專案的根目錄
+- 如果是 JavaScript 專案可以使用 `jsconfig.json`
+- `files`, 指定特定檔案編譯
+- `include`, `exclude`, 指定路徑編譯
+- `compilerOptions`, 設定編譯選項
+- 官方提供的 config [模板](https://github.com/tsconfig/bases/)
+
 ---
 
 ### 第五十章 - Compiler Options in MSBuild
+
+- MSBuild project
 
 ---
 
 ### 第五十一章 - TSConfig Reference
 
+- 完整的 TSConfig Reference
+- 分類如下
+
+File Inclusion
+
+Project Options
+
+Strict Checks
+
+Module Resolution
+
+Source Maps
+
+Linter Checks
+
+Experimental
+
+Command Line
+
+Watch Options
+
+Advanced
+
 ---
 
 ### 第五十二章 - tsc CLI Options
+
+- `tsc` 執行編譯 TypeScript 
+- 完整的 `tsc` CLI reference
 
 ---
 
 ### 第五十三章 - Project References
 
+- TypeScript 3.0 以上提供的新功能
+- `tsconfig.json` 中，新的 `references` 提供 project reference array
+- 分割成多個 project 的情況下可以提供更快速的編譯時間，也代表更快速的型別檢查 
+- `declarationMaps`, project reference source map 
+- `prepend`, optional
+
+Caveats for Project References
+- `tsc` 必須配合 `--build` flag
+- `.d.ts` dependency 需要額外注意
+
+tsc -b Command line
+- `tsc -b` `tsc --build`
+- `--verbose`
+- `--dry`, 試作查看可能的影響
+- `--clean`, 通常配合 `--dry` 
+- `--force`, 強制所有的 project 重新編譯
+- `--watch`, watch mode
+
+Guidance
+- Overall Structure
+  - 分割 `tsconfig.json` 提出共用的成 base
+
+- Structuring for relative modules, 簡單放置 `tsconfig.json` 在每個 sub-project 並且設置 `references`, 輸出設定 `outDir` 或 `rootDir`
+
 ---
 
 ### 第五十四章 - Integrating with Build Tools
+
+- 與各家 build tools 整合的設定與範例
+
+Babel
+
+Browserify
+
+Duo
+
+Grunt
+
+Gulp
+
+Jspm
+
+Webpack
+
+MSBuild
+
+NuGet
 
 ---
 
 ### 第五十五章 - Configuring Watch
 
+- TypeScript 3.8 以上版本使用
+
+Background
+- `--watch` watch mode 實作使用 Node.js 的 `fs.watch` 與 `fs.watchFile` 有個別的優缺點
+
+設置 watch mode 的三種方式
+- `tsconfig.json`, 參考設定[範例](https://www.typescriptlang.org/docs/handbook/configuring-watch.html#configuring-file-watching-using-a-tsconfigjson)
+- environment variable `TSC_WATCHFILE`
+- environment variable `TSC_WATCHDIRECTORY`
+
 ---
 
 ### 第五十六章 - Nightly Builds
+
+- 使用最新版的 TypeScript (Nightly Builds)
+- 配合 npm `typescript@next`
+- 範例設置編輯器使用最新版的 TypeScript
 
 ---
