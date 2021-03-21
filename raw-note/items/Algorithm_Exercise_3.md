@@ -74,6 +74,13 @@ Hard and Very Hard
 
 ### 第一章 - Arrays : Easy and Medium
 
+#### Two Number Sum
+
+- 三種方式
+- Brute force, T: O(N^2)
+- Using space, T: O(N), S: O(N)
+- Using sorted and two pointers, T: O(NlogN)
+
 ---
 
 ### 第二章 - Strings : Easy and Medium
