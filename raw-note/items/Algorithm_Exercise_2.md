@@ -1,6 +1,6 @@
 ## Top 10 Algorithms for the Coding Interview (for software engineers)
 
-### [Youtube part 1](https://www.youtube.com/watch?v=r1MXwyiGi_U), [Youtube part 2](https://www.youtube.com/watch?v=zHczhZn-z30), Algorithm
+### [Youtube part 1](https://www.youtube.com/watch?v=r1MXwyiGi_U), [Youtube part 2](https://www.youtube.com/watch?v=zHczhZn-z30), AlgorithmExercise
 
 ---
 
