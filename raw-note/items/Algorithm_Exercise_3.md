@@ -74,12 +74,35 @@ Hard and Very Hard
 
 ### 第一章 - Arrays : Easy and Medium 13
 
+Hints:
+
+- Hash table memory, 計算且儲存 S: O(N)
+- 排序 T: O(N \* LogN)
+- Index pointers
+- 找出回傳的模式並且優先計算格式，才補值
+
 #### Two Number Sum
 
 - 三種方式
 - Brute force, T: O(N^2)
 - Using space, T: O(N), S: O(N)
-- Using sorted and two pointers, T: O(NlogN)
+- Using sorted and two pointers, T: O(N \* LogN)
+
+#### Validate Subsequence
+
+- `while` loop, two index pointers
+- `for` loop, one index pointer
+- T: O(N), S: O(1)
+
+#### Sorted Squared Array
+
+- 計算排序, T: O(N \* LogN), S: O(N)
+- 利用已排序的特性配合 two pointers 直接找到正確的位置後才計算, T: O(N), S: O(N)
+
+#### Tournament Winner
+
+- 分步驟做
+- 思考步驟是否可以使用相同的迴圈一次處理完
 
 ---
 
