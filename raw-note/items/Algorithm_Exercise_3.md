@@ -76,13 +76,13 @@ Hard and Very Hard
 
 Hints:
 
-- Hash table memory, 計算且儲存 S: O(N)
-- 排序 T: O(N \* LogN)
 - Index pointers
+- 排序 T: O(N \* LogN), 排序後利用有序這個條件來更有效率地尋找解
+- Hash table memory, 計算且儲存 S: O(N)
 - 找出回傳的模式並且優先計算格式, 才補值
 - 注意剩餘條件或迴圈跑完後的狀況, 除了中途正確的 return 外，特別注意最後的 return 應該回傳的內容
-- 檢查特殊案例與基本案例
 - 把問題 array 的值，依序加入思考每次的結果是否可以重用
+- 檢查特殊案例與基本案例
 
 #### 1. Two Number Sum
 
@@ -114,6 +114,14 @@ Hints:
 - 排序, 思考依序增加後重用找解
 
 #### 6. Three Number Sum
+
+- Brute force (triple `for` loop): T: O(N^3),
+- 排序後使用 two pointers 分別為最大與最小包夾找解, T: O(N^2), S: O(N) 放置解答的空間
+
+#### 7. Smallest Difference
+
+- Brute force (double `for` loop): T: O(N \* M), N for arrayOne.length, M for arrayTwo.length
+- 排序後使用 two pointers 依據大小尋找適合的解，節省多餘的計算, T: O(N _ LogN + M _ LogM) 因為排序, S: O(1)
 
 ---
 
