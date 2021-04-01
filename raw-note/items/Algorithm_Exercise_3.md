@@ -79,30 +79,41 @@ Hints:
 - Hash table memory, 計算且儲存 S: O(N)
 - 排序 T: O(N \* LogN)
 - Index pointers
-- 找出回傳的模式並且優先計算格式，才補值
+- 找出回傳的模式並且優先計算格式, 才補值
+- 注意剩餘條件或迴圈跑完後的狀況, 除了中途正確的 return 外，特別注意最後的 return 應該回傳的內容
+- 檢查特殊案例與基本案例
+- 把問題 array 的值，依序加入思考每次的結果是否可以重用
 
-#### Two Number Sum, 1
+#### 1. Two Number Sum
 
 - 三種方式
 - Brute force, T: O(N^2)
 - Using space, T: O(N), S: O(N)
 - Using sorted and two pointers, T: O(N \* LogN)
 
-#### Validate Subsequence, 2
+#### 2. Validate Subsequence
 
 - `while` loop, two index pointers
 - `for` loop, one index pointer
 - T: O(N), S: O(1)
 
-#### Sorted Squared Array, 3
+#### 3. Sorted Squared Array
 
 - 計算排序, T: O(N \* LogN), S: O(N)
 - 利用已排序的特性配合 two pointers 直接找到正確的位置後才計算, T: O(N), S: O(N)
 
-#### Tournament Winner, 4
+#### 4. Tournament Winner
 
 - 分步驟做
 - 思考步驟是否可以使用相同的迴圈一次處理完
+- T: O(N), S: O(N)
+
+#### 5. Non-Constructible Change
+
+- T: O(N \* LogN), S: O(1)
+- 排序, 思考依序增加後重用找解
+
+#### 6. Three Number Sum
 
 ---
 
