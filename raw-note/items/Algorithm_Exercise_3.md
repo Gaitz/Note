@@ -83,6 +83,7 @@ Hints:
 - 注意剩餘條件或迴圈跑完後的狀況, 除了中途正確的 return 外，特別注意最後的 return 應該回傳的內容
 - 把問題 array 的值，依序加入思考每次的結果是否可以重用
 - 檢查特殊案例與基本案例
+- 嚴格思考問題定義與解的相關邏輯，也許有更簡單的作法
 
 #### 1. Two Number Sum
 
@@ -122,6 +123,23 @@ Hints:
 
 - Brute force (double `for` loop): T: O(N \* M), N for arrayOne.length, M for arrayTwo.length
 - 排序後使用 two pointers 依據大小尋找適合的解，節省多餘的計算, T: O(N _ LogN + M _ LogM) 因為排序, S: O(1)
+
+#### 8. Move Element To End
+
+- Brute force: 分類儲存然後合併, T: O(N), S: O(N)
+- 因為最佳的時間複雜度只可能是 T: O(N) 並且已經達到, 因此要改成精簡成 S: O(1), 使用 two index pointers, 分別指向頭與尾
+
+#### 9. Monotonic Array
+
+- T: O(N), S: O(1) 符號變動
+- 有小陷阱需要注意 0 變動時
+- 方法二, 從定義下手雖然複雜度不變，但是程式更簡短
+
+#### 10. Spiral Traverse
+
+- T: O(N), S: O(N)
+- 方法一, 一次走訪一個, 類似走迷宮, 程式較為繁瑣
+- 方法二, 一次走訪一圈, 然後內縮, 可分成迭代解與遞迴解
 
 ---
 
