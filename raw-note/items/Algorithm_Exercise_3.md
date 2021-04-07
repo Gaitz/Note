@@ -170,6 +170,16 @@ Hints:
 
 ### 第二章 - Strings : Easy and Medium 9
 
+Hints:
+
+- 字串就是陣列
+- 遞迴解，肯定需要額外的空間複雜度
+
+#### 15. Palindrome Check
+
+- 方法一, two pointers, T: O(N), S: O(1)
+- 方法二, recursive, T: O(N), S: O(N), 每次呼叫都會儲存一次新的 string 因此空間複雜度是 O(N)
+
 ---
 
 ### 第三章 - Stacks : Easy and Medium 3
