@@ -174,11 +174,35 @@ Hints:
 
 - 字串就是陣列
 - 遞迴解，肯定需要額外的空間複雜度
+- 字元可以轉換成 ASCII code 或 Unicode 後做運算
+- 在 JavaScript 中, 需要注意 code unit 與 code point 的差別在 UTF-16 中遇到擴充字元時。
+- Hash table 優化搜尋
 
 #### 15. Palindrome Check
 
 - 方法一, two pointers, T: O(N), S: O(1)
 - 方法二, recursive, T: O(N), S: O(N), 每次呼叫都會儲存一次新的 string 因此空間複雜度是 O(N)
+
+#### 16. Caesar Cipher Encryptor
+
+- 方法一, 利用紙筆計算找出計算移動後正確的 char code 公式，然後依序執行。T: O(N), S: O(N), N for string.length, 題目要求回傳新的字串因此佔用空間複雜度 N
+
+#### 17. Run-Length Encoding
+
+- 方法一, pre 放在迴圈外，T: O(N), S: O(N)，程式較複雜
+- 方法二, pre 放在迴圈內，每次都讀取 pre 與 current, T: O(N), S: O(N), 程式較簡單
+
+#### 18. Generate Document
+
+- 方法一, Force Brute, 每次在迴圈裡尋找後刪除用過的，T: O(N \* M), S: O(1), N 為 characters.length, M 為 document.length
+- 方法二, 使用 hash table 取代搜尋, T: O(N + M), S: O(N), N 為 characters.length, M 為 document.length
+
+#### 19. First Non-Repeating Character
+
+- 方法一, Force Brute, double `for`, T: O(N^2), S: O(1)
+- 方法二, hash table, T: O(N), S: O(1), N for string.length, 空間複雜度為 O(1) 因為已經指定字元集合最多為 26 個
+
+#### 20. Longest Palindromic Substring
 
 ---
 
