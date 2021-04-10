@@ -68,6 +68,18 @@ Hard and Very Hard
 
 ---
 
+## Tips
+
+- Index pointers
+- Hash table, 優化搜尋, T: O(1), S: O(N)
+- Sort first, T: O(N \* LogN), 先排序
+- Scan and find candidate, 搜尋尋找候選者
+- Recursive, 遞迴解, 因為 call stack 的關係會產生額外的 space
+- Back tracking, 一邊優化的遞迴解
+- 觀察問題特性, 尋找獨特的優化方式
+
+---
+
 ## Easy and Medium
 
 ---
@@ -194,15 +206,23 @@ Hints:
 
 #### 18. Generate Document
 
-- 方法一, Force Brute, 每次在迴圈裡尋找後刪除用過的，T: O(N \* M), S: O(1), N 為 characters.length, M 為 document.length
+- 方法一, Brute Force, 每次在迴圈裡尋找後刪除用過的，T: O(N \* M), S: O(1), N 為 characters.length, M 為 document.length
 - 方法二, 使用 hash table 取代搜尋, T: O(N + M), S: O(N), N 為 characters.length, M 為 document.length
 
 #### 19. First Non-Repeating Character
 
-- 方法一, Force Brute, double `for`, T: O(N^2), S: O(1)
+- 方法一, Brute Force, double `for`, T: O(N^2), S: O(1)
 - 方法二, hash table, T: O(N), S: O(1), N for string.length, 空間複雜度為 O(1) 因為已經指定字元集合最多為 26 個
 
 #### 20. Longest Palindromic Substring
+
+- 方法一, Brute Force, 窮舉後計算, T: O(N^3), S: O(N), 空間複雜度為輸出結果
+- 方法二, Scan and expand, 依序尋找候選者並且擴充找到最佳解, 由定義下手觀察特性，誰是候選者。 T: O(N \* (N + N)) = O(N^2), S: O(N), N for string.length
+- 方法三, 等同於方法二, 但是儲存使用 index 取代完整的字串, T: O(N^2), S: O(1)
+
+#### 21. Group Anagrams
+
+- 方法一, 排序配合 hash table, T: O(N _ W _ log(W)), S: O(N), N for words.length, W for longest word length
 
 ---
 
