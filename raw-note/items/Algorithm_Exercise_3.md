@@ -222,17 +222,45 @@ Hints:
 
 #### 21. Group Anagrams
 
-- 方法一, 排序配合 hash table, T: O(N _ W _ log(W)), S: O(N), N for words.length, W for longest word length
+- 方法一, 排序配合 hash table, T: O(N \* W \* log(W)), S: O(N), N for words.length, W for longest word length
+
+#### 22. Valid IP Address
+
+- 方法一, Brute force (triple `for`), T: O(1), S: O(1), 因為 string.length 的長度已經被限制，因此最高上限是固定的
+- 方法二, Brute force (triple `for`) + index optimization (不需要每一個 `for` 都檢查完整的字串，因為 ip 每個區間上限就是 3 個字元)
+
+#### 23. Reverse Words In String
+
+- 方法一, 收集 word 與 space 然後翻轉後組合起來, T: O(N), S: O(N) N for string.length
 
 ---
 
 ### 第三章 - Stacks : Easy and Medium 3
 
+#### 24. Min Max Stack Construction
+
+- 方法一, 追蹤每次的 min 與 max 連動 stack
+
+#### 25. Balanced Brackets
+
+- 方法一, 追蹤 brackets 是否關閉, 使用 stack 資料結構, 注意 error case, T: O(N), S: O(N), N for string.length
+
+#### 26. Sunset Views
+
+- 方法一, 先直觀的處理容易的 WEST 然後反向處理 EAST, T: O(N), S: O(N), N for buildings.length
+
 ---
 
 ### 第四章 - Heaps : Easy and Medium 1
 
----
+- Tip: 用 array 儲存 binary tree,
+  - parent = array[floor((currentIndex - 1) / 2)],
+  - childLeft = array[currentIndex * 2 + 1] ,
+  - childRight = array[currentIndex * 2 + 2]
+
+#### 27. Min Heap Construction
+
+- ***
 
 ### 第五章 - Linked Lists : Easy and Medium 4
 
