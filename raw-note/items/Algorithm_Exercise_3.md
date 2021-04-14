@@ -260,9 +260,22 @@ Hints:
 
 #### 27. Min Heap Construction
 
+- Min heap 建立, 以 array 來儲存 binary tree, build heap 的方式有多種
+
 - ***
 
 ### 第五章 - Linked Lists : Easy and Medium 4
+
+Hints:
+
+#### 28. Remove Duplicates From Linked List
+
+- 方法一, 記憶一個 reference 負責改造連接所有值不一樣的節點，需注意在 `while` loop 結束後要處理結尾, T: O(N), S: O(1), N for linked list length
+- 方法二, 在處理每個 current node 的時候，都 `while` loop 找到值不同的 next 節點然後接上, 複雜度同上
+
+#### 29. Linked List Construction
+
+#### 30. Remove Kth Node From End
 
 ---
 
