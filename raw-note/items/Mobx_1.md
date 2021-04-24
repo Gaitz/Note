@@ -93,7 +93,6 @@ Guided tour
 - 推薦閱讀順序
 - 以及 API reference [連結](https://mobx.js.org/api.html#core-apis)
 
-
 ---
 
 ### 第三章 - Installation
@@ -131,15 +130,15 @@ MobX 在其他框架與平台
 順序
 
 1. 建立 state 並且設置成 observable
-    - State 是應用程式的狀態資料，多數時是與應用程式 domain 直接相關的
-    - MobX 可以支援多種不同的資料結構
-    - 只要標註成 `observable` 則 MobX 就會開始追蹤使用
+   - State 是應用程式的狀態資料，多數時是與應用程式 domain 直接相關的
+   - MobX 可以支援多種不同的資料結構
+   - 只要標註成 `observable` 則 MobX 就會開始追蹤使用
 1. 使用 action 更新 state
-    - action 是任何會改變 state 的程式碼
-    - 藉由主動標記成 `action` 讓 MobX 做效能最佳化
+   - action 是任何會改變 state 的程式碼
+   - 藉由主動標記成 `action` 讓 MobX 做效能最佳化
 1. 建立 derivations 在 state 改變時自動反應
-    - 任何單純受到 state 影響的行為就是 derivations
-    - 例如 UI 更新, 重新計算值, 呼叫其他 API
+   - 任何單純受到 state 影響的行為就是 derivations
+   - 例如 UI 更新, 重新計算值, 呼叫其他 API
 
 MobX 把 derivations 分成兩種
 
@@ -149,9 +148,9 @@ MobX 把 derivations 分成兩種
 
 Computed value
 
-- 配合 `class` syntax 與 `get` syntax 同時標記為 `computed` 
+- 配合 `class` syntax 與 `get` syntax 同時標記為 `computed`
 
-Reactions 
+Reactions
 
 - 觸發 side-effect function
 
@@ -173,7 +172,6 @@ Custom reactions
 - Computed values 是 pure 的，也不會再次改變 state
 
 可以開啟 [linting](https://mobx.js.org/configuration.html#linting-options) 協助採用 MobX
-
 
 ---
 
@@ -267,7 +265,7 @@ observables 轉換成原始的 JavaScript collections
 
 `action.bound`
 
-- Annotation 
+- Annotation
 - 自動綁定 `this` 到 instance
 - 在配合使用 `makeAutoObservable` 時可以使用 arrow function 取代 action.bound 定義
 
@@ -287,7 +285,7 @@ observables 轉換成原始的 JavaScript collections
 
 使用 `flow` + generator function 取代 async/await
 
-- annotation `flow` 
+- annotation `flow`
 - 函式簽名 `flow(function* (args) {})`
 - 使用 `flow` annotation 與 `flow()` 函式傳入 generator function，取代 async/await。
 - 程式碼效果類似 async/await 但是 action 不需要額外標註，在 generator function 內的 action 會自動被 `flow()` 標註
@@ -349,16 +347,16 @@ Options
 `reaction`
 
 - 函式簽名 `reaction(() => value, (value, previousValue, reaction) => { sideEffect }, options?)`
-- 類似 `autorun` 但是提供更細微的控制, 需傳入 2 個 function, 
-  - 第一個是 data function, 作為傳入第二個 effect function 的值, 只有在 data function 裡的 `observable` 和 `computed` 值會被追蹤. 
+- 類似 `autorun` 但是提供更細微的控制, 需傳入 2 個 function,
+  - 第一個是 data function, 作為傳入第二個 effect function 的值, 只有在 data function 裡的 `observable` 和 `computed` 值會被追蹤.
   - 第二是個 effect function, 執行 side-effect 的函式
 - 使用方式是藉由 data function 去控制 effect function 的觸發時機, 並且與 `autorun` 不同的是在初次宣告時不會觸發.
 - 參考使用[範例](https://mobx.js.org/reactions.html#reaction-example)
 
 `when`
 
-- 函式簽名1 `when(predicate: () => boolean, effect?: () => void, options?)`
-- 函式簽名2 `when(predicate: () => boolean, options?): Promise`
+- 函式簽名 1 `when(predicate: () => boolean, effect?: () => void, options?)`
+- 函式簽名 2 `when(predicate: () => boolean, options?): Promise`
 - 只有在 predicate function 回傳 `true` 時會觸發 effect function
 - 如果不傳入 effect function 時, `when()` 會回傳一個 Promise
 - 利用 `async/await` 與 `when` promise 達到特定時機的執行, 並且可以通過 `cancel()` 提前關閉
@@ -464,7 +462,7 @@ Stores
 Domain stores
 
 - 一個應用程式應該有一個或多個 domain stores, 每個 domain store 分別負責一個概念.
-- 經驗法則, 如果兩個 stores 具有包含關係的話應該被放在同一個 domain store 中. 
+- 經驗法則, 如果兩個 stores 具有包含關係的話應該被放在同一個 domain store 中.
 
 Domain objects
 
@@ -474,7 +472,7 @@ Domain objects
 
 UI stores
 
-- 通常包含所有與 UI 相關的設定值, 例如 session, i18n language, UI狀態
+- 通常包含所有與 UI 相關的設定值, 例如 session, i18n language, UI 狀態
 - 參考[範例](https://mobx.js.org/defining-data-stores.html#ui-stores)
 
 組合 stores
@@ -516,7 +514,7 @@ UI stores
 
 `getAtom()`
 
-- 函式簽名, `getAtom(thing, property?)` 
+- 函式簽名, `getAtom(thing, property?)`
 
 `spy()`
 
@@ -527,25 +525,55 @@ UI stores
 
 ### 第十四章 - Computeds with arguments {🚀}
 
+- Computed 通常作為單純的 getter 使用，但是如果需要傳入參數時有以下四種方式實現
+- 使用 functional component 作為範例，值得參考
+- Derivations don't need to be computed,
+- Close over the arguments, 把帶有 argument 的計算函式包在明確定義的 `computed()` 中
+  - 提供更精準的 re-rendering
+  - 推薦使用
+- Move to state, 把取值邏輯作為 computed 封裝到 state 中
+- Use computedFn {🚀}, 使用 `mobx-utils` 裡的 `computedFn` 來做 memorizing function
+  - 不推薦馬上採用，先思考是否真的需要 memorize
+
 ---
 
 ### 第十五章 - MobX-utils {🚀}
+
+- 另外的函式庫，包含使用 MobX pattern 時常見的工具, [library](https://github.com/mobxjs/mobx-utils)
 
 ---
 
 ### 第十六章 - Custom observables {🚀}
 
+- 使用 `import { createAtom } from "mobx"` 實現客製化的 observables,
+- 包含觸發更新的時機自行控制 `reportChanged()`
+- 分別處理 observable 有被觀察時與沒有被觀察時 `reportObserved()`
+- 文件中有參考範例
+
 ---
 
 ### 第十七章 - Lazy observables {🚀}
+
+- 通過 `onBecomeObserved()`, `onBecomeUnobserved()` 來監聽一個 state 開始被 observe 與中止的事件
+- 用來執行 lazy behavior 與執行 side-effect
+- 例如在被觀察時才開始 fetching 資料並且在不會被觀察時關閉
+- 參考文件範例
 
 ---
 
 ### 第十八章 - Collection utilities {🚀}
 
+- 在沒有 Proxy 支援的情況下，也可以透過使用 `mobx` 中的 collections API 來讓 mobx 取得追蹤
+- 提供統一界面的 API 可以使用在任意 collection 上
+  - `values()`, `keys()`, `entries()`
+  - `set()`, `remove()`, `has()`, `get()`
+
 ---
 
 ### 第十九章 - Intercept & Observe {🚀}
+
+- `intercept`, `observe` 作為低階工具，不應該被直接使用
+- 用來監控單一個 observable 的改變，但是監控不到 nested
 
 ---
 
@@ -555,12 +583,30 @@ Fine-tuning
 
 ### 第二十章 - Configuration {🚀}
 
+- 額外的設定，用來符合特定的 JavaScript 環境
+- Proxy Support, MobX 預設使用 proxy 來實現 array 與 object 的 observable
+  - 可以通過設定告知 MobX 不要使用 proxy 但是會有使用限制
+  - 要額外使用 Mobx collections utilities 來實現追蹤
+- Decorator support, 開啟實驗性的 decorator 語法
+- Linting options, 啟用 linting 設置，在開發時能更好的符合 Mobx pattern, 警告訊息可以適時的使用，不是嚴格的規定。
+  - `enforceActions`, 提醒在更改 state 時必須以 action 的形式執行
+  - `computedRequiresReaction`, 提醒在操作 computed 時必須要在 mobx 能知道的情況下，才能提供 cache 機制
+  - `observableRequiresReaction`, 提醒在非 observable 環境使用 observable state, 例如在 React function component 中需要包裹在 `observer` 裡
+  - `reactionRequiresObservable`, 找出不必要的 reaction
+  - `disableErrorBoundaries`, 與 Mobx 處理發生在 reaction 中的 error 行為有關
+- Further configuration options, 其他設定
+  - `isolateGlobalState`, 在同一頁中有其他函式庫也使用 Mobx 時，會有不必要的共享。可以開啟這個設定來獨立正確的 MobX state
+
 ---
 
 ### 第二十一章 - Enabling decorators {🚀}
 
+- 使用實驗性的 decorator 語法來操作 Mobx
+
 ---
 
 ### 第二十二章 - Migrating from MobX 4/5 {🚀}
+
+- MobX 版本升級策略
 
 ---
