@@ -266,7 +266,7 @@ Lerna
 - `yarn set version from sources`, 從 yarn repository 安裝 yarn, 可以使用 flag 控制, 安裝指定的來源, 分支, 與 plugins
 - `yarn set version [version]`, 設定當前 project 的 yarn 版本, 可以使用 `latest`, `classic` 指定版本
 - `yarn stage`, 需額外安裝 `stage` plugin 使用, 把 yarn 相關的檔案加到版本控制的 stage 中, 可以配合 flag `--commit`, `--reset`
-- `yarn unplug [package]`, 在安裝時指定的 package 會被解壓縮並且放置在指定的資料夾中, 而不是以 archive 的方式 cache, 可以配合 glob 語法
+- `yarn unplug [package]`, 在安裝時指定的 package 會被解壓縮並且放置在指定的資料夾中, 而不是以 archive 的方式 cache, 可以配合 glob 語法, [使用案例 1. 與環境相關的 script 無法以 zip 方式存取時](https://github.com/storybookjs/storybook/issues/13531)
 - `yarn up`, 更新 (upgrade) 指定的 dependencies, 可以使用 glob 語法
 - `yarn upgrade-interactive`, 需額外安裝 `interactive-tools` plugin 使用, 開啟互動式升級界面
 - `yarn version apply`, 需額外安裝 `version` plugin 使用, 一次更新所有過期的版本號
