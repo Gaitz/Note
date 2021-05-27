@@ -172,13 +172,23 @@ Features
 
 ### 第十章 - Attaching additional props
 
+- 傳遞 element attributes 到 DOM 層
+- 使用 `.attrs()`
+- [範例](https://styled-components.com/docs/basics#attaching-additional-props), 跨層傳遞 input `type`
+
 ---
 
 ### 第十一章 - Animations
 
+- 建立 `@keyframes` 相關 CSS 並且避免 name collisions
+- 使用 `keyframes` function 建立
+- 在 version 3 以上時, `keyframes` function 建立的內容會被 code-split, 因此使用上需要額外被 `css` helper function 包裹, 才能正確執行.
+
 ---
 
 ### 第十二章 - React Native
+
+- 也支援 React Native 上使用
 
 ---
 
@@ -188,33 +198,93 @@ Advanced
 
 ### 第十三章 - Theming
 
+- 支援建立 theme 與 `<ThemeProvider>` 使用 context 來傳遞
+- 傳遞 theme 物件提供被 `<ThemeProvider>` 包裹的 styled component 以 `props.theme` 取用
+- 參考[範例](https://styled-components.com/docs/advanced#theming)
+
+Function theme
+
+- `theme` 改以 function 方式存在，以此可以取得上層 `ThemeProvider` 的值, 並且產生新的 inner theme 在近層使用。
+- 提供更 contextual 的 theming
+- 參考[範例](https://styled-components.com/docs/advanced#function-themes)
+
+Getting the theme without styled components
+
+- 在 JavaScript 中取用 theme context 的值
+
+1. 使用 `import { withTheme } from 'styled-components'` HoC 方式
+2. 使用 `React.useContext` 配合 `import { ThemeContext } from 'styled-components'`的 hook 方式
+
+The `theme` prop
+
+- 直接傳遞 `theme` prop 給 styled-component 可以 override 或者不使用 ThemeProvider 來提供 theme
+
 ---
 
 ### 第十四章 - Refs
+
+- styled-component v4 以上支援使用 `ref` props 與 `React.createRef()`
+- 參考[範例](https://styled-components.com/docs/advanced#refs)
 
 ---
 
 ### 第十五章 - Security
 
+- styled-component 允許任意 JavaScript 變數植入 CSS 中
+- 如果樣式的變數值, 是來自使用者或其他不可信任的來源時, 會產生 CSS injection 的攻擊機會
+- 必須額外使用 CSS.escape, ... 工具來跳脫攻擊語法, 參考[文件](https://styled-components.com/docs/advanced#security)
+
 ---
 
 ### 第十六章 - Existing CSS
+
+使用 styled-component 配合其他 CSS 檔案時的注意事項
+
+- styled-component 使用 class name 並且通過 `className` JSX attribute 傳入, 並且生成樣式檔在 `<head>` 的最後
+
+Styling normal React components
+
+- styled 作用在一般的 React component 時記得傳遞 `className` 才能正確的帶上樣式的 class
+- 注意樣式的優先性問題, 因為 styled component 生成的樣式檔放置在 `<head>` 的最後, 因此在同級的情況下, 通常會勝出採用, 否則需要提昇 selector 層級優先度
+
+同頁上的第三方 style 碰撞問題
+
+- 可以配合 `babel-plugin-styled-components-css-namespace` 以提供 `id` container 的方式來提昇 styled-component 的 selector 層級
+- 遇到同頁上使用兩組以上的 styled-component 碰撞問題可以利用 `process.env.SC_ATTR` 來區隔, 參考[文件](https://styled-components.com/docs/advanced#avoiding-conflicts-with-thirdparty-styles-and-scripts)
 
 ---
 
 ### 第十七章 - Tagged Template Literals
 
+- 在 ES6 上的新語法, 提供執行函式的新方式
+- 並且在 styled-component 的使用上會跳脫 falsy 的 parameter value, 例如 `undefined`, `null`, `false`, `''`
+- 深入閱讀 [The magic behind 💅 styled-components](https://mxstbr.blog/2016/11/styled-components-magic-explained/)
+- [Template literals, mdn](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates)
+
 ---
 
 ### 第十八章 - Server Side Rendering
+
+- 支援 SSR, 需要額外做設定來帶入 `ServerStyleSheet`
+- 配合專用的 babel plugin, 來避免 className hash unstable 的問題, 參考[文件](https://styled-components.com/docs/advanced#tooling-setup)
+- 設定 `import { ServerStyleSheet, StyleSheetManager } from 'styled-components'` 參考[文件](https://styled-components.com/docs/advanced#example)
+- [文件](https://styled-components.com/docs/advanced#nextjs)提供 Next.js, Gatsby, Streaming Rendering 的設定方式
 
 ---
 
 ### 第十九章 - Referring to other components
 
+- web-specific, react-native 無法使用
+- `styled()` factory function 會提供 stable 的 class name, 因此可以在 styled-component styling 上直接引用其他的 styled-component 作為 selector reference.
+- 參考[範例](https://styled-components.com/docs/advanced#referring-to-other-components)
+- 限制, 這個行為只能作用在都是 styled-component 上, 無法直接參考其他 React component, 但是可以通過 styled(OtherReactComponent)`` 快速把一般的 React component 變成 styled component
+
 ---
 
 ### 第二十章 - Style Objects
+
+- Styled component 允許樣式除了使用 string 的方式表達之外, 也支援傳入 style object 的方式來實現
+- 非常適合在移植已經有 style object 的情況下使用
 
 ---
 
