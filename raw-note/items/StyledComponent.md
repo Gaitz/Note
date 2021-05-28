@@ -294,29 +294,104 @@ API Reference
 
 ### 第二十一章 - Primary
 
+`styled`, 低階的 factory function 有兩種格式
+
+- `styled.{tagName}`, 建立一般的 DOM element styled component
+- `styled(ComponentName)`, 建立其他 React Component styled component
+
+Tagged Template Literal
+
+- 傳遞 CSS Rule 或是其他相依的字串變數與函式 (Ex. theme)
+
+Styled Component
+
+- 經過 `styled` factory function 轉換形成的 styled component
+- 可以傳遞任何合法的 attributes 與 className 到實際的 React component 或 DOM component 上
+- 使用 `.attrs()` 來傳遞定義樣式所使用的參數 (不適合合法的 DOM attributes)
+- 使用 `as` attribute 來改變實際渲染的 DOM element 類型
+- 使用 `$` 作為 attribute prefix, 形成只在 styled component 樣式使用的參數, 類似 `.attrs()` 的作用
+- `shouldForwardProp` 適用於多層的 HoC 使用相同的參數名稱時的解決方案
+
+`ThemeProvider`
+
+- React context 的 helper function 用來傳遞 theme object
+
+`css` Prop
+
+- 必須配合 Babel plugin 使用
+- 避免使用 `styled` 轉換成 styled component 的語法糖
+- 配合 TypeScript 需要加上 `import {} from 'styled-components/cssprop'` 與安裝 `@types/styled-components`
+
 ---
 
 ### 第二十二章 - Helpers
+
+`createGlobalStyle` helper function
+
+- Web 專用
+- 一次性建立 global style 形成對應的 Styled component 使用上類似 CSS resets, base stylesheet
+
+`css` helper function
+
+- 用來分離複雜的 style 邏輯到獨立的函式定義上
+
+`keyframes` helper function
+
+- Web 專用
+- 實現 CSS animations 時使用, 可配合 `css` helper function 更進一步分離定義
+
+`StyleSheetManager` helper function
+
+- 客製化定義 processor 行為
+- 例如配合 SSR 使用的 `sheet`, 或是關閉 vendor prefix 等等
+
+`isStyledComponent` helper function
+
+- 判斷一個 component 是否是 styled component
+
+`ThemeConsumer` helper function
+
+- 如果要在與樣式無關的 JavaScript 中取得 theme object 時使用
 
 ---
 
 ### 第二十三章 - Test Utilities
 
+`find`, `findAll`
+
+- 在 DOM 上搜尋指定的 styled component
+
+`enzymeFind`
+
+- 配合 `enzyme`, `mount` 使用時的 `find` function
+
 ---
 
 ### 第二十四章 - Supported CSS
+
+- 配合 `&` 實現複雜的 CSS selectors
 
 ---
 
 ### 第二十五章 - Flow
 
+- 可以支援 Flow typing
+
 ---
 
 ### 第二十六章 - TypeScript
 
+- 可以支援 TypeScript typing
+- `@types/styled-components`
+- 配合 theming 的 TypeScript 定義, 參考文件[範例](https://styled-components.com/docs/api#create-a-declarations-file)
+- 實現 styling 使用的 attributes 時的定義方式, 參考[文件](https://styled-components.com/docs/api#using-custom-props)
+
 ---
 
 ### 第二十七章 - Previous APIs
+
+- 棄用的 APIs
+- `.extend`, `injectGlobal`, `innerRef`
 
 ---
 
@@ -326,28 +401,54 @@ Tooling
 
 ### 第二十八章 - Babel Plugin
 
+- 協助 SSR, 最小化樣式檔, debug
+- 安裝 `babel-plugin-styled-components`
+- SSR,
+- Debugging, `displayName`, `fileName`
+- Minification, 可以關閉 `minify`, `transpileTemplateLiterals`
+- Dead Code Elimination, 開啟 `pure` 來移除
+- 更聰明的 template literals 語法轉譯到不支援的 browsers
+- Namespace, 配合 `namespace` 為 class name 提供 namespace 減少 name collision 的發生 (通常在 **mircofrontend** 的情境下)
+
 ---
 
 ### 第二十九章 - Babel Marco
+
+- ?
 
 ---
 
 ### 第三十章 - TypeScript Plugin
 
+- `typescript-plugin-styled-components` 提供 webpack 環境下的 TypeScript plugin
+
 ---
 
 ### 第三十一章 - Jest Integration
+
+- 安裝 `jest-styled-components` 來協助 Jest testing
+- Snapshot Testing 時要載入否則會遇到 unstable class name
+- `toHaveStyleRule` helper function
 
 ---
 
 ### 第三十二章 - Stylelint
 
+- 安裝 `stylelint` 來協助 styled component linting
+- linting 細節請參考[文件](https://styled-components.com/docs/tooling#stylelint)
+
 ---
 
 ### 第三十三章 - Styled Theming
 
+- 安裝 styled component 專用的 `styled-theming` 協助建立 theme
+- 更結構化的方式建立 theme object
+- 範例參考[文件](https://styled-components.com/docs/tooling#styled-theming)
+
 ---
 
 ### 第三十四章 - Syntax Highlighting
+
+- 在各家 editor 上啟動 styled component 的 CSS 高亮
 
 ---
