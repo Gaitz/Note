@@ -38,6 +38,21 @@
 - Example: `red, white, and blue`
 - Example: `He opened the letter, read it, and made a note of its contents.`
 
+3. 句子中補充說明要放在逗號之間
+
+- Example: `Marjorie's husband, Colonel Nelson, paid us a visit yesterday`
+- Example: `The best way to see a country, unless you are pressed for time, is to travel on foot.`
+- 如果有連接詞, 要放在連接詞之前
+- 在配合 `which`, `when`, `where` 的子句時也一樣, 如果是補充說明而非決定時要放置在逗號之間
+- 可以以是否能直接拆成兩句, 來做補充說明的判斷
+
+4. 連接對等子句時, 連接詞前面需加逗號
+
+- 善用 `as`, `although`, `since` 等, 取代 `and`, `but` 更有效的描述句子之間的關係
+- 使用 `and`, `but` 連接詞的句子較為輕鬆, 不正式, 避免使用 `so` 不正式, 應以 `since`, `as` 取代
+- 片語形式 (phrases) 又更加正式
+- 如果句子前後主詞相同, 但是只寫一次, 後面的被省略時, `but` 需要加逗號, `and` 則不需要
+
 ---
 
 ### 第二章 - 英文寫作的基本原則
