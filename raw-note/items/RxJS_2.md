@@ -144,6 +144,81 @@ Transforming Observables, 轉換類
 
 Filtering Observables, 過濾類
 
+- `Debounce`, 在一定時間內只發送出一個
+- `Distinct`, 去除重複, 不發送重複的內容
+- `ElementAt`, 只發送指定序號的
+- `Filter`, 只發送通過檢查的
+- `First`, 只發送第一個, 或者第一個通過檢查的
+- `IgnoreElements`, 不發送任何內容, 但是會收到終結通知 (onComplete, onError)
+- `Last`, 只發送最後一個
+- `Sample`, 定期抽樣
+- `Skip`, 忽略從頭開始的指定數量
+- `SkipLast`, 忽略指定數量的結尾
+- `Take`, 只取從頭開始的指定數量
+- `TakeLast`, 只取結尾的指定數量
+
+Combining Observables, 組合類
+
+- `And` / `Then` / `When` , 組合多組 observable 成一個
+- `CombineLatest`, 依據指定函數連結最新的內容
+- `Join`, 指定區間內組合
+- `Merge`, 合併內容
+- `StartWith`, 略過開頭指定數量後開始
+- `Switch`, 交替發送, 如果同個時間區間則會以目前交替到的對象為優先
+- `Zip`, 組合序列對應的內容成一個
+
+Error Handling Operators, 錯誤處理類
+
+- `Catch`, 捕捉 `onError` 並且不終結 observables streaming
+- `Retry`, 接收到 `onError` 後重新註冊 (subscribe) observables 重試所有內容
+
+Utility Operators, 工具類
+
+- `Delay`, 延遲指定時間後發送
+- `Do`, 執行指定轉換內容
+- `Materialize` / `Dematerialize`, 轉換成 onNext, 或 onComplete, onError 形式
+- `ObserveOn`, **?**, 指定 schedular 去表達 observables
+- `Serialize`, 強制整合 observables 形成一個序列
+- `Subscribe`, 訂閱 observable, 啟動
+- `SubscribeOn`, 指定 schedular 來執行 `Subscribe`
+- `TimeInterval`, 轉換 observables 內容成發生的時間區間
+- `Timeout`, 如果當內容超越時間區間後, 則發送終結訊號
+- `Timestamp`, 發送內容附加 timestamp 資訊
+- `Using`, **?**,依據 resources 創建 observables
+
+Conditional and Boolean Operators, 條件判斷類
+
+- `All`, 類似 every, 判斷所有的內容並且回傳 boolean
+- `Amb`, 多條 observables 競爭, 只取最優先觸發的
+- `Contains`, 判斷是否擁有符合的內容, 回傳 boolean
+- `DefaultIfEmpty`, 如果內容是空的則發送預設值
+- `SequenceEqual`, 比較兩條 observables 發送是否順序一致, 回傳 boolean
+- `SkipUntil`, 忽略 observables 內容直到第二條 observables 發送後才開始
+- `SkipWhile`, 忽略內容直到判斷式為 false 後才開始
+- `TakeUntil`, 取值直到第二條 observables 開始後就停止
+- `TakeWhile`, 取值直到判斷式為 false 後中止
+
+Mathematical and Aggregate Operators, 數學與聚合類
+
+- `Average`, 計算並且發送平均數
+- `Concat`, 接續連接兩條 observables
+- `Count`, 計算符合條件的數量
+- `Max`, 發送最大值
+- `Min`, 發送最小值
+- `Reduce`, 依序計算並且記憶, 回傳最終值
+- `Sum`, 計算並且發送總和
+
+Connectable Observable Operators, 連結類, 通常與 hot observable 有關
+
+- `Connect`, 連接現有的 observables 並不從頭觸發, 而是等待新的內容
+- `Publish`, 把現有的 observable stream 轉換成 connectable
+- `RefCount`, 轉換 connectable observable 成原本的靜態模式
+- `Replay`, 配合 connectable 使用, 可以保證重複發送先前於 publish 的內容
+
+Operators to Convert Observables, 轉換類
+
+- `To`, 轉換 observable 成單一的資料結構
+
 ---
 
 ### 第三章 - Single
