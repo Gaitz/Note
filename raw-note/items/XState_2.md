@@ -247,29 +247,235 @@ SCXML events
 
 ### 第十章 - Transitions
 
+- Transition 傳入 current state 與 event 回傳下一個新的 state
+- 被定義在 `states`, `on` property 裡
+- 定義方式有三種
+  - string
+  - object
+  - array, with guard function
+
+Machine `.transition` Method
+
+- pure function
+- Input: `state`, `event`
+- Output: `state`
+
+Selecting Enabled Transitions
+
+- 依據 `guard` function 與 current state 定義深度決定, 在不同階層可以有同名的 event, 但是相對深度越深的優先度越高
+
+Event Descriptors
+
+- 對應通常使用 `event.type`
+- 特殊的 event descriptors
+  - `""`, null, 已棄用, 被 `always` 語法取代
+  - `*`, 可以作為 default match
+
+Self Transitions
+
+- 自循環，分成兩種
+- 內部的 internal transition, 進入其他 child
+- 外部的 external transition, 離開再進入 self
+
+Internal Transitions
+
+- 定義方式 event type 沒有 `target` 或 `.` relate path, 可以明確標明 `internal: true`
+
+External Transitions
+
+- 預設行為,
+- 會觸發 `exit`, `entry` actions
+
+Eventless ("Always") Transitions
+
+- `always: []`, 每次進入 event 都會執行 `always` 裡的 guard function
+
+Forbidden Transitions
+
+- 不執行任何行為的特殊 event
+- 定義方式為 `target` 為 `undefined`
+- 使用情境通常為了不執行 parent 的同名 event
+
+Multiple Targets
+
+- 作為 FSM 一般情況下只有一個狀態
+- XState 依循 statechart 可以有 `parallel` type 時可以使用 `target: { [] }` 來多重觸發 parallel machine 裡的 event
+
+SCXML
+
+- 等價於 SCXML `<transition>` element
+
 ---
 
 ### 第十一章 - Hierarchical State Nodes
+
+- XState 允許 無限層數的 substates
+- 提供更細緻的 state, 提高重用性, 聚合, 獨立, 避免單一 states 巨大增長
+- states 只是單純的 JavaScript object
 
 ---
 
 ### 第十二章 - Parallel State Nodes
 
+- Parallel states 代表完全獨立的 states, 可以同時間運作, 並且之間沒有任何的 transition 互相影響
+- 藉由 `type: 'parallel'` 標明, states 之間是互相 parallel 的, substates 也可以為個別的 parallel
+
 ---
 
 ### 第十三章 - Effects
+
+- side-effects 生存的地方
+
+Fire-and-forget effects, 執行同步的 side-effect
+
+- `Actions`
+- `Activities`
+
+Invoked effects, 非同步執行的 side-effect
+
+- `Invoked Promises`,
+- `Invoked Callbacks`,
+- `Invoked Observables`,
+- `Invoked Machines`,
 
 ---
 
 ### 第十四章 - Actions
 
+- 用來處理外部的 side-effect
+- 包含三種時機, `entry`, `exit`, transition taken
+- 定義方式 `entry: []`, `exit: []`, `actions: []`
+- action function implementation 定義在, `createMachine()`, 的 options 參數裡, `actions: {}`
+
+Declarative Actions
+
+- `type`, action type 對應的名稱, `exec`, 實作的函式
+- `exec` function 會傳入的參數,
+  - `context`, currentState.context
+  - `event`,
+  - `actionMeta`,
+    - `action`,
+    - `state`,
+
+Action order
+
+- action 最好不要相依於執行順序
+
+Send Action
+
+- `send(event)`, 特殊的 action 用來發送 event 給自身, `send(event)` 只是一個 pure 的 action creator
+
+Send Targets
+
+- 發送 event 的目標可以從 `target` 與 `to` 來指定
+
+Raise Action
+
+- `raise()`
+
+Respond Action
+
+- `respond()`
+
+Forward To Action
+
+- `forwardTo()`
+
+Escalate Action
+
+- `escalate()`, 發送 error 到父層
+
+Log Action
+
+- `log()`, logger
+
+Choose Action
+
+- `choose()`,
+
+Pure Action
+
+- `pure()`, 動態生成的 action, 例如動態產生 `to` 位置
+
+Actions on self-transitions
+
+- 在自身 state 運作的 transition 分成兩種
+- `internal`, 不會離開自身, 因此 `entry`, `exit` 不會觸發, 但是 `actions` 會執行
+- `external`, 會離開自身再回來, 因此 `entry`, `exit`, `actions` 皆會觸發
+
+SCXML
+
+- 對應到 `<onentry>`, `<script>`, `<onexit>`, `<transition>`
+
 ---
 
 ### 第十五章 - Guarded Transitions
 
+- 通過 guarded function 判斷後才決定執行的 transitions
+
+Guards (Condition Functions)
+
+- `cond:`, 會傳入 `context`, `event`, `condMeta` 回傳 boolean
+
+Custom Guards
+
+- 可以客製化傳入的 `cond` metadata
+
+Multiple Guards
+
+- Guards 可以提供多個對應, 並且第一個為 `true` 的 transition 則被採用
+- 盡可能先以多個 event type 為優先, 之後才是使用 Guards
+
+"In State" Guards
+
+- `in`,
+- 作為一個可以被 refactor 的訊息, 應該盡少採用 `in`
+
+SCXML
+
+- 對應到 `<transition cond>`
+
 ---
 
 ### 第十六章 - Context
+
+Context
+
+- 實際的資料是有無限組合的, 因此被是為獨立於 FSM 之外的 context
+- 只有在配合 context 時才能更適合的把 FSM 運用在真實的 Application 上
+- `action` 裡呼叫 `assign` 來實作添加 context 內容
+
+Initial Context
+
+- 定義於 `createMachine` 第一參數裡的 `context`
+- Dynamic initial context, 可以把動態參數帶給 `createMachine` 在傳入 `context` 中, 這樣在初始化 machine 時可以一同傳入 dynamic context
+
+Assign Action
+
+- `action` 裡使用 `assign()` 來更新 context 內容, 傳入一個 object 或 function
+- 推薦優先使用 object 形式
+
+Action Order
+
+- `assign()` action 會被 batch 且優先執行的
+
+Notes
+
+- 不要在外部以 mutate 的方式修改 context, 應該明確的依據 event 來修改, 才有可預測性
+- 優先使用物件模式定義, 可以提供更多的 debug analysis
+- `Assign` 是有順序性的
+- 最好以 `action` 配合命名函式的方式, 定義 `assign` function
+- 理想狀態下 context 是可被序列化成 JSON 的
+- assign function 會被 batch 且優先於其他的 actions 之前執行, 要小心順序問題
+
+TypeScript
+
+- 定義 context type, 並且傳入 `createMachine<>`
+- assign function 可以帶有 context type 與 event type, `assign<Context, Event>(...)`
+
+Quick Reference
+
+- 實用的 code example
 
 ---
 
