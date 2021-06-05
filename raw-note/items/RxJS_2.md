@@ -282,6 +282,13 @@ ReplaySubject
 - Rx 預設是 single thread 的非同步模式 (asynchronous)
 - 利用 Rx 的 Scheduler 協助做到 concurrency and multithreading
 - 有些 operator 提供可以指定 Schedular 參數
+- Schedular 以抽象層表示, 內容包含三個部份
+  - execution context, (threads)
+  - execution policy, (queue, async, ...)
+  - clock, (timer)
+- 提供對於 observer 的控制, 也提供實現 virtual timer 介入的機會, 方便測試 time-based scenario
+- `SubscribeOn`
+- `ObserveOn`
 
 ---
 
@@ -291,25 +298,141 @@ RxJS
 
 ### 第六章 - Observable
 
+Pull, Push
+
+- 資料的生產者與接收者
+- Pull System, 資料的生產者, 不在意資料被接收的時機, (資料生產者為被動傳遞)
+  - 例如 function, generator (iterator)
+- Push System, 資料的生產者, 主動傳遞資訊, (接收者為被動接收)
+  - 例如 Promise, (callback function), Observable
+
+function and Observable
+
+- 都是 lazy 執行的, 不被呼叫 (call) 或註冊 (subscribe) 之前不會執行
+- 預設的情況下 Observable 是同步執行的
+
+Anatomy of an Observable
+
+- 分成建立 (create), 訂閱 (subscribe), 執行 (execute), 處置 (disposed)
+- Creating
+  - 使用 `new Observable()`
+  - 使用創建類的 operator 例如 `from()`, `of()`, ...
+- Subscribing
+  - 使用 `.subscribe` 來觸發 observable 的執行
+- Executing
+  - 觸發 `next`, `error`, `complete`
+- Disposing
+  - Observer 的 executing 可以是無限的
+  - 通過 subscribing 的回傳函式, 來終止 (`unsubscribe`)
+
 ---
 
 ### 第七章 - Observer
+
+- 接收 Observable 資料的人, 只是一組 callback function 的集合
+- 包含 `next`, `error`, `complete` 命名的 callback functions
+- Observer 可以是只有部分的 (partial), 並不一定要提供完整的三個 callback function
+- 甚至可以傳入單一函式, Observable 會自動封裝成 `next` callback function
 
 ---
 
 ### 第八章 - Operators
 
+- RxJS 最主要的功能實現
+- Operator 只是單純的 pure function
+- 可以使用 functional 的 `pipe()` 達成 operator chaining, 取代手動的函式呼叫
+- Marble diagrams, 彈珠圖, 用圖示的方式解釋各種 operator 的作用
+
+Categories of Operators, 分類
+
+- Creation Operators 建造類
+- Join Creation Operators 組合建造類
+- Transformation Operators 轉換類
+- Filtering Operators 過濾類
+- Join Operators 組合類
+- Multicasting Operators 多重發佈類 (hot)
+- Error Handling Operators 錯誤處理類
+- Utility Operators 工具類
+- Conditional and Boolean Operators, 條件判別類
+- Mathematical and Aggregate Operators, 數學類
+
+Custom Operators, 建立客製化的 operator
+
+- 使用 `pipe()` 建立 custom operator
+- 使用定義建立 custom operator 較為繁瑣, 只有在無法使用 `pipe()` 配合現有的 operators 組合時才有機會使用
+
 ---
 
 ### 第九章 - Subscription
+
+- 由 creator 回傳的物件, 內容包含了 `unsubscribe()` 的中止函式
+- `add()` function, 可以組合多個 subscription object 組合成單個 `unsubscribe()` 中止函式, 即呼叫一次中止所有的
+- `remove()` function, 為 `add()` 的反向作用
 
 ---
 
 ### 第十章 - Subjects
 
+- 同時包含 Observable 與 Observer 的特性, 等同於 event emitter,
+- 可以使用 subject `subscribe()` 來註冊 callback function
+- 使用 subject `next()` 來發送訊息
+
+Multicasting
+
+- 可以用來轉發單一 observable 成 multicasting
+- 其他 Observer `subscribe()` subject
+- 藉由 subject `subscribe()` source observable 來觸發, 轉發給之前註冊的 observers
+- 使用 `multicast` operator 來實現與簡化 multicasting 流程
+  - 回傳 ConnectableObservable 實現 hot 與 multicasting
+
+BehaviorSubject
+
+- 對於 behaviorSubject 新註冊的 observer 都可以立即接收到先前最新的資訊
+
+ReplaySubject
+
+- 類似於 BehaviorSubject 但是可以接收先前指定數量 buffer 裡的所有訊息
+
+AsyncSubject
+
+- 類似於 `last` operator, 只會在 `complete` 時, 發送最後一個資訊
+
+Void subject
+
+- 不在意內容, 只在意有 event 被發送的話, 可以使用 void subject, 使用下面兩種方式建立
+- `new Subject<void>()`
+- `new Subject()`
+
 ---
 
 ### 第十一章 - Scheduler
+
+- Scheduler 用來控制 subscription 何時開始與 資訊何時發送
+- 包含三個部分
+  - Data structure, 用來控制 task 儲存的資料結構
+  - Execution context, 用來控制 task 何時, 在哪裡執行
+  - Clock, 定義計時時鐘 timer
+- observable 定義時以 `observeOn()` 來指定 scheduler
+
+Scheduler types, 可指定的類型
+
+- `null`, default 設定, 以同步且遞迴的方式執行通知
+- `queueScheduler`, 同步執行, 所有的 observable 放置在 queue 中
+- `asapScheduler`, 非同步執行, 以 `microtask` 實現
+- `asyncScheduler`, 非同步執行, 以 `macrotask` 實現
+- `animationFrameScheduler`, 非同步執行, 以 `requestAnimationFrame` 實現 (macrotask)
+
+Using Schedulers
+
+- 很多 operator 都提供指定 scheduler 的參數, 並且擁有不同的 default Scheduler
+- 大多數的 creation operators 都提供 scheduler 指定的機會
+- 使用 `subscribeOn()` 提供在 Observer subscribe 時指定 scheduler 的機會
+- 使用 `observeOn()` 提供在建立 Observable 時指定 scheduler 的機會
+- 其他時間相關的 operators 也提供指定 scheduler 的機會
+
+References, 額外的參考資料
+
+- [認識 RxJS 的 Scheduler](https://ithelp.ithome.com.tw/articles/10253801)
 
 ---
 
