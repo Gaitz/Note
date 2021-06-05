@@ -282,6 +282,13 @@ ReplaySubject
 - Rx 預設是 single thread 的非同步模式 (asynchronous)
 - 利用 Rx 的 Scheduler 協助做到 concurrency and multithreading
 - 有些 operator 提供可以指定 Schedular 參數
+- Schedular 以抽象層表示, 內容包含三個部份
+  - execution context, (threads)
+  - execution policy, (queue, async, ...)
+  - clock, (timer)
+- 提供對於 observer 的控制, 也提供實現 virtual timer 介入的機會, 方便測試 time-based scenario
+- `SubscribeOn`
+- `ObserveOn`
 
 ---
 
