@@ -223,13 +223,65 @@ Operators to Convert Observables, 轉換類
 
 ### 第三章 - Single
 
+- RxJava 家族專屬
+- 類似 Observable, 但是 callback function 不同, 變成 `onSuccess`, `onError` 兩種狀態
+- 概念類似於 JavaScript Promise
+
+Single 也有 Operators
+
+- `compose`,
+- `concat`, `concatWith`
+- `create`,
+- `delay`,
+- `doOnError`,
+- `doOnSuccess`,
+- `error`,
+- `flatMap`,
+- `flatMapObservable`,
+- `from`,
+- `just`,
+- `map`,
+- `merge`,
+- `merge`, `mergeWith`,
+- `observerOn`,
+- `onErrorReturn`,
+- `subscribeOn`,
+- `timeout`,
+- `toSingle`,
+- `toObservable`,
+- `zip`, `zipWith`,
+
 ---
 
 ### 第四章 - Subject
 
+- 一個中間層, Proxy, Bridge, 同時具有 observer 與 observable 性質
+- Subject 具有四種類型, 不一定每個實作都有, 名稱也有可能不同
+
+AsyncSubject
+
+- Subject 註冊一個 Observable 後, 在該 Observable 完結 (onComplete) 後, 會發送最後一個訊息 (final value)
+- 如果註冊的 Observable 以 error 結束時, Subject 則不發送任何內容
+
+BehaviorSubject
+
+- Observer 註冊 BehaviorSubject 會接收到最近的資訊, 並且 BehaviorSubject 所註冊的原始 Observer 資訊也會一同傳遞，並且在原始 Observer onError 結束時也會傳遞, onError 出去
+
+PublishSubject
+
+- 從建立開始就會發送資訊, 不管目前有沒有 observer 註冊, 並且使用 hot observable 提供後續的 observer 資訊
+
+ReplaySubject
+
+- 提供 cold observer 的功能
+
 ---
 
 ### 第五章 - Scheduler
+
+- Rx 預設是 single thread 的非同步模式 (asynchronous)
+- 利用 Rx 的 Scheduler 協助做到 concurrency and multithreading
+- 有些 operator 提供可以指定 Schedular 參數
 
 ---
 
