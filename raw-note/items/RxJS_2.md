@@ -42,9 +42,9 @@ Learn RxJS
 
 第十六章 - Operators, Error Handling
 
-第十七章 - Operators, Filtering
+第十七章 - Operators, Multicasting
 
-第十八章 - Operators, Multicasting
+第十八章 - Operators, Filtering
 
 第十九章 - Operators, Transformation
 
@@ -436,32 +436,188 @@ References, 額外的參考資料
 
 ---
 
-Learn RxJS
+Learn RxJS, v6
 
 ---
 
 ### 第十二章 - Subjects
 
+- multicasting 單一來源把資訊 (subject) 一次性發給多個使用者
+- 可以分成幾類 Subject, AsyncSubject, BehaviorSubject, ReplaySubject
+- Subject, 一般的, 一次性發送給所有訂閱者, 沒有初始值, 不重發
+- AsyncSubject, 只有在 `complete` 後才發送最後一組資料給訂閱者, (只發一個)
+- BehaviorSubject, 帶有初始值的 subject, 新進訂閱者也會取得當前最新的資訊 (replay 1)
+- ReplaySubject, 會 cache 指定次數, 並且新進訂閱者會取得 cache 的內容 (replay)
+
 ---
 
 ### 第十三章 - Operators, Combination
+
+- 組合類, 可以組合多個 observers 的資訊成一個
+- combineAll, **?**
+  - `combineAll(project: function): Observable`
+- combineLatest ⭐, 轉換多個 observables 成為一個, 並且取得所有的最新資訊一次印出
+  - `combineLatest(observables: ...Observable, project: function): Observable`
+- concat ⭐, 依序執行, 只有在前一個 observable `complete` 後第二個才會開始執行
+  - `concat(observables: ...*): Observable`
+- concatAl, 類似於 `concat`, 但是不用傳入 observables
+  - `concatAll(): Observable`
+  - 來源是 promise 時, 會自動轉換成 value
+- endWith, 在 observable `complete` 時, 會發送一次指定的值
+  - `endWith(an: Values): Observable`
+- forkJoin, 類似於 `Promise.all` 的概念, 等所有的 observers 都 `complete` 後, 蒐集所有的最後一筆資料傳出 (只會傳出一個)
+  - `forkJoin(...args, selector : function): Observable`
+- merge ⭐, 整合多個 observables 成為一個, 所有的 observables 一起執行但是訊息發到 merge
+  - `merge(input: Observable): Observable`
+- mergeAll, **?**
+  - `mergeAll(concurrent: number): Observable`
+- pairwise, 發送前一個與當前的資訊組成的 array
+  - `pairwise(): Observable<Array>`
+- race, 使用最先發送的 observable, (有第一筆資料後採用該 observable)
+  - `race(): Observable`
+- startWith ⭐, 先發送指定的 values, 提供初始值
+  - `startWith(an: Values): Observable`
+- withLatestFrom ⭐, 也取得指定的 observable 裡最新的資料
+  - `withLatestFrom(other: Observable, project: Function): Observable`
+- zip, 收集所有的 observables 都有發送值後形成 array 回傳
+  - `zip(observables: *): Observable`
+  - 其中一個 observable 如果中止後, 則停止
 
 ---
 
 ### 第十四章 - Operators, Conditional
 
+- 依據特定的條件達成的 operator
+- defaultIfEmpty, 如果在 `complete`前沒有任何資訊發送, 則發出指定的預設值
+  - `defaultIfEmpty(defaultValue: any): Observable`
+- every, 檢查在 complete 前所以的資訊是否有通過 predicate function, 回傳 boolean
+  - `every(predicate: function, thisArg: any): Observable`
+- iif, 依據 condition function 來決定 subscribe 的對象
+  - `iif(condition: () => boolean, trueResult: SubscribableOrPromise = EMPTY, falseResult: SubscribableOrPromise = EMPTY): Observable`
+- sequenceEqual, 比對 array 裡的值, 回傳 boolean
+  - `sequenceEqual(compareTo: Observable, comparor?: (a, b) => boolean): Observable`
+
 ---
 
 ### 第十五章 - Operators, Creation
+
+- 建立 observable
+- ajax ⭐, 發送 http request 並且把 response 轉換成 observable
+  - `ajax(urlOrRequest: string | AjaxRequest)`
+- create, 以 subscription 定義函式 (`next`, `complete`, `error`), 產生 observable
+  - `create(subscribe: function)`
+- defer, 直到 subscribe 觸發時, 才執行 observableFactory function 產生 observable
+  - `defer(observableFactory: function(): SubscribableOrPromise): Observable`
+  - 適合時間性的, 例如 `new Date()` 在 subscription 時產生
+- empty, 立即 `complete` 的 observable
+  - `empty(scheduler: Scheduler): Observable`
+- from ⭐, 發送 promise, string, array, iterables 成 stream observable
+  - `from(ish: ObservableInput, mapFn: function, thisArg: any, scheduler: Scheduler): Observable`
+- fromEvent, 把 event 轉換成 stream observable
+  - `fromEvent(target: EventTargetLike, eventName: string, selector: function): Observable`
+- generate, 以 state function 的方式生成 observable, 類似 `for` loop
+  - `generate(initialStateOrOptions: GenerateOptions, condition?: ConditionFunc, iterate?: IterateFunc, resultSelectorOrObservable?: (ResultFunc) | SchedulerLike, scheduler?: SchedulerLike): Observable`
+- interval, 以時間區間發送觸發次序, 1000 = 1second
+  - `interval(period: number, scheduler: Scheduler): Observable`
+- of ⭐, 發送以逗號相隔的 stream, 可以是異質的
+  - `of(...values, scheduler: Scheduler): Observable`
+- range, 發送數組
+  - `range(start: number, count: number, scheduler: Scheduler): Observable`
+- throw, 丟出 error
+  - `throw(error: any, scheduler: Scheduler): Observable`
+- timer, 提供延遲與時間間隔形成的次序 observable
+  - `timer(initialDelay: number | Date, period: number, scheduler: Scheduler): Observable`
 
 ---
 
 ### 第十六章 - Operators, Error Handling
 
-###
+- 錯誤處理的 operators
+- catch / catchError ⭐, 捕捉錯誤並且回傳 observable 接續執行
+  - `catchError(project : function): Observable`
+  - 記得回傳 observable
+- retry, 接收到錯誤時, 執行重試指定次數
+  - `retry(number: number): Observable`
+  - 適合用於 http request retry
+- retryWhen, 接收到錯誤時傳給 function 處理何時 retry
+  - `retryWhen(receives: (errors: Observable) => Observable, the: scheduler): Observable`
+  - 可以實現費式數列 retry
+
+---
+
+### 第十七章 - Operators, Multicasting
+
+- Observable 預設都是 cold 且 unicast 的, 可以藉由 operators 轉換成 hot 或 multicast
+- publish, 在 `connect()` 後開始執行, 以 hot 模式發送資訊
+  - `publish() : ConnectableObservable`
+- multicast, 配合 `subject` 使用, `connect()` 後開始 multicast subject
+  - `multicast(selector: Function): Observable`
+- share ⭐, 轉換 observable 成為分享模式, 所有的 subscription 共享一筆資訊
+  - `share(): Observable`
+  - 好處是昂貴的計算或 request 不用重新觸發
+- shareReplay ⭐, 等同於 `share` 只是新的 subscription 會有 replay 指定次數的值
+  - `shareReplay(bufferSize?: number, windowTime?: number, scheduler?I IScheduler): Observable`
+
+---
+
+### 第十八章 - Operators, Filtering
+
+- 控制何時發送資訊的過濾類 operators
+- audit, 時間間隔內回傳最後一筆資訊, 類似 `throttle`, 差別在於 **?**
+  - `audit(durationSelector: (value) => Observable | Promise): Observable`
+- auditTime, **?**
+  - `auditTime(duration: number, scheduler?: Scheduler): Observable`
+- debounce, **?**
+  - `debounce(durationSelector: function): Observable`
+- debounceTime ⭐
+- distinct
+- distinctUntilChanged ⭐
+- distinctUntilKeyChanged
+- filter ⭐
+- find
+- first
+- ignoreElements
+- last
+- sample
+- single
+- skip
+- skipUntil
+- skipWhile
+- take ⭐
+- takeLast
+- takeUntil ⭐
+- takeWhile
+- throttle
+- throttleTime
+
+---
+
+### 第十九章 - Operators, Transformation
 
 ---
 
 ### 第二十章 - Operators, Utility
+
+- Observable toolkit
+- tap / do ⭐, 執行 side-effect function
+  - `tap(nextOrObserver: function, error: function, complete: function): Observable`
+- delay ⭐, 指定時間延遲發送
+  - `delay(delay: number | Date, scheduler: Scheduler): Observable`
+- delayWhen, 以函式的方式指定延遲的時間
+  - `delayWhen(selector: Function, sequence: Observable): Observable`
+- dematerialize, 把 Notification object 轉換成 Notification value observable
+  - `dematerialize(): Observable`
+- finalize / finally, 在 `complete` 或 `error` 後執行
+  - `finalize(callback: () => void)`
+- repeat, 重複執行指定次數
+  - `repeat(count: number): Observable`
+- timeInterval, 取得與前一次觸發的時間差
+  - `timeInterval(scheduler: *): Observable<TimeInterval<any>> | WebSocketSubject<T> | Observable<T>`
+- timeout, 在指定時間內沒有任何資訊發送的話則關閉 (`complete`)
+  - `timeout(due: number, scheduler: Scheduler): Observable`
+- timeoutWith, `timeout` 後, 執行指定的 observable
+  - `timeoutWith(due: number | Date, withObservable: ObservableInput, scheduler: SchedulerLike = async): OperatorFunction`
+- toPromise, 轉換成 promise
+  - `toPromise() : Promise`
 
 ---
