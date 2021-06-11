@@ -594,6 +594,62 @@ Learn RxJS, v6
 
 ### 第十九章 - Operators, Transformation
 
+- 轉換類
+- buffer, 收集內部 observable 的結果成 array 發送
+  - `buffer(closingNotifier: Observable): Observable`
+- bufferCount,收集指定數量的 observable 的結果成 array 發送
+  - `bufferCount(bufferSize: number, startBufferEvery: number = null): Observable`
+- bufferTime ⭐, 收集指定時間內 observable 的結果成 array 發送
+  - `bufferTime(bufferTimeSpan: number, bufferCreationInterval: number, scheduler: Scheduler): Observable`
+- bufferToggle, 依據開關收集 observable 的結果成 array 發送
+  - `bufferToggle(openings: Observable, closingSelector: Function): Observable`
+- bufferWhen, 收集 observable 的結果直到關閉訊號觸發, 成 array 發送
+  - `bufferWhen(closingSelector: function): Observable`
+- concatMap ⭐, 執行 map 但是在內部的 (inner) observables 前一項結束後, 下一項才會觸發
+  - `concatMap(project: function, resultSelector: function): Observable`
+- concatMapTo, 當 source observable 觸發後, 會先執行 inner observable 直到結束, 才繼續接下去 source observable
+  - `concatMapTo(observable: Observable, resultSelector: function): Observable`
+  - 小心有 memory leak 的問題發生
+- exhaustMap, source observable 被觸發後會執行 inner function 直到完成, 才會在接收 source observable 並且在執行期間的原有的 source 會被忽略, 類似 hot observable.
+  - `exhaustMap(project: function, resultSelector: function): Observable`
+- expand, 遞迴呼叫 project function 直到達成指定次數
+  - `expand(project: function, concurrent: number, scheduler: Scheduler): Observable`
+- groupBy, 依據 selector function 對 observable 執行 grouping
+  - `groupBy(keySelector: Function, elementSelector: Function): Observable`
+- map ⭐, 對於 observable 每個訊息都執行指定的 function 然後回傳
+  - `map(project: Function, thisArg: any): Observable`
+- mapTo, 簡化的 `map`, 直接指定每次的回傳值
+  - `mapTo(value: any): Observable`
+- mergeMap / flatMap ⭐, 允許指定平行數量執行的 `map`
+  - `mergeMap(project: function: Observable, resultSelector: function: any, concurrent: number): Observable`
+  - 在 inner observables 執行不會結束時, 可能會造成 memory leak
+- mergeScan, 依據 inner observable 的 `scan`
+  - `mergeScan(accumulator: (acc, value, index: number) => ObservableInput, seed, concurrent: number = Number.POSITIVE_INFINITY): OperatorFunction`
+- partition, 把 source observable 依據 predicate function 一分為二, 分成兩個 observables, 以 array 的方式回傳
+  - `partition(predicate: function: boolean, thisArg: any): [Observable, Observable]`
+- pluck, observable 發送 object 時可以藉由 pluck 指定欄位回傳, (類似 `map` 的物件取值版)
+  - `pluck(properties: ...args): Observable`
+- reduce, 依據 accumulator function 計算結果, 在 source observable 結束後發送結果值
+  - `reduce(accumulator: function, seed: any): Observable`
+- scan ⭐, 每次都發送結果值的 `reduce`, 可以被視為有記憶功能的 `map`
+  - `scan(accumulator: function, seed: any): Observable`
+- switchMap ⭐, 會結束的 inner observable `map`, 在新的 observable 被取用時就的會自動關閉, 改用新的 observable
+  - `switchMap(project: function: Observable, resultSelector: function(outerValue, innerValue, outerIndex, innerIndex): any): Observable`
+- switchMapTo, 直接指定 inner observable 的 `switchMap`
+  - `switchMapTo(innerObservable: Observable, resultSelector: function(outerValue, innerValue, outerIndex, innerIndex): any): Observable`
+- toArray, 收集所有的發送值在結束 (complete, error) 後, 回傳一個 array
+  - `toArray(): OperatorFunction`
+- window, 類似 `buffer` 轉換成多個 inner observables (window) 取代 array (buffer 的回傳值)
+  - `window(windowBoundaries: Observable): Observable`
+- windowCount, 在累積指定數量的 source observable 發送, 轉換成 inner observable (window)
+  - `windowCount(windowSize: number, startWindowEvery: number): Observable`
+- windowTime, 收集指定時間內的 source observable 發送, 轉換成 inner observable (window)
+  - `windowTime(windowTimeSpan: number, windowCreationInterval: number, scheduler: Scheduler): Observable`
+- windowToggle, 依據 toggle observable 收集 source observable 發送, 轉換成 inner observable (window)
+  - `windowToggle(openings: Observable, closingSelector: function(value): Observable): Observable`
+- windowWhen, 在指定的 closing observable 觸發時, 關閉一次 window 的收集, 並生成新的
+  - `windowWhen(closingSelector: function(): Observable): Observable`
+
 ---
 
 ### 第二十章 - Operators, Utility
