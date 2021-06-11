@@ -563,32 +563,53 @@ Learn RxJS, v6
 ### 第十八章 - Operators, Filtering
 
 - 控制何時發送資訊的過濾類 operators
-- audit, 時間間隔內回傳最後一筆資訊, 類似 `throttle`, 差別在於 **?**
+- audit, 等同於 `auditTime` 只是忽視的時間點由, 傳入的 observable 決定
   - `audit(durationSelector: (value) => Observable | Promise): Observable`
-- auditTime, **?**
+- auditTime, 固定時間區間的忽視發送, 只取最近一筆, 然後時間區間重複執行
   - `auditTime(duration: number, scheduler?: Scheduler): Observable`
-- debounce, **?**
+- debounce, 等同於 `debounceTime`, 只是延遲的時間點由傳入的 observable 決定
   - `debounce(durationSelector: function): Observable`
-- debounceTime ⭐
-- distinct
-- distinctUntilChanged ⭐
-- distinctUntilKeyChanged
-- filter ⭐
-- find
-- first
-- ignoreElements
-- last
-- sample
-- single
-- skip
-- skipUntil
-- skipWhile
-- take ⭐
-- takeLast
-- takeUntil ⭐
-- takeWhile
-- throttle
-- throttleTime
+- debounceTime ⭐, 延遲指定的時間, 發送最近一筆訊息, 其他會被忽略
+  - `debounceTime(dueTime: number, scheduler: Scheduler): Observable`
+- distinct, 只發送不同於以往的資訊內容, 可以傳入函式決定 key 與 flushes 時機
+  - `distinct(keySelector?, flushes?): Observable`
+- distinctUntilChanged ⭐, 發送 _值_ 改變時的最後一筆, 使用 `===` 作為比較算子
+  - `distinctUntilChanged(compare: function): Observable`
+- distinctUntilKeyChanged, 可以指定 key 與比較算子的 `distinctUntilChanged`
+  - `distinctUntilKeyChanged(key, compare: fn): Observable`
+- filter ⭐, 只發送通過測試的值
+  - `filter(select: Function, thisArg: any): Observable`
+- find, 只發送通過測試的第一筆資料
+  - `find(predicate: function)`
+- first, 發送第一筆通過測試的資料或者不指定函式, 只回傳第一筆資料
+  - `first(predicate: function, select: function)`
+- ignoreElements, 忽略所有的發送值, 只發送 `complete` 或 `error`
+  - `ignoreElements(): Observable`
+- last, 發送最後一筆資料或者最後一筆通過測試的資料
+  - `last(predicate: function): Observable`
+- sample, 依據傳入的 observable 決定, 每個開關內取一個值發送
+  - `sample(sampler: Observable): Observable `
+- single, 確保發送值只有一個, 並且回傳該發送值, 在多餘一個或者沒有的情況下會回傳 `error`
+  - `single(a: Function): Observable`
+  - 與 `first` 不同之處在於 single 需要等待 `complete` 並且會在多餘一個時丟出錯誤
+- skip, 忽略開頭的指定數量個發送值
+  - `skip(the: Number): Observable`
+- skipUntil, 忽略開頭的發送值, 直到傳入的 observable 被觸發
+  - `skipUntil(the: Observable): Observable`
+- skipWhile, 忽略開頭的發送值, 直到 predicate function 變成 `false`
+  - `skipWhile(predicate: Function): Observable`
+- take ⭐, 取得開頭固定數量的發送值
+  - `take(count: number): Observable`
+- takeLast, 取得結尾固定數量的發送值
+  - `takeLast(count: number): Observable`
+- takeUntil ⭐, 取值直到傳入的 observable 發送訊息時停止
+  - `takeUntil(notifier: Observable): Observable`
+- takeWhile, 取值直到 predicate function 回傳 `false` 時停止
+  - `takeWhile(predicate: function(value, index): boolean, inclusive?: boolean): Observable`
+- throttle, 只取第一筆, 然後忽略直到傳入的 observable 觸發後重新開啟, 重複執行
+  - `throttle(durationSelector: function(value): Observable | Promise): Observable`
+- throttleTime, 只取第一筆, 然後忽略發送指定時間, 之後重新開啟, 重複執行
+  - `throttleTime(duration: number, scheduler: Scheduler, config: ThrottleConfig): Observable`
 
 ---
 
