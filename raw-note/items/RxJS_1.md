@@ -21,7 +21,7 @@
   - `interval`
   - `of`
 - Hot vs. Cold
-  - `publich` + `connect` to be hot, `share` in version 6
+  - `publish` + `connect` to be hot, `share` in version 6
 - Completion
   - `finally`-> `finalize` in version 6
 - Operators
