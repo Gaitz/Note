@@ -583,33 +583,150 @@ Referencing Services
 
 ### 第二十章 - Actors
 
+- Actor Model, 以 message 為基礎的溝通與計算模型
+- 每個 actors 都可以發送, 接收, 與處理 message
+- 類似於 invoke services 但是與之不同的是 actors 管理自己的 private state
+
+Actors 類型
+
+- Promises
+- Callbacks
+- Observables
+- Machines
+
+Actor API
+
+- 每個 actor 都有 `id` 與 `send()` 和選用的 `stop()`, `subscribe()`
+
+Spawning Actors
+
+- 在 `assign` function 裡使用 `spawn` 以 `refName: spawn()` 建立 actor
+
+Sending Events to Actors
+
+- 使用 `send()` action 發送 event 給指定的 actors
+
+Syncing and Reading States
+
+- 預設 actor 的 state 是 private 的
+- 可以使用 `{ sync: true }` optional 在 `spawn()` 階段, 讓 actor state 改變時 parent 會接收通知
+- 然後直接使用 ref `.state` 讀取 actor state
+
+Sending Updates
+
+- 推薦使用 `sendUpdate()` action 主動通知 parent 所需要的狀態改變, 取代由 parent sync + 直接讀取 state
+
 ---
 
 ### 第二十一章 - Delayed Events and Transitions
+
+- Time 與 delay 也是一種 event, xstate 提供 delayed transition 與 delayed event, 底層使用相同的工具實現
+
+Delayed transition
+
+- transition 會在 delay `after` 後自動發生
+- 使用 `after: {}` 標示固定時間的 delay
+- 在 `createMachine()` 選用的 `delays` 欄位定義 dynamic delay,
+- 使用明確標示的 `delay: (context, event) => ()` 回傳 dynamic delay
+
+Delayed events
+
+- `send()` 發送的 event 可以包含選用的 `{ delay: }` 參數, 固定的 delay 時間或是產生 delay 時間的函式
+- 可以配合指定 `id` 與 `cancel()` action 來取消 delayed event
+
+Testing
+
+- 使用 `import { SimulatedClock } from 'xstate/lib/SimulatedClock';`
+- 在 `interpret()` 時傳入可控制的 clock
 
 ---
 
 ### 第二十二章 - Final States
 
+- 使用 `type: 'final'` 標注終結的狀態, 可以搭配 `onDone` event
+- Parallel 的 machines 都到達 final state 時, parent 也會被視為 final, 然後觸發 `onDone`, 可以被作為 `Promise.all()` 來處理平行
+
 ---
 
 ### 第二十三章 - History
+
+- history `state` 作為特殊的 state 來紀錄 machine 的歷史狀態
+- 可以分為兩種
+  - `shallow`, 只紀錄當前一層的 history
+  - `deep`, 紀錄包含子代的 state history
+- 以特殊的 `type: 'history'` 作為 configuration, 包含兩個選用參數 `history: 'shallow' | 'deep'`, `target` history 初值
 
 ---
 
 ### 第二十四章 - Identifying State Nodes
 
+- 指定 state 的方式
+- 使用 default ID, absolute path
+- 使用相對路徑, `.`
+- 使用 custom ID, 在 state 定義時指定 `id` 欄位
+
+Avoid strings
+
+- 不使用 string ID 的方式
+- 使用 `get` getter 定義
+
 ---
 
 ### 第二十五章 - Interpreting Machines
+
+- machine 使用 `.transition()` 作為 pure 的狀態移動
+- `interpret()` 初始化 machine, 作為 _service_ 存在
+- 可以使用 `.start()` 啟動, `.send()` 傳遞 events, `.stop()` 停止服務, `onTransition()` 註冊 listener 監聽改變
+
+Executing Actions
+
+- 預設在 transition 時觸發定義好的 actions
+- 可以通過 `execute: false` 參數停止預設行為, 另外配合 `onTransition()` 指定執行 action 的時機
+- 例如 `requestAnimationFrame(() => service.execute(state))`
+
+Custom Interpreters
+
+- 取代使用 xstate 提供的 `interpret()`
+- 可以自行定義 interpreter 來執行 machine
 
 ---
 
 ### 第二十六章 - Testing Machines
 
+- 以 end-to-end 的角度測試 machine, 可以符合 behavior-driven development (BDD) 概念
+- 測試: Given 當前狀態 (state), When 觸發 events, Expect 判別結果的 state 是否符合預期
+
+Testing pure logic
+
+- 測試 pure function 不包含 side-effect
+
+Testing services
+
+- 以整個 machine 作為 service 測試, 包含 side-effect
+
+Mocking effects
+
+- 以 machine `.withConfig()` 傳入 mock functions 取代實際的 side-effect
+
 ---
 
 ### 第二十七章 - Using TypeScript
+
+- XState 使用 TypeScript 實作的, 因此可以良好的與 TypeScript 結合提供 typing 機制
+- `createMachine<Context, StateSchema, Events>`, 提供三種 type 給予 machine, `Context`, `StateSchema`, `Events`
+
+MachineConfig Objects
+
+- 推薦使用 `MachineConfig<Context, StateSchema, Events>` 抽離 `createMachine()` 外定義
+
+Actions
+
+- `send()` action 應該使用 object 物件模式呼叫, 才能保證符合 event type
+
+TypeStates
+
+- 更精確定義的 State typing
+- 以 union types 精準描述每個 state 的 typing
 
 ---
 
@@ -619,8 +736,13 @@ Recipes
 
 ### 第二十八章 - Using with React
 
+- machine 邏輯應該完全與 React 無關
+- 使用 xstate 提供的 `useMachine()` hook 傳入已經 create 出來的 machine (service)
+
 ---
 
 ### 第二十九章 - Using with RxJS
+
+- `intrepret()` 且 `start()` 的 machine (service) 可以藉由 `from()` 轉換成 observable state
 
 ---
