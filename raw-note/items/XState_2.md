@@ -481,13 +481,103 @@ Quick Reference
 
 ### 第十七章 - Models
 
+- 選用的, `createModel()`, 建立 context 與 event, 提供 event creator helper, 提昇 Typing
+
+`createModel()`
+
+- 傳入: `initialContext`, `creators` (optional), event creators
+
+model context
+
+- model `.initialContext`, 提供建立 machine 時的 initial context
+- model `.assign()`, 更新 context
+
+model events
+
+- 使用 model `.events.` eventName 作為 event creator 建立 event
+
+TypeScript
+
+- 使用 createModel 建立時, 會推斷 context 與 events 的型別
+- 建立 machine 時, 提供 model type `createMachine<typeof ${model}>`
+- 在建立 machine actions 時, 提供選用的 eventType 可以使對應的 action 窄化 typing, `model.assign(assignments, eventType)`
+
 ---
 
 ### 第十八章 - Activities
 
+- 一些持續時間的 side effect, 具有開始與停止的性質, 依據狀態 (state) 的進入與離開觸發
+- 建立方式如同 React.useEffect 提供一個 callback function 且 callback function 的回傳函式為 cleanup 函式, 在 createMachine 時定義 `activities: {}`,
+- activities function 會傳入 `context`, 與 `activity`
+
+Restarting Activities
+
+- 希望 restore 舊有的 state 時, 原先狀態內的 activities 預設不會主動重新觸發 (restart)
+- 需要針對 state.actions 主動加上 `start()` 去明確表明要 restart
+
 ---
 
 ### 第十九章 - Invoking Services
+
+- 把整個 app 所有的狀態都使用同一個 machine 表達, 是不切實際的
+- 應該使用多個 machine 並且以 actor model 的模式, 發送與處理 messages 作為 machines 間的溝通
+- 執行非同步 side-effect
+
+invokes 的類型
+
+- Promises
+- Callbacks
+- Observables
+- Machines
+
+定義在個別 state 裡的 `invoke: {}` 欄位
+
+- 包含 `src`, `id`, `onDone` (選用), `onError`(選用) 等欄位
+
+Invoke Promises
+
+- Promises 可以被視為一個 machine, 分別以 resolve, reject 對應 onDone, onError
+
+Invoke Callbacks
+
+- `src` 定義為 `(context, event) => (callback, onReceive) => {}`, return 作為選用的 cleanup function
+- `callback` function 用來發送 event, `onReceive` 用來接收 event
+- 無法使用 `async/await` 因為會自動被包裝成 Promise 使用
+
+Invoke Observables
+
+- 作為單向的發送資訊的 stream 發送訊息給 parent
+- 配合 RxJS 使用建立 observables
+- `src` 定義為 `(context, event) => ()` 回傳一個 observables
+- hot observables 可以在外部定義, 使用 reference 帶給 `src`
+
+Invoke Machines
+
+- Machines 是階層式的溝通, 父層 invoke 子代 machine
+- 傳向子代 `send(EVENT, { to: '' })`
+- 傳向父代 `sendParent(EVENT)`
+- 可以藉由選用的 `data` 欄位傳遞資訊
+
+Sending Responses
+
+- 使用 actions `response()` 在 invoke machines 完成時回傳 event
+
+Multiple Services
+
+- `invoke: []` 以 `id` 區分, 可以使用相同的 `src` services
+
+Configuration Services
+
+- 可以定義在 `createMachine` 裡的選用參數 `{ services: {} }`
+- invoke 時 `src` 可以使用 `{ type: }` 的方式使用 services
+
+Testing
+
+- 配合 `withConfig()` 提供 mock services
+
+Referencing Services
+
+- 使用 state object 裡的 `children` 可以取得 invoke 的 services
 
 ---
 
