@@ -725,6 +725,143 @@ Part III 解依賴技術
   - 模板重定義 (template redefinition)
   - 文字重定義 (text redefinition)
 
+25.1 參數適配 (parameter source) 
+
+- 為了要執行測試時的實體化, 並且希望隔離底層 API
+- 介面應該傳遞職責而非實作, 越簡單越特定越好
+- Legacy Code 普遍的問題是抽象層次不足, 重要的程式與底層 API 耦合
+
+25.2 分解出方法物件 (break out method object)
+
+- 把要測試的長方法, 移動到另一個新的物件中, 即 method object 利用新物件的建構子與成員變數來傳遞原本的參數
+- 如果長方法有呼叫原物件的其他方法時, 則需要傳遞原物件的參考作為第一個參數
+- 即獨立分離想要測試的方法成為另外的物件, 以方便實體化
+
+25.3 定義補全 (definition completion)
+
+- 在特定的程式語言中可以把定義與實作分離時, 例如 C/C++ 的標頭檔
+- 可以在測試時以定義補全的方式, 定義且替換新的實作.
+- 一般來說不推薦使用, 因為會產生兩個以上的實作定義, 不易維護
+- 只作為最初解除初始依賴達到可測試時使用, 在可以測試後, 即可以刪除這種作法
+
+25.4 封裝全域參照 (encapsulate global references)
+
+- 初期解耦合重點在於引入接縫, 讓測試變得容易
+- 提供一個好設計的方向
+- 把各別的全域變數或全域函式, 變成單個全域物件的成員
+- 這讓全域變數能夠在測試時很容易的替換掉, 並且提供在未來思考參數化等良好設計的開頭
+
+25.5 暴露靜態方法 (expose static method)
+
+- 在沒有測試的情況下修改最好保持簽章一致, 使用 copy/paste 降低錯誤引入
+- 在想測試的函式可以被變成靜態方法時，就可以被執行獨立的測試
+- 靜態方法與靜態變數意味著, 存在其他更適合存放他們的位置
+- 在擁有測試保護後, 可以進行更好設計的重構
+
+25.6 提取並覆寫呼叫 (extract and override call)
+
+- 對於想解耦合的外部呼叫, 可以使用在物件內建立一個同名的函式作為中間層呼叫
+- 物件自己的函式呼叫可以很容易的被 override 形成測試用的版本
+
+25.7 提取並覆寫工廠方法 (extract and override factory method)
+
+- 在建構子中寫死初始化工作, 會讓測試變得很不容易
+- 在想測試的物件中, 建構子寫死了很多初始化外部物件或呼叫外函式時, 我們想要替換掉
+- 把建構子裡寫死的部份抽成一個工廠方法, 並且在測試版本時可以 override 該方法
+
+25.8 提取並覆寫獲取方法 (extract and override getter)
+
+- 把想替換掉變數的初始化抽離成一個單體模式的 lazy getter
+- 必須注意 garbage collection 的問題, 避免 memory leak
+- 在測試時可以 override 這個 lazy getter
+
+25.9 實作提取 (extract implemeter)
+
+- 與介面提取為類似的方法
+- 實作提取是把原有的具體物件變成介面 (interface) 把原有的實作全部提取成另外一個物件中
+- 用來解決想要提取介面但是理想的名稱以被使用的情況
+
+25.10 介面提取 (extract interface)
+
+- 在得到足夠的測試之前，最好避免大規模的變動. 
+- 為了測試執行的解耦合, 只需要作到能夠測試即可.
+- 把想要替換的物件參照改成一個介面參考, 利用介面取代實體型別的呼叫
+
+25.11 引入實例委託 (introduce instance delegator)
+
+- 處理在測試中遇到問題的 static function
+- 建立一個新的成員函式並且委派執行那個 static function
+- 並且修改想要測試的地方的呼叫方式成為新的成員函式
+- 這樣就引入了一個成員函式接縫可以透過 override 來協助測試
+
+25.12 引入靜態設置方法 (introduce static setter)
+
+- 處理全域變數, 好的設計是減少對全域的參考
+- 處理在測試時替換單例模式 (Singleton Pattern)
+- 首先要降低 constructor 的限制, 從 private 變成 protected
+- 並且建立一個 static setter 來執行替換工作
+
+25.13 連接替換 (link substitution)
+
+- 使用 linker 機制達到替換功能
+- 例如 C 語言的 linker, Java 的 object library mapping
+
+25.14 參數化建構子 (parameterize constructor)
+
+- 避免在建構子中寫死實體化, 最好全部都變成參數化, 才容易測試
+- 避免修改簽章, 可以使用 constructor overload 達成或者 default parameter 的方式達成
+- 實體化最好都發生在外部
+
+25.15 參數化方法 (parameterize method)
+
+- 等同於參數化建構子
+
+25.16 樸素化參數 (primitivize parameter)
+
+- 不推薦使用, 因為並沒有導向更好的設計而是延遲問題
+- 以自由函式實作新功能
+
+25.17 特性提升 (pull up feature)
+
+- 把想要測試的函式, 移動到一個 abstract class 中
+- 讓測試可以只實例化那個類別並且可以用 override 取代
+
+25.18 依賴下推 (push down dependency)
+
+- 把不想在測試時引入的依賴, 移動至新的子類別中
+- 繼承不是最佳的設計, 但是為了方便測試可以使用這種方式
+- 更好的設計是改成委託其他物件執行
+
+25.19 換函數為函數指標 (replace function with function pointer)
+
+- 使用函數指標取代函數呼叫, 因此可以讓不同環境呼叫不同的函數實體
+- 這是一個 build time 決定的功能, 如果是在 C 語言時常使用, 推薦考慮把專案轉移到 C++ 上
+
+25.20 以獲取方法替換全域參照 (replace global reference with getter)
+
+- 建立一個 getter function 取代直接呼叫全域參考
+- 這讓我們可以使用 override 建立測試版本
+
+25.21 子類別化並覆寫方法 (subclass and override method)
+
+- 使用繼承來建立測試版本的子類別並且 override 
+- 需要注意存取權限, 否則沒辦法實現繼承
+
+25.22 替換實例變數 (supersede instance variable)
+
+- 提供 setter function 替換變數
+- 這種方式是危險的, 因為原先我們並不希望可以任意替換變數, 可以透過命名函式前綴為 supersede 來區隔. 作為測試時用函式
+
+25.23 模板重定義 (template redefinition)
+
+- 在擁有 template 語法的程式語言中可以使用, 但是仍然可以優先考慮繼承類的方式
+- 使用 template 抽離類別
+
+文字重定義 (text redefinition)
+
+- 在一些直譯語言中, 可以動態替換名稱
+- 或是 C/C++ 語言的預處理的類似功能
+
 ---
 
 ### 第二十六章 - Appendix 重構
