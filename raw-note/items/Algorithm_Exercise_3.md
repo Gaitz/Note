@@ -4,13 +4,15 @@
 
 ---
 
+Coding Interview Tips
+
 Easy and Medium
 
 第一章 - Arrays : Easy and Medium 14
 
-第二章 - Strings : Easy and Medium 9
+第二章 - Strings : Easy and Medium 10
 
-第三章 - Stacks : Easy and Medium 3
+第三章 - Stacks : Easy and Medium 5
 
 第四章 - Heaps : Easy and Medium 1
 
@@ -22,7 +24,7 @@ Easy and Medium
 
 第八章 - Tries : Easy and Medium 1
 
-第九章 - Graphs : Easy and Medium 7
+第九章 - Graphs : Easy and Medium 8
 
 第十章 - Recursion : Easy and Medium 6
 
@@ -46,30 +48,47 @@ Hard and Very Hard
 
 第十八章 - Heaps : Hard and Very Hard 4
 
-第十九章 - Linked Lists : Hard and Very Hard 8
+第十九章 - Linked Lists : Hard and Very Hard 9
 
-第二十章 - Binary Trees : Hard and Very Hard 6
+第二十章 - Binary Trees : Hard and Very Hard 7
 
 第二十一章 - Binary Search Trees : Hard and Very Hard 3
 
 第二十二章 - Tries : Hard and Very Hard 1
 
-第二十三章 - Graphs : Hard and Very Hard 4
+第二十三章 - Graphs : Hard and Very Hard 5
 
-第二十四章 - Recursion : Hard and Very Hard 6
+第二十四章 - Recursion : Hard and Very Hard 7
 
-第二十五章 - Sorting : Hard and Very Hard 4
+第二十五章 - Sorting : Hard and Very Hard 5
 
 第二十六章 - Searching : Hard and Very Hard 4
 
-第二十七章 - Dynamic Programming : Hard and Very Hard 13
+第二十七章 - Dynamic Programming : Hard and Very Hard 14
 
 第二十八章 - Famous Algorithms : Hard and Very Hard 4
 
 ---
 
+### Coding Interview Tips
+
+How To Best Use AlgoExpert
+
+- 目標在於最佳化面試
+- 做大多數或所有的題目並且吸收
+- 推薦依據難度練習, 
+- 依據類型做題, 可以找出自己的弱項, 然後加強學習
+- 一開始練習不要限制解題時間, 只有在快要面試時才開始限制時間練習
+- 盡可能自己解開問題, 才能最大化吸收
+- 對於 Hint 的使用, 要一個一個來
+- 永遠要詳細的描述空間與時間複雜度
+
+---
+
 ## Tips
 
+- 清楚問題的輸入與輸出
+- 複雜流程應該被抽成有意義的函式, 然後組合成可閱讀的程式碼
 - Index pointers
 - Hash table, 優化搜尋, T: O(1), S: O(N)
 - Sort first, T: O(N \* LogN), 先排序
@@ -77,6 +96,7 @@ Hard and Very Hard
 - Recursive, 遞迴解, 因為 call stack 的關係會產生額外的 space
 - Back tracking, 一邊優化的遞迴解
 - 觀察問題特性, 尋找獨特的優化方式
+- 遞迴中止條件放在最開頭, 來保障正確性
 
 ---
 
@@ -180,7 +200,7 @@ Hints:
 
 ---
 
-### 第二章 - Strings : Easy and Medium 9
+### 第二章 - Strings : Easy and Medium 10
 
 Hints:
 
@@ -190,64 +210,80 @@ Hints:
 - 在 JavaScript 中, 需要注意 code unit 與 code point 的差別在 UTF-16 中遇到擴充字元時。
 - Hash table 優化搜尋
 
-#### 15. Palindrome Check
+#### 1. Palindrome Check
 
 - 方法一, two pointers, T: O(N), S: O(1)
 - 方法二, recursive, T: O(N), S: O(N), 每次呼叫都會儲存一次新的 string 因此空間複雜度是 O(N)
 
-#### 16. Caesar Cipher Encryptor
+#### 2. Caesar Cipher Encryptor
 
 - 方法一, 利用紙筆計算找出計算移動後正確的 char code 公式，然後依序執行。T: O(N), S: O(N), N for string.length, 題目要求回傳新的字串因此佔用空間複雜度 N
 
-#### 17. Run-Length Encoding
+#### 3. Run-Length Encoding
 
 - 方法一, pre 放在迴圈外，T: O(N), S: O(N)，程式較複雜
 - 方法二, pre 放在迴圈內，每次都讀取 pre 與 current, T: O(N), S: O(N), 程式較簡單
 
-#### 18. Generate Document
+#### 4. Generate Document
 
 - 方法一, Brute Force, 每次在迴圈裡尋找後刪除用過的，T: O(N \* M), S: O(1), N 為 characters.length, M 為 document.length
 - 方法二, 使用 hash table 取代搜尋, T: O(N + M), S: O(N), N 為 characters.length, M 為 document.length
 
-#### 19. First Non-Repeating Character
+#### 5. First Non-Repeating Character
 
 - 方法一, Brute Force, double `for`, T: O(N^2), S: O(1)
 - 方法二, hash table, T: O(N), S: O(1), N for string.length, 空間複雜度為 O(1) 因為已經指定字元集合最多為 26 個
 
-#### 20. Longest Palindromic Substring
+#### 6. Longest Palindromic Substring
 
 - 方法一, Brute Force, 窮舉後計算, T: O(N^3), S: O(N), 空間複雜度為輸出結果
 - 方法二, Scan and expand, 依序尋找候選者並且擴充找到最佳解, 由定義下手觀察特性，誰是候選者。 T: O(N \* (N + N)) = O(N^2), S: O(N), N for string.length
 - 方法三, 等同於方法二, 但是儲存使用 index 取代完整的字串, T: O(N^2), S: O(1)
 
-#### 21. Group Anagrams
+#### 7. Group Anagrams
 
 - 方法一, 排序配合 hash table, T: O(N \* W \* log(W)), S: O(N), N for words.length, W for longest word length
 
-#### 22. Valid IP Address
+#### 8. Valid IP Address
 
 - 方法一, Brute force (triple `for`), T: O(1), S: O(1), 因為 string.length 的長度已經被限制，因此最高上限是固定的
 - 方法二, Brute force (triple `for`) + index optimization (不需要每一個 `for` 都檢查完整的字串，因為 ip 每個區間上限就是 3 個字元)
 
-#### 23. Reverse Words In String
+#### 9. Reverse Words In String
 
 - 方法一, 收集 word 與 space 然後翻轉後組合起來, T: O(N), S: O(N) N for string.length
 
+#### 10. Minimum Characters For Words
+
+- 方法一, 分別計算然後整合
+
 ---
 
-### 第三章 - Stacks : Easy and Medium 3
+### 第三章 - Stacks : Easy and Medium 5
 
-#### 24. Min Max Stack Construction
+Hints:
+
+- 遞迴中止條件放在最開頭, 來保障正確性 
+
+#### 1. Min Max Stack Construction
 
 - 方法一, 追蹤每次的 min 與 max 連動 stack
 
-#### 25. Balanced Brackets
+#### 2. Balanced Brackets
 
 - 方法一, 追蹤 brackets 是否關閉, 使用 stack 資料結構, 注意 error case, T: O(N), S: O(N), N for string.length
 
-#### 26. Sunset Views
+#### 3. Sunset Views
 
 - 方法一, 先直觀的處理容易的 WEST 然後反向處理 EAST, T: O(N), S: O(N), N for buildings.length
+
+#### 4. Sort Stack
+
+- 遞迴解, 遞迴中止條件放在最開頭, 來保障正確性
+
+#### 5. Next Greater Element
+
+- 
 
 ---
 
@@ -258,7 +294,7 @@ Hints:
   - childLeft = array[currentIndex * 2 + 1] ,
   - childRight = array[currentIndex * 2 + 2]
 
-#### 27. Min Heap Construction
+#### 1. Min Heap Construction
 
 - Min heap 建立, 以 array 來儲存 binary tree, build heap 的方式有多種
 
@@ -268,14 +304,14 @@ Hints:
 
 Hints:
 
-#### 28. Remove Duplicates From Linked List
+#### 1. Remove Duplicates From Linked List
 
 - 方法一, 記憶一個 reference 負責改造連接所有值不一樣的節點，需注意在 `while` loop 結束後要處理結尾, T: O(N), S: O(1), N for linked list length
 - 方法二, 在處理每個 current node 的時候，都 `while` loop 找到值不同的 next 節點然後接上, 複雜度同上
 
-#### 29. Linked List Construction
+#### 2. Linked List Construction
 
-#### 30. Remove Kth Node From End
+#### 3. Remove Kth Node From End
 
 ---
 
@@ -291,7 +327,7 @@ Hints:
 
 ---
 
-### 第九章 - Graphs : Easy and Medium 7
+### 第九章 - Graphs : Easy and Medium 8
 
 ---
 
@@ -339,11 +375,11 @@ Hints:
 
 ---
 
-### 第十九章 - Linked Lists : Hard and Very Hard 8
+### 第十九章 - Linked Lists : Hard and Very Hard 9
 
 ---
 
-### 第二十章 - Binary Trees : Hard and Very Hard 6
+### 第二十章 - Binary Trees : Hard and Very Hard 7
 
 ---
 
@@ -355,15 +391,15 @@ Hints:
 
 ---
 
-### 第二十三章 - Graphs : Hard and Very Hard 4
+### 第二十三章 - Graphs : Hard and Very Hard 5
 
 ---
 
-### 第二十四章 - Recursion : Hard and Very Hard 6
+### 第二十四章 - Recursion : Hard and Very Hard 7
 
 ---
 
-### 第二十五章 - Sorting : Hard and Very Hard 4
+### 第二十五章 - Sorting : Hard and Very Hard 5
 
 ---
 
@@ -371,7 +407,7 @@ Hints:
 
 ---
 
-### 第二十七章 - Dynamic Programming : Hard and Very Hard 13
+### 第二十七章 - Dynamic Programming : Hard and Very Hard 14
 
 ---
 
