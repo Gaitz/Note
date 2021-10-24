@@ -97,6 +97,7 @@ How To Best Use AlgoExpert
 - Back tracking, 一邊優化的遞迴解
 - 觀察問題特性, 尋找獨特的優化方式
 - 遞迴中止條件放在最開頭, 來保障正確性
+- 如果 case 結束記得 `return` 避免錯誤
 
 ---
 
@@ -311,7 +312,15 @@ Hints:
 
 #### 2. Linked List Construction
 
+- 細心處理 edge case, 盡可能重用 function
+
 #### 3. Remove Kth Node From End
+
+- 如果 case 結束記得 `return` 避免錯誤
+
+#### 4. Sum of Linked Lists
+
+- 
 
 ---
 
