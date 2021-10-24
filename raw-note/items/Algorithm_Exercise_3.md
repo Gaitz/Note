@@ -98,6 +98,7 @@ How To Best Use AlgoExpert
 - 觀察問題特性, 尋找獨特的優化方式
 - 遞迴中止條件放在最開頭, 來保障正確性
 - 如果 case 結束記得 `return` 避免錯誤
+- 完成前記得 trace code with example 找到可能沒處理到的 case.
 
 ---
 
@@ -320,11 +321,24 @@ Hints:
 
 #### 4. Sum of Linked Lists
 
-- 
+- 一個 while loop 解決， 完成前記得 trace code with example 找到可能沒處理到的 case.
 
 ---
 
 ### 第六章 - Binary Trees : Easy and Medium 6
+
+Hints: 
+
+- DFS, 遞迴, 非遞迴使用 stack
+
+#### 1. Branch Sums
+
+- DFS + Recursive
+
+#### 2. Node Depths
+
+- DFS, 遞迴或非遞迴
+- 遞迴解可以只用一行 expression 就寫完
 
 ---
 
