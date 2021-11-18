@@ -76,7 +76,7 @@ How To Best Use AlgoExpert
 
 - 目標在於最佳化面試
 - 做大多數或所有的題目並且吸收
-- 推薦依據難度練習, 
+- 推薦依據難度練習,
 - 依據類型做題, 可以找出自己的弱項, 然後加強學習
 - 一開始練習不要限制解題時間, 只有在快要面試時才開始限制時間練習
 - 盡可能自己解開問題, 才能最大化吸收
@@ -87,7 +87,7 @@ How To Best Use AlgoExpert
 
 ## Tips
 
-- 清楚問題的輸入與輸出
+- 清楚問題的輸入與輸出的型別與可進行的操作
 - 複雜流程應該被抽成有意義的函式, 然後組合成可閱讀的程式碼
 - Index pointers
 - Hash table, 優化搜尋, T: O(1), S: O(N)
@@ -97,6 +97,7 @@ How To Best Use AlgoExpert
 - Back tracking, 一邊優化的遞迴解
 - 觀察問題特性, 尋找獨特的優化方式
 - 遞迴中止條件放在最開頭, 來保障正確性
+- 遞迴可以利用物件型別回傳多個資料
 - 如果 case 結束記得 `return` 避免錯誤
 - 完成前記得 trace code with example 找到可能沒處理到的 case.
 
@@ -265,7 +266,7 @@ Hints:
 
 Hints:
 
-- 遞迴中止條件放在最開頭, 來保障正確性 
+- 遞迴中止條件放在最開頭, 來保障正確性
 
 #### 1. Min Max Stack Construction
 
@@ -284,8 +285,6 @@ Hints:
 - 遞迴解, 遞迴中止條件放在最開頭, 來保障正確性
 
 #### 5. Next Greater Element
-
-- 
 
 ---
 
@@ -327,9 +326,10 @@ Hints:
 
 ### 第六章 - Binary Trees : Easy and Medium 6
 
-Hints: 
+Hints:
 
 - DFS, 遞迴, 非遞迴使用 stack
+- 遞迴回傳多資料型態
 
 #### 1. Branch Sums
 
@@ -339,6 +339,22 @@ Hints:
 
 - DFS, 遞迴或非遞迴
 - 遞迴解可以只用一行 expression 就寫完
+
+#### 3. Invert Binary Tree
+
+- mutable, 遞迴解 DFS
+- immutable, 遞迴解 DFS
+
+#### 4. Binary Tree Diameter
+
+- dfs, 思考遞迴應該回傳的型別與最基礎的案例, 回傳的內容可以是多資料的
+
+#### 5. Find Successor
+
+- 清楚的理解, input 的型別與能進行的操作
+- 兩種做法,
+  1. 無視額外的 parent pointer 存在 array 後查詢, T: O(n), S: O(n), n = length
+  1. 因為輸入的目標含有指標, 可以直接進行搜尋, T: O(h), S: O(1), h = depth
 
 ---
 
