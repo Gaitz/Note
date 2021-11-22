@@ -372,6 +372,19 @@ Tips:
 
 - 遞迴與非遞迴解, 只差在佔用的空間
 
+#### 2. BST Construction
+
+- Remove 有多種 case 需要思考清楚, 是否是 root 與子樹的存在與否
+
+#### 3. Validate BST
+
+- 針對一個點思考什麼狀況是不合理的, 然後使用遞迴方式依序檢查
+- 遞迴函式可以藉由回傳值或參數攜帶狀態
+
+#### 4. BST Traversal
+
+- 遞迴 in-order, pre-order, post-order
+
 ---
 
 ### 第八章 - Tries : Easy and Medium 1
