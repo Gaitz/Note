@@ -100,6 +100,8 @@ How To Best Use AlgoExpert
 - 遞迴可以利用物件型別回傳多個資料
 - 如果 case 結束記得 `return` 避免錯誤
 - 完成前記得 trace code with example 找到可能沒處理到的 case.
+- 注意呼叫內部函式或已有函式的複雜度
+- Immutable 與 mutable 如果只是 read 減少不必要的空間
 
 ---
 
@@ -385,7 +387,15 @@ Tips:
 
 - 遞迴 in-order, pre-order, post-order
 
----
+#### 5. Min Height BST
+
+- 手動建立, 找出基本案例, 發現遞迴解
+- 注意呼叫內部函式或已有函式的複雜度
+- Immutable 與 mutable 如果只是 read 減少不必要的空間
+
+#### 6. Find Kth Largest Value In BST
+
+- ***
 
 ### 第八章 - Tries : Easy and Medium 1
 
