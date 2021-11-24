@@ -395,7 +395,11 @@ Tips:
 
 #### 6. Find Kth Largest Value In BST
 
-- ***
+- 遞迴走訪
+
+#### 7. Reconstruct BST
+
+---
 
 ### 第八章 - Tries : Easy and Medium 1
 
