@@ -102,6 +102,7 @@ How To Best Use AlgoExpert
 - 完成前記得 trace code with example 找到可能沒處理到的 case.
 - 注意呼叫內部函式或已有函式的複雜度
 - Immutable 與 mutable 如果只是 read 減少不必要的空間
+- 紙筆優先
 
 ---
 
@@ -403,9 +404,21 @@ Tips:
 
 ### 第八章 - Tries : Easy and Medium 1
 
----
+Tips:
+
+- 紙筆優先
+
+#### 1. Suffix Trie Construction
+
+- 思考時間與空間複雜度
 
 ### 第九章 - Graphs : Easy and Medium 8
+
+Tips:
+
+#### Depth-first search
+
+- 複雜度分析, 依據邊 (edges) 與節點數 (vertices)
 
 ---
 
