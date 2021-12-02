@@ -416,9 +416,19 @@ Tips:
 
 Tips:
 
-#### Depth-first search
+#### 1. Depth-first search
 
 - 複雜度分析, 依據邊 (edges) 與節點數 (vertices)
+
+#### 2. Single Cycle Check
+
+- T: O(n), S: O(n) 記錄版
+- T: O(n), S: O(1) 不記錄版
+- 困難在正確寫出 next index 的處理包含所有的 edge cases
+
+#### 3. Breadth-first Search
+
+-
 
 ---
 
