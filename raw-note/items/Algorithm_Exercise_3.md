@@ -436,6 +436,13 @@ Tips:
 
 #### 5. Youngest Common Ancestor
 
+- S: O(n), S: O(1) 對應 Level
+
+#### 6. Remove Islands
+
+- 演算法不難, 但是很繁瑣
+- 有更複雜的 S: O(1) 版本
+
 ---
 
 ### 第十章 - Recursion : Easy and Medium 6
