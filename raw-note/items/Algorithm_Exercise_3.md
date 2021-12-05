@@ -416,6 +416,8 @@ Tips:
 
 Tips:
 
+- 試著用 DFS 和 BFS 尋找有用的資訊
+
 #### 1. Depth-first search
 
 - 複雜度分析, 依據邊 (edges) 與節點數 (vertices)
@@ -442,6 +444,10 @@ Tips:
 
 - 演算法不難, 但是很繁瑣
 - 有更複雜的 S: O(1) 版本
+
+#### 7. Cycle In Graph
+
+- 試著用 DFS 和 BFS 尋找有用的資訊
 
 ---
 
