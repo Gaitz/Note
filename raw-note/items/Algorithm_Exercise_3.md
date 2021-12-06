@@ -448,6 +448,11 @@ Tips:
 #### 7. Cycle In Graph
 
 - 試著用 DFS 和 BFS 尋找有用的資訊
+- 紀錄兩種東西, visited 與 inStack
+
+#### 8. Minimum Passes Of Matrix
+
+- 直觀的執行並且減少不必要的重複檢查
 
 ---
 
