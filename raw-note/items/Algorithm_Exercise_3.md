@@ -458,6 +458,19 @@ Tips:
 
 ### 第十章 - Recursion : Easy and Medium 6
 
+#### 1. Nth Fibonacci
+
+- 有趣的題目, 三種解法, 每種都有進步, T: O(2^n), S: O(n) -> T: O(n), S: O(n) -> T: O(n), S: O(1)
+
+#### 2. Product Sum
+
+- 沒任何難度, 照著題目定義解
+
+#### 3. Permutations
+
+- 經典題目, 注意複雜度算法
+- SWAP + 遞迴法
+
 ---
 
 ### 第十一章 - Sorting : Easy and Medium 4
