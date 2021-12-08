@@ -471,6 +471,14 @@ Tips:
 - 經典題目, 注意複雜度算法
 - SWAP + 遞迴法
 
+#### 4. Powerset
+
+- 經典題目
+- 從基礎案例列舉, 找出新增規律
+- 注意複雜度分析
+
+#### 5. Phone Number Mnemonics
+
 ---
 
 ### 第十一章 - Sorting : Easy and Medium 4
