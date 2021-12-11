@@ -103,6 +103,7 @@ How To Best Use AlgoExpert
 - 注意呼叫內部函式或已有函式的複雜度
 - Immutable 與 mutable 如果只是 read 減少不必要的空間
 - 紙筆優先
+- 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
 
 ---
 
@@ -458,6 +459,10 @@ Tips:
 
 ### 第十章 - Recursion : Easy and Medium 6
 
+Tips:
+
+- 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+
 #### 1. Nth Fibonacci
 
 - 有趣的題目, 三種解法, 每種都有進步, T: O(2^n), S: O(n) -> T: O(n), S: O(n) -> T: O(n), S: O(1)
@@ -478,6 +483,21 @@ Tips:
 - 注意複雜度分析
 
 #### 5. Phone Number Mnemonics
+
+- 窮舉的題目
+- 遞迴處理每一個階段
+- 注意複雜度分析
+
+#### 6. Staircase Traversal
+
+- 經典題目, 有多種解法並且有不同的複雜度
+- 注意複雜度分析
+- 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+
+1. 遞迴法,
+2. 遞迴 + memorize,
+3. 疊代法 (DP),
+4. Window 移動, 每次只做必要的工作
 
 ---
 
