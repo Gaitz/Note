@@ -503,6 +503,30 @@ Tips:
 
 ### 第十一章 - Sorting : Easy and Medium 4
 
+#### 1. Bubble Sort
+
+- IDEA: 持續從頭兩兩檢查
+- 最基礎的 Sort 方式, mutated, 不需要其他的空間
+- Avg T: O(n^2), S: O(1)
+- Best T: O(n), S: O(1)
+- 依序檢查並且 SWAP 然後重複執行直到 Sorted
+- 特別注意到的是每次跌代都會把最大值放到最尾端
+- 每次跌代記得追蹤是否已經 sorted 可以提早回傳
+
+#### 2.Insertion Sort
+
+- IDEA: 把左側作為已排序, 一次加入一個新的元素, 插入已排序的左側
+- Mutated, 不需要額外空間
+- Avg T: O(n^2), S: O(1)
+- Best T: O(n), S: O(1)
+
+#### 3. Selection Sort
+
+- IDEA: 把左側作為已排序, 持續地把未排序的最小值往已排序的位置放置
+- Mutated, 不需要額外空間
+- Avg T: O(n^2), S: O(1)
+- Best T: O(n^2), S: O(1)
+
 ---
 
 ### 第十二章 - Searching : Easy and Medium 3
