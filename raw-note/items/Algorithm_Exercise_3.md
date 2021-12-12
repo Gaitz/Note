@@ -527,9 +527,30 @@ Tips:
 - Avg T: O(n^2), S: O(1)
 - Best T: O(n^2), S: O(1)
 
+#### 4. Three Number Sort
+
+- Count and swap, Bucket Sort
+- 使用 Index 去指定 first, second, third value 的正確位置
+
 ---
 
 ### 第十二章 - Searching : Easy and Medium 3
+
+Tips:
+
+#### 1. Binary Search
+
+- 經典搜尋
+- T: O(log(n))
+- 注意 middleIdx 的修改
+
+#### 2. Find Three Largest Numbers
+
+- 走訪且持續更新最大值
+
+#### 3. Search In Sorted Matrix
+
+- 手動找出走訪規則
 
 ---
 
