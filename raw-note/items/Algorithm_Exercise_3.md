@@ -556,6 +556,34 @@ Tips:
 
 ### 第十三章 - Greedy Algorithms : Easy and Medium 5
 
+Tips:
+
+- Greedy Algorithms: 每次都找出局部最佳解則最終結果為最佳解時適用
+- 通常解法都很直觀
+
+#### 1. Minimum Waiting Time
+
+- 沒有難度找出規律, 思考複雜度
+- 先排序比重複尋找更有效率
+
+#### 2. Class Photos
+
+- 沒有難度找出規律, 思考複雜度
+- 先排序比重複尋找更有效率
+
+#### 3. Tandem Bicycle
+
+- 沒有難度找出規律, 思考複雜度
+- 先排序比重複尋找更有效率
+
+#### 4. Task Assignment
+
+- 為了要符合答案的格式, 需要準備適當的資料結構來計算
+
+#### 5. Valid Starting City
+
+- 利用給的條件可以達成 O(n) 有點 tricky
+
 ---
 
 ### 第十四章 - Dynamic Programming : Easy and Medium 5
