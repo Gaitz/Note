@@ -588,9 +588,31 @@ Tips:
 
 ### 第十四章 - Dynamic Programming : Easy and Medium 5
 
+Tips:
+
+- Dynamic Programming 是以子問題的解來建立全域的解
+- 持續追蹤目前的最佳解並且觀察目前最佳解與過去最佳解的關係, 找出可以推導的公式
+
+#### 1. Max Subset Sum No Adjacent
+
+- 持續追蹤目前的最佳解並且觀察目前最佳解與過去最佳解的關係, 找出可以推導的公式
+
+#### 2. Number Of Ways To Make Change
+
+- Dynamic Programming 經典題目
+- 無限數量的背包問題
+
 ---
 
 ### 第十五章 - Famous Algorithms : Easy and Medium 1
+
+Tips:
+
+#### 1. Kadane's Algorithm
+
+- 處理連續子陣列最大和
+- Dynamic Programming 的基礎應用
+- 每次加入新 index 都可以計算一次最大值並且與現有最大值做比較
 
 ---
 
