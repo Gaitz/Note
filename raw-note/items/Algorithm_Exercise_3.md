@@ -592,6 +592,8 @@ Tips:
 
 - Dynamic Programming 是以子問題的解來建立全域的解
 - 持續追蹤目前的最佳解並且觀察目前最佳解與過去最佳解的關係, 找出可以推導的公式
+- 適合在問題組合非常多種時, 可以先以非常小的問題慢慢建立起解答
+- 針對 Dynamic Programming 的空間使用率, 可以藉由觀察每一次真正所需要使用到的範圍, 去做空間使用率的減少
 
 #### 1. Max Subset Sum No Adjacent
 
@@ -601,6 +603,22 @@ Tips:
 
 - Dynamic Programming 經典題目
 - 無限數量的背包問題
+
+#### 3. Min Number Of Coins For Change
+
+- Dynamic Programming 經典題目
+- Dynamic Programming 時, 只需一小步變化作考慮
+
+#### 4. Levenshtein Distance
+
+- Dynamic Programming 經典應用
+- 針對實際會用到的內容建立需要暫存的空間, 達到最佳化空間複雜度
+
+#### 5. Number Of Ways To Traverse Graph
+
+- Dynamic Programming 經典問題
+- 1. 使用基本的 dp 方式可以做出來
+- 2. 最佳解其實是答案即移動次數的組合數, 因此可以直接使用數學組合數公式, 直接算出解
 
 ---
 
