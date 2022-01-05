@@ -92,13 +92,34 @@ Concepts
 
 ### 第一章 - Introduction
 
+- 對於 System Design 題目背後的 Design Fundamentals 知識
+- System Design 問題需要大量的背景知識才能回答問題
+
 ---
 
 ### 第二章 - What Are Design Fundamentals
 
+- 首先理解 System Design 面試的進行方式
+  1. 大量的問答與溝通用來釐清與假設系統需求
+- 對於 System Design 問題來說很常沒有絕對正確的答案, 系統設計都是假設與取捨
+- Design Fundamentals
+- 簡單分成四個類型
+  1. 必需的基礎知識 (Network protocol, basic model, ...),
+  2. 觀測系統相關 (logger, monitoring, latency, ...),
+  3. 進階提升的部分 (Load balancers, proxy, ...)
+  4. 實際存在的工具 (AWS services, redis, ...)
+
 ---
 
 ### 第三章 - Client-Server Model
+
+- Client-Server Model
+- Client, 提出請求 request
+- Server, 接收請求與回覆 resolve and response
+- IP address, 機器位置 `localhost` `127.0.0.1`
+- DNS, Domain Name System 解析名稱與機器位置
+- port, 單一機器上的接口後方對應不同的服務, 0-1023 為系統保留, 範圍在 0~65535 (2^16)
+- Example, 輸入網址在瀏覽器上與伺服器回應
 
 ---
 
@@ -245,3 +266,7 @@ Questions
 ---
 
 ### 第十三章 - Design the Twitch API
+
+---
+
+38
