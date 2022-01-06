@@ -125,9 +125,17 @@ Concepts
 
 ### 第四章 - Network Protocols
 
+- Network Protocols
+- IP, Internet Protocol, 主要包含來源與目的地的資訊, 目前分成 IPv4 與 IPv6 兩個版本
+- TCP, Transmission Control Protocol, 建立連線, 主要目的在於提供溝通上的一些功能, 例如保持資料的順序, 丟包時資料重送. 以 handshake 的方式建立連線 (connection)
+- HTTP, HyperTextTransfer Protocol, 應用層協定, 實現 request respond model
+- IP Packet, 一次傳遞的最小單位, 由 header 與 payload 兩個部分組成
+
 ---
 
 ### 第五章 - Storage
+
+- Persistence
 
 ---
 
