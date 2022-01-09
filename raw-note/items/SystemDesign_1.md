@@ -196,7 +196,7 @@ Concepts
   - least-frequently used, LFU, 頻率上用到最少次數的內容
 - Content Delivery Network, CDN
   - 第三方服務提供實體地區性的 cache 機制
-- Redis
+- _Redis_
 
 ---
 
@@ -205,20 +205,67 @@ Concepts
 - 一種伺服器提供中間層的服務
 - Proxy, Forward Proxy, 服務使用服務的 Client (隱藏 client)
 - Reverse Proxy, 服務提供服務的 Server (隱藏 server)
-- Nginx (used for reverse proxy or load balancer)
 - Reverse Proxy 可以提供 load balancer, logger, cache, filter 等等不同的功能
+- _Nginx_ (used for reverse proxy or load balancer)
 
 ---
 
 ### 第十章 - Load Balancers
 
+- 中間層伺服器, 一種 reverse proxy, 用來分配資源
+- 以多個服務伺服器來提升 throughput 時, 需要 load balancer 來分配工作
+- 使用水平擴張 (horizontal scaling) 提高 throughput 時需要使用 load balancer
+- Load balancer 有分成硬體版與軟體版
+- Load balancer 使用的分配演算法 (Server-Selection Strategy),
+  - random, 隨機分配
+  - round-robin (RR), 依序分配
+  - weighted round-robin,
+  - performance/load, 定期調查機器使用量, 並且分配給最輕的
+  - ip based, **通過 ip hash 值到指定的機器上, 這種做法可以提高 cache hit rate**
+  - path based, 功能性分配, 每個機器提供不同的服務並且以 load balancer 做區分, 可以安全的個別更新並且不會產生 single point failure
+- 系統設計上最需要回答的是依據需求選擇適當的分配演算法
+- Load balancer 可以擁有多層並且在系統各層都可以使用
+- 可以使用 _Nginx_ 實現
+
 ---
 
 ### 第十一章 - Hashing
 
+- load balancer 考慮到提高 cache 使用率時, 希望相同的 request 可以對應到相同的伺服器, 因此可以提供 cache
+- 以 hashing 產生固定的 bucket, 要考慮到新增伺服器或有伺服器停止功能時, 需要產生新的 bucket
+- **Consistent Hashing**, 以 loop 的方式放置 server 然後 client hashing 後尋找值的下一個 server, 這樣讓 bucket 與 hashing 值有範圍空間, 而不是單純的 1 對 1, 這樣在新增或移除伺服器時, 大多數 request 仍然可以到舊的 bucket
+  - 另外可以讓相同的 server 有多個 bucket 產生, 這樣可以讓 request 更 balanced 的分配
+- **Rendezvous Hashing**, coined highest random weight hashing,
+  - 每個 client 與所有的 server 值做計算 score 並且選擇 score 最高的 server 處理,
+  - 與 consistent hashing 一樣在減少或增加伺服器時能保持一定的一致性, 但是缺點是每次選擇都要計算 O(n), n 為伺服器數量
+- 在預期有大量的流量產生並且需要即時加機器時, 應該使用以上兩種 hashing 方式來提高 cache 的使用率
+- SHA, Secure Hash Algorithms,
+- 一般情況下我們會選用現成的 hashing function 與 score function 避免自己建立
+
 ---
 
 ### 第十二章 - Relational Databases
+
+- Relational Databases, 有結構的 (structured)
+  - table
+  - schema
+  - 大多數的 relational databases 都支援 SQL
+- Non-Relational Databases, 不強制定義 structure 的資料庫
+- **SQL**, Structured **Query** Language, 一種 domain-specific language 用來查詢結構資料庫, 提供強大且複雜的查詢功能
+- SQL Database, 支援使用 SQL 查詢的資料庫
+- NoSQL Database, 不支援使用 SQL 查詢的資料庫
+- ACID **Transaction** 可以視為一般人對於資料庫安全性的基本要求或看法
+  - Atomicity, 複雜的交易會形成一個單元, 只有全部成功或全部失敗, 沒有中間型態, 失敗就會自動回復已執行的動作
+  - Consistency, 當交易完成或者回復時, 其他相關的 transition 或未來的 transition 都能得到最新狀態的值
+  - Isolation, 多個交易可以同步執行結果等價於他們依序執行, 並不會互相影響
+  - Durability, 所有完成的交易會把紀錄寫進 disk 中, 而不會僅存在 memory 上
+- Database **Index**, 用來加速指定的查詢, 以建立額外的資料結構來協助查詢, 增加容量和寫入速度變慢但是提高查詢速度, 有多種方式實作
+  - 通常用在常用的查詢上
+- Strong Consistency, 等價於 ACID transaction 的 Consistency
+- Eventual Consistency, 相較於 Strong Consistency 有時候會取得過時的資料, 只保證在一定時間內會更新到最新
+- **選擇適當的資料庫系統在系統設計是重要的決定**
+- 移植資料庫是複雜且痛苦的過程
+- _Postgres_
 
 ---
 
