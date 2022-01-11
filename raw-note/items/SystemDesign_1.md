@@ -271,25 +271,84 @@ Concepts
 
 ### 第十三章 - Key-Value Stores
 
+- Key-Value store 是最常見的 NoSQL, 常用於 cache 與設定配置
+- _Etcd_, _Redis_, _ZooKeeper_
+
 ---
 
 ### 第十四章 - Specialized Storage Paradigms
+
+- Blob store
+  - Blob, Binary large object, 是容量大且 unstructured 的資料型態, 不適合存放在 relational database (SQL database) 裡
+  - 大多數情況不會自行建立 (實作複雜) 而是使用 Blob store 雲端服務 _s3_, _GCS_
+- Time Series Database
+  - 以時間為 index 的資料, 例如 log, event,
+  - 如果要操作很多時間相關的行為, 很適合存在 time series database, 例如 monitoring
+  - _InfluxDb_, _Prometheus_, _Graphite_
+- Graph Database
+  - 適合處理資料型態會自然形成 graph 的資料
+  - 以 relational database 儲存時在 query 時會相對較慢且複雜
+  - _Neo4j_
+- Spatial Database
+  - 例如 location related data, latitude and longitude
+  - Quadtree, 分支只有 4 或 0 的樹狀結構, 常用於建立空間資料, 例如地圖上的內容
+  - query 時複雜度為 O(log4(n))
+  - 現代 relational databases 例如 _Postgres_, 都有很好的最佳化
 
 ---
 
 ### 第十五章 - Replication And Sharding
 
+- 由於資料庫在整個系統中至關重要, 並且時常是效能瓶頸或者 single point failure
+- 多數情況會建立多個資料庫來避免 single point failure
+- Replica, 複製體可以隨時取代原本的 main database 運作, 以避免 single point failure, 因此必須要與 main database 完全同步 (sync write)
+  - Replication 可以分地理區域建立, 提供更好的 latency
+  - sync update 也可以以 async 的方式進行, 取決於使用需求
+- Main database 在增加 throughput 時, 以 vertical scaling 單體增加不能滿足後必須採用 horizontal scaling 形成 database cluster
+- Sharding and shards, data partitioning 資料區塊分割並且放在不同的機器上
+  - Sharding 時要做的決策是如何切割資料
+  1. 以 client 區域做分割
+  1. 依據資料類型分割, 例如 payment, clients, ...
+  1. 結構化資料以特定欄位的 hash 值做區分 (consistent hashing), 使用良好設計的 hash function 是至關重要的來避免 hot spot
+  - 不良的分割會產生 hot spot 讓單一的機器負擔過重甚至無法承擔
+- Sharding 與 replication 在實際上是非常複雜的內容, 在系統設計中只需要最高抽象層的討論
+
 ---
 
 ### 第十六章 - Leader Election
+
+- 範例: Database 包含會員付費資訊與第三方支付服務 (Stripe, Paypal, ...) 之間的互動
+- 系統設計永遠思考避免 single point failure, 因此服務多數都會以 cluster 的方式建立, 但是有一些操作必須只做一次時, 必須確保只有一台機器會執行
+- 範例: 在 cluster 中避免重複扣款問題, 因此要選出 main or leader server 來執行
+- Leader Election 為選擇 main server 的機制並且要考慮問題發生時 (Network issue, leader server down, exception, interrupt)
+- Consensus Algorithm, 複雜的共識演算法
+  - Paxos & Raft,
+- 實務上以 _Etcd_, _ZooKeeper_ key-value store 建立 leader election, 都是 strong consistent (資料維護), highly available 儲存當前的 leader
 
 ---
 
 ### 第十七章 - Peer-To-Peer Networks
 
+- 傳送資料的 source 如果可以持續增加即可避免依序的傳輸 (避免等待)
+
+1. 資料被切割成 chunk
+2. 主資料來源把各個 chunk 傳送給不同的 peer
+3. 與此同時各個 peer 可以跟其他 peer 取得缺少的 chunk
+
+- 另外的問題是需要 peer selection algorithm 去選擇下一個 peer
+  1. 另外一個 management server 來處理 peer selection 問題 (tracker)
+  2. peers 之間互相溝通並且分享資訊 (例如用 hash table 存資訊), 去試著理解群體與選出自己下一個 peer (gossip protocol), DHT, distributed hash table
+- _Kraken_, uber open source
+
 ---
 
 ### 第十八章 - Polling And Streaming
+
+- client-server communication
+  1. request and response
+  1. polling, client 持續且定期的發出 request, 例子: 溫度更新
+  1. streaming, client 與 server 建立一個長期的 connection (socket) 然後由 server 主動發送 (push) 資料給 client 來更新, 例子: chat
+- 在系統設計時需要依據需求來決定溝通方式
 
 ---
 
