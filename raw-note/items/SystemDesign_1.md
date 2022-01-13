@@ -421,11 +421,40 @@ Concepts
 
 ### 第二十四章 - Security And HTTPS
 
+- HTTP
+  - Man-in-the-middle attack
+- Encryption
+  - Symmetric, _AES_ Advanced Encryption Standard, AES-128, AES-192, AES-256, 只有一個 key 因此安全的分享 key 是一個問題
+  - Asymmetric, _RSA_,
+- HTTPS
+- TLS, Transport Layer Security, 一個 security protocol
+- SSL Certificate, Secure Socket Layer, a public key from server, 認證 server 是正確的 server 來提供 public key 否則一樣可以被 man-in-the-middle 攻擊, 由 certificate authority (CA) 提供的 digital certificate
+- TLS Handshake, 讓 client 與 server 建立 session key 來安全的溝通
+  1. client hello (random) -> server
+  2. server hello + SSL Certificate (server public key, signed by CA) -> client
+  3. client verify SSL Certificate by CA public key
+  4. client premaster secret (encrypted by server public key) -> server
+  5. generate symmetric-encryption session key (client hello, server hello, premaster secret)
+
 ---
 
 ### 第二十五章 - API Design
 
----
+- API for inner or as a product
+- 因為 API 被大量的使用不管是內部還是對外, 因此如何設計 API 是非常重要的事情
+- Pagination
+- CRUD Operations
+- 做決定時的溝通是設計面試的重點
+
+1. 詢問詳細的需求細節, 2. 系統設計: 畫出架構圖, 2. API 設計: 描述 API endpoint 等等細節 (API outline)
+
+- 寫下 API Definition, 像是所有的 entity 與 properties
+- 寫下 API Endpoint Definition, 各個需要支援的 function definition, 名稱, 輸入與輸出, 與實際的 restful endpoint (path, method, request body, response body)
+- 或者寫下 API in swagger format
+- 面試時詢問可以接受的格式與寫法
+- **練習方式**:
+  1. 實際看大公司的 API 文件, 學習如何設計 (Stripe API, ...)
+  2. 嘗試回答如何常見公司的 API (Stripe API, Twitter API, ...) 然後對照實際的 API 詢問設計是否更好或決策想法
 
 ---
 
