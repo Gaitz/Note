@@ -354,21 +354,68 @@ Concepts
 
 ### 第十九章 - Configuration
 
+- JSON or YAML
+- static, 寫死的相依於 application 中, 修改通常需要重啟或重新建置
+  - 修改時通常需要經過 code review
+- dynamic, 與 application 分離的, application 以 query/request 取得當下的設定
+  - 修改時更容易, 要小心安全性
+- configuration 修改與更新, 可以非常複雜與詳細的流程, 來保證安全性
+
 ---
 
 ### 第二十章 - Rate Limiting
+
+- Rate Limiting, 一個動作在一定時間內的執行次數上限
+- 為了安全性的 rate limiting
+  - DoS attack, 單一來源利用大量的 request 導致伺服器的功能無法服務其他人甚至直接掛掉
+  - DDoS attack, 多個來源產生的 DoS attack, 為了嘗試繞過 rate limiting 設定的限制
+- 為了效能的 rate limiting
+- Rate limiting 可以依據 user, IP-address, region, time
+- Rate limiting 可以建立在各個不同的 layer, 例如 Network, Service, ...
+- 對於 service cluster 把 rate limiting 建立在單台機器上是不足夠的, 因此要把 rate limiting 建立在其他 server 上, 例如 _Redis_
+- _Redis_
+- 系統設計上要思考各個情境要如何設計對應的 rate limiting 機制
 
 ---
 
 ### 第二十一章 - Logging And Monitoring
 
+- 在系統越來越大時 logging, monitoring, alerting 會越來越重要
+  - 用來除錯, 偵測攻擊, 尤其是跨系統的問題
+  - 用來取得有用的資訊來協助決策
+- Logging, 有格式的印出各種 event 與重要的資訊, 協助除錯與偵測攻擊, 尤其是跨系統的問題
+- Monitoring, 設定指定的數據來觀察或查詢, 可以協助 BD, marketing, ...
+- Alerting, 設定指定的觀測並且主動通知
+- 有額外的系統協助收集 logs, 提供 monitoring, 設定 alerting 等等
+- 例如 time series database, ...
+
 ---
 
 ### 第二十二章 - Publish/Subscribe Pattern
 
+- async, 分離 (decouple) publisher 與 subscriber
+- publisher, 發送 message 到 topic
+- subscriber, 訂閱 topic 來取得 message
+- topic (channel),
+- message, 資料與動作
+- Idempotent operation, 這個動作無論執行多少次都不會影響他的輸出或影響
+- Publish/Subscribe Pattern, 特色是保證至少一次的 delivery, persistent storage, 保證 message 順序 (ordering), replayability 可重現
+- _Apache Kafka_, _Google Cloud Pub/Sub_
+
 ---
 
 ### 第二十三章 - MapReduce
+
+- 大數據處理
+- distributed
+- Google opened white paper: MapReduce
+- 由 functional programming 的概念啟發
+- Map, 分散的檔案經過 map function 形成 key-value pairs
+- Reduce, 整合各節點裡的 key-value pairs 成最終的結果
+- Map 與 Reduce function 都必須是 idempotent
+- Distributed File System, 由分散式系統組成的檔案系統
+- word count, 大數據處理的 hello world example
+- _Hadoop_, HDFS (Hadoop Distributed File System)
 
 ---
 
