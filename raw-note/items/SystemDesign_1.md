@@ -464,6 +464,55 @@ Questions
 
 ### 第一章 - Design A Code-Deployment System
 
+問題
+
+- Q1: what is
+- Q2: 用戶是誰, 為什麼需要這個系統
+- Q3: 地區性, 全球或特定地區
+- Q4: 使用我們自己的機器或雲端服務, 機器是在特定區域還是全世界各地
+- Q5: 內部系統或外部系統, 時間需求 (反應非常快速與否), 遇到錯誤時的處理
+- Q6: 以自己的話描述來確認需求
+- Q7: 需求的時間頻率, 容量大小
+- Q8: 輸入的資料從何而來, 如何取得
+
+Video Solution
+
+- 需求探索, 列出要實作中的每個階段並且討論每個階段的需求與設定
+  - 實際的需求數據, 例如每天多少次, 執行時間, 容量大小 等等
+  - 輸入資料的來源與如何取得
+- 分成兩個步驟 building 與 deploying
+- 使用 message queue 來接需求與準備處理
+  - 討論 queue 如何實作, 建立在 memory 上或有實際的硬碟儲存, 例如建立在 relational database 上
+  - relational database 的 table 實際上會怎麼建立
+  - 利用 SQL database 的 ACID transaction 來保證 concurrency safety
+- 一直思考或詢問自己如何處理 worst case 或任何的 failed 與 edge cases
+  - 處理方式例如 health check
+- 依據假設的需求數據計算出預估的機器數量或工作數量
+- region issue 可以分散成各區域獨立一個小系統處理, 但要記得如果有資料需要部屬在各個 region 時的處理
+- 大資料傳輸可以建立在 peer-to-peer network
+
+Solution Walkthrough
+
+- 解題步驟與思考順序
+
+1. 探詢且確認系統需求, 系統目的與動作, 使用者, 預估運行的量與時間, 期望的 availability 程度
+2. 第一個高抽象層的計畫, 系統應該切成那些獨立的功能, 階段, component, 子系統, ...
+3. 從 high level 去描述這些階段與獨立功能要執行的工作與成員
+
+- 思考實作討論與假設並且思考每個 edge cases, worst cases, failed cases 發生時
+- 討論輸入資料的來源與取得方式
+- Job Queue, 以 memory 實作時發生錯誤時資料會消失, 可以以 SQL databases 實作
+- 討論 SQL databases 實際的 table 與 query
+- 思考 concurrency, 以 SQL databases 為例可以使用 ACID transaction 來保護
+  - 實際計算需求的量以 SQL 為系統是否能乘載
+- 部分機器死掉時, 可能遇到的狀況與解決方案, 可以實作 health check
+- 實際計算預估的機器數量
+- 討論輸出資料的存放位置與實現方式
+- 考慮 region 與 vertical scaling
+- 在大資料大數量傳輸時, 可以考慮使用 peer-to-peer network 加速
+- 非同步工作追蹤可以使用 dynamic configuration 建立 global 與 regional 之類的互相讀取得到最新狀態
+- 畫出最終系統圖包含 scaling 與 load balancer
+
 ---
 
 ### 第二章 - Design AlgoExpert
