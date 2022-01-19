@@ -175,3 +175,13 @@
 - 針對 Dynamic Programming 的空間使用率, 可以藉由觀察每一次真正所需要使用到的範圍, 去做空間使用率的減少
 
 ---
+
+### Methods check list
+
+- Greedy Algorithm,
+  - 每個步驟都尋求局部最佳解 (local optimal solution) 最後即得到全域最佳解 (global optimal solution)
+- Dynamic Programming,
+  - 試著以子問題的最佳解來推導母問題最佳解, (子問題最佳解可以組合出母問題最佳解)
+  - 因此通常需要儲存子問題的解 (需要佔用空間, 通常用到方格)
+- NP complete
+  - 辨識出無法以多項式時間解決的問題
