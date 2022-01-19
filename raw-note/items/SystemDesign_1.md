@@ -327,7 +327,7 @@ Concepts
 
 ---
 
-### 第十七章 - Peer-To-Peer Networks
+### 第十七章 Peer-To-Peer Networks
 
 - 傳送資料的 source 如果可以持續增加即可避免依序的傳輸 (避免等待)
 
