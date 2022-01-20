@@ -1,4 +1,4 @@
-## AlgoExpert 140 Coding Interview Questions
+## AlgoExpert 160 Coding Interview Questions
 
 ### [AlgoExpert](https://www.algoexpert.io/questions), AlgorithmExercise
 
@@ -639,6 +639,10 @@ Tips:
 ---
 
 ### 第十章 - Arrays : Hard and Very Hard 10
+
+Tips:
+
+#### 1. Four Number Sum
 
 ---
 

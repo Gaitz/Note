@@ -180,8 +180,14 @@
 
 - Greedy Algorithm,
   - 每個步驟都尋求局部最佳解 (local optimal solution) 最後即得到全域最佳解 (global optimal solution)
+  - 也許不是最佳解但是可以快速找到近似解
+- Divide and conquer,
+  - Divide 原問題太難, 先切割成子問題
+  - Conquer, 嘗試解決子問題
+  - Combine, 組合子問題解答變成原問題解答
 - Dynamic Programming,
   - 試著以子問題的最佳解來推導母問題最佳解, (子問題最佳解可以組合出母問題最佳解)
   - 因此通常需要儲存子問題的解 (需要佔用空間, 通常用到方格)
+  - 可以視為 Divide and conquer + memorization
 - NP complete
   - 辨識出無法以多項式時間解決的問題
