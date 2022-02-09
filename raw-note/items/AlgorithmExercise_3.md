@@ -644,6 +644,9 @@ Tips:
 
 #### 1. Four Number Sum
 
+- 以 Two number sum 的解法為基礎進化而成
+- 思考如何避開紀錄重複的內容, 以一定的順序做處理
+
 ---
 
 ### 第十六章 - Strings : Hard and Very Hard 5
