@@ -647,6 +647,15 @@ Tips:
 - 以 Two number sum 的解法為基礎進化而成
 - 思考如何避開紀錄重複的內容, 以一定的順序做處理
 
+#### 2. Subarray Sort
+
+- 注意相等時的處理並且測試多個可能
+
+#### 3. Largest Range
+
+- Hash table 優化搜尋
+- 順序的 check 除了單向之外, 其實可以一次雙向處理 (+ -)
+
 ---
 
 ### 第十六章 - Strings : Hard and Very Hard 5
