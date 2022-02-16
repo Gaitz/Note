@@ -80,23 +80,79 @@
 
 ---
 
-### 第二章 - 從二層到三層
+### 第二章 - 從二層到三層 (data link layer, network layer)
 
 1 從實體層到 MAC 層
 
 - 實體層組合成 Local Area Network, LAN
 - MAC 層 (Medium Access Control)
-- 使用 ARP 協定以廣播的方式取得目標 IP 的 MAC address
-- RARP 反向的協定以 MAC address 尋找 IP 位置
+- 使用 _ARP_ 協定以廣播的方式取得目標 IP 的 MAC address
+- _RARP_ 反向的協定以 MAC address 尋找 IP 位置
 - Hub 無腦的廣播, Switcher 有腦的紀錄與更新 MAC address 與 IP 對應
 
 2 交換機 switcher 與 VLAN
 
--
+- 多個交換機, 要解決 cycle 問題, 來避免廣播風暴
+- 使用 Spanning Tree Protocol, _STP_ 產生交換機的階層來避免 cycle 產生的廣播風暴
+  - Root Bridge, Designated Bridge, Bridge Protocol Data Units (BPDUs), Priority Vector
+- 以 switcher 設置 _VLAN_ 來提高效能與安全性
+  - 設置 VLAN tag 讓支援 VLAN 的 switcher 辨識
+
+3 ICMP 與 ping
+
+- Internet Control Message Protocol, _ICMP_
+- 屬於 IP 封包, 用來偵查傳輸狀況的協定, 裡面有各種類型的封包
+- 查詢探查封包 (type 8), `ping` 是依據 ICMP 格式再增加一些欄位所成的
+  - ICMP ECHO REQUEST 與 ICMP ECHO REPLY (type 0)
+- 差錯封包, 當例外情況發生時所發送的封包, 例如: 不可到達, timeout, 路由重新導向
+- 在可以控制範圍內發生網路不通時, 可以使用 ping 來偵測不同的網路設備查詢問題可能發生的地方
+- 遇到關閉回應 ping 協定的設備時, 要通過其他協定來探測, 例如 telnet
+- `traceroute` 使用特定的設定 (例如指定的 TTL) 配合 UDP 來觸發 ICMP 差錯封包
+
+4 想出閘道, 前往外網
+
+- 在路由器 Router 上一筆一筆手動輸入的靜態路由 Static Route
+- MAC address 與 IP address
+- 在不知道位置時需要訪問 DEFAULT GATEWAY (通常就是該區域網路內的 Router) 來協助處理轉發
+- 在內網裡的路由不需要使用到外網 IP (封包傳送不會修改 IP)
+- 需要到外網時的路由則需要 Network Address Translation (_NAT_) 來協助轉換內外網 IP
+  - 修改 source IP 的 Source Network Address Translation, SNAT
+  - 修改 destination IP 的 Destination Network Address Translation, DNAT
+- 對於 server-side 而言, 只需要對外的入口使用 public IP 即可, 對內的機器仍然可以使用 private IP 來傳輸
+
+5 路由式通訊協定
+
+- `route` 與 `ip route` 指令查詢與設定靜態路由
+- 靜態路由 (static routing) 指定, 目標網路, 出口裝置 (實體 port), 下個路由器位置
+- 靜態策略路由, 除了指定目標網路而定之外, 可以通過設定 `ip rule` 做更複雜的判定
+  - 可以有多層的 route table 規則
+- 動態路由 (dynamic routing) 依據規則自動計算下一個路徑
+  - Graph 與最短路徑演算法 Bellman-Ford Algorithm, Dijkstra Algorithm
+- Distance Vector Routing 距離向量路由,
+  - 依據 Bellman-Ford algorithm 每個路由器紀錄目標網路與距離資訊
+  - 每個路由器都知道全域路由資訊並且每次傳遞資訊都是全域路由資訊
+  - 壞處是傳播路由資訊的速度較慢, 不適合用在大型網路上 (節點 > 15)
+  - 實現範例: Routing Information Protocol, _RIP_
+- Link State Routing 鏈路狀態路由, 依據 Dijkstra algorithm
+  - 只廣播更新與自己相連的路由器資訊
+- 以 Link State Routing 為基礎的 Open Shortest Path First, _OSPF_ 協定
+  - 主要用於資料中心內部, 因此又稱為 Interior Gateway Protocol, IGP
+  - 在有相等路由時, 可以藉由 load balancer 平衡流量
+- 以 Distance Vector Routing 為基礎的 Border Gateway Protocol, _BGP_ 協定
+  - 使用於外部網路
+  - 自治系統 Autonomous System
+  - Stub AS, 對外只有一個接口, 個人或小公司網路
+  - Multihomed AS, 多介面, 大公司網路
+  - Transit AS, 協助轉發的
+  - 分成 external Border Gateway Protocol, _eBGP_ 與 internal Border Gateway Protocol, _iBGP_
+  - 以升級版的 _Path Vector Protocol_ 來減低傳播速度慢的問題
 
 ---
 
-### 第三章 - 最重要的傳輸層
+### 第三章 - 最重要的傳輸層 (transport layer)
+
+- Transmission Control Protocol, _TCP_ 與 User Datagram Protocol, _UDP_
+-
 
 ---
 
