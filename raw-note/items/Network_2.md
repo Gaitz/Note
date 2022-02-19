@@ -151,8 +151,55 @@
 
 ### 第三章 - 最重要的傳輸層 (transport layer)
 
+1 _UDP_
+
 - Transmission Control Protocol, _TCP_ 與 User Datagram Protocol, _UDP_
--
+  - TCP 需要建立連線, UDP 不需要建立連線
+- UDP 與 TCP 都建立在 IP 層上並且通過 port 號來對照應用程式
+- UDP header 很簡單, 只需要包含 source port, target port, UDP length, UDP checksum
+- UDP 溝通簡單, 不需要提前建立連線, 但是不保證是否遺失或者資料順序等等
+- 通常適用場景: 1. 需要廣播, 2. 環境簡單, 3. 應用層自行管理連線與重送問題
+- 以 UDP 為基礎客製化的協定或應用場景, 例如:
+  - _DHCP_, 動態配置 IP 的協定
+  - Quick UDP Internet Connection, _QUIC_ 用來取代 TCP 為基礎的 HTTP 協定
+  - Stream 類型資料影音應用, 通常以客製化的 UDP 實現
+  - 線上遊戲, 需要快速的反應也通常以客製化的 UDP 實現
+  - 物聯網, 終端能力較小, 不適合使用 TCP 的情況
+  - 行動通訊領域, 例如 4G 網路
+
+2 _TCP_ 上
+
+- TCP 協定, 在傳輸層就保證了傳輸的品質, 實現重送, 資料順序, 不遺失等保證
+- TCP 的狀態是雙方共同維護的並且資料允許雙方傳遞與回覆
+- TCP header, 包含
+  - source 與 target port,
+  - 封包序號,
+  - 確認序號,
+  - 視窗大小 **AdvertisedWindow**, (能處理的量)
+  - 狀態 flag, Synchronize Sequence Number, **SYN**, Acknowledgement, **ACK**, Reset, **RST**, Finish, **FIN**
+- TCP 主要維護, 順序問題, 封包遺失問題, 連線維護, 流量控制, 壅塞控制
+- 建立連線需要 **3** 次驗證,
+  - 客戶端有以下狀態 CLOSED, SYN_SENT, ESTABLISHED,
+  - 伺服器端有 CLOSED, LISTEN, SYN_RCVD, ESTABLISHED
+- 結束連線需要 **4** 次驗證,
+  - 發起方狀態有 ESTABLISHED, FIN_WAIT_1, FIN_WAIT_2, TIME_WAIT (2MSL), CLOSED
+  - 接收方狀態有 ESTABLISHED, CLOSED_WAIT, LAST_ACK, CLOSED
+- Maximum Segment Lifetime, 最長存活時間, **MSL**, 配合 IP Header 的 Time to live, **TTL**, 常見選項有 30 秒, 1 分鐘, 2 分鐘
+
+3 _TCP_ 下
+
+- 實現 TCP 可靠度的關鍵與演算法
+- 利用 cache 與 **advertisedWindow** 來控制封包順序, 封包遺失, 流量控制
+- TCP cache, 儲存應用層尚未讀取, 但是已經收到的封包並且依順序排列, 受到 advertisedWindow 控制
+- 通過動態的演算法調整逾時重傳的時間 **Adaptive Retransmission Algorithm**
+- 通過連續發送 3 個前一序號封包的 ACK 使得服務端立即重傳遺失的內容 (快速重傳) 不需等待 timeout
+- 利用演算法與 congestion window, **cwnd** 來控制壅塞狀況, 目標是達到高頻寬並且低延遲
+  - 壅塞會產生的現象, 封包遺失 (loss) 和逾時重傳 (timeout)
+  - TCP **BBR** 壅塞演算法, 達到佔滿頻寬, 但是不影響快取
+
+4 socket
+
+- 以 UDP 與 TCP 為基礎的 socket 實現
 
 ---
 
