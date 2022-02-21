@@ -200,10 +200,51 @@
 4 socket
 
 - 以 UDP 與 TCP 為基礎的 socket 實現
+- 相關於 OS kernel
+- socket 是作為讓 client 與 server 能夠互相溝通 (read, write)
+- TCP socket 因為需要建立連線因此需要 server-side: `bind() -> listen() -> accept()`, client-side: `connect()`
+- socket 在 linux kernel 中是以檔案方式存在 (file)
+- UDP socket 因為不需要交握因此，只需要使用 `bind()`
+- 討論單機 socket 所能允許的數量上限與各種處理方式
+- 理論最大連接數為 {本機 IP, 本機 port, 客戶方 IP, 客戶方 port},
+  - 不可能達到, 理由是受 OS kernel 實體限制包含記憶體限制與檔案個數上限
+- 以 multiple process 處理 (OS `fork()`)
+- 以 multiple thread 處理 (OS `pthread_create`)
+- 受到 process 與 thread 數量上限會遇到單機器 **C10K** 問題
+- 以**更有效的 I/O** 方式解決 process 與 thread 數量上限問題
+  - **polling**, 單個 thread or process 監控與執行多個 socket
+  - **epoll**, 以 callback 方式實現 event based, 實際監控的 sockets 以 red-black tree 儲存, 因此搜尋 callback 的時間是 O(log(n))
+- 因此最終方法, **epoll** 方式下的數量上限為 OS 所能允許的開啟檔案數量上限
 
 ---
 
 ### 第四章 - 最常見的應用層
+
+1 HTTP
+
+- **URL**, Uniform Resource Locator, 包含協定名稱, domain name, path to resource
+- HTTP 傳輸層是以 TCP 為基礎
+- _HTTP 1.1_ 中預設開啟 **keepAlive** 盡可能重用同一個 TCP 連結
+  - 配合 **KeepAliveTimeOut** 時間來決定何時關閉 TCP
+- Request 包含 method, URL, HTTP version, headers, body
+- 常用 Methods, **GET**, **POST**, **PUT**, **DELETE**
+- 常用 Request headers, **Accept-Charset**, **Content-Type**, **Cache-Control**, **If-Modified-Since**
+- HTTP 應用層把資料視為 Stream, 傳輸層仍然是 TCP 封包
+- Response 包含 HTTP version, status code, headers, body
+- _HTTP 2.0_, 仍然使用 TCP 為基礎, 但是優化傳輸容量與應用層多工處理
+  - Header 壓縮
+  - 應用層實現多個 stream 並且共用同一個 TCP
+  - 切割資料成更小的 frame
+- HTTP 2.0 以應用層多工改善 HTTP 1.1 的單個 stream 傳輸, 但是底層仍然是 TCP 會受限於 TCP 的傳輸順序
+- Quick UDP Internet Connection, _QUIC_, 傳輸層以客製化的 UDP 為基礎實現 HTTP 協定的功能
+  - 自訂連接, 連接不以 IP 為基礎, 而是使用自定義的 64 bits ID
+  - 自訂重傳, 與 TCP 不同的是封包順序與封包內容不使用同一個序號, 封包順序採用遞增的序號, 封包內容採用 offset 做辨認
+  - 採用 UDP 後無需受到 TCP 傳輸順序影響導致阻塞
+  - 自訂流量控制與壅塞控制, 利用與 TCP 類似的概念與演算法實現
+
+2 HTTPS
+
+-
 
 ---
 
