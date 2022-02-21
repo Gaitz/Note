@@ -663,6 +663,10 @@ Tips:
 - 除了 expand valley 一次處理左右邊
 - 不如一次處理單向然後執行兩次 (更聰明, code 更簡單)
 
+#### 5. Apartment Hunting
+
+- 一次處理單向然後執行兩次
+
 ---
 
 ### 第十六章 - Strings : Hard and Very Hard 5
