@@ -244,11 +244,86 @@
 
 2 HTTPS
 
--
+- _HTTPS_ 讓 HTTP 建立在安全通道 (secure) 上
+- 同時使用對稱加密與非對稱加密, 並且通過數位權證 (certification) 來驗證可信度
+- 作為驗證與發證的機構 **Certification Authority, CA**
+  - 以階層式建立的 CA 通過層層背書的方式來提供可信度
+  - Self-Signed Certification, 自行認證的, 可信度無法背書
+- HTTPS 先以非對稱式加密與數位權證的方式驗證與傳遞未來實際使用的對稱式加密金鑰 (key)
+- 首先使用明文的 **Transport Layer Security, TLS** 做傳遞通道
+- Client Hello (內包含一組亂數)
+- Server Hello (內包含一組亂數), Server Certificate, Server Hello Done,
+- Client 驗證 certification 並且產生亂數 pre-master
+- Client Key Exchange, Change Cipher Spet, Encrypted Handshake Message
+- Change Cipher Spec, Encrypted Handshake Message
+- 對稱式加密執行較快, 但是 key 無法安全的傳遞
+- 非對稱式加密執行較慢, 但是沒有 key 傳遞的問題
+- 因此 HTTPS 最終資料傳遞使用對稱式加密, 只有在驗證與傳遞亂數的時候使用非對稱式加密和數位簽章
+
+3 Stream 串流資訊
+
+- 視訊, 即一連串的圖片資訊, 圖片即像素組成,
+- 完整的資料太過巨大, 因此不管是圖片還是視訊都會需要經過壓縮與編碼
+- 視訊編碼兩大機構,
+  1. **International Telecommunications Union, ITU**, **Video Coding Experts Group, VCEG**, 例如 _H.264_
+  2. **International Standards Organization, ISO**, **Moving Picture Experts Group, MPEG**, 例如 _MPEG-4_
+- 視訊編碼被統一, 由兩大機構一起制定了 _H.264/MPEG-4 AVC_ 標準
+- 視訊服務架構: 生產方 -> 分散式 servers -> 消費者
+- 視訊資料以 frame 為單位, 分成三種類型 **I-frame**, **P-frame**, **B-frame** 有不同的容量與壓縮率, I 最完整, B 壓縮率最高
+- 每個 frame 會被分成多個 slice, 每個 slice 又分成巨集塊, 每個巨集塊裡又有多個子塊
+- 傳輸的封包單位為 **Network Abstraction Layer Unit, NALU**, 資料為一個 slice 一個 NALU
+  - 包含 header 與 payload
+- **NALU** 資料傳輸使用 _Real-Time Messaging Protocol, RTMP_ 協定,
+  - 此協定建立在 TCP 上,
+  - 有額外的 connect() 通道, 來傳遞版本編號與時間戳記
+
+4 P2P 協定
+
+- 傳輸資料以 HTTP 或 FTP 傳輸大容量的資料都會常有效能問題
+- _File Transfer Protocol, FTP_ 協定
+  - 使用 2 個 TCP 連接,
+  - 一個固定為 **21 Port** 做為控制使用
+  - 另一個與客戶端建立用來傳輸資料
+  - FTP 分成 主動模式 (PORT) 與 被動模式 (PASV) 來與客戶端建立資料通道
+- **Peer-to-Peer, P2P**
+- **.torrent** 內儲存 tracker URL 與檔案資料 (info, Name, 每段容量, 資料 HASH)
+- 把大容量資料分成小段, 並且每段資料都有 HASH 值, 來協助判定傳輸的資料正確性
+- P2P 分成兩種方式實現
+  1. **tracker**, 固定有一個中心來提供其他使用者的位置與所持有的資源, 壞處是會產生 single point failure
+  2. **Distributed Hash Table, DHT** 來實現去中心化網路, 每個節點儲存**部分**資源與其他成員聯繫方式
+- DHT 常以 _Kademlia_ protocol 實作,
+  - 以 1 個 TCP 來傳輸資料, 1 個 UDP 來溝通
+  - 以檔案片段的 Hash Value 來對應 DHT ID, 來決定資料的儲存
+  - 使用 DHT ID 以 XOR 為節點距離計算, 並且計算與產生 **k-bucket**
+  - 節點搜尋演算法複雜度為 O(logN)
+  - 分成四個指令, PING (測試節點存活), STORE (要求儲存資料), FIND_NODE (尋找節點位置), FIND_VALUE (尋找資料)
+- 遇到 private IP 時的解法,
+  1. NAT 穿透, 通過共用一台公網 proxy 作為轉發
+  2. UDP 打洞, 通過一台公網 server 作為協調者
 
 ---
 
 ### 第五章 - 陌生的資料中心
+
+1 DNS
+
+- **Domain Name System, DNS**, 以 domain name 解析成 IP 的服務
+- 必須是高可用性, 高平行處理, 分散式的
+- DNS 採用樹狀結構, Root DNS, 頂級 DNS, 權威 DNS
+- 並且擁有 cache 機制, 1. 本地端 (`/etc/hosts`), 2. IPS 提供的 DNS server
+- DNS 另一個主要功能是作為 **load balancer** 的實現, 可以包含多層的 DNS load balancer 來實現區域性與服務內部的 load balance
+
+2 HTTPDNS
+
+- **HTTPDNS**
+  - 不使用傳統的 DNS 服務, 而是以 HTTP 為基礎自定義一套 DNS 服務
+  - 客戶端必須使用專用的 SDK 並且可以 fallback 回傳統的 DNS
+  - 通常使用在手機網路與移動端 mobile
+- 用來解決傳統 DNS 的快取問題與不精準的位置解析
+- Cache 模式分成同步與非同步取用和更新
+- 同步的 **Cache-Aside** 機制, 客戶端直接讀取資料庫然後才更新快取
+- 非同步的 **Refresh-Ahead** 機制, 以 **Guava Cache** 為例包含 **RefreshAfterWrite** 機制
+  - **多個**無快取 request 也**只會產生一次** request 到資料庫
 
 ---
 
