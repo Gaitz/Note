@@ -680,6 +680,18 @@ Tips:
 - 程式稍微繁瑣適合抽離邏輯, 提高表達力
 - 官方解法使用, 一次處理兩層依序處理 (認為稍微複雜, 不直觀, 效能也沒有差異)
 
+#### 8. Minimum Area Rectangle
+
+- 資料的順序, 可以避免不必要的計算
+- Hash Table 儲存邊 (edge) as key
+
+#### 9. Line Through Points
+
+- 圖形題, 先視覺化畫出實際的圖, 來觀察
+- 沒有想法時, 先思考 brute force 然後減少重複的部分
+- 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
+- 此題困難處在於處理 float point as hash table key
+
 ---
 
 ### 第十六章 - Strings : Hard and Very Hard 5
