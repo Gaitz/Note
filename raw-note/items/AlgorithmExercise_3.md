@@ -643,6 +643,12 @@ Tips:
 Tips:
 
 - 最佳化的兩種情況 1. 一次處理雙向, 2. 一次處理單向但是處理兩次, 最好兩種都想想看選擇出最簡單實作的
+- 圖形題, 先視覺化畫出實際的圖, 來觀察
+- 沒有想法時, 先思考 brute force 然後減少重複的部分
+- 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
+- 此題困難處在於處理 float point as hash table key
+- 資料的順序, 可以避免不必要的計算
+- Hash Table 儲存邊 (edge) as key
 
 #### 1. Four Number Sum
 
@@ -695,6 +701,29 @@ Tips:
 ---
 
 ### 第十六章 - Strings : Hard and Very Hard 5
+
+Tips:
+
+- 試著以儲存 index 來處理字串問題, 而非儲存字串本身
+- 如果單一個迴圈或直接處理太困難, 試著不要一個迴圈做完, 而是分成多個步驟處理
+- 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
+- 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
+- 複雜度分析可以嘗試分析實際的 input 可以更精準的計算出實際的複雜度
+
+#### 1. Longest Substring Without Duplication
+
+- 試著以儲存 index 來處理字串問題, 而非儲存字串本身
+
+#### 2. Underscorify Substring
+
+- 困難, 允許的情況除了連接以外 overlay 也算, 要處理的 case 非常多
+- 如果單一個迴圈或直接處理太困難, 試著不要一個迴圈做完, 而是分成多個步驟處理
+- 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
+- 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
+- 此題步驟分成
+  1. 找出所有 substring indices,
+  2. 合併 substring indices 找到真正要加 underscore 的地方
+  3. 實際執行加 underscore 並且組合出結果
 
 ---
 
