@@ -709,6 +709,7 @@ Tips:
 - 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
 - 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
 - 複雜度分析可以嘗試分析實際的 input 可以更精準的計算出實際的複雜度
+- 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
 
 #### 1. Longest Substring Without Duplication
 
@@ -724,6 +725,14 @@ Tips:
   1. 找出所有 substring indices,
   2. 合併 substring indices 找到真正要加 underscore 的地方
   3. 實際執行加 underscore 並且組合出結果
+
+#### 3. Pattern Matcher
+
+- 困難, 細節很複雜
+- 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
+- 簡化 case, 優先處理簡化版本
+
+#### 4. Smallest Substring Containing
 
 ---
 
