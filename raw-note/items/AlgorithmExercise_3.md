@@ -710,6 +710,7 @@ Tips:
 - 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
 - 複雜度分析可以嘗試分析實際的 input 可以更精準的計算出實際的複雜度
 - 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
+- 試著思考所有能儲存的東西, 並且觀察是否有用
 
 #### 1. Longest Substring Without Duplication
 
@@ -733,6 +734,21 @@ Tips:
 - 簡化 case, 優先處理簡化版本
 
 #### 4. Smallest Substring Containing
+
+- 困難, 有一個搜尋字串時的特殊技巧值得學會 (sliding window), 使用兩個一前一後的 pointer 一次只移動一個
+- 使用到兩個 pointers, left 與 right,
+  - 尚未找到 substring 時由 right 往前尋找
+  - 找到 substring 後移動 left 來縮短, 直到又不符合 substring 時
+
+#### 5. Longest Balanced Substring
+
+- 困難, cases 很多, 最佳解不容易想到
+- 試著思考所有能儲存的東西, 並且觀察是否有用
+- brute force, T: O(n^3), S: O(n)
+- 方法 1. T: O(n), S: O(n)
+  - 使用 stack 儲存 index, 並且計算 diff 取得距離
+- 方法 2. T: O(n), S: O(1),
+  - 最佳解法: 只記錄 opening 與 closing 的數量, 並且要執行由左至右和由右至左兩次, 才能包覆所有的 cases
 
 ---
 
