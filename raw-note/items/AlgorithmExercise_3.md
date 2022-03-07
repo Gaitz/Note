@@ -104,6 +104,7 @@ How To Best Use AlgoExpert
 - Immutable 與 mutable 如果只是 read 減少不必要的空間
 - 紙筆優先
 - 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
 
 ---
 
@@ -753,6 +754,31 @@ Tips:
 ---
 
 ### 第十七章 - Stacks : Hard and Very Hard 2
+
+Tips:
+
+- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
+
+#### 1. Shortest Path
+
+- 困難, 要考慮的 cases 非常多, 很難一次完成, 必須經過多個 edge cases 來修正
+- key points:
+  1. path 是以 '/' 作為間隔的, 因此可以直接 `split('/')` 再來做處理
+  1. 思考所有合法的 path 開頭, 可以分類成 `/`, `../`, others related path
+  1. edge case, 以 root 開頭的 absolute path
+  1. edge case, 以 `../` 開頭的 related path
+  1. 在前項沒有東西時遇到 `..` 則要加入相對父層路徑 `../`
+  1. 前項是 root `/` 時遇到 `..` 則保持 root `/`
+- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
+
+#### 2. Largest Rectangle Under Skyline
+
+- 困難, 最佳解想不到, 即使知道使用 stack 仍然想不到解法
+- Brute force T: O(n^2)
+- 最佳解使用 stack 儲存 index of strict order of value
+  - 利用這個條件, 嚴格小於, 可以在適當的時機找到指定 height 的極右與極左位置 (即 width 長度)
+  - 這樣就可以一次性計算並且與最大值比較
+  - 複雜度是 T: O(n), S: O(n), n for length of buildings
 
 ---
 
