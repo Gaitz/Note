@@ -152,6 +152,13 @@
 - Stack, 可以用於把遞迴演算法改成迭代演算法時使用
 - Queue, 常用於廣度優先搜尋 BFS, 實現 Cache
 - 遞迴中止條件放在最開頭, 來保障正確性
+- Stack 與 Queue 可以用來儲存待處理的事項並且在適當的時機取出來處理
+
+#### Heap
+
+- Heap 是一種特殊的 binary tree, 可以利用 array 儲存
+- 一個不需要排序 O(n \* log(n)) 但是可以取出特定的值的資料結構
+- get O(1), 其他 operator 都是 O(log(n))
 
 #### Tree and Graph
 

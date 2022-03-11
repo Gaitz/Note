@@ -303,8 +303,8 @@ Hints:
 #### 1. Min Heap Construction
 
 - Min heap 建立, 以 array 來儲存 binary tree, build heap 的方式有多種
-
-- ***
+- insert 是從底層浮上來
+- remove 是把 root 與最後一個元素交換, 然後把最後一個元素向下移動到適合的位置
 
 ### 第五章 - Linked Lists : Easy and Medium 4
 
@@ -783,6 +783,19 @@ Tips:
 ---
 
 ### 第十八章 - Heaps : Hard and Very Hard 4
+
+Tips:
+
+- Heap 是一種特殊的 binary tree, 可以利用 array 儲存
+
+#### 1. Continuous Median
+
+- 第一個想法是建立 sorted array, 這樣 insert 是 T: O(n), get median 是 T: O(1), S: O(n)
+- 想到一個不需要排序, 但是可以取出特定的值, 最大值或最小值就是 heap
+- 同時建立 max heap 與 min heap 來處理中間值的左半與右半
+- 使用 Heap 讓 insert 複雜度降成 T: O(log(n)), S: O(n)
+
+#### 2.
 
 ---
 
