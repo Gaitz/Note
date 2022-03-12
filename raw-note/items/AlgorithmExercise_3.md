@@ -305,6 +305,7 @@ Hints:
 - Min heap 建立, 以 array 來儲存 binary tree, build heap 的方式有多種
 - insert 是從底層浮上來
 - remove 是把 root 與最後一個元素交換, 然後把最後一個元素向下移動到適合的位置
+- **buildHeap** 的時間複雜度是 T: O(n) 而非 T: O(n \* log(n)), 學習實際的複雜度分析
 
 ### 第五章 - Linked Lists : Easy and Medium 4
 
@@ -787,6 +788,7 @@ Tips:
 Tips:
 
 - Heap 是一種特殊的 binary tree, 可以利用 array 儲存
+- 問題涉及變動的極大極小值或想要降低排序時間時, 可以嘗試使用 heap
 
 #### 1. Continuous Median
 
@@ -795,7 +797,28 @@ Tips:
 - 同時建立 max heap 與 min heap 來處理中間值的左半與右半
 - 使用 Heap 讓 insert 複雜度降成 T: O(log(n)), S: O(n)
 
-#### 2.
+#### 2. Sort K-Sorted Array
+
+- 以 min-heap 來 sort 可以降低時間複雜度從 `n * log(n)` 到 `n * log(k)`
+
+#### 3. Laptop Rentals
+
+- 經典題目, 區間覆蓋問題, 記得最佳解為 T: O(n \* log(n)), S: O(n)
+- 出現時間相關問題時, 可以先嘗試排序來觀察是否有幫助, sort first, T: O(n \* log n)
+- 由於排序所需的複雜度是 T: O(n \* log(n))
+- 每個欄位做 Heap insert 所需的總共複雜度也是 T: O(n \* log(n))
+- 方法 2. 不需要 heap, 很聰明的方式, 只需要知道 start times 與 end times 不需要管 interval
+  - 分別排序 start times 與 end times 即可知道在每個 end times 歸還前還有幾個 start times 正在運行 (即此題的佔用數)
+  - start 代表開始租, ends 代表歸還
+- 好好觀察問題, 嘗試排序永遠適合
+
+#### 4. Merge Sorted Array
+
+- 經典題目, merge sorted array
+- 優於直接 sort 整個 array 的優勢在於 array 的數量 k 遠小於總數 n
+- 使用 heap 的複雜度會是 T: O(n \* log(k)), S: O(n + k)
+- 通常這題會提供限制 1. 不能使用 sort, 2. array 的數量 k 遠小於總數 n
+- 記得複雜度分析
 
 ---
 
