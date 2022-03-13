@@ -824,6 +824,38 @@ Tips:
 
 ### 第十九章 - Linked Lists : Hard and Very Hard 9
 
+Tips
+
+- linked list 除了記錄節點之外, 也可以記錄走過的長度
+- 嘗試紀錄移動的距離
+
+#### 1. Find Loop
+
+- 經典題目, 尋找 loop 的起點
+- 解法非常巧妙聰明
+- 利用**移動的距離**尋找出關係, 紀錄移動距離!!
+- 先以 fast slow pointer 來找到交會點, 從交會點與起點開始一起走直到相遇則是 loop 起點
+  - 可以通過畫圖, 找出這個關係, fast 的移動長度 - slow 的移動長度 = loop 的長度
+  - 假設 D 為起點到 loop 起點的距離, P 為起點到交會點的距離
+  - slow 移動 D + P, fast 移動 2D + 2P 並且剛好 D + P 為 loop 的長度, 因此在重走 D 即會在 loop 起點相遇
+
+#### 2. Reverse Linked List
+
+- 經典題目
+- 直接直線執行即可, 轉換時想到 swap
+- 沿路執行依序轉換順序
+
+#### 3. Merge Linked List
+
+- 簡單, 依序執行每次都選出最小的即可
+- **複雜度分析**, 基本走過一次因此是 T: O(n + m), S: O(1)
+
+#### 4. Shift Linked List
+
+- 簡單, 仔細處理細節即可
+- 畫圖然後舉例思考所需
+- 寫程式時注意 edge cases
+
 ---
 
 ### 第二十章 - Binary Trees : Hard and Very Hard 7
