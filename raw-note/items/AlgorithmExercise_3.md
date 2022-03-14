@@ -860,6 +860,24 @@ Tips
 
 ### 第二十章 - Binary Trees : Hard and Very Hard 7
 
+Tips:
+
+- 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
+- tree 問題可以嘗試建立 parent pointer table 來協助處理, 變成類似 graph 問題, 需要額外的 O(n) space
+
+#### 1. Max Path Sum In Binary Tree
+
+- 問題 spec 需要問清楚, 1. 值是否有負的, 2. 可以不取嗎?
+- 關鍵在於不一定要過 root, 任意子樹也可能有最大值
+- 還有一個關鍵的 edge cases 當所有值都是負的時, 則預設值不能為 0
+- 比想像中困難, 需要考慮多種情況
+
+#### 2. Find Nodes Distance K
+
+- 困難, 但是有趣的題目, 很多不同的 cases, 要處理相對複雜的 recursive program
+- 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
+- tree 問題可以嘗試建立 parent pointer table 來協助處理, 變成類似 graph 問題, 需要額外的 O(n) space
+
 ---
 
 ### 第二十一章 - Binary Search Trees : Hard and Very Hard 3
