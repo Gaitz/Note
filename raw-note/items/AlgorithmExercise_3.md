@@ -882,6 +882,25 @@ Tips:
 
 ### 第二十一章 - Binary Search Trees : Hard and Very Hard 3
 
+Tips:
+
+- 沒想法時試著操作資料, 然後查看是否有用
+
+#### 1. Same BSTs
+
+- 此題限制不能建立 BST 來比較, 否則最佳解則是直接建立 BST 然後比較
+- 注意複雜度分析
+- 方法 1. 持續分割成左半與右半, 然後遞迴比較, T: O(n^2), S: O(n^2)
+- 方法 2. 較複雜, 但是可以降低空間複雜度, T: O(n^2), S: O(d), d for depth of bst
+  - 學習這個技巧:
+  - 傳入上一層的節點作為 bound value, 這樣就不需要傳入完整的 array 而是重新正確的搜尋出所需的比較值
+  - 並且以 index 取代完整的 array
+
+#### 2. Validate Three Nodes
+
+- 簡單直接執行檢查即可, 記得利用 BST 的搜尋
+- while 版只需要 S: O(1), recursive 版需要 S: O(log(n))
+
 ---
 
 ### 第二十二章 - Tries : Hard and Very Hard 1
