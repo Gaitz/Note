@@ -901,13 +901,31 @@ Tips:
 - 簡單直接執行檢查即可, 記得利用 BST 的搜尋
 - while 版只需要 S: O(1), recursive 版需要 S: O(log(n))
 
+#### 3. Right Smaller Than
+
+- brute force 很簡單
+- 要找出最佳解規則很不容易, 因為需要持續更新, 以反序建立特殊的 binary search tree 來實現
+
 ---
 
 ### 第二十二章 - Tries : Hard and Very Hard 1
 
+Tips:
+
+#### 1. Multi String Search
+
+- 有趣的題目, 有很多種解決方式不同的複雜度
+- 應該詳細的分析複雜度, 更多的變數來精確估計
+- 最佳解: 反過來以 small strings array 建立 trie 然後以 big string char 進行比對
+- 次解為: 以 big string 建立 suffix trie 然後以 small strings 搜尋
+
 ---
 
 ### 第二十三章 - Graphs : Hard and Very Hard 5
+
+Tips:
+
+#### 1. Boggle Board
 
 ---
 

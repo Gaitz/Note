@@ -180,6 +180,11 @@
 - 二元搜尋走訪時間 O(log n) 比走訪完整的樹更快 O(n), 為思考優化時的參考
 - 遞迴回傳多資料型態
 
+#### Hash map and trie
+
+- Trie, suffix trie, 以 characters 做成的 hash map 可以用於實現以字首序搜尋
+  - key point 有 end symbol 作為結尾
+
 #### Recursion
 
 - 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
