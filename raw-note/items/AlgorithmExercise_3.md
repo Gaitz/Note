@@ -927,9 +927,33 @@ Tips:
 
 #### 1. Boggle Board
 
+- 不困難但是程式寫起來有點長
+- 如同其他字串比較, 使用 trie 來儲存要比較的字串
+- 要檢查 8 個方向並且不能採用已經拜訪過的
+
 ---
 
 ### 第二十四章 - Recursion : Hard and Very Hard 7
+
+Tips:
+
+- **可以儲存: 目前搜尋到的目標數量**, 以數量來判斷是否找齊
+- 必須看出 recursive 的行動模式然後以 caching 提升速度
+- 對於遞迴一定要想到 cache 來提升速度
+
+#### 1. Lowest Common Manager
+
+- 要討論好, 特例的處理情況才進行實作
+- 與尋找最近的共同父層問題等價
+- 樹狀問題以各層的子樹來觀察看看是否有用
+- **可以儲存: 目前搜尋到的目標數量**, 以數量來判斷是否找齊
+
+#### 2. Interweaving Strings
+
+- 注意複雜度分析, 可以以 worst case 舉例計算
+- 必須看出 recursive 的行動模式然後以 caching 提升速度
+- 沒有 cache 是 T: O(2^(n + m)) worst case
+- 有 cache 是 T: O(n \* m)
 
 ---
 

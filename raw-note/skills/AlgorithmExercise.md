@@ -101,6 +101,7 @@
 - 注意呼叫內部函式或已有函式的複雜度
 - 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
 - 複雜度分析可以嘗試分析實際的 input 可以得到更精準的複雜度
+- 利用 worst case 實際計算複雜度
 
 ---
 
@@ -179,6 +180,7 @@
 - 利用數量平衡機率產生隨機
 - 二元搜尋走訪時間 O(log n) 比走訪完整的樹更快 O(n), 為思考優化時的參考
 - 遞迴回傳多資料型態
+- **可以儲存: 目前搜尋到的目標數量**, 以數量來判斷是否找齊
 
 #### Hash map and trie
 
@@ -188,6 +190,10 @@
 #### Recursion
 
 - 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+- 複雜度分析需要練習, 並不這麼直觀
+- 對於遞迴一定要想到 cache 來提升速度
+- 必須看出 recursive 的行動模式然後以 caching 提升速度
+  - 例如 fibonacci number, interweavingStrings 計算
 
 #### Sorting and Searching
 
