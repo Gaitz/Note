@@ -1,4 +1,4 @@
-## AlgoExpert 140 Coding Interview Questions
+## AlgoExpert 160 Coding Interview Questions
 
 ### [AlgoExpert](https://www.algoexpert.io/questions), AlgorithmExercise
 
@@ -104,6 +104,7 @@ How To Best Use AlgoExpert
 - Immutable 與 mutable 如果只是 read 減少不必要的空間
 - 紙筆優先
 - 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
 
 ---
 
@@ -302,8 +303,9 @@ Hints:
 #### 1. Min Heap Construction
 
 - Min heap 建立, 以 array 來儲存 binary tree, build heap 的方式有多種
-
-- ***
+- insert 是從底層浮上來
+- remove 是把 root 與最後一個元素交換, 然後把最後一個元素向下移動到適合的位置
+- **buildHeap** 的時間複雜度是 T: O(n) 而非 T: O(n \* log(n)), 學習實際的複雜度分析
 
 ### 第五章 - Linked Lists : Easy and Medium 4
 
@@ -640,41 +642,318 @@ Tips:
 
 ### 第十章 - Arrays : Hard and Very Hard 10
 
+Tips:
+
+- 最佳化的兩種情況 1. 一次處理雙向, 2. 一次處理單向但是處理兩次, 最好兩種都想想看選擇出最簡單實作的
+- 圖形題, 先視覺化畫出實際的圖, 來觀察
+- 沒有想法時, 先思考 brute force 然後減少重複的部分
+- 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
+- 此題困難處在於處理 float point as hash table key
+- 資料的順序, 可以避免不必要的計算
+- Hash Table 儲存邊 (edge) as key
+
+#### 1. Four Number Sum
+
+- 以 Two number sum 的解法為基礎進化而成
+- 思考如何避開紀錄重複的內容, 以一定的順序做處理
+
+#### 2. Subarray Sort
+
+- 注意相等時的處理並且測試多個可能
+
+#### 3. Largest Range
+
+- Hash table 優化搜尋
+- 順序的 check 除了單向之外, 其實可以一次雙向處理 (+ -)
+
+#### 4. Min Rewards
+
+- 除了 expand valley 一次處理左右邊
+- 不如一次處理單向然後執行兩次 (更聰明, code 更簡單)
+
+#### 5. Apartment Hunting
+
+- 一次處理單向然後執行兩次
+
+#### 6. Calender Matching
+
+- 思考方式有兩種, 演算法不同但是時間與空間複雜度一樣
+
+1. 計算出允許的時間後才挑出共同適合的
+2. 合併雙方被占用的時間, 然後才找出剩餘的時間
+
+#### 7. Waterfall Streams
+
+- 樹狀結構, 因此使用 stack 儲存所需的資訊, 與處理順序
+- 程式稍微繁瑣適合抽離邏輯, 提高表達力
+- 官方解法使用, 一次處理兩層依序處理 (認為稍微複雜, 不直觀, 效能也沒有差異)
+
+#### 8. Minimum Area Rectangle
+
+- 資料的順序, 可以避免不必要的計算
+- Hash Table 儲存邊 (edge) as key
+
+#### 9. Line Through Points
+
+- 圖形題, 先視覺化畫出實際的圖, 來觀察
+- 沒有想法時, 先思考 brute force 然後減少重複的部分
+- 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
+- 此題困難處在於處理 float point as hash table key
+
 ---
 
 ### 第十六章 - Strings : Hard and Very Hard 5
+
+Tips:
+
+- 試著以儲存 index 來處理字串問題, 而非儲存字串本身
+- 如果單一個迴圈或直接處理太困難, 試著不要一個迴圈做完, 而是分成多個步驟處理
+- 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
+- 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
+- 複雜度分析可以嘗試分析實際的 input 可以更精準的計算出實際的複雜度
+- 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
+- 試著思考所有能儲存的東西, 並且觀察是否有用
+
+#### 1. Longest Substring Without Duplication
+
+- 試著以儲存 index 來處理字串問題, 而非儲存字串本身
+
+#### 2. Underscorify Substring
+
+- 困難, 允許的情況除了連接以外 overlay 也算, 要處理的 case 非常多
+- 如果單一個迴圈或直接處理太困難, 試著不要一個迴圈做完, 而是分成多個步驟處理
+- 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
+- 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
+- 此題步驟分成
+  1. 找出所有 substring indices,
+  2. 合併 substring indices 找到真正要加 underscore 的地方
+  3. 實際執行加 underscore 並且組合出結果
+
+#### 3. Pattern Matcher
+
+- 困難, 細節很複雜
+- 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
+- 簡化 case, 優先處理簡化版本
+
+#### 4. Smallest Substring Containing
+
+- 困難, 有一個搜尋字串時的特殊技巧值得學會 (sliding window), 使用兩個一前一後的 pointer 一次只移動一個
+- 使用到兩個 pointers, left 與 right,
+  - 尚未找到 substring 時由 right 往前尋找
+  - 找到 substring 後移動 left 來縮短, 直到又不符合 substring 時
+
+#### 5. Longest Balanced Substring
+
+- 困難, cases 很多, 最佳解不容易想到
+- 試著思考所有能儲存的東西, 並且觀察是否有用
+- brute force, T: O(n^3), S: O(n)
+- 方法 1. T: O(n), S: O(n)
+  - 使用 stack 儲存 index, 並且計算 diff 取得距離
+- 方法 2. T: O(n), S: O(1),
+  - 最佳解法: 只記錄 opening 與 closing 的數量, 並且要執行由左至右和由右至左兩次, 才能包覆所有的 cases
 
 ---
 
 ### 第十七章 - Stacks : Hard and Very Hard 2
 
+Tips:
+
+- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
+
+#### 1. Shortest Path
+
+- 困難, 要考慮的 cases 非常多, 很難一次完成, 必須經過多個 edge cases 來修正
+- key points:
+  1. path 是以 '/' 作為間隔的, 因此可以直接 `split('/')` 再來做處理
+  1. 思考所有合法的 path 開頭, 可以分類成 `/`, `../`, others related path
+  1. edge case, 以 root 開頭的 absolute path
+  1. edge case, 以 `../` 開頭的 related path
+  1. 在前項沒有東西時遇到 `..` 則要加入相對父層路徑 `../`
+  1. 前項是 root `/` 時遇到 `..` 則保持 root `/`
+- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
+
+#### 2. Largest Rectangle Under Skyline
+
+- 困難, 最佳解想不到, 即使知道使用 stack 仍然想不到解法
+- Brute force T: O(n^2)
+- 最佳解使用 stack 儲存 index of strict order of value
+  - 利用這個條件, 嚴格小於, 可以在適當的時機找到指定 height 的極右與極左位置 (即 width 長度)
+  - 這樣就可以一次性計算並且與最大值比較
+  - 複雜度是 T: O(n), S: O(n), n for length of buildings
+
 ---
 
 ### 第十八章 - Heaps : Hard and Very Hard 4
+
+Tips:
+
+- Heap 是一種特殊的 binary tree, 可以利用 array 儲存
+- 問題涉及變動的極大極小值或想要降低排序時間時, 可以嘗試使用 heap
+
+#### 1. Continuous Median
+
+- 第一個想法是建立 sorted array, 這樣 insert 是 T: O(n), get median 是 T: O(1), S: O(n)
+- 想到一個不需要排序, 但是可以取出特定的值, 最大值或最小值就是 heap
+- 同時建立 max heap 與 min heap 來處理中間值的左半與右半
+- 使用 Heap 讓 insert 複雜度降成 T: O(log(n)), S: O(n)
+
+#### 2. Sort K-Sorted Array
+
+- 以 min-heap 來 sort 可以降低時間複雜度從 `n * log(n)` 到 `n * log(k)`
+
+#### 3. Laptop Rentals
+
+- 經典題目, 區間覆蓋問題, 記得最佳解為 T: O(n \* log(n)), S: O(n)
+- 出現時間相關問題時, 可以先嘗試排序來觀察是否有幫助, sort first, T: O(n \* log n)
+- 由於排序所需的複雜度是 T: O(n \* log(n))
+- 每個欄位做 Heap insert 所需的總共複雜度也是 T: O(n \* log(n))
+- 方法 2. 不需要 heap, 很聰明的方式, 只需要知道 start times 與 end times 不需要管 interval
+  - 分別排序 start times 與 end times 即可知道在每個 end times 歸還前還有幾個 start times 正在運行 (即此題的佔用數)
+  - start 代表開始租, ends 代表歸還
+- 好好觀察問題, 嘗試排序永遠適合
+
+#### 4. Merge Sorted Array
+
+- 經典題目, merge sorted array
+- 優於直接 sort 整個 array 的優勢在於 array 的數量 k 遠小於總數 n
+- 使用 heap 的複雜度會是 T: O(n \* log(k)), S: O(n + k)
+- 通常這題會提供限制 1. 不能使用 sort, 2. array 的數量 k 遠小於總數 n
+- 記得複雜度分析
 
 ---
 
 ### 第十九章 - Linked Lists : Hard and Very Hard 9
 
+Tips
+
+- linked list 除了記錄節點之外, 也可以記錄走過的長度
+- 嘗試紀錄移動的距離
+
+#### 1. Find Loop
+
+- 經典題目, 尋找 loop 的起點
+- 解法非常巧妙聰明
+- 利用**移動的距離**尋找出關係, 紀錄移動距離!!
+- 先以 fast slow pointer 來找到交會點, 從交會點與起點開始一起走直到相遇則是 loop 起點
+  - 可以通過畫圖, 找出這個關係, fast 的移動長度 - slow 的移動長度 = loop 的長度
+  - 假設 D 為起點到 loop 起點的距離, P 為起點到交會點的距離
+  - slow 移動 D + P, fast 移動 2D + 2P 並且剛好 D + P 為 loop 的長度, 因此在重走 D 即會在 loop 起點相遇
+
+#### 2. Reverse Linked List
+
+- 經典題目
+- 直接直線執行即可, 轉換時想到 swap
+- 沿路執行依序轉換順序
+
+#### 3. Merge Linked List
+
+- 簡單, 依序執行每次都選出最小的即可
+- **複雜度分析**, 基本走過一次因此是 T: O(n + m), S: O(1)
+
+#### 4. Shift Linked List
+
+- 簡單, 仔細處理細節即可
+- 畫圖然後舉例思考所需
+- 寫程式時注意 edge cases
+
 ---
 
 ### 第二十章 - Binary Trees : Hard and Very Hard 7
+
+Tips:
+
+- 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
+- tree 問題可以嘗試建立 parent pointer table 來協助處理, 變成類似 graph 問題, 需要額外的 O(n) space
+
+#### 1. Max Path Sum In Binary Tree
+
+- 問題 spec 需要問清楚, 1. 值是否有負的, 2. 可以不取嗎?
+- 關鍵在於不一定要過 root, 任意子樹也可能有最大值
+- 還有一個關鍵的 edge cases 當所有值都是負的時, 則預設值不能為 0
+- 比想像中困難, 需要考慮多種情況
+
+#### 2. Find Nodes Distance K
+
+- 困難, 但是有趣的題目, 很多不同的 cases, 要處理相對複雜的 recursive program
+- 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
+- tree 問題可以嘗試建立 parent pointer table 來協助處理, 變成類似 graph 問題, 需要額外的 O(n) space
 
 ---
 
 ### 第二十一章 - Binary Search Trees : Hard and Very Hard 3
 
+Tips:
+
+- 沒想法時試著操作資料, 然後查看是否有用
+
+#### 1. Same BSTs
+
+- 此題限制不能建立 BST 來比較, 否則最佳解則是直接建立 BST 然後比較
+- 注意複雜度分析
+- 方法 1. 持續分割成左半與右半, 然後遞迴比較, T: O(n^2), S: O(n^2)
+- 方法 2. 較複雜, 但是可以降低空間複雜度, T: O(n^2), S: O(d), d for depth of bst
+  - 學習這個技巧:
+  - 傳入上一層的節點作為 bound value, 這樣就不需要傳入完整的 array 而是重新正確的搜尋出所需的比較值
+  - 並且以 index 取代完整的 array
+
+#### 2. Validate Three Nodes
+
+- 簡單直接執行檢查即可, 記得利用 BST 的搜尋
+- while 版只需要 S: O(1), recursive 版需要 S: O(log(n))
+
+#### 3. Right Smaller Than
+
+- brute force 很簡單
+- 要找出最佳解規則很不容易, 因為需要持續更新, 以反序建立特殊的 binary search tree 來實現
+
 ---
 
 ### 第二十二章 - Tries : Hard and Very Hard 1
+
+Tips:
+
+#### 1. Multi String Search
+
+- 有趣的題目, 有很多種解決方式不同的複雜度
+- 應該詳細的分析複雜度, 更多的變數來精確估計
+- 最佳解: 反過來以 small strings array 建立 trie 然後以 big string char 進行比對
+- 次解為: 以 big string 建立 suffix trie 然後以 small strings 搜尋
 
 ---
 
 ### 第二十三章 - Graphs : Hard and Very Hard 5
 
+Tips:
+
+#### 1. Boggle Board
+
+- 不困難但是程式寫起來有點長
+- 如同其他字串比較, 使用 trie 來儲存要比較的字串
+- 要檢查 8 個方向並且不能採用已經拜訪過的
+
 ---
 
 ### 第二十四章 - Recursion : Hard and Very Hard 7
+
+Tips:
+
+- **可以儲存: 目前搜尋到的目標數量**, 以數量來判斷是否找齊
+- 必須看出 recursive 的行動模式然後以 caching 提升速度
+- 對於遞迴一定要想到 cache 來提升速度
+
+#### 1. Lowest Common Manager
+
+- 要討論好, 特例的處理情況才進行實作
+- 與尋找最近的共同父層問題等價
+- 樹狀問題以各層的子樹來觀察看看是否有用
+- **可以儲存: 目前搜尋到的目標數量**, 以數量來判斷是否找齊
+
+#### 2. Interweaving Strings
+
+- 注意複雜度分析, 可以以 worst case 舉例計算
+- 必須看出 recursive 的行動模式然後以 caching 提升速度
+- 沒有 cache 是 T: O(2^(n + m)) worst case
+- 有 cache 是 T: O(n \* m)
 
 ---
 
