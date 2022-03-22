@@ -325,6 +325,46 @@
 - 非同步的 **Refresh-Ahead** 機制, 以 **Guava Cache** 為例包含 **RefreshAfterWrite** 機制
   - **多個**無快取 request 也**只會產生一次** request 到資料庫
 
+3 CDN
+
+- 就近配送的概念,
+- 世界各地都部屬快取形成 cluster
+- 以分層的概念布置快取的容量與內容
+- **Content Delivery Network, CDN**
+- 以 CNAME 在 DNS 階層設定, 讓請求指向 CDN 的 DNS server
+- 依據請求的 IP 位置, ISP, URL 路徑, 伺服器附載情況來決定處理的伺服器
+- CDN 快取的內容以靜態不常變動的資料類型為主, 例如靜態頁面, 圖片, 還有串流資訊 (stream) 等等
+- 快取建立的方式有 **pull** (被動拉取) 或 **push** (主動推送), 依據內容的不同而選用
+- CDN 除了快取之外, 還可以提供資料前處理, 防盜功能設置 (referer header 或時間戳記)
+- 對於動態資料 CDN 也能提供不同的模式來加速,
+  - 邊緣計算模式 (edge computing), 在 CDN 節點即提供計算與紀錄, 後續再同步資料
+  - 路徑最佳化模式, **Dynamic Site Accelerator, DSA**, 依據路徑來最佳化 TCP 連線
+
+4 資料中心 data center
+
+- 資料中心是一大群的伺服器所組成
+- 每個伺服器被放置在 rack (機櫃上)
+- 資料中心對外出入口是邊界交換機 Border Router
+- 為了實現高可用性 high availability 所有的設備都是以多數個存在
+- 路由使用 _BGP_ 協定
+- 多個機器需要透過交換機 (Switcher) 連接, 交換機通常被放置在機櫃的最上層 top of rack, TOR
+- 機器與交換機所屬的階層被稱為連線層 (Access Layer)
+- 每個機器至少擁有兩張以上的網路卡並寫以 bond 的機制綁定, 並且配合 _Link Aggregation Control Protocol_ 實現多個網路卡整合成一個網路卡
+- 多個機櫃也需要通過交換機連接, 被稱為匯聚交換機, 形成匯聚層, 多個匯聚層形成二層互通的 Point Of Delivery, POD, Available Zone
+- 多個可用區 Available Zone 以核心交換機連接, 形成核心層, 內部以 _OSPF_ 路由協定
+- 大二層網路中使用 _Transparent Interconnection of Lots of Link_, _TRILL_ 實現無環溝通
+  - 其中的交換機成為 RBridge 以類似 IP 路由的原理實現轉發封包
+- 資料儲存, 傳統上使用 **Storage Area Network, SAN** 或 **Network Attached Storage, NAS**
+  - 現在多以軟體定義儲存, 實現計算節點融合儲存網路在同一個機櫃上, 提升效率
+- 傳統的三層式架構, 連線層, 匯聚層, 核心層是以南北流量, 上下層流動
+- 現在更多的數據計算需要在水平流動, 東西流量, 以新架構 Leaf-Spine 網路實現
+  - Leaf Switch 與 Spine Switch 更扁平的架構來提升水平擴充與流動能力
+
+5 VPN
+
+- **Virtual Private Network, VPN**
+-
+
 ---
 
 ### 第六章 - 雲端運送中的網路
