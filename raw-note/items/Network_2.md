@@ -363,11 +363,90 @@
 5 VPN
 
 - **Virtual Private Network, VPN**
--
+- VPN 為了安全的連結兩地傳訊, 模擬點到點連線
+- 包含三種協定類型:
+  - 乘載協定, 外部網路通訊時
+  - 隧道協定, 外部網路通訊時, 內部資料
+  - 乘客協定, 到達目的地後的傳輸
+- 以 IP 協定為基礎的 VPN 協定群, _IPsec VPN_
+- 為了達成:
+  - 私密性 (資料加密)
+  - 完整性 (保證資料完整)
+  - 真實性 (傳輸身份認證)
+- _Authentication Header, AH_ 協定
+  - Security Parameter Index,
+  - 共通的加密演算法, 雜湊演算法, 封裝模式
+  - 生命週期, 存續時間
+- _Encapsulating Security Payload, ESP_ 協定
+- 通過 **Diffie-Hellman** 演算法交換出 symmetric key
+- IPsec VPN 因為是依據 IP 協定, 這種非連線並且每次皆需路徑演算, 因此傳訊速度較慢
+- 與 IP 協定同層的 _Asynchronous Transfer Mode, ATM_ 協定
+  - 讓封包都走相同路徑, 但是是不完整的協定, 無法正確應對節點失聯時
+- _Multi-Protocol Label Switching, MPLS_ 協定, 改善 ATM 協定的弱點
+  - 通過標籤的方式, 達到相同路徑
+  - 需要配合路由器支援
+- 依據 _MPLS_ 實現的 VPN, MPLS VPN
+  - 需要與 ISP 申請
+  - 配合特殊的 _Multi Protocol BGP, MP-BGP_ 路由協定
+
+6 行動網路
+
+- 由基地台 Mobile Station, MS 接收無線訊號, 然後進行後續的有線處理
+- 行動網路粗略流程
+  1. 基地台接收無線訊號, 對內發送
+  2. 核心元件 (Core Network) 驗證使用者, 流量計價, 協助建立對外部網路通道
+  3. 連通手機端到外部網路
+- 2G 網路
+  - 使用類比訊號網路 **Public Switched Telephone Network, PSTN**, 而非 IP 網路
+  - 2.5G 網路, 外部網路擴充支援 IP 網路
+- 3G 網路
+  - 接收無線訊號 (NodeB) 與轉發內部控制 (RNC) 的系統, 更進步速度更快
+- 4G 網路
+  - 架構大躍進
+  - 接收無線網路與轉發內部控制系統整合成 (eNodeB) 並且速度更快
+  - Core Network 把工作分成控制與資料傳輸由不同的元件控制
+  - 控制元件 **Mobility Management Entity, MME**
+  - 資料元件 **Serving GateWay, SGW** 與 **PDN GateWay, PGW**
+  - 對外網路僅剩 IP 網路
+  - eNodeB 與 MME 控制層的溝通是建立在 IP 網路, 但是使用非 UDP, TCP 的傳輸層協定 _Stream Control Transmission Protocol, SCTP_
+  - _SCTP_ 很多特性更適合用在行動網路上
+  - 建立傳輸通道的溝通則是建立在客製化的 UDP 上, _GTP-C_
+  - 行動網路溝通是以類似 VPN 的建立概念來協助連線, 因此會有多層協定與通道 (tunnel) 建立
+  - **SGW** 屬於接收地的電信業者, **PGW** 屬於提供手機服務的電信業者
+  - 由於對外網路是由 **PGW** 所控制, 因此對網際網路連線控制還是由手機服務電信業者提供
 
 ---
 
 ### 第六章 - 雲端運送中的網路
+
+1 雲端網路
+
+- 應用不需要擁有自己的實體機, 而是更有彈性的虛擬化
+- 虛擬化上的網路建立
+- 虛擬網卡, 使用 linux 上的 **TUN/TAP** 技術
+  - 把網路封包變成字串存入檔案 `/dev/net/tun` 然後再由核心讀取轉發
+- 虛擬化網路需要提供的功能
+  - 共用, 多個虛擬機共用實體網路卡
+  - 隔離, 安全隔離 (無法互相存取), 流量隔離 (流量不互相影響)
+  - 互通, 相同使用者所屬的虛擬機應該可以互相溝通
+  - 靈活, 靈活的設定提供虛擬機
+- 共用與互通,
+  - 需要建立虛擬交換機 (switcher)
+  - 以 linux 指令 `brctl` 建立橋接器, 實現虛擬交換機
+  - 對外連接可以把實體網路卡也接到橋接器 (`brctl`) 上
+- 相同區域網路設定會遇到廣播問題與隔離問題
+- 因此對外應該使用 **Network Address Translation, NAT** 技術, 轉譯實體網卡與虛擬網卡的 IP
+- 並且配合**虛擬 DHCP** 伺服器動態分配 IP
+- 隔離問題
+  - 以 VLAN 實現, 因此需要支援 VLAN 的實體交換機
+  - 配合 `vconfig` 讓虛擬網卡的封包也能帶上各自的 VLAN tag
+  - 然而使用 VLAN 有數量上限 **4096** 對於大型虛擬網路來說不夠使用
+- 雲端實現通常使用 OpenStack 軟體
+
+2 軟體定義網路 SDN
+
+- **Software Defined Network, SDN** 軟體定義網路
+- 實現方式 **OpenFlow**, **Open vSwitch**
 
 ---
 
