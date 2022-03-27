@@ -446,7 +446,83 @@
 2 軟體定義網路 SDN
 
 - **Software Defined Network, SDN** 軟體定義網路
-- 實現方式 **OpenFlow**, **Open vSwitch**
+- 以軟體的方式定義中央控制器, 例如 **OpenDaylight**
+  - 提供北面介面給應用方
+  - 提供南面介面給所有網路設備
+- 實現方式 _OpenFlow_, _Open vSwitch_
+  - 提供協定與標準, 需要所有的網路設備支援
+- **Open vSwitch** 提供虛擬交換機, 內容會包含路由表 route table
+  - 以軟體的方式取代實體支援 VLAN 的交換機
+  - `ovs-vsctl` 命令介面
+  - 對於虛擬交換機而言, 接到所有的封包都可以進行改寫
+  - 可以處理 TCP/IP 多個層級, 從實體層 (switcher port), MAC 層 (MAC address), 網路層 (IP address), 傳輸層 (tcp port)
+- 利用 **Open vSwitch** 實現 VLAN 的兩種方式
+  - access port, 根據 port 綁定特定的 tag
+  - truck port, 不綁定, 但是會過濾設定的 VLAN id
+- 利用 **Open vSwitch** 實現模擬網路卡綁定交換機, 並且允許 load balancing
+- **Open vSwitch** 包含兩個主要處理程序 **OVSDB** 處理虛擬交換機設定資訊, **vswitchd** 處理路由表
+  - 與 linux OS kernel 通過 Netlink 與核心路由表互動
+- 雲端運算中隔離與管理
+  - 傳統的 VLAN 作法是需要配合實體 VLAN 交換機, 並且設定 VLAN 需要綁定虛擬橋接器 (bridge), 實體綁定虛擬沒有彈性不好管理
+  - 使用 **Open vSwitch** 全部使用軟體定義模擬, 等同於在實體交換機上面建立一個虛擬交換機的軟體中間層, 解除實體 VLAN 設定與虛擬機的綁定
+
+3 雲端網路安全
+
+- 設定好 **Access Control List, ACL** 關閉無用的 port, 設定特定 IP, ...
+  - 特定的設定形成安全組, 可以直接把虛擬機加入安全組來採用預先的設定
+  - 最常用的方式是使用 `iptables` 實現
+- `iptables` 是 linux 的使用者介面, 與核心的 `ip_tables` 模組對應
+  - 內容包含 raw 表, mangle 表, nat 表, filter 表
+- 處理 TCP/UDP 層的內容, 實現 **conntrack** (連線追蹤紀錄), **mangle** (修改封包), **nat** (IP 轉址), **filter** (過濾)
+- 向下 IP 層, linux 核心通過 **Netfilter** 架構
+  - 對於 IP 層的處理分成五個狀態 **PREROUTING**, **INPUT**, **FORWARD**, **OUTPUT**, **POSTROUTING**
+  - 每個狀態都可以通過 Netfilter 植入 hook function 進行決策 **ACCEPT**, **DROP**, **QUEUE** (丟給其他使用者自訂處理程序客製化處理, 例如實現 load balance)
+- 通過以上功能讓 `iptables` 擁有強大的設定過濾能力 (**filter 表**)
+  - 關閉所有 IP
+  - 開放特定 IP 連結特定 port 號
+- 基於 `iptables` 使用 NAT 功能, (**nat 表**)
+  - 對應虛擬 IP 與公網 IP, 讓封包能轉發到正確的虛擬機上
+  - 底層以 C++ 實現 hash linked list 結構儲存連結與對應
+
+4 雲端網路的 QoS 流量隔離
+
+- **Quality of Service, QoS** 服務品質
+- 控制網路兩個方向
+  - **Ingress** 入口的 **Policy** 過濾政策
+  - **Egress** 出口的 **Shaping** 流量控制
+- linux 下的 **traffic control, TC** 工具, `tc`
+- 出口流量控制的兩種方式
+  1. 無類別排隊規則 **Classless Queuing Discipline**
+  2. 有類別排隊規則 **Classful Queuing Discipline**
+- 無類別排隊規則有三種方式
+- 不分類的 3 個先進先出 queue, **3 Band FIFO queue**
+  - 依據 TOS 的類別排進 3 個 queue 之中, 3 個 queue 有優先順序之分
+- 依據 hash 值的隨機公平序列 (**Stochastic Fairness Queuing**)
+  - 依據 hash 值放入平等的 queue 中再以 polling 的方式取出發送
+- **Token Bucket Filter**
+  - 單一 queue 但是必須持有 token 者才發送
+  - 以控制 token 數量與生產速度來控制流量
+- 有類別排對規則
+- 最常見的 **Hierarchical Token Bucket, HTB**, 以樹狀結構分支 class 的流量控制方式
+  - HTB 的特性是分支的流量控制, 可以借用讓沒有流量的分支能把流量借出給其他分支, 因此可以時時刻刻達到最大流量
+- 雲端可以配合 **Open vSwitch** `ovs-vsctl` 在虛擬交換機上建立 **HTB** 來控制各個來源的出口流量
+
+5 雲端網路的隔離 GRE, VXLAN
+
+- 當 VLAN 因為數量上限而不夠使用時, 應該如何處理隔離問題呢,
+  - 希望分離實體網路與雲端網路
+  - VLAN 只有 12 bits 上限為 4096 個
+  - 以隧道技術實現包裹協定來解決問題
+- 以實體網路組成的網路稱為 **Underlay 網路**, 虛擬機氣與雲端技術組成的網路稱為 **Overlay 網路**
+- **Generic Routing Encapsulation, GRE** 通用網路封裝
+  - 一種 IP-over-IP 的隧道技術支援 key 32 bits 欄位
+  - 點到點建立隧道, 因此在廣播時會讓隧道數量以指數上漲
+- VXLAN
+  - 在第三層加上 VXLAN header ID 為 24 bits 欄位
+  - 每個實體機上都有 **VXLAN Tunnel Endpoint, VTEP** 進行管理
+  - 支援多點傳輸, 如同一般的路由器行為, 只是建立在虛擬層上
+- 雲端網路上以 **Open vSwitch** 實現, 支援 **GRE**, **VXLAN**, **IPsec_GRE**
+  - 透過虛擬路由器建立 tunnel 管理, 提供虛擬機器與實體機器之間網路的轉換
 
 ---
 
