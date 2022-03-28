@@ -528,6 +528,87 @@
 
 ### 第七章 - 容器技術中的網路
 
+1 容器網路
+
+- Container 容器
+- 雲端運算解決了基礎資源層的虛擬化 (IaaS)
+- PaaS 層的批次處理與快速部屬問題則由 container 技術虛擬化實現, 相比雲端基礎設施隔離性沒有這麼好
+- 把容器視為貨櫃需要兩樣東西 1. 如何包裝 2. 標準是什麼
+- 包裝方式使用
+  - namespace (名稱空間)
+  - cgroup (資源限制)
+- 標準則是容器映像檔 (image) 是儲存狀態並且可以完整的搬運到各個平台
+- **namespace**
+  - 以 namespace 隔離網路設定, 建立出多個網路設定如同多個網路設備一般
+  - 在 linux 系統網路設定的 namespace 可以由 `ip netns` 指令實現
+  - 以網路 namespace 建立虛擬路由器, 包含開啟 forward, 設定 iptables, 開啟 NAT, 建立網路卡, 分配 IP, 建立路由表
+- **cgroup**
+  - **Control Group, cgroup** 是 linux kernel 提供用來限制, 隔離使用程序的資源
+  - 能夠控制 **CPU**, **cpuset** (多核心), **memory** (記憶體), **blkio** (區塊裝置), **net_cls** (網路)
+  - 以 cgroup - net_cls 配合 `tc` 使用
+  - 以掛載檔案系統的方式建立
+- Docker 網路, 執行 Docker 每個 container 會產生一個虛擬的網路卡
+  - 並且整體 Docker 會共用一個 bridge
+- linux 系統下以建立 **veth pair** 網路卡的方式來連動 Docker 內的虛擬網路卡
+- Docker 啟動時會產生對應的 **namespace** (預設是 **pid**)
+- 對外連線 Docker 預設使用 NAT 模式, 分別使用 SNAT 與 DNAT 來對應存取方向
+  - **iptables** 會有 NAT 規則
+- Docker 實現實體機與容器內的 port 對應方式
+  1. 通過 **docker-proxy** 直接轉發
+  2. 通過 DNAT 在實體機 iptables 設定上加上把實體機 port DNAT 對應到 docker 內部網卡
+
+2 容器網路上的跨實體解決方案 Flannel
+
+- Docker 每台實體機啟動後會預設分配 IP **172.17.0.0/16** 每個容器都會被分配到一個
+  - 並且所有的容器會共用 docker0 作為 bridge, 因此單台實體機內的所有容器能任意互相溝通
+  - 遇到分散式平行處理問題, 單台機器有能力上限, 因此需要分散式架構
+- **Kubernetes** 提供管理多台實體機多個容器的服務
+- 遇到跨實體機的通訊問題
+  1. 容器之間如何知道對方在哪
+  2. 跨實體機的容器之間要如何溝通
+- 以中央管理, 每個實體機與容器進行註冊的方式讓容器之間能知道對方在哪
+- 跨實體機容器的溝通解決方案之一 **Flannel**
+  - **Flannel** 會分配給各實體機不同的網段來避免 IP 衝突, 以 **172.17.0.0/16** 下做切割
+  - 方法一, 以 UDP 實現 Overlay 網路機制
+  - 方法二, 利用虛擬機器的經驗, 使用 **VXLAN** 在 flannel 虛擬網卡上建立 **VTEP**
+  - **VXLAN** 方法效能較好
+
+3 容器網路上的跨實體解決方案 Calico
+
+- 由於 Flannel 讓各實體上的容器仍有不同的 IP 位置, 因此可以直接設定路由規則來通訊
+- 概念上直接使用實體 switcher 做連接, 不使用虛擬化的 Overlay 網路, 而是實體層路由
+- 取消使用 **docker0 bridge** 而是使用 veth pair 進行連動實體網卡, 在實體機上產生路由器能力 as router
+- Calico 架構元件
+  - **Felix**, 在每個實體機上使用 Felix 作為 agent 自動處理路由設定
+  - **BGP Speaker**, Calico 使用 BGP 作為路由設定
+  - **BGP Route Reflector**, 由於是一對一路由設定, 因此在節點變多時會過多路由資訊, 因此以 Route Reflector 中間管理
+  - 安全性管理 Network Policy, 一樣使用 **iptables**
+- 然而 Calico 原先概念是建立在 switcher 上, 即同個區域網路上, 如果要跨網域連接則會出現問題
+  - 以隧道模式解決, **Calico IPIP 模式**
+
+4 RPC 服務間的遠端呼叫
+
+- **Remote Procedure Call, RPC** 遠端服務間的呼叫
+  - 實現如同呼叫本地端 function 一般的使用遠端服務
+- 分散式系統中服務之間互相呼叫, 底層都是使用 socket 標準
+- 然而跨網路間的呼叫與標準需要面對多個問題
+  1. 遠端呼叫的語法標準
+  2. 如何傳遞參數
+  3. 表示資料的標準
+  4. 網路錯誤時的處理
+  5. 如何讓其他遠端服務知道
+- 1 遠端呼叫語法, 2 如何傳遞參數, 3 資料表示標準, 問題集合稱為協定約定問題
+- 4 網路錯誤時的處理, 稱為傳輸協定問題
+- 5 如何知道遠端提供服務, 稱為服務發現問題
+- 依據 Implementing Remote Procedure Calls, Bruce Jay Nelson 的論文標準化的 RPC 架構
+  - Client side 與 Server side 都分別擁有 **Stub** (解決問題 1,2,3) 與 **RPCRuntime** (解決問題 4)
+- 最早期的 RPC 實作為 Sun 的 **ONC RPC** 並且被使用在 **Network File System, NFS** 上, 跨網路的存取檔案系統
+- 問題 4 的網路傳輸協定問題中,
+  - 如同 TCP 的設計會以 queue, 壅塞視窗的方式解決, 連接失敗, 重試, 發送失敗, 逾時等問題
+  - 並且會實現非同步執行, 因此會由複雜的狀態機來記錄狀態
+- 問題 5 的服務發現問題,
+  - 在 **ONC PRC** 中以 **portmapper** 解決, 即註冊服務管理
+
 ---
 
 ### 第八章 - 微服務相關協定
