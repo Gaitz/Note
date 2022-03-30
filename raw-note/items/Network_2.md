@@ -597,12 +597,13 @@
   3. 表示資料的標準
   4. 網路錯誤時的處理
   5. 如何讓其他遠端服務知道
-- 1 遠端呼叫語法, 2 如何傳遞參數, 3 資料表示標準, 問題集合稱為協定約定問題
-- 4 網路錯誤時的處理, 稱為傳輸協定問題
-- 5 如何知道遠端提供服務, 稱為服務發現問題
-- 依據 Implementing Remote Procedure Calls, Bruce Jay Nelson 的論文標準化的 RPC 架構
+- 1 遠端呼叫語法, 2 如何傳遞參數, 3 資料表示標準, 問題集合稱為**協定約定問題**
+- 4 網路錯誤時的處理, 稱為**傳輸協定問題**
+- 5 如何知道遠端提供服務, 稱為**服務發現問題**
+- 依據 **Implementing Remote Procedure Calls, Bruce Jay Nelson** 的論文標準化的 RPC 架構
   - Client side 與 Server side 都分別擁有 **Stub** (解決問題 1,2,3) 與 **RPCRuntime** (解決問題 4)
 - 最早期的 RPC 實作為 Sun 的 **ONC RPC** 並且被使用在 **Network File System, NFS** 上, 跨網路的存取檔案系統
+  - 使用約定標準的**二進制傳遞**資料結構
 - 問題 4 的網路傳輸協定問題中,
   - 如同 TCP 的設計會以 queue, 壅塞視窗的方式解決, 連接失敗, 重試, 發送失敗, 逾時等問題
   - 並且會實現非同步執行, 因此會由複雜的狀態機來記錄狀態
@@ -613,10 +614,114 @@
 
 ### 第八章 - 微服務相關協定
 
-1 SOAP 協定
+1 SOAP 協定, XML based
+
+- **ONC RPC** 遇到的問題, 因為協定問題使用 server 與 client 一致的 Stub 導致更新時的彈性不足, 版本更新困難
+  - 並且適用的 pattern 偏向 function call 而非常見的物件導向
+  - 二進制 RPC 的問題, 約定規格嚴格, 修改複雜, 不是物件導向
+- XML 的特性
+  - 結構化, 類似物件導向
+  - 資料順序無關 (修改靈活)
+  - 人類可閱讀
+- XML based SOAP 協定, _Simple Object Access Protocol, SOAP_
+- RPC 網路傳輸問題
+  - 使用 **HTTP, POST method**
+  - 資料以 **XML** 傳輸
+- RPC 協定約定問題
+  - 依據 **Web Service Description Language, WSDL** 建立的 XML 來定義服務
+  - Stub 則由程式依據 WSDL XML 自動生成, 因此讓 Stub 同步更靈活
+- RPC 服務發現問題
+  - **Universal Description, Discovery, and Integration, UDDI** 作為註冊中心
+
+2 RESTful 介面, JSON based
+
+- SOAP 的定義仍然相對複雜 (XML), 並且只利用到了 HTTP POST 動作行為仍然寫在 XML 裡
+- 狀態的維護, 在 RPC 與 SOAP 模式下通常由 server side 負責維護
+  - 在 client 越來越多的情況下, 僅由 server 維護狀態會造成瓶頸
+- JSON based RESTful 介面 **Representational State Transfer, RESTful**
+  - 是一種架構風格, 由 **Architectural Styles and the Design of Network-based Software Architecture** 論文
+- RPC 網路傳輸問題
+  - **HTTP**
+  - 資料以 **JSON** 傳輸
+- RPC 協定約定問題
+  - REST 屬於一種設計風格, 思考以資源為核心而非動作, 無狀態化讓水平擴張容易
+  - JSON 文件表示資料狀態
+  - 動作由 HTTP methods 負責, **GET** (應該充分 cache), **POST**, **PUT**, **DELETE**
+  - 狀態維護變成由 server-side 負責資源狀態, client-side 負責自己的階段狀態
+  - 變成 server-side 無狀態, 因此容易水平擴充
+  - API 設計變成**資源**為核心, 而非動作與過程
+  - **API 需要考慮到網路連線問題, 並且防止資源重複動作**, 因為網路連線可能重試
+- RPC 服務發現問題
+  - 無統一架構
+  - 以 Java based Spring Cloud 為例
+  - 服務發現問題由 Spring Cloud 的 Eureka 元件負責, 一樣是註冊中心
+  - Spring Cloud 中有 RestTemplate 負責轉換 Java Object 與 JSON
+
+3 優化的 Java based 二進制 RPC, Dubbo
+
+- 傳輸文字的 RPC (SOAP, RESTful) 主要的問題是佔用空間太大, 佔太多頻寬, 因此可能產生延遲
+- 仍然想要使用二進制 RPC 來達到更好的傳輸效能, 但是要面對 **ONC RPC** 所遇到的問題
+  - Stub 更新問題
+  - 能否支援物件導向
+- 常見的應用內部仍然使用 API 溝通, 架構由上而下通常如下
+  - Client
+  - DNS, CDN, Load Balance
+  - Nginx, Redis, Cache
+  - Controller 層
+  - 組合服務層, 相依於基礎服務層的 interface
+  - 基礎服務層
+  - 儲存空間快取
+  - 分散式資料庫
+  - 分散式搜尋引擎
+  - 管理中心 (logger, monitoring, configuration, service center)
+- 有個實作 Java based **Dubbo** 二進制 RPC
+- RPC 服務發現問題
+  - 註冊中心
+- RPC 協定約定問題
+  - 使用 **Hessian2** 撰寫自描述式語法描述,
+  - 自描述讓 **Stub** 更新更靈活
+  - **Hessian2** 能序列化成很簡短的二進制, 並且支援物件導向
+- RPC 網路傳輸問題
+  - 使用 **Netty** 作為網路傳輸架構
+  - 提供非阻塞 (non-block) 事件驅動 (event based, channel) 的網路傳輸架構
+- Dubbo 遇到的問題是在微服務粒度越來越小的情況下
+  - Jar 檔的相依性變成複雜的問題
+  - 跨語言支援的問題, 需要更統一的介面
+
+4 跨語言的 RPC 協定: gRPC 與 Protocol Buffers
+
+- 從 client-server model 到 microservices 架構, RPC 通訊變得更重要
+  - 需要更好的傳輸效能, 二進制最好
+  - 能夠跨語言溝通, 大系統更多不同的實作
+  - 既嚴謹又靈活, 必須更新容易
+  - 能有服務發現, 更多策略管理支援, 例如 Load Balance, 錯誤處理, ...
+- **gRPC** (Google Remote Procedure Call) 是二進位, 跨語言的 RPC
+- **Protocol Buffers** 是壓縮率極高的二進位序列化協定
+  - 每個欄位會轉換為 **Tag, Length, Value, TLV**
+  - Tag 為 `(field_num << 3) | wire_type`
+  - wire_type 為提供的資料結構型別, 主要有變長整數, 變長字串, 定長浮點數
+  - 考慮到相容性, 欄位含有修飾符 `required`, `optional`, `repeated`
+- RPC 協定約定問題
+  - 二進位序列化使用 Protocol Buffers 需要撰寫協定檔案,
+- RPC 網路傳輸問題
+  - 建立在 **HTTP 2.0** 上
+  - 對應的程式語言會有各自的傳輸架構
+  - 以 Java 為例, 可以使用 **Netty** 作為 gRPC 的網路傳輸架構
+  - gRPC 提供四種服務方式, client 與 server, 分別為 **1-1**, **1-m**, **m-1**, **m-m**
+- RPC 服務發現問題
+  - 沒有原生的服務發現機制與管理機制
+  - 需要配合使用 Service Mesh 來實現服務管理
+  - 例如使用 **Envoy** 作為各個服務的 **proxy**, 即 **Istio**
+  - 實現服務發現 (Discovery Service), Load Balance, 錯誤管理, 特定的路由設定, 動態設定, 權限管理等等
+  - **Service Mesh** 即服務管理功能, 整合進基礎架構 (infrastructure) 中, 而非單純的外部中心, 主要以 Service Proxy (sidecar) 的方式實現
 
 ---
 
 ### 第九章 - 網路通訊協定知識串購
+
+- 完整的網路流程, 以雲端部屬一個電商平台, 顧客使用手機網路連線查看且下單的整個流程
+- 包含了書中所有的協定細節才呈現出一個完整的流程
+- 實作方面推薦 TCP/IP illustrated 此書中的內容
+- 實作上書中提供測試環境的架設, 使用到 Docket, Ubuntu server, Open vSwitch 來建立一組測試環境
 
 ---
