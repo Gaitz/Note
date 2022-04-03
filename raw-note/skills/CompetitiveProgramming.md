@@ -1,4 +1,4 @@
-## Algorithm Exercise
+## Competitive Programming
 
 ### Computer Science
 
