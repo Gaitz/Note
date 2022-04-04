@@ -227,8 +227,46 @@
 
 ### 第十章 - 反覆與測試
 
+- 客戶, 驗收測試與迭代開發
+- 開發順序可以主要分為兩種
+  - **Feature Driven Development**, 一次開發一個 Feature 直到完成
+  - **Use Case Driven Development**, 一次開發一條 use case 路徑直到完成
+- **開發的順序重點在於客戶要的東西**
+  - Customer Driven Development 才是重點
+- 撰寫驗收測試, 及早給客戶驗收與測試
+- 對於測試,
+  - 為**所有**想到的可能狀況撰寫測試
+  - 也要測試**不正確的使用狀況**, 提早捕捉到錯誤
+- **Test Driven Development, TDD** 測試驅動開發
+  - 先撰寫測試才撰寫可以通過測試的程式碼
+  - 聚焦在行為的正確
+  - 一次只測試一個單一的功能片段
+- 設計決策總是一種 tradeoff
+  - 在每次迭代中如果遇到問題, 就要反思過去的設計, 也許已經需要改變
+  - 不要害怕推翻舊的設計, 只要是建立在合理的評估下
+- 軟體是在一次次迭代中產生的
+- 錯誤處理的兩種風格
+  - **program by contract**, 與程式使用方約定好, 錯誤處理的方式, 例如: `null` 或 `exception`
+  - **defensive programming**, 防禦性編程, 設想到所有可能的錯誤並且處理, 不讓使用方有任何錯誤發生
+  - **使用哪種錯誤處理風格通常取決於客戶**
+
 ---
 
 ### 第十一章 - OOAD 生命週期
+
+- 軟體開發 OOAD 風格
+- 流程, 但是其中是可以 iterate 的
+  - 功能清單 feature list, 軟體要做什麼
+  - 使用案例圖 use case diagram, 軟體如何被使用
+  - 分解問題 modules
+  - 了解問題 Spike
+  - 需求 requirement
+  - 領域分析 domain analysis
+  - 初步設計 preliminary design + 文本分析 textual analysis
+  - 實作 implement
+  - 交付 release
+- 有時候完成工作的最佳方式是找到其他人完成的成果
+  - 尤其是**特定問題的最佳化程式碼**已經存在時
+- 工具越多, 代表選擇越多, 越有機會針對不同的問題找到好的解法
 
 ---
