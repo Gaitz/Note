@@ -207,6 +207,43 @@ Estimating efficiency
 
 ### 第三章 - Sorting
 
+- Sorting 排序是很常被使用的基礎, 需要花額外的複雜度 `O(n * log(n))`
+
+`O(n^2)` Sort algorithms
+
+- **Bubble sort**, 持續兩兩交換, 每一輪都把最大值移動到正確的位置
+- **Inversion**, 每次都先走訪尋找順序不對的 pairs 然後執行 pairs 的位置交換, 直到沒有任何順序不對的 pairs
+
+`O(n * log(n))` Sort algorithms
+
+- **merge sort**, 以 recursion 建立, 遞迴處理分成左半與右半, 分別 sort 後最後 merge 結果
+  - 在 array 的實作下需要額外的 `O(n)` space, 並且不管是否排序都會執行完所有的遞迴
+
+`O(n)` Sort algorithms
+
+- **Counting Sort**, 在特定限制下的 sorting 可以達到 `O(n)` 的速度, 需要額外的 `O(k)` space, k 是所有可能元素集合大小
+  - 假設已知所有可能的元素集合, 然後走訪一次計算每個元素出現的數量 `O(n)`
+  - 已知元素的數量與順序, 因此可以以 `O(n)` 重建出 sorted 的結果
+
+Sorting in C++
+
+- 優先使用各語言提供的 sorting 函式庫, 節省自己實作的時間並且確保正確性
+- Comparison operators 與 comparison function, 大多數 sort 函式可以額外傳入比較算子 (operator) 或者比較函式 (function)
+  - 尤其是應用在客製化的資料結構上
+
+Binary Search
+
+- 在進行 search 時, 如果搜尋的資料結構沒有額外的資訊, 例如已排序時, 最有效的方式是走訪所有元素 `O(n)`
+- 當搜尋的資料結構是已排序時 sorted, 即可利用 binary search 利用已排序的特性加速搜尋 `O(log(n))`
+- 熟悉使用 **while loop** 建立的 binary search 實作, T: `O(log(n))`, S: `O(1)`
+- C++ function based on binary search
+  - `lower_bound`, 第一個大於指定值的 pointer
+  - `upper_bound`, 第一個小於指定值的 pointer
+  - `equal_range`, 回傳以上兩個函式的結果
+- 以 jump 為概念實作的 binary search
+- 應用在 Finding the smallest solution
+- 應用在 Finding the maximum value
+
 ---
 
 ### 第四章 - Data structures

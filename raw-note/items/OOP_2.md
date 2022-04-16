@@ -8,7 +8,7 @@
 
 第二章 - 觀察者模式
 
-第三章 - 裝飾模式
+第三章 - 裝飾者模式
 
 第四章 - 工廠模式
 
@@ -49,9 +49,10 @@
 - 原則 2: **程式針對介面, 而非實作**, 相依於介面而非實作, 實作是動態傳入的
   - 意思是在宣告變數時的型別, 應該是 **supertype** (**super class** or **interface**), 即使用多型, 增加程式的彈性 (Runtime 才決定實體)
 - 原則 3: **多用合成 (composition), 少用繼承 (inheritance)**
-  - 重用性以合成實現比起繼承更有彈性, 並且**繼承不利維護與擴充**
+  - 重用性以合成實現比起繼承更有彈性, 並且**繼承不利維護與擴充**, 繼承無法在 runtime 產生變動
 - Design Pattern 1: `策略模式 Strategy Pattern`
   - **封裝個別的策略, 並且允許動態的替換, 但是介面保持不動**
+  - 以 delegation 實現
 
 ---
 
@@ -73,11 +74,45 @@
 
 ---
 
-### 第三章 - 裝飾模式
+### 第三章 - 裝飾者模式
+
+- 原則 4. **開放封閉原則 Open-closed principle**
+  - 對於擴充開放, 關閉修改
+  - 減少變動開發完成的程式
+  - **只需要針對系統中最有可能變動的地方採用即可**
+- 避免過早最佳化, 最佳化帶來額外的抽象層
+- 物件可能有很多不同的變化, 避免使用繼承產生無數種組合
+- Design Pattern 3. `Decorator Pattern 裝飾者模式`
+  - **動態地將責任與擴充功能加在物件上**, 提供比繼承更有彈性的作法
+  - 缺點是會產生出多個裝飾者類別
+- 仍然使用**繼承為建立方式**, 因此會出現多個裝飾者類別
+  - 但是**使用時是以 delegation** 因此可以在 runtime 進行組合 aggregation
+- 重點在於 **decorator** 與 **component** 是繼承關係, 因此擁有相同的 super class 介面
+  - **decorator** 會傳入 **component** 並且 delegation + 加上自己的行為
+- 實際的範例, **Java I/O** 的 _InputStream_ 與 _OutputStream_ 系列
+  - Node.js 的 _middleware_ pattern
 
 ---
 
 ### 第四章 - 工廠模式
+
+- _new_ 等同於 construct 建立具體的物件
+  - 為了針對介面寫程式, 並且封裝變動之物
+- 為了要利用超型別, 因此必然會有選擇於生成不同的具體物件
+  - 封裝這樣的 _switch_ + _new_
+- Design Pattern 4. `Simple Factory` 簡單工廠, 把生成物件外包給單一個
+  - 獨立出一個單獨的類別處理這樣的生成行為, 通常命名慣例為 **factory** 配合 **create**
+- Design Pattern 4. `Factory Method`,
+  - 以繼承 _abstract_ **create** method 的方式讓子類別實作個別的 factory method
+- Design Pattern 4. `Abstract Factory`,
+  - 建立一個 **factory** 介面 (interface) 然後允許存在多個不同的 factory 物件
+  - 使用工廠時可以動態的決定要使用哪個工廠實體 factory object
+- 原則 5. **反向依賴原則 Dependency Inversion Principle**
+  - **依賴抽象 (abstract), 不要依賴具體 (concrete)**
+  - 因此會導致高階物件與低階元件都指向中間的抽象層, 而非高階物件直接指向低階物件
+  - 變數不持有 object reference, (以 factory 取代)
+  - 不要繼承 inherit 具體類別, 而是 _interface_ 或 _abstract class_,
+  - 子類別不要 override 父類別的 method
 
 ---
 

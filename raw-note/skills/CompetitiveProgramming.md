@@ -228,3 +228,12 @@
   - 可以視為 Divide and conquer + memorization
 - NP complete
   - 辨識出無法以多項式時間解決的問題
+
+---
+
+### clever algorithms
+
+- Maximum subarray sum,
+  - **Kadane's algorithm**, `O(n)`, 依序加入動態配置 Dynamic Programming, 利用前項最佳解, 來推導當前最佳解
+- Longest palindromic substring
+  - **Manacher's algorithm**, `O(n)`,
