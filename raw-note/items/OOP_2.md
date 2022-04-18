@@ -118,6 +118,30 @@
 
 ### 第五章 - 獨體模式
 
+- 如同全域變數一樣, 但是只在需要使用到的時候才會建立
+- 最經典的建立方式是
+  - class **private constructor**, 因此無法被 _new_
+  - 配合 class **static getInstance** function, 來提供生成與回傳唯一的 instance
+- Design Pattern 5. `Singleton Pattern 獨體模式`
+  - 一個 class 只有唯一的一個 instance 並且是全域可得 global
+  - 在使用時, 做好思考, 是否真的需要使用 Singleton Pattern, 因為真正適用的時機其實是少數, 否則等同於濫用全域變數一樣
+- 最經典的建立方式**並非是 thread-safe**
+  - 在不同的 thread 都在尚未建立前執行時, 會產生多餘一個的 instance, 則破壞模式
+- `thread-safe Singleton pattern` 建立方式
+
+1. 以 _synchronized_ 讓 **getInstance** function 成為同步的,
+
+   - 優點, 實作簡單
+   - 缺點, 原本的問題只有在建立實體時才有 thread-safe 問題之後的呼叫並不需要, 因此會有效能浪費
+
+2. **instance** 生成在 class 載入時, 即 _new_ 並不在 **getInstance** 中呼叫, 而是直接生成且存在 class member 上
+
+   - 缺點, 等同於全域變數, 並無法在所需要時才生成, 因此應用程式從載入時就佔用額外的空間, 造成資源浪費
+
+3. **double-checked locking** 在生成時才進行 _synchronized_ 限制, 需要額外配合 _volatile_ 語法使用在 instance 上
+   - 最佳解法
+   - 缺點, 稍嫌複雜需要額外注意
+
 ---
 
 ### 第六章 - 命令模式
