@@ -146,6 +146,19 @@
 
 ### 第六章 - 命令模式
 
+- Design Pattern 6. `Command Pattern 命令模式`
+  - **分離**要求者 (Client) 與執行者 (Receiver)
+  - 並不直接呼叫 Receiver 而是**通過 Invoker 來呼叫統一的 Command Interface 介面**
+- 常用物件與方法命名慣例,
+  - **Invoker** class with **setCommand()**
+  - **Command** **interface** with **execute()** 或 **undo()** 等等統一的方法
+  - 具體的 Command object 會接收 Receiver 作為 delegation, 並且藉由統一的 **execute()** 來呼叫 Receiver 的方法
+- **Invoker** 可以作為 Command 的中間層, 來實現批次執行, queue, 等等功能
+- 常見功能,
+  - 實現 **undo**, time travel
+  - 實現 task queue, 控制命令的執行順序與時間
+  - 實現 commands log, 儲存 commands pure object 來實現備援機制, 寫入硬碟能對抗某些系統當機
+
 ---
 
 ### 第七章 - 轉接器與外觀模式
