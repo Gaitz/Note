@@ -1,6 +1,6 @@
-## FrontEnd Interview Questions 2020 - 2021
+## FrontEnd Interview Questions
 
-### FrontEnd_Interview
+### Computer Science
 
 ---
 
@@ -352,7 +352,11 @@ Hint: `reduce`, arguments as variable
 
 ```javascript
 function compose(...funs) {
-  return funs.reduce((a, b) => (...args) => a(b(args)))
+  return funs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(args))
+  )
 }
 ```
 
