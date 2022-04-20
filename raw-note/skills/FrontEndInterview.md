@@ -4,6 +4,8 @@
 
 ---
 
+第零章 - 準備資源
+
 第一章 - 題目清單 25
 
 第二章 - 分類解答 JavaScript 相關
@@ -23,6 +25,16 @@
 第九章 - 面試時的提問
 
 ---
+
+### 準備資源
+
+- [tech-interview-handbook](https://github.com/yangshun/tech-interview-handbook)
+
+  - 履歷撰寫, 準備演算法問題, 技術面試考驗重點與應對方式, 演算法分類 cheat sheet (edge cases, 常用技巧), Behavior questions
+
+- [前端开发面试题 2018](https://github.com/markyun/My-blog/tree/master/Front-end-Developer-Questions)
+
+- [React Fiber 淺談](https://medium.com/happy-friday/react-fiber-%E6%B7%BA%E8%AB%87-1f18b5859298)
 
 ### 題目清單
 
