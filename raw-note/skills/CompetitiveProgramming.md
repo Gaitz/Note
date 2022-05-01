@@ -110,14 +110,14 @@
 #### Array and String
 
 - 利用 Hash Table: insert, search O(1), 利用 hash table 的搜尋與插入 O(1), 缺點是需要 O(n) 空間複雜度
-- 利用 Sorted O(n log n), 思考排序過後是不是更容易處理, 缺點是排序需要 O(n log n) 的時間複雜度
+- 利用 Sorted O(n log n), **思考排序過後是不是更容易處理**, 缺點是排序需要 O(n log n) 的時間複雜度
 - 利用 字串連接, 觀察連接後是否更好處理
 - 字串問題相關,
   - 字元編碼 (ASCII / Unicode)
   - 空白, 大小寫, 重複字元, 字串長度,
   - 排序
   - 字串連接, 自己與自己相連或與其他相連
-- Index pointers
+- Index pointers, 處理陣列時, 使用 one pointer 或 two pointers 等等方式嘗試
 - 嘗試排序 T: O(N \* LogN), 排序後利用有序這個條件來更有效率地尋找解
 - Hash table memory, 計算且儲存 S: O(N)
 - 找出回傳的模式並且優先計算格式, 才補值
@@ -132,13 +132,14 @@
 - 字元可以轉換成 ASCII code 或 Unicode 後做運算
 - 在 JavaScript 中, 需要注意 code unit 與 code point 的差別在 UTF-16 中遇到擴充字元時。
 - Hash table 優化搜尋
-- 嘗試從左走訪陣列跟從右邊走訪陣列, 嘗試一次只做一部份的解最後才整合
+- **嘗試從左走訪陣列跟從右邊走訪陣列, 嘗試一次只做一部份的解最後才整合**
 - **最佳化的兩種情況 1. 一次處理雙向, 2. 一次處理單向但是處理兩次, 最好兩種都想想看選擇出最簡單實作的**
 - 圖形題, 先視覺化畫出實際的圖, 來觀察
 - 沒有想法時, 先思考 brute force 然後減少重複的部分
 - 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
 - 資料的順序, 可以避免不必要的計算
 - 試著以儲存 index 來處理字串問題, 而非儲存字串本身
+- 計算 square 時, 試著使用 **two pointers** 逼近
 
 #### Linked List
 
@@ -228,3 +229,12 @@
   - 可以視為 Divide and conquer + memorization
 - NP complete
   - 辨識出無法以多項式時間解決的問題
+
+---
+
+### clever algorithms
+
+- Maximum subarray sum,
+  - **Kadane's algorithm**, `O(n)`, 依序加入動態配置 Dynamic Programming, 利用前項最佳解, 來推導當前最佳解
+- Longest palindromic substring
+  - **Manacher's algorithm**, `O(n)`,
