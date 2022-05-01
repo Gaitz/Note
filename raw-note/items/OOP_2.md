@@ -210,24 +210,114 @@
 
 ### 第九章 - 反覆器與合成模式
 
+- Design Pattern 10. `Iterator Pattern`, 反覆器模式
+  - 給所有的資料結構, collection 提供一個共用的介面 interface, 讓應用實作時不用理會實際使用的資料結構為何
+  - 提供彈性, 多型處理
+  - 針對介面寫程式, 而非實體 (各種不同的資料結構)
+- Iterator 介面常見 methods 與命名
+  - _hasNext()_, _next()_
+  - 如果要實作 _remove()_ 必須考量 multithread 的應用環境, 並且加以限制來達到 thread-safe
+- Principle 9. **Single responsibility principle** 單一責任原則
+  - 每個類別應該只有一個改變的理由
+  - 符合單一責任原則就會達到高內聚 (cohesion)
+  - 需要時常反思現有的設計
+- Design Pattern 11. `Composition Pattern` 合成模式
+  - 遇到 nested 的結構, 提供一個統一的介面同時處理 **Leaf**, **Composite**, 即可以使用統一介面配合 recursion 呼叫走訪
+  - 自然形成 **tree** structure 同時處理 **part-whole** hierarchies
+  - 此模式**違反** **Single responsibility principle** 但是換取透明度 **Transparency**, 客戶端不需要分別處理集合與內容
+  - 使用遞迴走訪, 可以在需要的時候以 caching 提昇效率
+- `Composition Pattern` 常見設計
+  - **Component** 共用的介面
+  - **Leaf** 繼承 **Component** 介面, 負責處理內容
+  - **Composite** 繼承 **Component** 介面, 負責處理集合
+- `Null object pattern` 空物件模式
+  - 使用統一介面的空物件來取代 **null**, 來避免額外處理 **null** 問題
+
 ---
 
 ### 第十章 - 狀態模式
+
+- Design Pattern 12. `State Pattern` 狀態模式
+  - 實現狀態機, 分成 **Context** 與 **State** interface
+  - 讓個別的 **state** 都實現 **State** 介面, 實作個別動作 **action** method 時的處理
+  - 讓 **Context** 控制 current state, 對於使用者而言, 只需要接觸 **Context** 即可
+  - State 的轉換邏輯, 可以放在個別 state 中或者 context 中
 
 ---
 
 ### 第十一章 - 代理人模式
 
+- Design Pattern 13. `Proxy Pattern` 代理人模式
+  - 以一個中間層重新代表一個物件, 讓代表物件可以控制原物件的存取
+- 與 `Decorator Pattern` 的不同之處
+  - 代理人模式, 是創建一個新物件來代表被控制的物件
+  - 裝飾者模式, 只是附加行為在原有的物件上
+- 代理人模式有無數種應用的時機, 常見的有
+  - Remote Proxy, 遠端代理人, 實現 RMI, RPC
+  - 虛擬代理人, 延遲生成時機 lazy
+  - 動態代理人, Java 中以 _reflection_ 實現, 在 Runtime 生成且替換 proxy
+  - 權限管理代理人, 限制 getter 或 setter 的呼叫
+  - Firewall Proxy, 防火牆代理人, 網路防火牆控管
+  - Caching Proxy, 快取代理人, 提供 caching
+  - Synchronization Proxy, 同步化代理人, 提供 thread-safe
+
 ---
 
 ### 第十二章 - 複合模式
+
+- **Compound Pattern** 複合模式
+  - 以多個 Design Pattern 組成來解決一般性的問題
+  - 例如: `MVC Pattern`, `Model 2`
+- `Model-View-Controller, MVC Pattern`
+  - **View**, 從 Model 中取得資料來呈現, 並且將觸發的行為轉交給 **Controller**
+  - **Controller**, 接收 **View** 的 action 解析且呼叫適當的 **Model** 層 API, 也可以呼叫 **View** 層改變顯示
+  - **Model**, 程式核心, 商業邏輯, 不認識 **View** 與 **Controller**
+- MVC Pattern 中使用到的 design patterns
+  - Observer Pattern, Model 層提供給 View 與 Controller 使用
+  - Strategy Pattern, View 層以此模式接收 Controller
+  - Composite Pattern, View 層建立在此模式上, 例如 DOM tree, Swing
+  - 常配合 Adapter Pattern 提供重用性, 例如不同的 Model 重用相同的 View
 
 ---
 
 ### 第十三章 - 與設計模式相處
 
+- Design Pattern 的定義
+  - 在某個 **Context** 下針對某個 **Problem** 的某個 **Solution**
+  - 模式是被發現的而不是被創造的
+- Principle 10. **Keep It Simple Stupid, KISS principle**
+  - **盡可能的保持簡單**
+- 不應該為了使用模式而使用
+  - 模式總是帶來更多的複雜度
+- 知道何時應該使用模式需要的是經驗與知識
+- **重構時, 也是引進模式的好時機**, 反思舊有的設計
+- Principle 11. **You aren't gonna need it, YAGNI principle**
+  - 如果現在不需要, 就不要使用
+- 不急切使用模式, 而是讓模式在適當的時間自然融入
+  - 致力於**簡單**的解決方案
+- Design Pattern 另一個主要的用處是**溝通**
+- 經典書籍
+  - **Design Patterns, Elements of Reusable Object-Oriented Software**, Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides (**GoF**)
+  - **The Timeless Way of Building**, Christopher Alexander
+  - **A Pattern Language, Towns, Buildings, Construction**, Christopher Alexander
+- **Anti-pattern** 反模式
+  - 提供不好的解決方案並且回答以下問題
+  - 為何此反模式吸引人?
+  - 使用此反模式的後果?
+  - 可以改用的良好模式是?
+
 ---
 
 ### 第十四章 - 剩下的模式
+
+- Design Pattern 14. `Bridge Pattern`,
+- Design Pattern 15. `Builder Pattern`, 複雜物件的生成模式
+- Design Pattern 16. `Chain of Responsibility Pattern`, 以 chain 的模式串接不同的 handler 來執行, 取代判斷
+- Design Pattern 17. `Flyweight Pattern`, 集合多個物件成單一資料結構, 以減少大量的物件實體
+- Design Pattern 18. `Interpreter Pattern`,
+- Design Pattern 19. `Mediator Pattern`, 以中間調解器解構耦合
+- Design Pattern 20. `Memento Pattern`, 實現狀態回復, save state and restore
+- Design Pattern 21. `Prototype Pattern`, 以 clone object 取代重新慢慢建立 create
+- Design Pattern 22. `Visitor Pattern`
 
 ---
