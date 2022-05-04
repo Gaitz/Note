@@ -1,10 +1,12 @@
-## FrontEnd Interview Questions 2020 - 2021
+## FrontEnd Interview Questions
 
-### FrontEnd_Interview
+### Computer Science
 
 ---
 
-第一章 - 題目清單 25
+第零章 - 準備資源
+
+第一章 - 題目清單
 
 第二章 - 分類解答 JavaScript 相關
 
@@ -24,7 +26,21 @@
 
 ---
 
+### 準備資源
+
+- [tech-interview-handbook](https://github.com/yangshun/tech-interview-handbook)
+
+  - 履歷撰寫, 準備演算法問題, 技術面試考驗重點與應對方式, 演算法分類 cheat sheet (edge cases, 常用技巧), Behavior questions
+
+- [前端开发面试题 2018](https://github.com/markyun/My-blog/tree/master/Front-end-Developer-Questions)
+
+- [React Fiber 淺談](https://medium.com/happy-friday/react-fiber-%E6%B7%BA%E8%AB%87-1f18b5859298)
+
+---
+
 ### 題目清單
+
+JavaScript 相關
 
 - closure 與 this?
 - event loop, macro task 與 micro task? Promise 的同步與非同步? 執行順序? then 的執行順序
@@ -34,31 +50,47 @@
 
 ---
 
+React 相關
+
 - Redux Reselect 的 selector 做了什麼?
 - Hook 實作倒數? useState, setTimeout, clearTimeout
 - setState 與 React 執行流程?
-- React 核心, diff 演算法?
+- React 核心, diff 演算法? diff 演算法比較什麼
 - Redux, how to diff state change and trigger notification?
 
 ---
+
+前端常見問題
 
 - 前端儲存資訊的地方? (cookies, local store, sessions, indexDB)
 - 如何判斷使用者語系? (IP detect, User Agent)
 - CSS 置中方法? flexbox, absolute + relative, grid
 - Bundle size minify 的方法? Webpack minify, tree shaking, dynamic import 與 CommonsChuckPlugin
+- 如何最佳化 Web
+- SEO tuning
+- RWD 與 AWD 分別是什麼, 使用時機是什麼
+- CSS selector 有哪些, 權重如何計算
+- Event phase
+- Cross site messaging 如何做？
 
 ---
+
+Network 相關
 
 - Browser cache policy, service worker, http cache?
 - http headers, etag v.s. Last-Modified?
 - Prevent XSS with http header (Content Security Policy, CSP)?
-- SSR with 'isitc', 'service mesh'
 
 ---
 
+後端相關
+
+- SSR with 'isitc', 'service mesh'
 - Restful API naming convention
 
 ---
+
+演算法實作
 
 - Leetcode 1. two sum, 2. three sum
 - function `compose` 實作?
@@ -67,10 +99,19 @@
 
 ---
 
+其他技術問題
+
 - 用過的 Design Patterns?
 - Open Source project understanding & experience?
+- Design Principles, SOLID
+- Event-driven Design
+- Logging, Monitoring, 應該針對什麼
+
+---
 
 ### 分類解答 - JavaScript 相關
+
+---
 
 #### Question: closure 與 this?
 
@@ -146,7 +187,11 @@ Answer:
 
 Reference 1. [The Decorator Pattern - Learning JavaScript Design Patterns by Addy Osmani](https://www.oreilly.com/library/view/learning-javascript-design/9781449334840/ch09s14.html)
 
+---
+
 ### 分類解答 - React 相關
+
+---
 
 #### Question: Redux Reselect 的 selector 做了什麼?
 
@@ -189,7 +234,11 @@ Reference 2. [React-Redux useSelector.js](https://github.com/reduxjs/react-redux
 
 Answer:
 
+---
+
 ### 分類解答 - 前端常見問題
+
+---
 
 #### Question: 前端儲存資訊的地方? (cookies, local store, sessions, indexDB)
 
@@ -243,7 +292,54 @@ Reference 3. [Tree shaking](https://webpack.js.org/guides/tree-shaking/)
 
 Reference 4. [dynamic import](https://webpack.js.org/guides/code-splitting/#dynamic-imports)
 
+---
+
+#### Question: 如何最佳化 Web, Performance tuning
+
+---
+
+#### Question: SEO tuning
+
+---
+
+#### Question: RWD 與 AWD 分別是什麼, 使用時機是什麼
+
+---
+
+#### Question: CSS selector 有哪些, 權重如何計算
+
+---
+
+#### Question: Event phase
+
+- DOM Event phase 分成三個步驟
+  1. Capturing phase
+  2. Target phase
+  3. Bubbling phase
+- 會影響到相關 DOM Tree element event listener 的觸發順序
+- `addEventListener()` Callback function
+  - 預設的觸發時機是 bubbling phase
+  - 可以通過選用參數讓觸發時機變成 capturing phase
+- `event.target` 與 `event.currentTarget` 的差別
+  - `event.target` 在 bubbling phase 並不會改變, 代表的是最深處觸發的 element
+  - `event.currentTarget` 代表當前觸發 handler 的 element
+- `event.stopPropagation()` 停止後續的 bubbling 執行
+- `event.eventPhase` 可以取得 readonly 的當前階段分別為
+  - `1` capturing, `2` target, `3` bubling
+
+[Ref 1. Phases of JavaScript Event](https://www.geeksforgeeks.org/phases-of-javascript-event/)
+
+[Ref 2. Bubbling and capturing](https://javascript.info/bubbling-and-capturing)
+
+---
+
+#### Question: Cross site messaging 如何做？
+
+---
+
 ### 分類解答 - Network 相關
+
+---
 
 #### Question: Browser cache policy, service worker, http cache?
 
@@ -299,7 +395,11 @@ Reference 1. [Content Security Policy (CSP)](https://developer.mozilla.org/en-US
 
 Reference 2. [Http Header Content-Security-Policy mdn](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
 
+---
+
 ### 分類解答 - 後端相關
+
+---
 
 #### Question: SSR with 'istio' and 'service mesh'
 
@@ -333,7 +433,11 @@ Reference 2. [表現層狀態轉換 wikipedia](https://zh.wikipedia.org/wiki/%E8
 
 Reference 3. [什麼是 REST? 認識 RESTful API 路由語義化設計風格](https://tw.alphacamp.co/blog/rest-restful-api)
 
+---
+
 ### 分類解答 - 演算法實作
+
+---
 
 #### Question: Leetcode 1. two sum, 2. three sum
 
@@ -352,7 +456,11 @@ Hint: `reduce`, arguments as variable
 
 ```javascript
 function compose(...funs) {
-  return funs.reduce((a, b) => (...args) => a(b(args)))
+  return funs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(args))
+  )
 }
 ```
 
@@ -374,7 +482,11 @@ Answer:
 
 Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 
+---
+
 ### 分類解答 - 其他技術問題
+
+---
 
 #### Question: 用過的 Design Patterns?
 
@@ -382,37 +494,87 @@ Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 
 #### Question: Open Source project understanding & experience?
 
+---
+
+#### Question: Design Principles, SOLID
+
+---
+
+#### Question: Event-driven Design
+
+- Event-Driven Architecture
+  - 常見於微服務 microservice 裡的一種架構
+  - JavaScript 甚至就是原生 event-driven 的程式語言
+  - 不同於過去的 Request / Response 模式, 同步式溝通
+  - 被視為是 asynchronous communication 非同步式溝通
+  - 觀點從 data centric model 轉移到 event centric model, 注重的從 data 的完整性移動到 event 的即時處理
+- 架構成員分成 Event Producers, Event Brokers, Event Consumers
+  - 作到 Event Producers 與 Event Consumers 的解耦合
+  - Event Brokers 是選用的, 最單純的 one producer to one consumer 只需要直接發送即可
+  - Event Brokers 即 Message Queue 系統, 用來實現 event 的轉發與處理
+- 驅動方式可以分成
+  - Pub/sub 發送註冊制, 事件發送後 event published 主動給註冊的 subscribers
+  - Event streaming 事件串流制, 不主動發送事件給 consumers, 事件以 log-based 的方式, 有嚴格的順序 strictly ordered 與永久性儲存 durable, Consumer 則主動以 pointer 的方式自由的讀取任意時間段的事件
+- Event 事件
+  - 行為或任務完成後, 拋出事件
+  - 事件是任何系統上的狀態變動 a change of state
+  - 重要的 event 必須是 immutable 的, 才能實現 replay
+- Message Queue
+  - 是實現 Event-Driven Architecture 常見的工具, 但是並不是必須的
+  - 考慮到不同的使用情境, 選擇不同的 Message Queue 實作
+  - 1. 只發送一次, 2. 訂閱機制, 3. 離線訊息, 4. 回放機制
+  - Log based message queue 可以實現回放機制
+- Event-Driven Architecture 的好處
+  - 方便追蹤系統的各種狀態
+  - 系統之間的解耦合
+  - 資料的解耦合, 可以配合 Command and Query Responsibility Segregation, **CQRS** 實現更好的 throughput
+  - 更容易實現微服務 microservice 與分散化 distributed 系統, 高度分散化 distributed 與擴張性 scalable
+  - 提昇系統上的平行處理能力 parallel
+- Event-Driven Architecture 的挑戰
+  - Guaranteed delivery, 如何保證事件被處理 ?
+  - Processing events in order or exactly once, 如何確保事件的處理順序 ?, 如何確保事件只被處理一次 ?
+- Data 與 Event
+  - Event 應該只包含最少的資訊, 例如 Ids, 來加速傳遞 latency 與提昇 throughput
+  - Data 應該另外儲存在其他地方, 詳細的資料不應該隨著 Event 傳遞
+- Event-driven 的應用
+  - 程式語言: JavaScript
+  - 使用情境: Browser UI, 其他 UI 設計
+  - 程式撰寫風格: Reactive Programming, 實現的函式庫 RxJS, RxJava, ...
+  - 系統架構: Event-driven architecture
+  - 常配合的中間層: Message Queue
+
+[Reference 1. 落實任務狀態事件化](https://medium.brobridge.com/%E8%90%BD%E5%AF%A6%E4%BB%BB%E5%8B%99%E7%8B%80%E6%85%8B%E4%BA%8B%E4%BB%B6%E5%8C%96-813a9366d42e)
+
+[Reference 2. Event-driven architecture style](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven)
+
+[Reference 3. What is Event-driven Architecture?](https://www.tibco.com/reference-center/what-is-event-driven-architecture)
+
+---
+
+#### Question: Logging, Monitoring, 應該針對什麼
+
+---
+
 ### 面試時的提問
 
-#### 對 hunter
-
-- 國內市場職缺, 國外市場職缺? 熱門的技術與人才類型? (確定未來方向)
-- 我的履歷 - 好壞, 改進?
-- 對我的看法? Feedback? 條件如何?
-- 對於高階工程師來說好的經驗?
+---
 
 #### 對 engineer
 
-- 對資深工程師的要求與期望?
-- 專案目前狀況 (使用的技術, 專案目前的維護者是誰)? 軟體工程實務? CI/CD? Testing?
+- 需求, UI/UX, use case, SCRUM / XP / Kanban, Git, Testing, CI/CD pipeline, Lint
+- Daily work 應該是怎麼樣的
 - 對於好的軟體的看法是什麼?
 - 系統架構與責任區分?
-- 團隊分工狀況? 需求來源, 如何與後端合作, 如何與 UI/UX 合作, 前端工程師的人數?
-- 設備狀況 (電腦, 雙螢幕)? 工時, 上下班時間?
-- 職缺開放的原因?
-- Daily Work 有哪些, 如何進行?
-- 目前使用的技術與架構?
-- git 工作流程? (git flow, github flow, ...)
-- CI/CD 如何進行?
-- Testing 如何進行?
+- 團隊分工狀況? 工程師的人數?
+- 如何與其他團隊合作
+- Remote 的溝通管道, 同步與非同步
+-
 
 #### 對 Manager
 
 - 團隊未來的規劃?
-
-#### 對 Boss
-
-- 企業文化?
-- 營收狀況?
-- 資金狀況?
-- 未來規劃?
+- 該職缺預期的 Impact 與 Scope
+- 公司內升職的架構
+- Work-life balance,
+- how a project lead?
+- 目前團隊最重要的事情與挑戰
