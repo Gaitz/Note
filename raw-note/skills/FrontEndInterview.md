@@ -502,6 +502,53 @@ Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 
 #### Question: Event-driven Design
 
+- Event-Driven Architecture
+  - 常見於微服務 microservice 裡的一種架構
+  - JavaScript 甚至就是原生 event-driven 的程式語言
+  - 不同於過去的 Request / Response 模式, 同步式溝通
+  - 被視為是 asynchronous communication 非同步式溝通
+  - 觀點從 data centric model 轉移到 event centric model, 注重的從 data 的完整性移動到 event 的即時處理
+- 架構成員分成 Event Producers, Event Brokers, Event Consumers
+  - 作到 Event Producers 與 Event Consumers 的解耦合
+  - Event Brokers 是選用的, 最單純的 one producer to one consumer 只需要直接發送即可
+  - Event Brokers 即 Message Queue 系統, 用來實現 event 的轉發與處理
+- 驅動方式可以分成
+  - Pub/sub 發送註冊制, 事件發送後 event published 主動給註冊的 subscribers
+  - Event streaming 事件串流制, 不主動發送事件給 consumers, 事件以 log-based 的方式, 有嚴格的順序 strictly ordered 與永久性儲存 durable, Consumer 則主動以 pointer 的方式自由的讀取任意時間段的事件
+- Event 事件
+  - 行為或任務完成後, 拋出事件
+  - 事件是任何系統上的狀態變動 a change of state
+  - 重要的 event 必須是 immutable 的, 才能實現 replay
+- Message Queue
+  - 是實現 Event-Driven Architecture 常見的工具, 但是並不是必須的
+  - 考慮到不同的使用情境, 選擇不同的 Message Queue 實作
+  - 1. 只發送一次, 2. 訂閱機制, 3. 離線訊息, 4. 回放機制
+  - Log based message queue 可以實現回放機制
+- Event-Driven Architecture 的好處
+  - 方便追蹤系統的各種狀態
+  - 系統之間的解耦合
+  - 資料的解耦合, 可以配合 Command and Query Responsibility Segregation, **CQRS** 實現更好的 throughput
+  - 更容易實現微服務 microservice 與分散化 distributed 系統, 高度分散化 distributed 與擴張性 scalable
+  - 提昇系統上的平行處理能力 parallel
+- Event-Driven Architecture 的挑戰
+  - Guaranteed delivery, 如何保證事件被處理 ?
+  - Processing events in order or exactly once, 如何確保事件的處理順序 ?, 如何確保事件只被處理一次 ?
+- Data 與 Event
+  - Event 應該只包含最少的資訊, 例如 Ids, 來加速傳遞 latency 與提昇 throughput
+  - Data 應該另外儲存在其他地方, 詳細的資料不應該隨著 Event 傳遞
+- Event-driven 的應用
+  - 程式語言: JavaScript
+  - 使用情境: Browser UI, 其他 UI 設計
+  - 程式撰寫風格: Reactive Programming, 實現的函式庫 RxJS, RxJava, ...
+  - 系統架構: Event-driven architecture
+  - 常配合的中間層: Message Queue
+
+[Reference 1. 落實任務狀態事件化](https://medium.brobridge.com/%E8%90%BD%E5%AF%A6%E4%BB%BB%E5%8B%99%E7%8B%80%E6%85%8B%E4%BA%8B%E4%BB%B6%E5%8C%96-813a9366d42e)
+
+[Reference 2. Event-driven architecture style](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven)
+
+[Reference 3. What is Event-driven Architecture?](https://www.tibco.com/reference-center/what-is-event-driven-architecture)
+
 ---
 
 #### Question: Logging, Monitoring, 應該針對什麼
