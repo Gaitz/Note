@@ -1,4 +1,4 @@
-## FrontEnd Interview Questions
+## Software Interview Questions
 
 ### Computer Science
 
@@ -57,6 +57,7 @@ React 相關
 - setState 與 React 執行流程?
 - React 核心, diff 演算法? diff 演算法比較什麼
 - Redux, how to diff state change and trigger notification?
+- useState render issues
 
 ---
 
@@ -233,6 +234,17 @@ Reference 1. [Redux createStore.ts](https://github.com/reduxjs/redux/blob/master
 Reference 2. [React-Redux useSelector.js](https://github.com/reduxjs/react-redux/blob/df36f4efa47a32954b9d14c2c3b5c3e9c0cc795d/src/hooks/useSelector.js#L7)
 
 Answer:
+
+---
+
+#### useState render issues
+
+- `useState()` 的 setState 傳遞如果是 reference 的話, 會直接比較 reference 才決定是否渲染
+
+  - 因此如果傳入相同的 object reference 例如 array 的話, 並不會觸發 re-render
+
+- React `key`, react render array 時 item 是使用 `key` 來決定是否 re-render
+  - 因此如果 render array 以 index 做 `key` 時, 常會出現 render issue 並沒有更新
 
 ---
 
