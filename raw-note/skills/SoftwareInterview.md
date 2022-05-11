@@ -88,6 +88,7 @@ Network 相關
 
 - SSR with 'isitc', 'service mesh'
 - Restful API naming convention
+- Restful API design guidelines
 
 ---
 
@@ -237,7 +238,7 @@ Answer:
 
 ---
 
-#### useState render issues
+#### Question: useState render issues
 
 - `useState()` 的 setState 傳遞如果是 reference 的話, 會直接比較 reference 才決定是否渲染
 
@@ -444,6 +445,21 @@ Reference 1. [Spring 基础篇（5）-restful 命名规则](https://www.jianshu.
 Reference 2. [表現層狀態轉換 wikipedia](https://zh.wikipedia.org/wiki/%E8%A1%A8%E7%8E%B0%E5%B1%82%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2)
 
 Reference 3. [什麼是 REST? 認識 RESTful API 路由語義化設計風格](https://tw.alphacamp.co/blog/rest-restful-api)
+
+#### Question: Restful API design guidelines
+
+- Do not use "physical" URLs, use logical url instead
+  - URL 定位不要指向實際的檔案, 而是邏輯意義上的名稱. 例如移除副檔名
+- Queries should not return an overload of data.
+  - 一次查詢不要帶超量的資訊, 配合 paging 使用, 在 response 中帶上 prev, next 的 url 即可
+- well documented, and do not change the output format lightly (since it will break existing clients).
+  - 不要輕易的改變 response 的結構, 會破壞現有的客戶端程式碼
+- Rather than letting clients construct URLs for additional actions, include the actual URLs with REST responses.
+  - 與其讓客戶自行組合 URL 得到更多的功能, 不如直接回傳對應的 URL 給它呼叫
+- `GET` access requests should never cause a state change.
+  - `GET` method 永遠不會觸發後端狀態的改變, 應該永遠是 read-only 的行為
+
+Reference 1. [9. REST Design Guidelines](http://rest.elkstein.org/2008/02/rest-design-guidelines.html)
 
 ---
 
