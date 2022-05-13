@@ -47,6 +47,7 @@ JavaScript 相關
 - JavaScript type converse, `==` algorithm?
 - V8 Garbage Collections, scavenge, young generation?
 - Decorator pattern in JavaScript
+- Implements curried multiple function
 
 ---
 
@@ -58,6 +59,7 @@ React 相關
 - React 核心, diff 演算法? diff 演算法比較什麼
 - Redux, how to diff state change and trigger notification?
 - useState render issues
+- PureComponent, Component, functional component
 
 ---
 
@@ -181,13 +183,18 @@ Reference 2. [Trash talk: the Orinoco garbage collector](https://v8.dev/blog/tra
 
 ---
 
-#### Decorator pattern in JavaScript
+#### Question: Decorator pattern in JavaScript
 
 Answer:
 
 取代創建 subclass 的方式，使用傳入原始物件的方式擴充功能。在 JavaScript 中可以非常容易地做到，因為 JavaScript 中的物件是 runtime 可修改的並且 member function 可以被重新賦值
 
 Reference 1. [The Decorator Pattern - Learning JavaScript Design Patterns by Addy Osmani](https://www.oreilly.com/library/view/learning-javascript-design/9781449334840/ch09s14.html)
+
+#### Question： Implements curried function
+
+- `Function.length`, The length property indicates the number of parameters expected by the function.
+- 在傳入的值數量還沒達到原本 Function.length 時, 持續蒐集傳入值並且傳遞下去.
 
 ---
 
@@ -246,6 +253,20 @@ Answer:
 
 - React `key`, react render array 時 item 是使用 `key` 來決定是否 re-render
   - 因此如果 render array 以 index 做 `key` 時, 常會出現 render issue 並沒有更新
+
+#### Question: PureComponent, Component, functional component
+
+- `Component`, 最基礎的 React component class
+- `PureComponent`, 無法自訂 `shouldComponentUpdate` 的 class component base, 但是會自動以 shallow compare 比較 props 與 states (**shallow compare** `shouldComponentUpdate`)
+  - 用來避免不必要的 re-render
+- **function component**,
+  - 傳統上的 stateless function component 沒有 state, refs, lifecycle functions
+  - React 16+ 以上有 React hook 可以在 function component 上實現以上的功能
+- `React.memo` is a higher order component
+  - 會 cache component render 的結果, 只有在 props, states, context 有變化時才會 re-render
+  - 預設是 shallow compare 但是可以傳遞額外的 `areEqual` compare function
+
+Reference 1. [React API](https://reactjs.org/docs/react-api.html#reference)
 
 ---
 
@@ -471,8 +492,13 @@ Reference 1. [9. REST Design Guidelines](http://rest.elkstein.org/2008/02/rest-d
 
 Answer:
 
-Leetcode [two-sum](https://leetcode.com/problems/two-sum/),
-Leetcode [3sum](https://leetcode.com/problems/3sum/)
+- Leetcode [two-sum](https://leetcode.com/problems/two-sum/)
+
+  - cache for searching
+
+- Leetcode [3sum](https://leetcode.com/problems/3sum/)
+  - cache for searching
+  - sorted to minify searching times, however the time complexity will not change.
 
 ---
 
