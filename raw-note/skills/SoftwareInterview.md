@@ -75,6 +75,7 @@ React 相關
 - CSS selector 有哪些, 權重如何計算
 - Event phase
 - Cross site messaging 如何做？
+- defer, async
 
 ---
 
@@ -83,6 +84,7 @@ Network 相關
 - Browser cache policy, service worker, http cache?
 - http headers, etag v.s. Last-Modified?
 - Prevent XSS with http header (Content Security Policy, CSP)?
+- Http status codes
 
 ---
 
@@ -110,6 +112,7 @@ Network 相關
 - Design Principles, SOLID
 - Event-driven Design
 - Logging, Monitoring, 應該針對什麼
+- git rebase 與 merge 的差別與範例
 
 ---
 
@@ -305,7 +308,7 @@ Reference 1. [Accept-Language header mdn](https://developer.mozilla.org/en-US/do
 Answer:
 
 - Flexbox, `display: flex; justify-content: center; align-items: center;`
-- Absolute + Relative, `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`
+- Absolute + Relative, parent: `position: relative`, child: `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`
 - Grid, `display: grid; place-items: center;`
 
 Reference 1. [Top 3 Ways to Center a DIV with CSS #Shorts](https://www.youtube.com/watch?v=njdJeu95p6s)
@@ -371,6 +374,16 @@ Reference 4. [dynamic import](https://webpack.js.org/guides/code-splitting/#dyna
 
 ---
 
+#### Question: defer, async
+
+- 關於 browser 解析 html, 下載資源, 執行外部 script
+- `defer`, 非同步下載, 執行會等到 DOMContentLoaded
+- `async`, 非同步下載, 下載回來後即刻執行
+
+Reference [Scripts: async, defer](https://javascript.info/script-async-defer)
+
+---
+
 ### 分類解答 - Network 相關
 
 ---
@@ -428,6 +441,29 @@ Answer:
 Reference 1. [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
 
 Reference 2. [Http Header Content-Security-Policy mdn](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
+
+---
+
+#### Question: Http status codes
+
+Common
+
+- `200` OK
+- `301`, Moved Permanently, given new URL in response
+- `302`, Found, changed temporarily
+- `304`, Not Modified, cache used
+- `307`, Temporary Redirect,
+- `308`, Permanent Redirect,
+- `400`, Bad Request,
+- `401`, Unauthorized, 使用者需授權
+- `403`, Forbidden, 使用者已授權但是沒有權限
+- `404`, Not Found,
+- `429`, Too Many Requests,
+- `500`, Internal Server Error,
+- `502`, Bad Gateway,
+- `503`, Service Unavailable, 通常用於維護中
+
+Reference 1. [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 
 ---
 
