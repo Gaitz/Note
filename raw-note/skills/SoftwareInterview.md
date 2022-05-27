@@ -48,6 +48,9 @@ JavaScript 相關
 - V8 Garbage Collections, scavenge, young generation?
 - Decorator pattern in JavaScript
 - Implements curried multiple function
+- Custom implements `Promise.all()`
+- setTimeout, scope, closure
+- rest operator, spread operator
 
 ---
 
@@ -63,19 +66,31 @@ React 相關
 
 ---
 
+CSS 相關
+
+- CSS 置中方法? flexbox, absolute + relative, grid
+- `visibility: hidden;` 與 `display: none;` 的差別
+- `position` 的選項與差別
+
+---
+
 前端常見問題
 
 - 前端儲存資訊的地方? (cookies, local store, sessions, indexDB)
 - 如何判斷使用者語系? (IP detect, User Agent)
-- CSS 置中方法? flexbox, absolute + relative, grid
 - Bundle size minify 的方法? Webpack minify, tree shaking, dynamic import 與 CommonsChuckPlugin
 - 如何最佳化 Web
 - SEO tuning
 - RWD 與 AWD 分別是什麼, 使用時機是什麼
 - CSS selector 有哪些, 權重如何計算
-- Event phase
+- Event phase, event flow and how to interrupt
 - Cross site messaging 如何做？
 - defer, async
+- What is CORS? CORB?
+- debounce 與 throttle 的差別與如何實作或使用
+- jpg 與 SVG 的容量差異
+- PWA data sync
+- XSS, CSRF 是什麼與如何防禦
 
 ---
 
@@ -85,6 +100,8 @@ Network 相關
 - http headers, etag v.s. Last-Modified?
 - Prevent XSS with http header (Content Security Policy, CSP)?
 - Http status codes
+- cookie attributes: httponly, secure, session, samesite
+- browser cross origin solutions
 
 ---
 
@@ -143,13 +160,42 @@ Reference 1. [this mdn](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
 
 Answer:
 
-`new Promise()` 是同步的, `.then()` 是非同步並且是 micro task
+- Event loop 的 event system 與 function execution context
+- `new Promise((resolve, reject) => {})` 是同步的, 包含傳進 `new Promise()` 的 function,
+  - 因此 `(resolve, reject) => {}` 的整個 function body 同步的先執行, 包含了 `resolve()` 或 `reject()` 之後的程式碼
+  - `.then()` 是非同步並且是 micro task
+- 兩個無關連, 沒有持有 reference 的 Promise job 的順序是不定的, 取決於 promise job queue
+- Promise 的執行順序範例
+
+```javascript
+async function bfunc() {
+  console.log("2 - b func")
+}
+
+async function afunc() {
+  await bfunc() // rest of function pushed to event queue
+  console.log("4 - a func")
+}
+
+const prom = new Promise((resolve, reject) => {
+  console.log("1 - inside promise")
+  resolve("5 - foo")
+  afunc()
+}).then((value) => {
+  // this is also pushed to the event queue
+  console.log(value)
+})
+
+console.log("3 - last thing")
+```
 
 Reference 1. [Event loop mdn](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
 
 Reference 2. [我知道你懂 Event Loop，但你了解到多深？](https://yeefun.github.io/event-loop-in-depth/?fbclid=IwAR1Q-4-8N2zdGEgcilB6mkgKGG_8wsDFRr48F5hajUBim4LXCPTiJM7bn0I)
 
 Reference 3. [Microtask mdn](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide)
+
+Reference 4. [Event loop queueing order example and description](https://stackoverflow.com/questions/67863820/event-loop-queueing-order)
 
 ---
 
@@ -201,6 +247,70 @@ Reference 1. [The Decorator Pattern - Learning JavaScript Design Patterns by Add
 
 ---
 
+#### Question: Custom implements `Promise.all()`
+
+```javascript
+const PromiseAll = (promises) => {
+  const result = new Array(promise.length)
+  let resolveTimes = 0
+  return new Promise((resolve, reject) => {
+    promises.forEach((promise, index) => {
+      promise()
+        .then((res) => {
+          resolveTimes++
+          result.push(res)
+          if (resolveTimes === promises.length) {
+            resolve(result)
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  })
+}
+```
+
+---
+
+#### Question: setTimeout, scope, closure
+
+- problem
+
+```javascript
+for (var i = 0; i < 5; i++) {
+  setTimeout(function () {
+    console.log(i)
+  }, 0)
+}
+```
+
+- solve by IIFE closure
+
+```javascript
+for (var i = 0; i < 5; i++) {
+  setTimeout(
+    (function (index) {
+      console.log(index)
+    })(i),
+    0
+  )
+}
+```
+
+---
+
+#### rest operator, spread operator
+
+- share the same operator `...`
+- rest operator example `function (a, b, ...rest)`
+- spread operator example `...arrayName`, `...stringName`, `...objectName`
+  - can expand any **iterable**
+
+Reference [JavaScript Rest vs Spread Operator – What’s the Difference?](https://www.freecodecamp.org/news/javascript-rest-vs-spread-operators/#:~:text=The%20main%20difference%20between%20rest,expands%20iterables%20into%20individual%20elements.)
+
+---
+
 ### 分類解答 - React 相關
 
 ---
@@ -233,6 +343,8 @@ Answer:
 
 Answer:
 
+---
+
 #### Question: Redux, how to diff state change and trigger notification?
 
 Answer:
@@ -257,6 +369,8 @@ Answer:
 - React `key`, react render array 時 item 是使用 `key` 來決定是否 re-render
   - 因此如果 render array 以 index 做 `key` 時, 常會出現 render issue 並沒有更新
 
+---
+
 #### Question: PureComponent, Component, functional component
 
 - `Component`, 最基礎的 React component class
@@ -270,6 +384,48 @@ Answer:
   - 預設是 shallow compare 但是可以傳遞額外的 `areEqual` compare function
 
 Reference 1. [React API](https://reactjs.org/docs/react-api.html#reference)
+
+---
+
+### 分類解答 - CSS 相關
+
+---
+
+#### Question: CSS 置中方法? flexbox, absolute + relative, grid
+
+Answer:
+
+- Flexbox, `display: flex; justify-content: center; align-items: center;`
+- Absolute + Relative, parent: `position: relative`, child: `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`
+- Grid, `display: grid; place-items: center;`
+
+Reference 1. [Top 3 Ways to Center a DIV with CSS #Shorts](https://www.youtube.com/watch?v=njdJeu95p6s)
+
+---
+
+#### Question: `visibility: hidden;` 與 `display: none;` 的差別
+
+- `visibility` 控制顯示與否但是不影響 layout, 選擇不被繪畫出來但是仍然存在佔位
+- `display` 控制該元素被視為 inline 或者 block 影響本身與子代的 layout 行為
+  - `display: none` 關閉元素的 display 即關閉他對 layout 的影響, 可以視為不存在 layout 上
+
+Reference: [visibility mdn](https://developer.mozilla.org/en-US/docs/Web/CSS/visibility)
+
+Reference: [display mdn](https://developer.mozilla.org/en-US/docs/Web/CSS/display)
+
+---
+
+#### Question: `position` 的選項與差別
+
+- `position` 控制元素如何被定位在 document 上
+  - `static`, 預設值,
+  - `relative`, 相對於自己原本的位置 ( static 時) 配合定位屬性來控制定位, 對於 layout 而言等同於 static
+  - `absolute`, 從原本的 layout 上移除, 定位於最近的 relative 父層, 抽離原本的 layout 以自由定位
+  - `fixed`, 從原本的 layout 上移除, 定位於 viewport
+  - `sticky`, 定位於最近的 scroll container 父層中
+- 通常配合定位屬性 `top`, `right`, `bottom`, `left`, `z-index` 來協助定位
+
+Reference: [position mdn](https://developer.mozilla.org/en-US/docs/Web/CSS/position)
 
 ---
 
@@ -300,18 +456,6 @@ Answer:
 - 使用 HTTP header, `Accept-Language` 判斷使用者偏好語言
 
 Reference 1. [Accept-Language header mdn](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language)
-
----
-
-#### Question: CSS 置中方法? flexbox, absolute + relative, grid
-
-Answer:
-
-- Flexbox, `display: flex; justify-content: center; align-items: center;`
-- Absolute + Relative, parent: `position: relative`, child: `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`
-- Grid, `display: grid; place-items: center;`
-
-Reference 1. [Top 3 Ways to Center a DIV with CSS #Shorts](https://www.youtube.com/watch?v=njdJeu95p6s)
 
 ---
 
@@ -347,7 +491,7 @@ Reference 4. [dynamic import](https://webpack.js.org/guides/code-splitting/#dyna
 
 ---
 
-#### Question: Event phase
+#### Question: Event phase, event flow and how to interrupt
 
 - DOM Event phase 分成三個步驟
   1. Capturing phase
@@ -381,6 +525,40 @@ Reference 4. [dynamic import](https://webpack.js.org/guides/code-splitting/#dyna
 - `async`, 非同步下載, 下載回來後即刻執行
 
 Reference [Scripts: async, defer](https://javascript.info/script-async-defer)
+
+---
+
+#### Question: What is CORS? CORB?
+
+Reference: [跨來源資源共用 (CORS) 是什麼? 如何設定 CORS?](https://shubo.io/what-is-cors/)
+
+---
+
+#### Question: debounce 與 throttle 的差別與如何實作或使用
+
+---
+
+#### Question: jpg 與 SVG 的容量差異
+
+- SVG image is generally larger than JPEG image of same image.
+
+Reference: [Difference between JPEG and SVG](https://www.tutorialspoint.com/difference-between-jpeg-and-svg#:~:text=JPEG%20image%20quality%20decreases%20on,quality%20remains%20same%20on%20zooming.&text=JPEG%20image%20is%20generally%20smaller,JPEG%20image%20of%20same%20image.)
+
+---
+
+#### Question: PWA data sync
+
+- 配合 Service Worker API
+- Service Worker Registration
+  - `sync` 實驗性 API
+
+Reference [ServiceWorkerRegistration.sync mdn](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/sync)
+
+Reference [Background Sync – PWA’s Backbone](https://www.excellarate.com/blogs/background-sync-pwas-backbone/)
+
+---
+
+#### Question: XSS, CSRF 是什麼與如何防禦
 
 ---
 
@@ -464,6 +642,18 @@ Common
 - `503`, Service Unavailable, 通常用於維護中
 
 Reference 1. [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+---
+
+#### Question: cookie attributes: httponly, secure, session, samesite
+
+- HostOnly, Session, Secure, HttpOnly, Domain, Path, Expiration, SameSite
+
+Reference 1 [什麼是 Cookie？如何用 JS 讀取/修改 document.cookie?](https://shubo.io/cookies/)
+
+---
+
+#### Question: browser cross origin solutions
 
 ---
 
@@ -645,6 +835,10 @@ Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 
 ---
 
+#### Question: git rebase 與 merge 的差別與範例
+
+---
+
 ### 面試時的提問
 
 ---
@@ -658,7 +852,6 @@ Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 - 團隊分工狀況? 工程師的人數?
 - 如何與其他團隊合作
 - Remote 的溝通管道, 同步與非同步
--
 
 #### 對 Manager
 
