@@ -42,94 +42,97 @@
 
 JavaScript 相關
 
-- closure 與 this?
-- event loop, macro task 與 micro task? Promise 的同步與非同步? 執行順序? then 的執行順序
-- JavaScript type converse, `==` algorithm?
-- V8 Garbage Collections, scavenge, young generation?
-- Decorator pattern in JavaScript
-- Implements curried multiple function
-- Custom implements `Promise.all()`
-- setTimeout, scope, closure
-- rest operator, spread operator
+- [x] closure 與 this?
+- [x] event loop, macro task 與 micro task? Promise 的同步與非同步? 執行順序? then 的執行順序
+- [x] JavaScript type converse, `==` algorithm?
+- [x] V8 Garbage Collections, scavenge, young generation?
+- [x] Decorator pattern in JavaScript
+- [x] Implements curried multiple function
+- [x] Custom implements `Promise.all()`
+- [x] setTimeout, scope, closure
+- [x] rest operator, spread operator
 
 ---
 
 React 相關
 
-- Redux Reselect 的 selector 做了什麼?
-- Hook 實作倒數? useState, setTimeout, clearTimeout
-- setState 與 React 執行流程?
-- React 核心, diff 演算法? diff 演算法比較什麼
-- Redux, how to diff state change and trigger notification?
-- useState render issues
-- PureComponent, Component, functional component
+- [x] Redux Reselect 的 selector 做了什麼?
+- [ ] Hook 實作倒數? useState, setTimeout, clearTimeout
+- [ ] setState 與 React 執行流程?
+- [ ] React 核心, diff 演算法? diff 演算法比較什麼
+- [x] Redux, how to diff state change and trigger notification?
+- [x] useState render issues
+- [x] PureComponent, Component, functional component
+- [x] React 'key' attribute
 
 ---
 
 CSS 相關
 
-- CSS 置中方法? flexbox, absolute + relative, grid
-- `visibility: hidden;` 與 `display: none;` 的差別
-- `position` 的選項與差別
+- [x] CSS 置中方法? flexbox, absolute + relative, grid
+- [x] `visibility: hidden;` 與 `display: none;` 的差別
+- [x] `position` 的選項與差別
 
 ---
 
 前端常見問題
 
-- 前端儲存資訊的地方? (cookies, local store, sessions, indexDB)
-- 如何判斷使用者語系? (IP detect, User Agent)
-- Bundle size minify 的方法? Webpack minify, tree shaking, dynamic import 與 CommonsChuckPlugin
-- 如何最佳化 Web
-- SEO tuning
-- RWD 與 AWD 分別是什麼, 使用時機是什麼
-- CSS selector 有哪些, 權重如何計算
-- Event phase, event flow and how to interrupt
-- Cross site messaging 如何做？
-- defer, async
-- What is CORS? CORB?
-- debounce 與 throttle 的差別與如何實作或使用
-- jpg 與 SVG 的容量差異
-- PWA data sync
-- XSS, CSRF 是什麼與如何防禦
+- [x] 前端儲存資訊的地方? (cookies, local store, sessions, indexDB)
+- [ ] Cookie, localStorage, sessionStorage 存在時間差異與控制方式
+- [x] 如何判斷使用者語系? (IP detect, User Agent)
+- [x] Bundle size minify 的方法? Webpack minify, tree shaking, dynamic import 與 CommonsChuckPlugin
+- [ ] 如何最佳化 Web
+- [ ] SEO tuning
+- [ ] RWD 與 AWD 分別是什麼, 使用時機是什麼
+- [ ] CSS selector 有哪些, 權重如何計算
+- [x] Event phase, event flow and how to interrupt
+- [ ] Cross site messaging 如何做？
+- [x] defer, async
+- [ ] What is CORS? CORB?
+- [ ] debounce 與 throttle 的差別與如何實作或使用
+- [x] jpg 與 SVG 的容量差異
+- [x] PWA data sync
+- [ ] XSS, CSRF 是什麼與如何防禦
+- [ ] Browser Render 的流程與可以優化的地方
 
 ---
 
 Network 相關
 
-- Browser cache policy, service worker, http cache?
-- http headers, etag v.s. Last-Modified?
-- Prevent XSS with http header (Content Security Policy, CSP)?
-- Http status codes
-- cookie attributes: httponly, secure, session, samesite
-- browser cross origin solutions
+- [x] Browser cache policy, service worker, http cache?
+- [x] http headers, etag v.s. Last-Modified?
+- [x] Prevent XSS with http header (Content Security Policy, CSP)?
+- [x] Http status codes
+- [ ] cookie attributes: httponly, secure, session, samesite
+- [ ] browser cross origin solutions
 
 ---
 
 後端相關
 
-- SSR with 'isitc', 'service mesh'
-- Restful API naming convention
-- Restful API design guidelines
+- [x] SSR with 'isitc', 'service mesh'
+- [x] Restful API naming convention
+- [x] Restful API design guidelines
 
 ---
 
 演算法實作
 
-- Leetcode 1. two sum, 2. three sum
-- function `compose` 實作?
-- Algorithm 1. 生成 `()` tree 與 backtracking algorithm
-- Algorithm 2. check linked list is recursion?
+- [x] Leetcode 1. two sum, 2. three sum
+- [x] function `compose` 實作?
+- [x] Algorithm 1. 生成 `()` tree 與 backtracking algorithm
+- [x] Algorithm 2. check linked list is recursion?
 
 ---
 
 其他技術問題
 
-- 用過的 Design Patterns?
-- Open Source project understanding & experience?
-- Design Principles, SOLID
-- Event-driven Design
-- Logging, Monitoring, 應該針對什麼
-- git rebase 與 merge 的差別與範例
+- [ ] 用過的 Design Patterns?
+- [ ] Open Source project understanding & experience?
+- [ ] Design Principles, SOLID
+- [x] Event-driven Design
+- [ ] Logging, Monitoring, 應該針對什麼
+- [ ] git rebase 與 merge 的差別與範例
 
 ---
 
@@ -387,6 +390,14 @@ Reference 1. [React API](https://reactjs.org/docs/react-api.html#reference)
 
 ---
 
+#### Question: React 'key' attribute
+
+- 當 `key` attribute 被加在非 list item 的 component 上時會有什麼表現?
+- 參考 React Reconciliation 的判斷流程
+- [Recommendation: Fully uncontrolled component with a key](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key)
+
+---
+
 ### 分類解答 - CSS 相關
 
 ---
@@ -445,6 +456,12 @@ Answer:
 - Cache API, 主要使用於 Web Worker 提供 offline 的 http request/response 儲存
 
 Reference 1. [Client-Side storage mdn](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Client-side_storage)
+
+---
+
+#### Question: Cookie, localStorage, sessionStorage 存在時間差異與控制方式
+
+Answer:
 
 ---
 
@@ -562,6 +579,12 @@ Reference [Background Sync – PWA’s Backbone](https://www.excellarate.com/blo
 
 ---
 
+#### Question: Browser Render 的流程與可以優化的地方
+
+Answer:
+
+---
+
 ### 分類解答 - Network 相關
 
 ---
@@ -641,7 +664,13 @@ Common
 - `502`, Bad Gateway,
 - `503`, Service Unavailable, 通常用於維護中
 
+301 vs 302
+
+- 使用時機與對 SEO 的影響參考 Reference 2
+
 Reference 1. [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+Reference 2. [When to Use a 301 Redirect vs. 302 Redirect](https://www.seoclarity.net/resources/knowledgebase/use-301-redirect-vs-302-redirect-15683/#:~:text=The%20user's%20search%20experience%20may,page%20has%20taken%20over%20permanently.)
 
 ---
 
@@ -843,21 +872,17 @@ Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 
 ---
 
-#### 對 engineer
-
-- 需求, UI/UX, use case, SCRUM / XP / Kanban, Git, Testing, CI/CD pipeline, Lint
+- 需求, UI/UX, use case, SCRUM / XP / Kanban, Git, Testing, CI/CD pipeline, Lint, Code Review
+- Refactoring How and When
+- Strategy of third-party library upgrade
 - Daily work 應該是怎麼樣的
 - 對於好的軟體的看法是什麼?
-- 系統架構與責任區分?
+- 現有的系統架構與責任區分?
 - 團隊分工狀況? 工程師的人數?
 - 如何與其他團隊合作
-- Remote 的溝通管道, 同步與非同步
-
-#### 對 Manager
-
+- 團隊當前遇到最大的挑戰或最重要的事情
 - 團隊未來的規劃?
+- How a project is lead? 領導風格與方式
 - 該職缺預期的 Impact 與 Scope
-- 公司內升職的架構
-- Work-life balance,
-- how a project lead?
-- 目前團隊最重要的事情與挑戰
+- Remote 的溝通管道, 同步與非同步
+- 新創: 公司當前的狀態, Funding, 遠景, 目標
