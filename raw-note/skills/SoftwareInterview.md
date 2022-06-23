@@ -89,11 +89,11 @@ CSS 相關
 - [ ] Cross site messaging 如何做？
 - [x] defer, async
 - [ ] What is CORS? CORB?
-- [ ] debounce 與 throttle 的差別與如何實作或使用
+- [x] debounce 與 throttle 的差別與如何實作或使用
 - [x] jpg 與 SVG 的容量差異
 - [x] PWA data sync
 - [ ] XSS, CSRF 是什麼與如何防禦
-- [ ] Browser Render 的流程與可以優化的地方
+- [x] Browser Render 的流程與可以優化的地方
 
 ---
 
@@ -132,7 +132,7 @@ Network 相關
 - [ ] Design Principles, SOLID
 - [x] Event-driven Design
 - [ ] Logging, Monitoring, 應該針對什麼
-- [ ] git rebase 與 merge 的差別與範例
+- [x] git rebase 與 merge 的差別與範例
 
 ---
 
@@ -553,6 +553,15 @@ Reference: [跨來源資源共用 (CORS) 是什麼? 如何設定 CORS?](https://
 
 #### Question: debounce 與 throttle 的差別與如何實作或使用
 
+- 兩者都是限制 event 的觸發, 並且都有可能會丟棄事件
+- `debounce`, 防抖, 避免"連續"發送, 只發送最後一次
+  - 參考 [RxJS debounceTime 彈珠圖](https://rxjs.dev/api/index/function/debounceTime)
+- `throttle`, 節流, 限制頻率上限, 一定區間內只會發送一次,
+  - 類似有個技能 cool down, CD 的感覺
+  - 參考 [RxJS throttleTime 彈珠圖](https://rxjs.dev/api/index/function/throttleTime)
+- 簡易實作可以參考 [網頁 DOM 事件的效能優化：Debounce 和 Throttle](https://jacobhsu.github.io/2021/08/04/dom/debounce-throttle/)
+- 實務上通常會使用第三方 library, `underscore`, `lodash`, `RxJS` 等等來提供
+
 ---
 
 #### Question: jpg 與 SVG 的容量差異
@@ -581,7 +590,7 @@ Reference [Background Sync – PWA’s Backbone](https://www.excellarate.com/blo
 
 #### Question: Browser Render 的流程與可以優化的地方
 
-Answer:
+- [瀏覽器原理系列-瀏覽器渲染流程詳解](https://www.gushiciku.cn/pl/gpqt/zh-tw)
 
 ---
 
@@ -865,6 +874,20 @@ Leetcode [linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
 ---
 
 #### Question: git rebase 與 merge 的差別與範例
+
+- 兩個指令的目的都在於合併分支
+- `git merge`, Join two or more development histories together
+  - 會產生額外的 merge commit
+  - 可以保留個別的歷史紀錄
+- `git rebase`, Reapply commits on top of another base tip
+  - 會修改歷史紀錄, 並且遺失原本的 branch 紀錄
+  - 把 commits 嫁接到目標的最後一個 commit 之後, 因此 commit hash 都會是新的
+  - `git rebase -i` 互動模式可以更多的修改指定數量的歷史 commits
+  - 產生線性的歷史紀錄
+
+[Reference 1 【Git 教學】分支合併: merge 與 rebase 差異](https://www.maxlist.xyz/2020/05/02/git-merge-rebase/)
+
+[Reference 2 Merging vs. Rebasing](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 
 ---
 
