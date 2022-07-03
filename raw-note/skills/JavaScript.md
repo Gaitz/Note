@@ -43,12 +43,35 @@
   - 所以通常會以慣例 **self** 另存
   - 使用 `bind()` 強置綁定
   - 使用 arrow function `=>` 強置綁定
+  - 在全域的部份呼叫得到的 `this` 會是指向 runtime 的 global object, 例如: browser `Window`, Node.js
 
 - JavaScript **closure**
 
   - 建立 scope, lexical scope
   - 原本的 JavaScript 只有 function scope, 因此使用 nested function 形成 scope 來保護值不會被任意變動
+  - 注意到 JavaScript 所謂的 function scope 是指 assigned parameters
   - 在擁有 `let` 與 `const` 後較少用
+  - ```javascript
+    // compare these two cases
+
+    for (var i = 0; i < 3; i++) {
+      var execFunction = (function () {
+        return function () {
+          console.log(i)
+        }
+      })()
+      arr.push(execFunction)
+    }
+
+    for (var i = 0; i < 3; i++) {
+      var execFunction = (function () {
+        return function (i) {
+          console.log(i)
+        }
+      })(i)
+      arr.push(execFunction)
+    }
+    ```
 
 - JavaScript `use strict`
 
