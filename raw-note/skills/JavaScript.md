@@ -97,7 +97,7 @@
   - JavaScript 是 single thread 但是 JavaScript runtime 不一定是 single thread
   - 依據 runtime 不同會有 Web APIs 的工作, 丟給 browser 專門負責的 thread 執行
   - event loop 也會分成 **window event loop**, **worker event loop**, **worklet event loop** 在各自的 thread 進行
-  - **window event loop** Callback queue (**marco tasks**) 會分成多個不同類型的 queue, 例如 DOM queue (包含 user events, HTML parsing), Network queue, Timer queue, 為此每個 queue 會有不同的優先權
+  - **window event loop** Callback queue (**macro tasks**) 會分成多個不同類型的 queue, 例如 DOM queue (包含 user events, HTML parsing), Network queue, Timer queue, 為此每個 queue 會有不同的優先權
   - **micro task queue**, 會盡可能的執行完成, 在同一個 event loop 裡會清空, 屬於此類的有 `Promise.then()`, `queueMicrotask` API, `MutationObserver`
   - 並不是每輪 event loop 都會觸發 rendering, 取決於運算時間受 browser 後台控制, fps,
   - 瀏覽器藉由降頻 60fps 到 30 fps 甚至 4 fps, 讓每個 frame 能有更長的執行時間, 但換取的是螢幕刷新率
