@@ -94,7 +94,7 @@ React v18
   - `useTransition` 配合 hook 去取得 transition update 中的狀態, 因此可以在使用者即時更變後停止或者改變 transition update function 的執行, 來避免錯誤的 re-rendering 與 performance
 - **新的 Feature** **Suspense**
   - `<Suspense fallback={}></Suspense>`, 在高階層就明確定義, component 需要時間建置, 先渲染 fallback 的 component
-  - 可以配合 **Transition** 使用, React 會避免 transition 中還蠻完成的資訊被渲染到頁面上並且保留舊的
+  - 可以配合 **Transition** 使用, React 會避免 transition 中還沒完成的資訊被渲染到頁面上並且保留舊的
 - **新的 Hook functions**
   - `useId()`, 生成於 client-side /server-side 同步的 unique id, 避免 hydration 時的錯誤
   - `useTransition()` + `startTransition`, 啟用 transition
