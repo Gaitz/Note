@@ -64,6 +64,10 @@ React 相關
 - [x] useState render issues
 - [x] PureComponent, Component, functional component
 - [x] React 'key' attribute
+- [ ] useMemo 與 useCallback 區別
+- [ ] React diff 是 dfs 還是 bfs?
+- [ ] Redux 為什麼 dispatch 必須是 pure function
+- [ ] Next.js 有沒有遇到什麼問題
 
 ---
 
@@ -72,6 +76,8 @@ CSS 相關
 - [x] CSS 置中方法? flexbox, absolute + relative, grid
 - [x] `visibility: hidden;` 與 `display: none;` 的差別
 - [x] `position` 的選項與差別
+- [ ] CSS triangle
+- [ ] CSS em vs rem
 
 ---
 
@@ -94,6 +100,7 @@ CSS 相關
 - [x] PWA data sync
 - [ ] XSS, CSRF 是什麼與如何防禦
 - [x] Browser Render 的流程與可以優化的地方
+- [ ] How to page lazy loading
 
 ---
 
@@ -103,6 +110,7 @@ Network 相關
 - [x] http headers, etag v.s. Last-Modified?
 - [x] Prevent XSS with http header (Content Security Policy, CSP)?
 - [x] Http status codes
+- [ ] Http methods and different between POST, PUT, PATCH
 - [ ] cookie attributes: httponly, secure, session, samesite
 - [ ] browser cross origin solutions
 
@@ -133,6 +141,7 @@ Network 相關
 - [x] Event-driven Design
 - [ ] Logging, Monitoring, 應該針對什麼
 - [x] git rebase 與 merge 的差別與範例
+- [ ] RxJS, error handling
 
 ---
 
