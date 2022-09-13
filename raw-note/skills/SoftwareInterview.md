@@ -51,6 +51,7 @@ JavaScript 相關
 - [x] Custom implements `Promise.all()`
 - [x] setTimeout, scope, closure
 - [x] rest operator, spread operator
+- [x] setTimeout in for loop 的觸發時間
 
 ---
 
@@ -68,6 +69,8 @@ React 相關
 - [ ] React diff 是 dfs 還是 bfs?
 - [ ] Redux 為什麼 dispatch 必須是 pure function
 - [ ] Next.js 有沒有遇到什麼問題
+- [x] 在同一個 event handler 中重複 `setState()` 會發生什麼事情
+- [ ] Why React initial render twice in dev mode?
 
 ---
 
@@ -101,6 +104,7 @@ CSS 相關
 - [ ] XSS, CSRF 是什麼與如何防禦
 - [x] Browser Render 的流程與可以優化的地方
 - [ ] How to page lazy loading
+- [ ] 從瀏覽器輸入 URL 到完成渲染中間發生的事情
 
 ---
 
@@ -252,6 +256,8 @@ Answer:
 
 Reference 1. [The Decorator Pattern - Learning JavaScript Design Patterns by Addy Osmani](https://www.oreilly.com/library/view/learning-javascript-design/9781449334840/ch09s14.html)
 
+---
+
 #### Question： Implements curried function
 
 - `Function.length`, The length property indicates the number of parameters expected by the function.
@@ -312,7 +318,7 @@ for (var i = 0; i < 5; i++) {
 
 ---
 
-#### rest operator, spread operator
+#### Question: rest operator, spread operator
 
 - share the same operator `...`
 - rest operator example `function (a, b, ...rest)`
@@ -320,6 +326,26 @@ for (var i = 0; i < 5; i++) {
   - can expand any **iterable**
 
 Reference [JavaScript Rest vs Spread Operator – What’s the Difference?](https://www.freecodecamp.org/news/javascript-rest-vs-spread-operators/#:~:text=The%20main%20difference%20between%20rest,expands%20iterables%20into%20individual%20elements.)
+
+---
+
+#### Question: setTimeout in for loop 的觸發時間
+
+- callback function 觸發的時間間隔
+
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => {
+    console.log(new Date(Date.now()).toUTCString())
+  }, 1000)
+}
+
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => {
+    console.log(new Date(Date.now()).toUTCString())
+  }, 1000 * i)
+}
+```
 
 ---
 
@@ -404,6 +430,27 @@ Reference 1. [React API](https://reactjs.org/docs/react-api.html#reference)
 - 當 `key` attribute 被加在非 list item 的 component 上時會有什麼表現?
 - 參考 React Reconciliation 的判斷流程
 - [Recommendation: Fully uncontrolled component with a key](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key)
+
+---
+
+#### 在同一個 event handler 中重複 `setState()` 會發生什麼事情
+
+```javascript
+export default function App() {
+  const [count, setCount] = useState(0)
+  const clickHandler = () => {
+    setCount(count + 1)
+    setCount(count + 1)
+  }
+
+  return (
+    <div className="App">
+      <h1 onClick={clickHandler}>Hello CodeSandbox</h1>
+      <h2>{count}</h2>
+    </div>
+  )
+}
+```
 
 ---
 
@@ -739,6 +786,8 @@ Reference 1. [Spring 基础篇（5）-restful 命名规则](https://www.jianshu.
 Reference 2. [表現層狀態轉換 wikipedia](https://zh.wikipedia.org/wiki/%E8%A1%A8%E7%8E%B0%E5%B1%82%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2)
 
 Reference 3. [什麼是 REST? 認識 RESTful API 路由語義化設計風格](https://tw.alphacamp.co/blog/rest-restful-api)
+
+---
 
 #### Question: Restful API design guidelines
 
