@@ -178,19 +178,38 @@ Advanced Concepts
 ### 第十章 - Channels
 
 - Channel 用來溝通外部 event sources 或者多個 Saga 之間的溝通
+  - 其實就是 message queue
+  - Saga 通過 `take` (接收), `put` (發送)
+- 可以通過 `actionChannel`, `eventChannel`, `channel` 等 API 來跟 Saga 互動
 
 Using the `actionChannel` Effect
 
 - **watch-and-fork** pattern
-  - `import { fork } from 'redux-saga/effects`
+  - 在 Generator function 裡使用 infinite while loop 進行 watch event
+    (`take`)
+  - 配合 non-blocking 的 `fork` 來執行 action
+- 因為是 non-blocking 所以沒辦法循序的進行
+- 在我們希望工作可以循序進行並且不影響 watch 的情況下
+  - Saga 可以通過 `actionChannel` 來實現 queue Saga Effects
+- 建立一個可以控制的 action queue 取代 watch `take` 後直接執行
+- `actionChannel` 會自動建立一個 `buffer` 可以通過參數去控制 `buffer` 的設定
+- [參考範例](https://redux-saga.js.org/docs/advanced/Channels#using-the-actionchannel-effect)
 
-...
+Using the `eventChannel` factory to connect to external events​
+
+- `eventChannel` 如同 `actionChannel` 一樣, 只是他存放的不是 Saga Effects, 而是外部的 Event
+- 需要傳入一個 `subscriber` function
+- 對於 Saga 來說可以通過 `take()` 一個 channel 來訂閱 `eventChannel` 發送的 event
+- [另一個範例](https://redux-saga.js.org/docs/advanced/Channels#using-the-eventchannel-factory-to-connect-to-external-events)用來串接 WebSocket 到 Saga 裡
+
+Using channels to communicate between Sagas
+
+- `channel` 與 `actionChannel` 類似, 只是更 general 等價於 Saga 的 default channel
+  - 可以提供額外的控制
 
 ---
 
 ### 第十一章 - Composing Sagas
-
-...
 
 ---
 
@@ -337,26 +356,155 @@ Testing libraries
 
 ### 第二十一章 - Using Run Saga
 
+- Saga 利用 `take` Effect 去等待 action, 利用 `put` 去發送 action
+- Redux-saga 可以獨立於 Redux 之外運作
+  - 配合 native `EventEmitter` 和 Redux-saga Channel 可以實現
+  - [範例程式碼參考](https://redux-saga.js.org/docs/advanced/UsingRunSaga)
+
 ---
 
 ---
 
 ### 第二十二章 - Recipes
 
+Throttling
+
+- `import { throttle } from 'redux-saga/effects'`
+- 在設定的時間內忽略相同的 action 只觸發最後一個
+  - 限制流量定期發送
+- 使用在等待 action 的 Saga 上
+- [參考範例](https://redux-saga.js.org/docs/recipes#throttling)
+
+Debouncing
+
+- 限制流量, 持續等待
+- 以 `fork`, `take`, `delay`, `cancel` Effects 實現
+- 以 `takeLatest`, `delay` Effects 實現
+- [參考文件範例](https://redux-saga.js.org/docs/recipes#debouncing)
+
+Retrying XHR calls
+
+- 以 for-loop + `delay` Effect 實現
+- [參考範例](https://redux-saga.js.org/docs/recipes#retrying-xhr-calls)
+
+Undo
+
+- Redux way, 去紀錄 previous state
+
 ---
 
 ### 第二十三章 - External Resources
+
+- 外部資源連結
+- 關於 Generators
+- 關於 redux-saga
+- 關於 redux-saga addons
 
 ---
 
 ### 第二十四章 - Troubleshooting
 
+- App freezes after adding a saga
+  - App 停止
+  - 可能是忘記使用 `yield` 導致 blocking
+- My Saga is missing dispatched actions
+  - 沒有發送 action
+  - 主要原因來自於 blocking call (`call` Effect)
+- Error stack for errors bubbling to root saga is unreadable
+  - 錯誤訊息不好定位
+  - 需要額外安裝 babel plugin (`babel-plugin-redux-saga`) 協助
+
 ---
 
 ### 第二十五章 - Glossary
 
+Effect
+
+- 一個單純的 JavaScript object, 內容是各種指令給 saga middleware 後續觸發使用
+- Redux-saga 有很多 helper function 協助產生
+
+Task
+
+- 可以視為一個在背景執行的工作
+- redux-saga 可以平行的運行工作, 需要透過 `fork` function
+
+Blocking/Non-blocking call
+
+- Blocking call 代表 `yield` 一個 Effect 並且等待他的回傳值或工作結束
+- 因此要分出那些 Effect 是 blocking 哪些是 non-blocking
+  - [參考文件](https://redux-saga.js.org/docs/api#blocking--non-blocking)
+
+Watcher/Worker
+
+- 都是以 generator function 實現
+- Watcher 負責等待 action 被觸發, 接收 action event
+- Worker 負責執行 action
+
 ---
 
 ### 第二十六章 - API Reference
+
+- 分類
+  - Middleware API
+  - Effect creators
+  - Effect combinator
+  - Interfaces
+  - External API
+  - Utils
+
+Middleware API
+
+- `createSagaMiddleware(options)`
+- `middleware.run(saga, ...args)`
+
+Effect creators
+
+- `take`
+- `takeMaybe`
+- `takeEvery`
+- `takeLatest`
+- `takeLeading`
+- `put`
+- `putResolve`
+- `call`
+- `apply`
+- `cps`
+- `fork`
+- `spawn`
+- `join`
+- `cancel`
+- `cancelled`
+- `select`
+- `actionChannel`
+- `flush`
+- `setContext`, `getContext`
+- `delay`
+- `throttle`
+- `debounce`
+- `retry`
+
+Effect combinator
+
+- `race`
+- `all`
+
+[Interfaces](https://redux-saga.js.org/docs/api#interfaces)
+
+- Task
+- Channel
+- Buffer
+- SagaMonitor
+
+External API
+
+- `runSaga`
+
+Utils
+
+- `channel`
+- `eventChannel`
+- `buffers`
+- `cloneableGenerator`
+- `createMockTask`
 
 ---
