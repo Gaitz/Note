@@ -273,19 +273,142 @@ Emotion cache
 
 rem, em, and px units
 
+- Mantine components 內部使用 `rem` 單位來定義樣式, 通常一 `1rem` 可以被視為 `16px`
+  - `em` 使用在 `theme.breakpoints` 和 responsive styles
+- px conversions
+  - Mantine components props 設定使用 `px` 時內部會自動轉譯成 `rem`
+- rem and em function
+  - `import { rem, em } from '@mantine/core'`
+  - 提供函式工具來轉譯 px 成 rem 或 em
+- Convert rem to px
+  - `import { px } from '@mantine/core'`
+  - 提供函式工具轉換 rem 成 px
+- rem in emotion styles
+  - 在使用 createStyles, sx prop, styles 定義樣式時不會自動轉換 px 成 rem
+  - 因此推薦明確使用 `rem` 單位或者配合 `rem()` 函式來轉換
+
 sx prop
+
+- 所有的 Mantine components 支援 `sx` prop
+- 可以通過 `sx` prop 設定樣式到 **root** element
+- 如果要設定樣式到其他的 elements 時推薦使用 Styles API 進行更細緻的設定
+- 傳遞 `sx` object 設定樣式會通過 emotion 並整合進 emotion cache
+- Subscribe to theme
+  - 可以通過傳遞 function 參數取得 theme object 協助定義
+- sx array
+  - 以 array 的方式傳遞 sx, 可以用來取得父層進行 override
+  - 可以配合 type `Sx` from `@mantine/core` 和 function `packSx()` from `@mantine/core` 來協助撰寫
+- `Box` component
+  - 作為 wrapper 用來封裝非 Mantine component 並且可以在上面使用 Mantine 的功能
+- Storing styles in a variable
+  - 建立共用的 `sx` 樣式 object
+  - 可以通過 type `CSSObject` from `@mantine/core` 來協助撰寫
 
 createStyles
 
+- Mantine component 是依據 emotion 的方式建立樣式
+- 推薦使用 `createStyles` 的方式撰寫其他客製化的樣式
+- `import { createStyles } from '@mantine/core'`
+  - `createStyles()` 是一個 hyper function 會回傳一個用來生成樣式名稱物件的函式
+  - [參考範例](https://mantine.dev/styles/create-styles/#usage)
+- Pseudo-classes
+  - 如同 Sass 一樣可以定義 pseudo-classes
+  - [參考範例](https://mantine.dev/styles/create-styles/#pseudo-classes)
+- Styles parameters
+  - 可以傳遞客製化參數讓 `createStyles()` function 生成更動態的樣式
+  - [參考範例](https://mantine.dev/styles/create-styles/#styles-parameters)
+- Composition and nested selectors
+  - 使用 `import { getStylesRef } from '@mantine/core'`
+  - 定義時生成 `ref` 值用來撰寫更複雜的 selectors
+  - [參考範例](https://mantine.dev/styles/create-styles/#composition-and-nested-selectors)
+- Classes merging (cx function)
+  - 使用 `cx()` function 來生成不會碰撞的樣式 class names
+  - API 等同於 **clsx** package, 但是不需要使用外部 packages 例如 **classnames** 或 **clsx**
+  - 使用 `createStyles()` 附帶生成的即可
+  - [參考範例](https://mantine.dev/styles/create-styles/#classes-merging-cx-function)
+- Media queries
+  - 有多種方式撰寫生成 media query
+  - [參考範例](https://mantine.dev/styles/create-styles/#media-queries)
+- Keyframes
+  - `import { keyframes } from '@mantine/core'`
+  - 使用 `keyframes()` helper function 來協助撰寫 CSS animation 使用的 keyframe
+  - [參考範例](https://mantine.dev/styles/create-styles/#keyframes)
+
 Global styles
+
+- 最佳方式去建立 global styles
+  - 使用 theme object 裡的 `globalStyles`, 可以良好的分享給其他環境例如 Next.js 或 Storybook 使用
+- Global component
+  - `<Global>` component from `@mantine/core` 是另外一種替代方案
+  - 提供 `styles` prop 來定義 global styles
+- Where to render Global
+  - `<Global>` component 會使用到 theme object 因此可以定義在任何 `MantineProvider` 的子代
+- Load fonts
+  - 以 Global styles 的方式使用字型檔
 
 Responsive styles
 
+- `@mantine/core` package 裡提供很多 component 協助進行 responsive
+  - 其餘需要客製化的地方, 則推薦使用 `createStyles` function 自行定義
+- Configure breakpoints
+  - theme object 中的 `breakpoints` 被所有的 Mantine components 使用,
+  - 定義 breakpoints 時單位使用 `em`, 預設 `1em` == `16px`
+  - `breakpoints` 有預設值
+- Media queries in createStyles
+  - 其餘客製化推薦優先使用 `createStyles` 的方式進行, 如果不行才考慮其他方式
+  - [參考範例](https://mantine.dev/styles/responsive/#media-queries-in-createstyles)
+- MediaQuery component
+  - `import { MediaQuery } from '@mantine/core'`
+  - `<MediaQuery>` component 是另一種以 component 的方式定義
+- Changing component size based on media query
+  - 大多數 Mantine component 支援 `size` prop, 但是無法依據 media query 變化
+  - 因此使用 `<MediaQuery>` component 定義, 此種方式自動支援 SSR 環境
+  - 或者確定不會使用 SSR 可以採用 `import { useMediaQuery } from '@mantine/hooks` hook 來進行動態定義 `size`
+  - [參考範例](https://mantine.dev/styles/responsive/#changing-component-size-based-on-media-query)
+- Inline media queries with sx
+  - 使用 `sx` prop 時的 media query, 可以直接撰寫
+  - 配合 `Box` component 讓非 Mantine component 也可以使用這種方式定義 media query
+  - [參考範例](https://mantine.dev/styles/responsive/#inline-media-queries-with-sx)
+
 Style props
+
+- 樣式相關的 props 會作用於 root element 上, 如果需要定義於 nested elements 時則使用 Styles API 進行
+- [參考文件看所有支援的 props](https://mantine.dev/styles/style-props/#supported-props)
+  - margin, padding 相關
+  - background, color, opacity 相關
+  - font 相關
+  - width, height 相關
+  - position, display 相關
+- Theme values
+  - 可以使用定義於 theme object 中的值
+  - [參考範例](https://mantine.dev/styles/style-props/#theme-values)
+- Responsive styles
+  - 傳遞 responsive object 來定義 responsive value
+  - `base`, `xs`, `md`, `lg`, `xl`
+  - [參考範例](https://mantine.dev/styles/style-props/#responsive-styles)
 
 Styles API
 
+- 用來進行 override Mantine component 內部的 elements
+- 可以通過 `classNames` 或 `styles` prop 設定
+- [參考範例](https://mantine.dev/styles/styles-api/)
+- 可以配合 `createStyles()` 一起使用以 classNames 的方式進行 Styles API
+- Styles API with MantineProvider
+  - 相同的方式也可以定義在 `MantineProvider` 裡 `styles`
+  - [參考範例](https://mantine.dev/styles/styles-api/#styles-api-with-mantineprovider)
+- root selector
+  - 如果沒有特定的 Styles API 時, 則可以使用 `root` 作為 selector
+- Static class names
+  - 除了使用 `classNames` 和 `styles` props 的方式以外, 也有靜態的 class name 可以進行指定, 如果不使用 css module 時
+- Unstyled components
+  - 所有的 Mantine components 提供 `unstyled` prop 來移除 Mantine 附上的樣式
+
 Styled components
+
+- 使用 styled component 的方式定義樣式
+- Installation
+  - 需要安裝 `@emotion/styled` package
+- 使用範例參考[文件](https://mantine.dev/styles/styled/)
 
 ---
 
