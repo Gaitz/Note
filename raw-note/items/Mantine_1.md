@@ -113,17 +113,159 @@ Mantine logo
 
 Theme object
 
+- `colorSchema`
+- `focusRing`
+- `focusRingStyles`
+- `respectReducedMotion`
+- `cursorType`
+- `defaultRadius`
+- `white`, `black`
+- `colors`
+- `primaryColor`
+- `primaryShade`
+- `defaultGradient`
+- `fontFamily`
+- `lineHeight`
+- `transitionTimingFunction`
+- `fontFamilyMonospace`
+- `fontSizes`, `radius`, `spacing`
+- `shadows`
+- `breakpoints`
+- `activeStyles`
+- `headings`
+- `fn`
+- `dir`
+- `loader`
+- `components`
+- `globalStyles`
+- `other`
+- 通過 `MantineProvider` 傳遞 theme object
+- 獨立建立 theme object 可以使用 `import { MantineThemeOverride } from '@mantine/core'` type 來撰寫 TypeScript
+- 通過 `useMantineTheme()` hook 來取得 theme object
+
 MantineProvider
+
+- 不是必須使用的,
+- CSS rest and global styles
+  - `withNormalizeCSS`, 使用類似 normalize.css 的功能
+  - `withGlobalStyles`, 啟動一些預設的樣式
+- CSS variables
+  - 如果要使用純 CSS 或者其他方式進行 styling 不與 CSS-in-JS theme object 直接互動的方式
+  - 需要開啟 `withCSSVariables`, 即可通過 CSS variable 的方式取得 theme object 定義的樣式
+- Nested MantineProviders
+  - 多層的 `MantineProvider` 改寫特定區域的 theme object
+  - React Context 的用法 (functional way)
+  - 通過給予 `inherit` prop 來繼承上一層的 theme object
+- Styles on MantineProvider
+  - Styles API 提供更強大的樣式客製化, [參考範例](https://mantine.dev/theming/mantine-provider/#styles-on-mantineprovider)
+  - 會傳入 theme object, component params, 來協助定義
+- Root selector
+  - 如果想要改寫的 component 沒有提供 Style API 框架的話
+  - 可以使用 Style API `root` 來進行設定
+- Classes on MantineProvider
+  - 通過 `classNames` 以類似 Style API 的方式賦予 component 帶上客製化的 class name
+- Variants on MantineProvider
+  - 客製化定義 `variant`
+  - 傳遞一個物件
+  - [參考文件範例](https://mantine.dev/theming/mantine-provider/#variants-on-mantineprovider)
+- Sizes on MantineProvider
+  - 客製化定義 `size`
+  - 傳遞一個物件
+  - [參考文件範例](https://mantine.dev/theming/mantine-provider/#sizes-on-mantineprovider)
 
 Colors
 
+- 預設使用 open-color, https://yeun.github.io/open-color/
+  - 每個顏色會有十種變化
+  - 以 array 儲存可以使用 index 取得
+  - 越往後的顏色越深
+- Adding extra colors
+  - 客製化定義新的顏色
+  - 通過 theme object `colors` 定義, 每個顏色必須有 10 個漸層設定
+- Primary color
+  - 預設是 `blue`
+  - 用於沒有指定顏色的 component 和 focus styles
+  - 通過 theme object `primaryColor` 定義, 必須使用已經定義在 `colors` 裡的顏色名稱, 不允許使用數值定義
+- Primary shade
+  - 設定主要的深淺階層
+  - 在 dark mode 有些設定不會被採用
+  - 可以針對 light mode, dark mode 設定不同的數值
+  - 在 theme object 中 `primaryShade`, 定義數值或 `{light, dark}` object 分別指定
+- Colors index reference
+  - 在使用顏色時, 系統會參考 `primaryShade` 和 `colors` 設定來取得對應的顏色使用
+  - `color` prop 可以通過 index 來指定 color shade, 例如 `blue.3`, `pink.4`
+- Add custom colors types
+  - 定義客製化顏色時的 TypeScript 設定
+  - [參考範例](https://mantine.dev/theming/colors/#add-custom-colors-types)
+
 Typography
+
+- 通過 theme object 中的
+  - `fontFamily` 來控制大多數的 component 字型
+  - `fontFamilyMonospace` 來控制使用 monospace font 的元件像是 Code, Kbd, Prism
+  - `headings.fontFamily` 針對 h1-h6 控制個別的字型
+- 設定 Font sizes
+  - 通過 theme object 中的 `fontSizes` object 來定義
+- System fonts
+  - Mantine 預設使用各個系統的 fonts
+  - 如果沒有特殊需求推薦使用預設的方式提供更好的效能和一致的使用者體驗
+- Headings
+  - 設定 `headings` object, 可以指定 `fontWeight`, `fontFamily`, `fontSize`, `lineHeight`
+  - 需要更細緻的設定可以通過 Styles API 針對特定的 component 進行設定, [參考範例](https://mantine.dev/theming/typography/#headings)
+- 使用客製化的字型檔
+  - 通過 `<Global>` component 進行設定, `import { Global } from '@mantine/core'`, [參考範例](https://mantine.dev/theming/typography/#load-custom-fonts)
+  - 之後則可以在 MantineProvider 的 theme object 中使用
 
 Default props
 
+- 通過 theme object 中的 `components` object 裡的 `defaultProps` 針對個別的 component 設定一些預設的 props 設定, 像是 `size`, `color`
+- 直接定義在 component props 上的參數會 override default props
+- `defaultProps` 可以傳入 function 取得 `theme` object 來協助定義動態樣式
+- Default props for static components
+  - 以 `defaultProps` 設定 `Menu`, `Tabs`, `RichTextEditor` 類型的樣式
+- Using with TypeScript
+  - 客製化時的 Types [參考範例](https://mantine.dev/theming/default-props/#usage-with-typescript)
+
 Theme functions
 
+- 通過 theme object 裡的 `fn` 來定義樣式相關的 function 並且在其他地方使用
+- 使用方式有
+  - `createStyles` function
+  - `sx` prop
+  - `styles` component prop
+  - `useMantineTheme` hook
+- focusStyles
+  - Mantine components 都有依據 `:focus-visible` 來定義 focus ring styles
+  - 在客製化 component 時, 可以通過 `fn.focusStyles()` 來取得並且統一使用者體驗
+- fontStyles
+  - 通過 `fn.fontStyles()` 來取得定義在 theme 中的 font-family 和 font-smoothing styles
+- smallerThan and largerThan
+  - `fn.smallerThan()`, `fn.largerThan()` 來協助撰寫一致的 responsive styles
+  - 會生成對應的 media query
+- linearGradient and radialGradient
+  - 以函數的方式 `fn.linearGradient()`, `fn.radialGradient()` 來協助定義 linear-gradient, radial-gradient styles
+- gradient
+  - `fn.gradient()` 回傳 `defaultGradient` 設定或者傳遞物件 `{ from, to, deg }` 定義客製化 gradient 樣式
+- cover
+  - `fn.cover()` 回傳樣式來覆蓋父層元件
+  - 生成 position: absolute, 和對應的 inset
+- lighten and darken
+  - `fn.lighten()`, `fn.darken()`
+  - 可以使用在 hex, rgb, rgba 的數值加上 percentage 協助回傳更深或更淺的顏色數值
+  - 回傳值都是 rgba 格式
+- rgba
+  - `fn.rgba()`, 指定 alpha 值協助轉換顏色數值成 rgba 格式
+- primaryShade
+  - `fn.primaryShade()`, 取得 theme 中定義的 `primaryShade` 數值
+  - 可以傳入 `'dark'`, `'light'` 如果有個別定義於 `primaryShade`
+- primaryColor
+  - `fn.primaryColor()`, 取得 theme 中定義的 `primaryColor` 數值
+
 Emotion cache
+
+- Mantine component 使用 [emotion](https://emotion.sh/docs/introduction) 來設定樣式, Mantine 會自動生成預設的 Emotion cache
+- 特定情況可能會需要客製化定義 emotion cache 設定
+- [參考文件](https://mantine.dev/theming/emotion-cache/)
 
 ---
 
