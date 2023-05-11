@@ -416,13 +416,59 @@ Styled components
 
 Custom components
 
+- 客製化定義 component 並且整合進 Mantine component system 裡
+- 使用 `createStyles` 定義 component 樣式
+  - 使用 useStyles 綁定客製化 component
+- 支援 default props
+- [參考範例](https://mantine.dev/guides/custom-components/)
+
 Dark theme
+
+- 所有的 Mantine component 都支援 dark theme
+- 可以通過 theme object, 中的 `colors: { dark }` 客製化定義顏色
+- Global styles,
+  - 預設使用 `colors.dark[7]` 作為背景顏色, `colors.dark[0]` 作為文字顏色
+- `import { ColorSchemeProvider } from '@mantine/core'`
+  - 使用 ColorSchemeProvider context 提供切換函式與設定值
+  - 在切換函式使用 `import { useMantineColorScheme } from '@mantine/core'` hook 來取得並且進行切換
+- Save to localStorage and add keyboard shortcut
+  - 可以通過 `useLocalStorage` hook 把設定值存到 local storage
+  - 通過 `useHotKeys` hook 實現 keyboard shortcut 的綁定
+  - 儲存在 local storage 未必是最好的方式, 因為會造成顏色的閃動
+  - 最佳的方式是配合 server-side 來避免顏色閃動
+- Detect user preferred color scheme
+  - 使用 `useColorScheme()` hook 來取得 server 設定的偏好屬性
+- Save color scheme in cookie
+  - 最簡單的方式同步顏色就是通過 cookie 傳遞設定值, 任何 server-side render 都可支援
+  - 以 Next.js 為[範例](https://mantine.dev/guides/dark-theme/#save-color-scheme-in-cookie)
 
 Polymorphic components
 
+- 有些 Mantine component 存在 `component` prop 作為通用型的 component 可以改變他的 root element
+  - 尤其是配合其他 library 使用時
+- With HTML elements 配合原生的 element 使用
+- With other components 配合客製化的 React component 使用
+  - 例如: React Router Link
+- With Next.js Link
+  - 針對不同版本的 Next.js 需要使用不同的方式
+- With TypeScript
+  - 通過 generic 方式指定型別, 來協助正確的判別 event type
+- Create your own polymorphic components
+  - 通過 `createPolymorphicComponent()` function 與 `<Box>` component
+  - 實現客製化的 polymorphic component
+  - [參考範例](https://mantine.dev/guides/polymorphic/#create-your-own-polymorphic-components)
+
 RTL Support
 
+- 支援文字排列順序, RTL
+- 因為 Mantine 使用 emotion 因此需要安裝 plugin `stylis-plugin-rtl` 實現
+- [參考範例](https://mantine.dev/guides/rtl/)
+
 Server side rendering
+
+- 以 custom server, Next.js, Gatsby 為範例
+- 配合 `@mantine/ssr` package 一起使用
+- [參考範例設定](https://mantine.dev/guides/ssr/)
 
 Using with CRA
 
@@ -526,18 +572,43 @@ YearPickerInput
 
 Carousel
 
+- 實現 Carousel 功能
+- `import { Carousel } from '@mantine/carousel'`
+- 需要安裝 packages, `embla-carousel-react` 和 `@mantine/carousel`
+
 Dropzone
+
+- 實現托放檔案功能
+- `import { Dropzone } from '@mantine/dropzone'`
 
 Modals manager
 
+- `import { ModalsProvider } from '@mantine/modals';`
+- 更好的管理 Modal 和更好用的 Modal
+
 Navigation progress
+
+- `import { NavigationProgress } from '@mantine/nprogress';`
+- 顯示在畫面最上方的進度條
 
 Notifications system
 
+- `@mantine/notifications`
+- 實現右下方彈出的通知欄位
+
 Prism code highlight
+
+- `import { Prism } from '@mantine/prism';`
+- 實現程式碼高亮的等特殊功能的 component
 
 Rich text editor
 
+- 實現複雜功能的編輯器
+- `import { RichTextEditor } from '@mantine/tiptap';`
+
 Spotlight
+
+- 實現 Modal 式的功能清單和搜尋介面
+- `import { SpotlightProvider } from '@mantine/spotlight';`
 
 ---
