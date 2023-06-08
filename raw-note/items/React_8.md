@@ -265,9 +265,70 @@ What's next?
 
 ### 第十章 - Adding Interactivity
 
+- 會隨著時間改變的資料在 React 中被稱為 state
+- event handler 去回應使用者操作
+- State, 屬於 component 的記憶空間
+  - hook React 中特殊的 function 用來操作 React 的其他功能
+  - 以 `useState` 操作 state
+- Render and commit, React 的渲染流程
+  - Triggering, 觸發階段, 觸發 render 啟動
+  - Rendering, 渲染階段, 產生 Virtual DOM
+  - Committing, 發送階段, 把渲染結果發送給 Real DOM
+- State as snapshot,
+  - 把 state 視為 component 每次渲染時的儲存空間 snapshot
+  - 換句話說 setState 並不會馬上修改 state 的狀態, 而是觸發 re-render 機制
+- Queuing a series of state updates
+  - 一次觸發多個 set state 時的處理
+- Updating objects in state
+  - 處理 object 型態的 state
+  - reference, immutable, create a new object, `Immer` library
+
 Responding to events
 
+- event handler function 通常定義在 React component 內部
+- 慣例以 `handle` 作為命名前綴
+- 各種 JavaScript function 定義方式皆可使用
+- event handler function 也可以從上層 component 以 props 的方式傳遞給其他 component 呼叫
+- 原生的 html element events
+- event propagation
+  - React 裡所有的 event 都會進行 propagation 只有 `onScroll` 除外
+- stop propagation
+  - 如同 html event 一樣通過 event handler callback 傳入的 event 來呼叫 `stopPropagation()`
+- Capture phase events
+  - Event 的三階段
+  - 儘管 child event 呼叫 stop propagation 仍然可以通過 `Capture` 階段 event 觸發
+  - 使用時機通常用於 logging 和分析
+- prevent default behavior
+  - event `preventDefault()`, 停止瀏覽器的預設行為, 只有幾個 event 有預設行為並非全部
+  - event `stopPropagation()`, 停止後續的 event propagation 觸發
+- event handler 可以擁有 side effect
+  - event handler function 與 React render function 不同是適合觸發 side effect 的地方
+
 State: a component's memory
+
+- Component 的渲染很多時候需要依據使用者互動的結果來呈現不同的內容
+  - 使用者互動的結果必須存在某些地方讓 component 能取得, 這樣專屬於 component 的空間就是 `state`
+- local variable 的限制
+  - 修改 local variable 不會觸發 re-render
+  - 每次 re-render 都會是新的 local variable
+- 因此 state 應該要能達成這兩件事情
+  - 更新 state 會觸發 re-render
+  - 在每次 render 時 state 會保持不變
+- 通過 `useState` hook
+  - 取得兩樣東西, state 與 setState function
+- Hooks
+  - 特殊的 React function 用來觸發 React 的其他功能
+  - 必須以 `use` 作為前綴開頭
+  - 只能放置在 component 的第一層和 custom hook 中
+- multiple state
+  - 如果 state 之間沒有關係, 推薦使用多個 state 分別存放
+  - 選擇適合的 state 資料結構
+- React 如何知道多個 state 分別是誰
+  - 依據宣告時的順序, 並且被存放在 array 中
+  - 因此, hook 必須宣告在第一層, 不允許條件宣告, 才能保持正確的順序
+  - React 底層以 variable array 實現 state
+- State is private and isolated
+  - State 是專屬於各自的 component instance 並不會互相影響
 
 Render and commit
 
