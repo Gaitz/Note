@@ -187,19 +187,77 @@ Learn React
 
 Your first component
 
+- 所有的 component 應該獨立定義
+  - Pitfall: 在一個 component 內部在定義一個 component 是容易會有 bug, 因為會影響 React state 的管理
+- Components all the way down
+  - React App 是由 components 組成
+  - 會依據需要可能掛在一個或多個 DOM root 上 (多數時候只有一個 root 作為入口)
+
 Importing and exporting components
 
+- Default vs named exports
+  - 都可以使用, 但是記得給 component 一個適當的名字, 使用匿名宣告會更難 debug
+
 Writing markup with JSX
+
+- 使用 JSX 讓 markup element 與 logic 存在同一個地方, JavaScript, React component
+- JSX 與 React 是分開的兩項工具, 只是通常一同使用
+  - 因此也可以獨立使用
 
 JavaScript in JSX with curly braces
 
 Passing props to a component
 
+- component 通過 props 來溝通
+  - 通過 props 傳遞來分離 parent 與 children 的責任
+- props 是 immutable, 因此 React 是單向綁定, 只能由上到下傳遞
+  - 不要試圖直接修改 props, 而是使用 React state 來產生新的內容
+
 Conditional rendering
+
+- `if..else`
+- `return null` 則不會 render 任何東西
+- `..?..:..`
+- `&&`,
+  - Pitfall, 記得左側必須是 boolean
 
 Rendering lists
 
+- 渲染 array
+- `key` prop
+  - string 或 number 用來區分 array 中的彼此
+  - 最好來自於 database 或本地以 uuid 等方式生成
+- rules of keys
+  - 必須與相鄰的元素區別
+  - key 不能在 render 中改變
+- React 為何需要 `key`
+  - 用與 array order 無關的方式來區別子元素, 避免全部 re-render
+- `key` prop 無法主動取得, 只給 React 內部機制使用
+
 Keeping components pure
+
+- pure function 讓程式更有可預測性
+- pure function:
+  - 相同的輸入必得到相同的輸出
+  - 沒有 side-effect 產生
+- React component
+  - 作為 pure function 時
+  - 相同的 props 產生相同的 JSX output
+  - 只應該回傳 JSX 並不產生 side-effect (**修改在 render 前就生成的其他任何變數**)
+- React 在 render 時, 能取得的 inputs: `props`, `state`, `context` 並且應該作為 read-only 存在
+  - 為了抓出是否有在 render 時期, 修改到 inputs, React 在 development mode 會自動 render 兩次來偵測
+  - 換句話說因為 component 應該是 pure 的, 所以 render 兩次應該不會對輸出有任何差別
+  - `<React.StrictMode>` 開啟這項功能, 很多框架會預設使用
+- side effect 必定會存在
+  - 像是更新 DOM 來觸發 render screen
+  - 在 React 中這些 side effect 應該只存在 event handler 中
+- 對於 React 在 render 時應該是 pure 的
+  - 所有的 side-effect 應該在 event handler 中觸發
+- 盡可能地讓 component 只進行 UI 的 pure rendering
+- Pure function 對於 React 帶來的好處
+  - 可以安心的讓 component 在任何環境中執行
+  - 可以安心進行 output cache
+  - 非同步的進行 rendering
 
 What's next?
 
