@@ -332,9 +332,44 @@ State: a component's memory
 
 Render and commit
 
+- Trigger -> Render -> Commit
+  - 觸發 -> 渲染 virtual DOM -> 傳給 Real DOM
+- Trigger
+  - 第一次渲染, initial render, `createRoot` 時呼叫的 `render()`
+  - 重新渲染, 因為狀態改變的 re-render ( component 本身或任何祖先 ), 因為 set state 改變的狀態
+- Rendering
+  - 遞迴的進行, 直到整個 component tree 該改變的部分都渲染過
+  - Initial render 是產生出對應的 HTML element
+  - Re-rendering, 則是判斷是否需要改變
+  - rendering 的進行必須是 pure 的, 1. 相同的輸入有相同的輸出, 2. 只管理自己內部, 沒有 side-effect
+  - 啟用 React Strict Mode 進行重複兩次的渲染來偵測是否有 side effect 產生
+- 效能調教, 預設的 rendering 是會重新渲染所有的子元件, 沒有針對效能做最佳化
+  - 切勿提早最佳化, 只有在遇到效能瓶頸時才進行調教
+- Commit
+  - Initial render, 會呼叫 `appendChild()` 掛載到 DOM 上
+  - Re-rendering, 會進行盡可能少的改動, 由 rendering 階段已經計算過
+  - React 只有在需要的時候才會調整 DOM 的刪減與生成, 大多時候會利用現有的 element
+- 在 React 進行完 render 與 commit 後, 交由瀏覽器會進行實際的渲染 (reflow, repaint 等)
+
 State as a snapshot
 
+- 把 React state 視為 snapshot 而非 variable
+  - 觸發的是 re-render, 而非變數改變, 發送 set state 讓 React 知道要 re-render
+- 區分 event handler 與 set state (snapshot) 觸發的 re-rendering 在時間軸上的不同
+  - React 不是直接響應 event handler, 而是響應 snapshot 的改變 (state 的改變觸發 re-render)
+  - 流程是使用者觸發 event -> event handler 執行 -> 通知 React state 需要更新 (set state) -> State 更新後觸發 re-rendering
+  - React rendering 僅僅只是 function 的執行
+  - React state 則是存活在 rendering 過程之外的空間
+
 Queueing a series of state updates
+
+- 更新 state 的 queue 與 batch update
+- 同個 event handler 中多個 set state 只會觸發一次 re-render (batch update)
+- set state 除了直接傳值之外, 還能夠傳遞 update function
+  - 如果是一個 event handler 中的多個 set update function 都會進入 queue 因此可以產生在同一個 event handler 中觸發修改多次的效果
+  - 但是仍然只會觸發一次 re-render
+  - **遇到非同步程式碼則會產生多次 re-render**
+- Event handler 中的 set state 會以 queue 的方式儲存, 並且在執行完 event handler 後依序執行, 都執行完才進行 re-render
 
 Updating objects in state
 
