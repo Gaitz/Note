@@ -373,9 +373,15 @@ Queueing a series of state updates
 
 Updating objects in state
 
+- React useState 中的 set state 是取代 (replace) 而非更新 (mutate, update)
+- 應該把 React state 視為 read-only 就算是 Object 也是一樣
+- `...`
+- `Immer` library 協助建立新物件
+  - 使用 `useImmer` 取代 React 原生 `useState`
+
 Updating arrays in state
 
-What's next?
+- 等同於 object
 
 ---
 
@@ -383,9 +389,30 @@ What's next?
 
 Reacting to input with state
 
+- 宣告式與命令式
+  - React 是宣告式, 告訴 React UI 應該是什麼樣子, 但是不描述如何實現
+- React 中思考如何宣告 UI
+  1. 思考 UI 是由哪些不同版本的 state 產生的
+  2. 哪些行為會觸發 state 改變 (trigger)
+  3. 通過 useState 觸發 re-render
+  4. 移除不必要的 state
+  5. 連結 event handler
+- React 的想法來自於 computer science 與 designer
+  - Finite state machine 有限狀態機的狀態改變
+  - Designer 依據不同狀態產生的 storybook
+- React state 盡可能減少, 使用 reducer 或 finite state machine 讓 state 更限制在合理的邏輯裡, 沒有奇怪的中間狀態的可能
+
 Choosing the state structure
 
+- Group 相關的 state, 如果這些 state 通常會同時更新時
+- 避免互斥的 state
+- 避免多餘的, 重複的 state
+- 避免使用 nested state
+
 Sharing state between components
+
+- Lifting state up
+- 把 state 提升到父層, 再以 props 的方式傳遞
 
 Preserving and resetting state
 
