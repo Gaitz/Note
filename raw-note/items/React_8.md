@@ -259,8 +259,6 @@ Keeping components pure
   - 可以安心進行 output cache
   - 非同步的進行 rendering
 
-What's next?
-
 ---
 
 ### 第十章 - Adding Interactivity
@@ -416,13 +414,41 @@ Sharing state between components
 
 Preserving and resetting state
 
+- React state 是否保存或移除, 是依據 React Virtual DOM 的判斷, 節點是否仍然掛在上面或者移除後重新掛載
+- 判斷依據是 component `return` 的 DOM 結構產生對應的位置 position of virtual DOM tree
+- 善用 React `key` prop
+  - 不只是可以用在 list 上
+  - 可以用於其他 component 上, 讓 React 判斷時直接採用 `key` 判斷是否為同個 position 會不會移除後更新
+  - 記得 `key` prop 是指定於呼叫的父層
+  - 指定不同的 `key` prop, 讓 React 每次都移除重新掛載
+
 Extracting state logic into a reducer
+
+- `useState` 與 `useReducer` 的比較
+  - Code size, 程式碼數量, useReducer 會明顯比 useState 更多
+  - Readability, 可閱讀性, useReducer 更容易看懂整個邏輯
+  - Debugging, 除錯能力, useReducer 更容易除錯, 可以直接介入 action 觸發與執行的函式
+  - Testing, 可測試, reducer function 是 pure function 因此更容易進行測試
+  - 個人偏好, 兩個方式皆可以, 並且之間可以隨時互相轉換
+- `useImmerReducer`, `import { useImmerReducer } from 'use-immer';`
+  - 使用 Immer 語法定義 reducer
+- Action type name 應該以使用者的角度命名動作名稱, 使用者角度的事件名稱
 
 Passing data deeply with context
 
+- Context
+  - Create, Use, Provide
+- 在使用 Context 之前應該盡可能使用 props 傳遞
+  - explicit 明確的傳遞, 可維護性更高
+- 善用 `children` prop 傳遞 component 取代中間層傳遞 props
+  - _補_: 多嘗試這種方式
+- Context 常見的使用時機
+  - Theme, current account, routing, managing state
+
 Scaling up with reducer and context
 
-What's next?
+- 使用 context 傳遞 reducers
+  - 讓程式組織的更容易閱讀
 
 ---
 
