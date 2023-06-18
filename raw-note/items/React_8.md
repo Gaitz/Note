@@ -456,7 +456,25 @@ Scaling up with reducer and context
 
 Referencing values with refs
 
+- `ref` 提供 component 一個不會受 render 影響, 也不會觸發 re-render 的空間
+- `import { useRef } from 'react';`
+- 用來存放與 render 無關的值
+  - 像是 timeout id, browser API, real DOM element, 等等
+- 可以通過 JSX `ref` prop 取得底層 element 的 real DOM element ref
+
 Manipulating the DOM with refs
+
+- JSX 原生 element 的 `ref` prop
+  - 通過存放在 React ref `useRef` 中以利後續利用
+  - `ref` prop 可以傳入 callback function 進行運算後指定, 實現把 real DOM element refs 存在特別的資料結構中
+- `forwardRef()` function 讓客製化的 React component 也允許傳遞 `ref` prop
+- `useImperativeHandle` hook 讓你介入回覆給父層的 `ref` prop, 劫持 ref 並且修改後回傳物件
+  - 可以用來限制父層取得的 `ref` 權限
+- setState 一般來說要經過 render 和 commit 兩個階段才會影響到 real DOM
+  - 因此在 setState 後立即使用的 DOM ref 不會是最新狀態 (要等待 React 做渲染)
+  - 可以通過 `flushSync()` from `react-dom`, 包裹相關的 setState 讓更新 real DOM 變成同步的, 立即更新完 real DOM 才執行後續
+- 要注意通過 ref 手動操作 real DOM 可能會導致 React 出錯, 尤其是在進行新增或移除節點的操作
+  - 因為手動操作會影響到 real DOM 與 virtual DOM 的狀態不一致
 
 Synchronizing with Effects
 
@@ -469,8 +487,6 @@ Separating events from Effects
 Removing Effect dependencies
 
 Reusing logic with custom Hooks
-
-What's next?
 
 ---
 
