@@ -478,7 +478,32 @@ Manipulating the DOM with refs
 
 Synchronizing with Effects
 
+- effect 與 event 的差別
+  - effect 是 rendering 階段中的 side effect, 像是 rendering life cycle function 對應的 event
+  - event 通常指的是 user 觸發的事件
+- `useEffect`
+  - 用來連結 React 以外的世界
+  - 執行函式內容是在 render screen 之後
+  - React 使用 `Object.is` 判斷 dependency
+- 直接在 effect 中呼叫 fetch
+  - 會產生一些缺點
+  - 無法在 server-side 運行, 容易產生 network waterfall 不必要的循序導致效能變差, 無法 preload 或 cache
+  - 推薦使用 React 相關 server-side framework, 或者 client-side library, React Query, useSWR, React Router 等等
+- React Strict Mode (預設在 development 環境開啟)
+  - 都會進行兩次 rendering 因次也會觸發兩次 effect, 目的是為了協助抓出錯誤
+- 在 effect 中如果有 async code 通常會需要一同 clean up function 來避免 race condition
+
 You might not need an effect
+
+- effect 是作為連接 React 外部的接口, 如果與外部無關的內容, 不應該使用 effect 實現
+  - 盡可能減少不必要的 effect 可以讓程式更可靠, 效能更好
+- 什麼樣的計算可以被視為昂貴的
+  - 使用 `console.time()` `console.timeEnd()`, 包裹計算邏輯, 如果時間多於 **1 ms**
+  - 昂貴的運算可以使用 cache 機制減少不必要的計算
+- 針對連結外部 store 的 effect 使用 `useSyncExternalStore` 取代一般的 `useEffect`
+  - 訂閱瀏覽器資料或其他第三方的資料
+- Fetch 資料的 effect
+  - 極度推薦使用 framework 或其他函式庫工具來協助撰寫, 不要自己處理
 
 Lifecycle of reactive effects
 
