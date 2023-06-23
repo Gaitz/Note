@@ -507,11 +507,54 @@ You might not need an effect
 
 Lifecycle of reactive effects
 
+- component lifecycle
+  - 分成 mount, update, unmount
+- effect lifecycle
+  - 分成與外部資源同步, 停止與外部資源同步
+- 應該把 effect 與 component lifecycle 分開思考, 不能視為同樣的概念
+  - 這樣才能正確地使用 effect
+- 撰寫 effect 時, 可以從 Strict Mode 提供的 log 來協助查看 start synchronizing and stop synchronizing 是否正常運作
+
 Separating events from Effects
+
+- 分清楚 event 與 effect 並且正確的使用
+- React 中的 reactive values, 有 props, states, in component body variables
+- 最大的差別在於變數, 如果改變是否會需要 reactive
+- 讓與 reactive 無關的邏輯存放在 effect 之外
+  - 確保 effect 只會進行必要的 reactive 行為
+- React 在未來希望引進 `useEffectEvent` 作為與 `useEffect` 的區分
+  - 讓 effect function 中類似 event 的邏輯可以被分離到 `useEffectEvent` 中
+  - 讓 effect 的 dependency array 中可以把 event 相關的變數從中移除
+  - 換句話說, effect 進行響應時不應該一起觸發 event, 否則就不是 event 而是 effect
+- 把 `useEffectEvent` 視為 event handler 只是這個 event 是由 effect function 有條件的觸發的
+- `useEffectEvent` 的使用限制
+  - 必須由 effect 所呼叫
+  - 不允許傳遞給其他 component 或 hook, 僅僅為了 effect 所服務
+- `useEffectEvent` 的 naming 因該像是 event handler, 只是這個 event 不是由 user 直接觸發
 
 Removing Effect dependencies
 
+- dependency array 是一堆 effect 所需要的 reactive values, 不是選擇去加入而是一個描述
+- 如果要調整 dependency array 就必須先調整現有的程式碼, 才能讓 effect 不把相關的 value 視為 reactive value
+- 不要使用 lint ignore 去關閉 dependency array 的 warning, 而是去調整程式碼
+- 策略 1. 相關的程式碼是否屬於 event handler 而非 effect
+  - 改用 event handler 的方式
+- 策略 2. 這個 effect 是否做了太多無關的事情
+  - 分離成多個 effect 管理好自己的事情
+- 策略 3. 這個 effect 讀取 state 後進行 set state
+  - 不要傳入 state 而是使用 set state 的 callback function 取得 (update function)
+  - 這樣就不需要 depend on state
+- 策略 4. effect 讀取 variable 但是不需要 reacting
+  - 把相關的程式碼變成 `useEffectEvent`, 不要進行不必要的 reacting, 分離 reactive code 與 non-reactive code
+- 策略 5. 注意 dependency 中的 object, function, array 等變數, 他們的 reference 問題
+  - 1. 定義在 component 外部, 2. 直接定義在 effect function 內部, 3. dependency 取用相關的 primitive values 就好
+- dependency array 盡可能只使用 primitive values 就好, 更簡單, 更明確, 更不容易出錯
+
 Reusing logic with custom Hooks
+
+- 以 custom hook 的方式實現重用邏輯
+- 尤其是 `useEffect` 應該屬於比較底層的邏輯, 應該被封裝在 custom hook 裡頭
+- React 在嘗試實現自己的 data fetching hook, `use`
 
 ---
 
