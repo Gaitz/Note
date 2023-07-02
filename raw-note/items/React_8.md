@@ -570,15 +570,105 @@ react
 
 State Hooks
 
+- `useState`, `useReducer`
+
+- `useReducer`, 以 reducer pattern 操作 component state
+
+- `useState`, 使用 component state
+  - 用來觸發 component re-render
+
 Context Hooks
+
+- `useContext`
+
+- `useContext`, 讓 component 可以讀取與訂閱 context
+  - context 傳遞的 value 與 function 可以提供 cache 版本減少不必要的 re-render
+  - 因為在 context value 改變時會影響到所有的訂閱者與其子代
 
 Ref Hooks
 
+- `useRef`, `useImperativeHandle`
+
+- `useImperativeHandle`, 使用於客製化 `ref` 的回傳物件
+
+  - `useImperativeHandle(ref, createHandle, dependencies?)`
+  - 主要用來限制父層對 ref 的權限
+
+- `useRef`, 為 component 提供一個與 rendering 無關的空間
+
 Effect Hooks
+
+- `useEffect`, `useLayoutEffect`, `useInsertionEffect`
+
+- `useEffect`, 讓 component 可以同步外部系統
+
+  - 如果不是要連結外部系統, 應該可以考慮其他方式實現
+  - dependency 最好是 primitive
+  - 觸發時機是在 repaint 之後, 因此如果 effect 是會影響畫面的時候應該使用 `useLayoutEffect` 取代
+  - 只運行在 client-side
+  - 未來可配合 `useEffectEvent` 減少 dependencies 更好的分離 event 與 effect
+
+- `useInsertionEffect`, 給 css-in-js library 開發者使用的 hook
+
+  - 主要給 css-in-js library 開發者使用而已
+  - 用來在正確的時機塞入 styles
+
+- `useLayoutEffect`, 在 browser repaint 之前觸發的 effect
+  - `useLayoutEffect` 可能會影響 performance, 盡可能優先使用 `useEffect`
+  - `useLayoutEffect` 會阻擋 repaint 的運行, 因此如果不當使用可能造成效能問題
+  - 主要用於測量 DOM 上的值並且會直接影響到渲染畫面的 effect
 
 Performance Hooks
 
+- `useMemo`, `useCallback`, `useTransition`, `useDeferredValue`
+
+- `useCallback`, cache a function between re-renders
+
+  - `useCallback` 唯一的使用時機就是效能最佳化
+  - 使用情境, 避免不必要的 re-render
+    - 預設情境下, React 會遞迴的 re-render 所有子代
+    - 先使用 `React.memo` 讓 component 形成依據 props 決定是否 rendering
+    - 再配合 cache 實現避免不必要的 re-render
+  - 使用情境, custom hook 的回傳值是 function 時
+
+- `useDeferredValue`, 讓 UI 更新有優先順序, 延緩更新的 hook
+
+  - re-render 時會先更新成舊的 value 並且把運算丟到 background 運行, 新資料算完才更新
+  - 包裹的資料應該是 primitive value 或者定義在外部的 object (避免不必要的 re-render)
+  - 背景運算是會中斷的, 可以避免 race condition 如果有新的運算進來會停止運行中的計算
+  - 可以配合 `<Suspense>` component 使用, 產生不會阻擋 UI 互動的運算
+  - 也可以單獨使用讓渲染緩慢的 component 也不會阻止使用者操作, 仍然需要配合 `React.memo` 來避免不必要的 re-render
+  - 提高使用者體驗, 減少停頓感
+  - 與 `throttling` 和 `debouncing` 不同, 不會減少觸發, 只是不會阻擋使用者操作, 依據不同的需求使用不同的技術
+
+- `useMemo`, cache a value between re-renders
+
+  - 主要用於加快 re-render 避免不必要的重新計算
+  - `useMemo` 只應該用於效能提升
+  - 要避免 component 進行不必要的 re-render 仍需要配合 `React.memo`
+
+- `useTransition`, 更新 state 但是不影響阻擋 UI 更新
+  - 回傳 isPending flag 和 startTransition function
+  - 讓緩慢的 set state 不會阻擋使用者操作
+  - 可以配合 `<Suspense>` 一起使用提供 fallback component
+
 Other Hooks
+
+- `useDebugValue`, `useId`, `useSyncExternalStore`
+
+- `useDebugValue`, 為 custom hook 加上 DevTool 的說明文字提高可閱讀性, 否則的話只是單純的 value
+
+- `useId`, 生成獨一無二的 ids
+
+  - 不應該用於 `key`, `key` 值應該來自於 data
+  - 主要使用於 HTML id 與 accessibility attributes
+
+- `useSyncExternalStore`, 用來訂閱外部的 store
+  - `useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)`
+  - 像是第三方的資料, 或者 browser API
+  - 提供 subscribe 訂閱函式處理訂閱資料
+  - 提供 getSnapshot 快照函式處理取得資料快照
+  - 提供 getServerSnapshot 支援 server-side rendering 的使用
 
 Your own Hooks
 
@@ -588,15 +678,57 @@ Your own Hooks
 
 Built-in components
 
+- `<Fragment>` (`<>`), `<Profiler>`, `<Suspense>`, `<StrictMode>`
+
+- `<Fragment>` (`<>...</>`), 包裹多個 elements 但是不需要 wrapper
+
+  - 需要使用 `key` 時必須使用 `<Fragment>`
+  - React 不會 reset state, 如果是僅僅切換包裹 `<Fragment>` 與否
+
+- `<Profiler>`, 提供機會去測量 rendering performance, 以提供 callback function 的方式實現
+
+  - 包裹任何 React component 以 `onRender` callback function 去測量 React tree rendering 時的 performance
+  - React dev tool 裡有 `Profiler` tab 可以進行互動式觀測
+  - `<Profiler>` 預設在 production mode 是關閉的, 因為會造成額外的效能消耗
+
+- `<StrictMode>`, 啟用 React 嚴格模式提早去捕捉一些 React 常見的 bugs
+
+  - 只會在 development mode 運行
+  - 主要使用三個功能來協助捕捉錯誤
+    - 連續運行兩次 render
+    - 連續運行兩次 effect
+    - 提供 deprecated API warning
+
+- `<Suspense>`, 啟用 Suspense mode 並提供 fallback component
+  - `children` 與 `fallback`
+  - 要實現 data fetching 層的 Suspense fallback 需要配合 frameworks (`Next.js`, `Relay`) 或者 `lazy` 使用
+  - 可以配合 `useDeferredValue` 與 `useTransition` hooks 使用提供更好的使用者體驗 (不會阻擋使用者操作與提供 fallback component)
+
 ---
 
 ### 第十五章 - APIs
 
-- `createContext`
-- `forwardRef`
-- `lazy`
-- `memo`
-- `startTransition`
+- `createContext`, `forwardRef`, `lazy`, `memo`, `startTransition`
+
+- `createContext`, 建立 context 空間
+
+  - 讓 component 配合 Provider 賦值 與 Customer (`useContext`) 取值
+  - `createContext(defaultValue)`
+
+- `forwardRef`, 讓 parent component 取得 DOM node ref
+
+  - `forwardRef(render)`
+  - 需要配合 HTML element `ref` prop 使用, 綁定指定的 DOM node
+  - 可以與 `useRef` 和 `useImperativeHandle` 來限制 parent 取得的權限
+
+- `lazy`, 延遲載入 component codes
+
+  - `lazy(load)` 配合 dynamic import 使用, 延遲載入 component codes
+  - 可以配合 `<Suspense>` 提供載入時的 fallback component
+
+<!-- - `memo`, 讓 component skip re-render 如果 props 沒有改變時
+  - component 的 hyper function (傳入一個 component 與回傳一個 memorized 版本的 component)
+  - 讓 component 可以避開 parent component -->
 
 ---
 
