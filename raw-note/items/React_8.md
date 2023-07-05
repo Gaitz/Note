@@ -726,9 +726,29 @@ Built-in components
   - `lazy(load)` 配合 dynamic import 使用, 延遲載入 component codes
   - 可以配合 `<Suspense>` 提供載入時的 fallback component
 
-<!-- - `memo`, 讓 component skip re-render 如果 props 沒有改變時
+- `memo`, 讓 component skip re-render 如果 props 沒有改變時
+
   - component 的 hyper function (傳入一個 component 與回傳一個 memorized 版本的 component)
-  - 讓 component 可以避開 parent component -->
+  - 讓 component 有機會可以避開 parent component 觸發的 re-render
+  - `memo` 只是給 React performance improvement 的提示, 並不保證什麼
+  - `memo` 的唯一價值在於 component 常在 props 沒有改變的情況下 re-render 並且 rendering 很昂貴時
+  - 儘管 `memo` 仍會 re-renders 的情境
+    - props 是其他 component 的 state 時
+    - 受到 context value 改變影響
+  - 使用 `memo` 時要注意 props 的型態, 並且預設比較使用 `Object.is` (可客製化)
+    - 客製化比較算子通常過於昂貴
+    - 應該讓 memo component 的 props 盡可能是 primitive 或者必須使用 `useCallback`, `useMemo`
+
+- `startTransition`, 讓 component 更新不阻擋 UI 操作
+
+  - `startTransition(scope)`, 包裹的 callback function 裡通常會有 set state 並且讓該 set state 造成的運算不會阻擋 UI 操作 (換句話說就是低優先度)
+  - 可以視為是讓 set state function 變成低優先度的 hyper function
+  - 配合 `useTransition` 可以取得運作中的狀態 (isPending)
+  - 如果要延遲運算則是使用 `useDeferredValue` hook
+
+- Directives, 只有在使用 server-side component 時候才需要使用
+  - `use client`, 指定 component 只在 client-side 運行
+  - `use server`, 指定該 server function 可以在 client-side 呼叫
 
 ---
 
@@ -738,11 +758,16 @@ react-dom
 
 ### 第十六章 - Components
 
+- 支援所有的瀏覽器原生 elements 與 SVG
+
 Common components
 
 Form components
 
 All HTML components
+
+- 支援建立 HTML custom element API
+- 文件可以查詢到所有原生的 event 與 attributes
 
 All SVG components
 
@@ -750,15 +775,26 @@ All SVG components
 
 ### 第十七章 - APIs
 
-APIs
+APIs 很少會使用到
+
+- `createPortal`, 在任何地方呼叫, 指定把 JSX 渲染在特定的 DOM
+  - 把 React component 植入任何地方
+- `flushSync`, 強制同步的立即更新 DOM
+  - 很少使用時機並且會傷害效能
 
 Entry points
+
+- `react/client`, `react/server`
+- Deprecated,
+  - `findDOMNode`, `hydrate`, `render`, `unmountComponentAtNode`
 
 ---
 
 ### 第十八章 - Client APIs
 
-Client APIs
+Client APIs, `react-dom/client`
+
+- `createRoot`, `hydrateRoot`
 
 Browser support
 
@@ -766,13 +802,23 @@ Browser support
 
 ### 第十九章 - Server APIs
 
+Server APIs, `react-dom/server` (通常由 framework 呼叫)
+
 Server APIs for Node.js Streams
+
+- `renderToPipeableStream`, `renderToStaticNodeStream`
 
 Server APIs for Web Streams
 
+- `renderToReadableStream`
+
 Server APIs for non-streaming environments
 
+- `renderToString`, `renderToStaticMarkup`
+
 Deprecated server APIs
+
+- `renderToNodeStream`
 
 ---
 
@@ -789,5 +835,7 @@ Legacy APIs
 - `PureComponent`
 
 Deprecated APIs
+
+- `createFactory`
 
 ---
