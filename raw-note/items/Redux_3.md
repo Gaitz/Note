@@ -306,13 +306,42 @@ Documentation
 
 ### 第七章 - Redux Toolkit Tutorials Quick Start
 
+- `configureStore()`
+- `import { Provider } from 'react-redux'`
+- `createSlice()`
+- bind reducers to `configureStore()`
+- `useSelector()`
+- `useDispatch()`
+
 ---
 
 ### 第八章 - Redux Toolkit Tutorials TypeScript Quick Start
 
+- `@types/react-redux`
+- `RootState`
+- `AppDispatch`
+- `useAppDispatch`
+- `useAppSelector`
+- slice state
+- PayloadAction
+
 ---
 
 ### 第九章 - Redux Toolkit Tutorials RTK Query Quick Start
+
+- `@reduxjs/toolkit` package
+- `import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'`
+- `createApi()`,
+  - `reducerPath`,
+  - `baseQuery`,
+  - `endpoints`
+  - export use Query Hooks
+- 把 Api service 加入 `configureStore()`,
+  - 加入 Reducer
+  - 加入 middleware
+- 通過 `import { Provider } from 'react-redux'` context 傳遞
+- 通過由 `createApi` 回傳的 use query hooks 來呼叫
+  - `{ data, error, isLoading }`
 
 ---
 
