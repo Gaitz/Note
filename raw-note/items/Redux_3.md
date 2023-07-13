@@ -347,13 +347,63 @@ Documentation
 
 ### 第十章 - Redux Toolkit Usage Guide
 
+- 介紹各個 Redux 需要撰寫的程式碼後, 以 Redux Toolkit 進行簡化
+- Store Setup
+  - `configureStore()`
+- Reducers
+  - `createReducer()`
+- Action Creators
+  - `createAction()`
+- Slice of state
+  - `createSlice()`
+- Async logic and data fetching
+  - 介紹三個常見的處理 async 的 Redux middlewares, `redux-thunk`, `redux-saga`, `redux-observable`
+  - `createAsyncThunk()`
+- Normalized Data
+  - 把 state 的資料整理成更好用高效的資料型態
+  - `normalizer` library
+  - `createEntityAdapter()` RTK function
+    - 可以跟 `normalizer` 一起使用
+    - 會自動生成常用的 selectors
+    - 允許客製化 id, sort
+- Non-serializable data 處理無法序列化的資料
+  - 應該是非常少見的使用情境
+  - 需要配合 middleware 去關閉指定位置的序列化警告
+  - 使用 `redux-persist` library
+  - 使用 `react-redux-firebase` library
+
 ---
 
 ### 第十一章 - Redux Toolkit Usage with TypeScript
 
+- 使用 TypeScript 的詳細操作指南
+- `configureStore()` 相關的 types
+  - `State`, `Dispatch`,
+- `createAction()`
+- `createReducer()`
+- `createSlice()`
+  - initial state type
+  - action content type `prepare` callback type
+  - `extraReducers`
+- `createAsyncThunk()`
+  - `thunkApi`
+  - pre-typed `createAsyncThunk()`
+- `createEntityAdapter()`
+
 ---
 
 ### 第十二章 - Redux Toolkit Writing Reducers with Immer
+
+- `createReducer()`, `createSlice()` 在內部自動使用 `Immer` library
+  - 簡化撰寫 immutable logic
+- Usage 常見的更新情境與撰寫方式
+- 使用 `current()` 解開 Immer wrapper 來協助 debug
+- Immer library 是 RTK 必備的一部分
+  - 很好的簡化撰寫 immutable logic
+
+---
+
+API Reference
 
 ---
 
@@ -366,6 +416,10 @@ Documentation
 ---
 
 ### 第十五章 - Redux Toolkit APIs Other
+
+---
+
+RTK Query
 
 ---
 
