@@ -409,13 +409,132 @@ API Reference
 
 ### 第十三章 - Redux Toolkit APIs Store Setup
 
+`configureStore`,
+
+- 封裝 createStore 並且提供更好的 DX
+- Parameters `reducer`, `middleware`, `devTools`, `preloadState`, `enhancers`
+
+`getDefaultMiddleware`
+
+- 回傳 RTK 預設的 middleware array
+- 在 production 與 development 環境會有不同的預設值
+- 可以針對個別預設的 middleware 進行 option 設定
+- Production: `thunk`
+- Development: `thunk`, 與其他檢查常見錯誤用的 checkers
+
+Immutability Middleware
+
+- 預設的 middleware 用來檢查 immutability
+
+Serializability Middleware
+
+- 預設的 middleware 用來檢查資料是否可序列化
+
+Action Creator Middleware
+
+- 預設的 middleware 用來檢查有正確的使用 action creator function
+
+`createListenerMiddleware`
+
+- 可以視為輕量化版的 redux-saga 跟 redux-observables
+- 用來介入 Redux event 並且塞入 side-effect
+
+`autoBatchEnhancer`
+
+- 用來降低指定 reducer 的優先度, (執行的 browser API function 不同)
+- 通過 reducer 中的 `prepare` function
+- 選項有四種
+  - `raf`, requestAnimationFrame
+  - `tick`, queueMicrotask
+  - `timer`, setTimeout
+  - `callback`, 客製化 function 指定時機
+- 當有效能問題時可參考使用, 例如 fetching 然後 listing 卡住畫面時
+
 ---
 
 ### 第十四章 - Redux Toolkit APIs Reducers and Actions
 
+`createReducer`
+
+- Parameters, `initialState`, `builderCallback`
+- 內建 Immer
+- 可以跟 `createAction` 配合使用
+- 有兩種語法模式建立
+  - builder callback, 對於 TypeScript 支援較佳, 推薦優先使用
+  - map object, 語法簡便
+
+`createAction`
+
+- 協助建立 action function
+- 可與 `createReducer` 一起使用
+- Key 可以為非 string, 不過最好起碼是可序列化的
+- `match` 作為 TypeScript type guard 使用
+- 與 redux-observable 一起使用
+
+`createSlice`
+
+- 整合好 `createReducer` 與 `createAction`
+- 直接建立完整的 slice (part of state)
+- Parameters, `initialState`, `name`, `reducers`, `extraReducers`
+- Return values, `name`, `reducer`, `actions`, `caseReducers`, `getInitialState`
+
+`createAsyncThunk`
+
+- 預設處理非同步行為的方式 thunk
+- 最常見的非同步行為是 fetching data, 因此有 RTK Query API 來協助進行, 減少需要撰寫 thunk 的情境
+- Parameters, `type`, `payloadCreator`
+  - `thunkAPI`
+- Return values, action creators (`pending`, `fulfilled`, `rejected`)
+- 處理 thunk result 與 errors
+- Cancellation 機制
+  - `condition`
+  - `promise`
+  - `signal`
+
+`createEntityAdapter`
+
+- 協助建立高效 CRUD 的資料結構與對應的 action creators
+- 建立的資料結構
+  - `{ id: [], entities: {} }`
+- Parameters, `selectId`, `sortComparer`
+- Return values, CRUD functions, `getInitialState`, selector functions (已經使用 `createSelector` 產生的)
+- 整合進 `reducer` 中
+
 ---
 
 ### 第十五章 - Redux Toolkit APIs Other
+
+`createSelector`
+
+- 來自 `reselect` library
+- 建立高效能的 memorized selector
+- 如果要在 Immer based 的 reducer 宣告中使用, 要用 `createDraftSafeSelector` 才能正確運行
+
+Matching Utilities
+
+- 協助建立型別安全 (type safety)
+- General purpose: `isAllOf`, `isAnyOf`
+- `createAsyncThunk` 相關的 matching utilities, `isAsyncThunkAction`, `isPending`, `isFulfilled`, `isRejected`, `isRejectedWithValue`
+- 使用 TypeScript type guards, 減少 boilerplate codes
+- 使用 Matching utilities 協助建立 TypeScript type guard functions
+
+Other Exports
+
+- `nanoid`, 來自 `nanoid/nonsecure` library
+- `miniSerializeError`
+- `copyWithStructuralSharing`
+- 來自 Immer library
+  - `createNextState`
+  - `current`
+  - `original`
+  - `isDraft`
+  - `freeze`
+- 來自 Redux library
+  - `combineReducers`
+  - `compose`
+  - `bindActionCreators`
+  - `createStore`
+  - `applyMiddleware`
 
 ---
 
