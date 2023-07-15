@@ -544,25 +544,134 @@ RTK Query
 
 ### 第十六章 - Redux Toolkit RTK Query Overview
 
+- 用來解決最常見的 data fetching and caching 使用情境
+- 是可以獨立於 Redux 之外直接使用的 library
+- RTK Query 建立在 RTK `createSlice`, `createAsyncThunk` 之上
+
+APIs
+
+- `import { createApi } from '@reduxjs/toolkit/query'`
+- `import { createApi } from '@reduxjs/toolkit/query/react'`, 會自動生成 React Hooks 的版本
+- `createApi()`, 主要的功能
+- `fetchBaseQuery()`, 用來協助建立 baseQuery 的 function
+- `<ApiProvider />`, 如果沒有使用 Redux store 時, 可以單獨使用的 Provider
+- `setupListeners()`, 用來啟動 `refetchOnMount` 與 `refetchOnReconnect` 的功能
+
+Basic Usage
+
+- 步驟 1. 以 `createApi()` 建立 API slice
+- 步驟 2. 整合進 store, `configureStore()`
+- 步驟 3. 在 component 中使用自動生成的 React hooks
+
 ---
 
 ### 第十七章 - Redux Toolkit Comparison with Other Tools
+
+- 受到很多相關的 library 啟發, `React Query`, `SWR`, `Apollo`, `Urql`
+- 應該採用 RTK Query 的幾個理由
+  - 已經在使用 Redux
+  - 希望配合 Redux DevTool 一起使用
+  - 把 Data fetching 整合進 Redux
+  - 你的程式邏輯可以脫離 React
+
+Tradeoffs
+
+- 沒有自動 Normalized fetching data 和 deduplicated cache
+- Bundle Size 的增加
+
+Comparing Feature Sets
 
 ---
 
 ### 第十八章 - Redux Toolkit Examples
 
+- Examples in CodeSandbox
+
 ---
 
 ### 第十九章 - Redux Toolkit Usage With TypeScript
+
+- RTK query 本身是用 TypeScript 撰寫的, 因此可以良好的支援
+
+`createApi`
+
+- 會自動生成正確型別的 React hooks
+- 定義 `baseQuery` Type
+- 定義 `ResultType`, `QueryArg` Types
+- 定義 `queryFn` Type
+- 定義 invalidation cache tag, `providesTags`, `invalidatesTags` Types
+- 定義 `skipToken` Type 用來處理 conditional fetching
+- Error handling Types
 
 ---
 
 ### 第二十章 - Redux Toolkit Using RTK Query
 
+詳細的使用指南
+
+#### Queries
+
+#### Mutations
+
+#### Cache Behavior
+
+#### Automated Re-fetching
+
+#### Manual Cache Updates
+
+#### Conditional Fetching
+
+#### Error Handling
+
+#### Pagination
+
+#### Prefetching
+
+#### Polling
+
+#### Streaming Updates
+
+#### Code Splitting
+
+#### Code Generation
+
+#### Server Side Rendering
+
+#### Persistence and Rehydration
+
+#### Customizing createApi
+
+#### Customizing Queries
+
+#### Usage Without React Hooks
+
+#### Migrating to RTK Query
+
 ---
 
 ### 第二一章 - Redux Toolkit API Reference
+
+`createApi()`
+
+`fetchBaseQuery()`
+
+`<ApiProvider api={} />`
+
+`setupListeners`
+
+#### Generated API Slices
+
+API Slice overview
+
+Redux Integration
+
+Endpoints
+
+Code Splitting
+
+API Slice Utilities
+
+React Hooks
 
 ---
 
