@@ -611,41 +611,169 @@ Comparing Feature Sets
 
 #### Queries
 
+- 僅用來讀取資料 (read)
+- `fetchBaseQuery`,
+- `createApi`,
+  - `endpoints`, 使用 `build.query` 建立
+- 相關的 hooks
+  - `useQuery`, 內部使用 `useQuerySubscription` 與 `useQueryState`
+  - `useQuerySubscription`,
+  - `useQueryState`,
+  - `useLazyQuery`, 取得 `trigger` function 用來在特定的時機觸發 query
+  - `useLazySubscription`, 取得 `trigger` function 版本的 `useQuerySubscription`
+- 實務上通常使用 `useQuery`, 其他 hooks 則是針對特定的使用情境才需要
+- query options
+  - `skip`, 預設 `false`
+  - `pollingInterval`, 預設 `0`
+  - `selectFromResult`,
+  - `refetchOnMountOrArgChange`, 預設 `false`
+  - `refetchOnFocus`, 預設 `false`
+  - `refetchOnReconnect`, 預設 `false`
+- `useQuery` 所回傳的物件包含
+  - `data`, 與 hook arg 無關的最新資料
+  - `currentData`, 依據 hook arg 的最新資料
+  - `error`, 錯誤結果
+  - `isUninitialized`, `true` 代表 query 尚未開始
+  - `isLoading`, 第一次 query 是否在進行中
+  - `isFetching`, 當前 query 是否在進行中
+  - `isSuccess`, 成功與否
+  - `isError`, 失敗與否
+  - `refetch` 強制觸發 refetch query
+- 多數使用 `data`, `isFetching`, `isLoading`
+- Query Cache Keys
+  - RTK query 會自動序列化 request parameters 來建立 query key 來進行 cache 管理
+- 從 query result 取得特定的值
+  - 可以使用重複呼叫 useQuery 並且通過 `selectFromResult` 來取得部分內容
+  - 是 memorized 版本, 只會在變動時才觸發 component re-render
+
 #### Mutations
+
+- 資料更新, 並且更新 cache
+  - 會觸發 invalidate cache 並且強制觸發 re-fetch
+- `fetchBaseQuery`
+- `createApi`, 使用 `build.mutation` 建立
+- 使用時的 hooks
+  - `useMutation`, 回傳 trigger function 與 result object
+- Result object 包含
+  - `data`,
+  - `error`,
+  - `isUninitialized`,
+  - `isLoading`,
+  - `isSuccess`,
+  - `isError`,
+  - `reset`,
+- 預設每個 `useMutation` instance 是獨立的
+  - 可以通過 `fixedCacheKey` 來建立相同的呼叫
+- Revalidation 更新本地端相關資料的 cache
+  - 建立在同一個 `createApi` 中, mutation 需要定義 `invalidatesTags`
+  - [參考範例](https://redux-toolkit.js.org/rtk-query/usage/mutations#revalidation-example)
 
 #### Cache Behavior
 
+- Cache 管理
+- Default Cache Behavior 預設行為
+  - RTK Query cache 是依據
+  - API endpoint
+  - 序列化的 query parameters
+  - Active subscription reference counts (配合 `keepUnusedDataFor` 來控制在 component unmount 後 cache 要存活的時間, 預設是 60 秒)
+- `queryCacheKey`
+- component 是 subscription 到 data 上, 因此可以通過 active subscription reference counts 來得知資料的使用狀況
+
+控制 caches
+
+- 降低 subscription cache time `keepUnusedDataFor`, 預設是 60 秒
+- 依據需要手動觸發 refetch, `refetch` function 與 `initiate` thunk action
+- 常見的情境可以通過預設的設定值控制
+  - `refetchOnMountOrArgChange`,
+  - `refetchOnFocus`
+  - `refetchOnReconnect`
+
 #### Automated Re-fetching
+
+- 利用 cache tag 來管理何時需要自動 refetch
+  - 給 Mutation 使用
+- Query 本身使用 `queryCacheKey` 來判斷
+- Tags, 定義在 `tagTypes`
+- Providing tags, `providesTags`
+- Invalidating tags, `invalidatesTags`
 
 #### Manual Cache Updates
 
+- 實現 UI first, 先更新本地端, 在等待 mutation 完成後做二次處理
+
 #### Conditional Fetching
 
+- 延遲發送 query
+- 使用 `skip` parameter
+
 #### Error Handling
+
+- 個別處理 error object
+- 集中處理, 使用 redux middleware 捕捉所有的 error
+  - `import { isRejectedWithValue } from '@reduxjs/toolkit'`
 
 #### Pagination
 
 #### Prefetching
 
+- 提早觸發 fetching 在使用者觸發頁面之前
+- 使用 `usePrefetch` hook
+  - 通過 `PrefetchOptions` 客製化
+  - `ifOlderThan`
+  - `force`
+- 自定義 helper function `usePrefetchImmediately`
+- Prefetching without hooks
+  - 使用 Redux dispatch 實現
+
 #### Polling
+
+- 以 `pollingInterval` parameter 設定自動觸發 query
 
 #### Streaming Updates
 
+- 使用 WebSockets 等等 Streaming 方式
+- 以 `onCacheEntryAdded` 實現
+
 #### Code Splitting
+
+- 切割多個 createAPI codes 來控制 bundle size
+- 以 API `injectEndpoints` 來實現串接 API
 
 #### Code Generation
 
+- 提供工具自動生成 RTK API 程式碼
+- 依據 GraphQL schema
+- 依據 OpenAPI schema
+
 #### Server Side Rendering
+
+- 使用 Next.js
 
 #### Persistence and Rehydration
 
+- `extractREhydrationInfo`
+
 #### Customizing createApi
+
+- 目前有兩種版本 `createBaseApi`, `createApi`
+- 建立客製化版本的 createApi function
+- `buildCreateApi`, `coreModule`, `reactHooksModule`
 
 #### Customizing Queries
 
+- 可以使用任何 request library
+- 通過 `baseQuery` 建立客製化的 request
+- 內建 `fetchBaseQuery`, 通過包裹 `fetch` 作為預設工具
+
 #### Usage Without React Hooks
 
+- 不使用 Hooks
+- 使用 Redux dispatch 取代
+
 #### Migrating to RTK Query
+
+- 基礎使用範例
+- https://redux-toolkit.js.org/rtk-query/usage/migrating-to-rtk-query
 
 ---
 
@@ -655,9 +783,9 @@ Comparing Feature Sets
 
 `fetchBaseQuery()`
 
-`<ApiProvider api={} />`
+`<ApiProvider api={} />`, 只有在不與 Redux 一起使用時, 提供的 context provider
 
-`setupListeners`
+`setupListeners`, 啟用 `refetchOnFocus` 與 `refetchOnReconnect` 需要配合使用的工具
 
 #### Generated API Slices
 
@@ -671,7 +799,27 @@ Code Splitting
 
 API Slice Utilities
 
+- 相關的工具
+- `updateQueryData`,
+- `upsertQueryData`,
+- `patchQueryData`,
+- `prefetch`,
+- `selectInvalidatedBy`,
+- `invalidateTags`,
+- `resetApiState`,
+- `getRunningQueryThunk`,
+- `getRunningMutationThunk`,
+
 React Hooks
+
+- 相關 Hooks
+- `useQuery`
+- `useMutation`
+- `useQueryState`
+- `useQuerySubscription`
+- `useLazyQuery`
+- `useLazyQuerySubscription`
+- `usePrefetch`
 
 ---
 
