@@ -14,15 +14,39 @@
 
 第五章 - Redux Toolkit Introduction
 
-第六章 - Redux Toolkit Basic Tutorial
+第六章 - Redux Toolkit Tutorials Overview
 
-第七章 - Redux Toolkit Intermediate Tutorial
+第七章 - Redux Toolkit Tutorials Quick Start
 
-第八章 - Redux Toolkit Advanced Tutorial
+第八章 - Redux Toolkit Tutorials TypeScript Quick Start
 
-第九章 - Redux Toolkit Usage Guide
+第九章 - Redux Toolkit Tutorials RTK Query Quick Start
 
-第十章 - Redux Toolkit Usage With TypeScript
+第十章 - Redux Toolkit Usage Guide
+
+第十一章 - Redux Toolkit Usage with TypeScript
+
+第十二章 - Redux Toolkit Writing Reducers with Immer
+
+第十三章 - Redux Toolkit APIs Store Setup
+
+第十四章 - Redux Toolkit APIs Reducers and Actions
+
+第十五章 - Redux Toolkit APIs Other
+
+第十六章 - Redux Toolkit RTK Query Overview
+
+第十七章 - Redux Toolkit Comparison with Other Tools
+
+第十八章 - Redux Toolkit Examples
+
+第十九章 - Redux Toolkit Usage With TypeScript
+
+第二十章 - Redux Toolkit Using RTK Query
+
+第二一章 - Redux Toolkit API Reference
+
+第二二章 - Redux Toolkit 舊文件
 
 ---
 
@@ -30,11 +54,11 @@
 
 常見的情境與解決方案
 
-- Configuring Your Store, 
+- Configuring Your Store,
   - 建置 store 的方法
-- Using With TypeScript, 
+- Using With TypeScript,
   - 配合 TypeScript 使用
-- Migrating to Redux, 
+- Migrating to Redux,
   - 從 Flux 或 Backbone 轉移到 Redux
 - Using Object Spread Operator
   - 使用 `...` Object Spread Operator 進行 state 複製
@@ -52,7 +76,7 @@
 - Isolating Redux Sub-Apps
   - 切割完全獨立的 App 各自擁有獨立的 Redux state
 - Using Immutable.JS with Redux
-  - 使用 `Immutable.JS` library 
+  - 使用 `Immutable.JS` library
 - Code Splitting
   - Redux 與 JavaScript bundle 分割
 - Structuring Reducers
@@ -204,7 +228,7 @@ Priority C: Recommend
   - 提供一致性, 推薦使用 action creator function 取代直接撰寫 `action`
   - Redux Toolkit 的 `createSlice()` 會自動生成 action type 與 action creators
 - Use Thunks for Async Logic
-  - Redux 提供 middleware 達到擴充, 使用者如果不需要的話不必學習 RxJS 
+  - Redux 提供 middleware 達到擴充, 使用者如果不需要的話不必學習 RxJS
   - 預設使用 `Redux Thunk` middleware 來實現非同步邏輯
   - 推薦使用 `async/await` 語法提升 Thunk 的可閱讀性
   - 更複雜的非同步需求可以考慮採用 `Redux-Saga` 或 `Redux-Observable`
@@ -234,7 +258,7 @@ Priority C: Recommend
 Installation
 
 - NPM `npm install @reduxjs/toolkit`
-- YARN
+- YARN `yarn add @reduxjs/toolkit`
 
 Purpose
 
@@ -252,11 +276,23 @@ Why You Should Use Redux Toolkit
 
 What's Included
 
-- `configureStore()`, 簡單的設定建立 store, 包含自動組合 slice reducers, 載入常用的 middleware
-- `createReducer()`, 協助建立 reducer 不需要使用 switch, 自動使用 `Immer` 來處理 immutable update 問題
-- `createAction()`, 自動生成 action creator function
-- `createSlice()`, 一次性生成 slice, 傳入 reducers, slice name, initial state 自動建立 action 與 action creators
-- `createSelector()`, 使用 `Reselect` 協助建立重複使用的 selector function
+- `configureStore()`, 簡易設定, 自動組合 slice 與引入常用 middleware 例如 `redux-thunk`
+- `createReducer()`, 建立 reducer 不需要使用 switch, 並且使用 `Immer` 處理 immutable updates
+- `createAction()`, 自動建立 action creator
+- `createSlice()`, 快速建立 slice, 需傳入 reducer, slice name, initial state, 自動生成 action 與 action creators
+- `createAsyncThunk`, 快速建立常見的非同步呼叫 thunk, 自動生成 action
+- `createEntityAdapter`, 協助生成 normalized data 並且生成對應的 selectors 與 reducer
+- `createSelector`, 使用 `Reselect` 建立 memorized selector function
+
+RTK Query
+
+- 額外選用的 Addon, 用來處理 data fetching, caching
+- 建立在 RTK 與 Redux 之上, 但可以獨立使用
+- 相關的 APIs
+  - `createApi()`, 最主要的 API
+  - `fetchBaseQuery()`, 簡單的 fetch wrapper 可以用於 `createApi()` 中
+  - `<ApiProvider />`, 如果沒有使用 Redux 單獨使用時, 需要加上 Provider
+  - `setupListeners()`, 用來開啟 `refetchOnMount`, `refetchOnReconnect` 的 utility
 
 Documentation
 
@@ -264,7 +300,532 @@ Documentation
 
 ---
 
-### 第五章 - Redux Toolkit Introduction
+### 第六章 - Redux Toolkit Tutorials Overview
+
+---
+
+### 第七章 - Redux Toolkit Tutorials Quick Start
+
+- `configureStore()`
+- `import { Provider } from 'react-redux'`
+- `createSlice()`
+- bind reducers to `configureStore()`
+- `useSelector()`
+- `useDispatch()`
+
+---
+
+### 第八章 - Redux Toolkit Tutorials TypeScript Quick Start
+
+- `@types/react-redux`
+- `RootState`
+- `AppDispatch`
+- `useAppDispatch`
+- `useAppSelector`
+- slice state
+- PayloadAction
+
+---
+
+### 第九章 - Redux Toolkit Tutorials RTK Query Quick Start
+
+- `@reduxjs/toolkit` package
+- `import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'`
+- `createApi()`,
+  - `reducerPath`,
+  - `baseQuery`,
+  - `endpoints`
+  - export use Query Hooks
+- 把 Api service 加入 `configureStore()`,
+  - 加入 Reducer
+  - 加入 middleware
+- 通過 `import { Provider } from 'react-redux'` context 傳遞
+- 通過由 `createApi` 回傳的 use query hooks 來呼叫
+  - `{ data, error, isLoading }`
+
+---
+
+### 第十章 - Redux Toolkit Usage Guide
+
+- 介紹各個 Redux 需要撰寫的程式碼後, 以 Redux Toolkit 進行簡化
+- Store Setup
+  - `configureStore()`
+- Reducers
+  - `createReducer()`
+- Action Creators
+  - `createAction()`
+- Slice of state
+  - `createSlice()`
+- Async logic and data fetching
+  - 介紹三個常見的處理 async 的 Redux middlewares, `redux-thunk`, `redux-saga`, `redux-observable`
+  - `createAsyncThunk()`
+- Normalized Data
+  - 把 state 的資料整理成更好用高效的資料型態
+  - `normalizer` library
+  - `createEntityAdapter()` RTK function
+    - 可以跟 `normalizer` 一起使用
+    - 會自動生成常用的 selectors
+    - 允許客製化 id, sort
+- Non-serializable data 處理無法序列化的資料
+  - 應該是非常少見的使用情境
+  - 需要配合 middleware 去關閉指定位置的序列化警告
+  - 使用 `redux-persist` library
+  - 使用 `react-redux-firebase` library
+
+---
+
+### 第十一章 - Redux Toolkit Usage with TypeScript
+
+- 使用 TypeScript 的詳細操作指南
+- `configureStore()` 相關的 types
+  - `State`, `Dispatch`,
+- `createAction()`
+- `createReducer()`
+- `createSlice()`
+  - initial state type
+  - action content type `prepare` callback type
+  - `extraReducers`
+- `createAsyncThunk()`
+  - `thunkApi`
+  - pre-typed `createAsyncThunk()`
+- `createEntityAdapter()`
+
+---
+
+### 第十二章 - Redux Toolkit Writing Reducers with Immer
+
+- `createReducer()`, `createSlice()` 在內部自動使用 `Immer` library
+  - 簡化撰寫 immutable logic
+- Usage 常見的更新情境與撰寫方式
+- 使用 `current()` 解開 Immer wrapper 來協助 debug
+- Immer library 是 RTK 必備的一部分
+  - 很好的簡化撰寫 immutable logic
+
+---
+
+API Reference
+
+---
+
+### 第十三章 - Redux Toolkit APIs Store Setup
+
+`configureStore`,
+
+- 封裝 createStore 並且提供更好的 DX
+- Parameters `reducer`, `middleware`, `devTools`, `preloadState`, `enhancers`
+
+`getDefaultMiddleware`
+
+- 回傳 RTK 預設的 middleware array
+- 在 production 與 development 環境會有不同的預設值
+- 可以針對個別預設的 middleware 進行 option 設定
+- Production: `thunk`
+- Development: `thunk`, 與其他檢查常見錯誤用的 checkers
+
+Immutability Middleware
+
+- 預設的 middleware 用來檢查 immutability
+
+Serializability Middleware
+
+- 預設的 middleware 用來檢查資料是否可序列化
+
+Action Creator Middleware
+
+- 預設的 middleware 用來檢查有正確的使用 action creator function
+
+`createListenerMiddleware`
+
+- 可以視為輕量化版的 redux-saga 跟 redux-observables
+- 用來介入 Redux event 並且塞入 side-effect
+
+`autoBatchEnhancer`
+
+- 用來降低指定 reducer 的優先度, (執行的 browser API function 不同)
+- 通過 reducer 中的 `prepare` function
+- 選項有四種
+  - `raf`, requestAnimationFrame
+  - `tick`, queueMicrotask
+  - `timer`, setTimeout
+  - `callback`, 客製化 function 指定時機
+- 當有效能問題時可參考使用, 例如 fetching 然後 listing 卡住畫面時
+
+---
+
+### 第十四章 - Redux Toolkit APIs Reducers and Actions
+
+`createReducer`
+
+- Parameters, `initialState`, `builderCallback`
+- 內建 Immer
+- 可以跟 `createAction` 配合使用
+- 有兩種語法模式建立
+  - builder callback, 對於 TypeScript 支援較佳, 推薦優先使用
+  - map object, 語法簡便
+
+`createAction`
+
+- 協助建立 action function
+- 可與 `createReducer` 一起使用
+- Key 可以為非 string, 不過最好起碼是可序列化的
+- `match` 作為 TypeScript type guard 使用
+- 與 redux-observable 一起使用
+
+`createSlice`
+
+- 整合好 `createReducer` 與 `createAction`
+- 直接建立完整的 slice (part of state)
+- Parameters, `initialState`, `name`, `reducers`, `extraReducers`
+- Return values, `name`, `reducer`, `actions`, `caseReducers`, `getInitialState`
+
+`createAsyncThunk`
+
+- 預設處理非同步行為的方式 thunk
+- 最常見的非同步行為是 fetching data, 因此有 RTK Query API 來協助進行, 減少需要撰寫 thunk 的情境
+- Parameters, `type`, `payloadCreator`
+  - `thunkAPI`
+- Return values, action creators (`pending`, `fulfilled`, `rejected`)
+- 處理 thunk result 與 errors
+- Cancellation 機制
+  - `condition`
+  - `promise`
+  - `signal`
+
+`createEntityAdapter`
+
+- 協助建立高效 CRUD 的資料結構與對應的 action creators
+- 建立的資料結構
+  - `{ id: [], entities: {} }`
+- Parameters, `selectId`, `sortComparer`
+- Return values, CRUD functions, `getInitialState`, selector functions (已經使用 `createSelector` 產生的)
+- 整合進 `reducer` 中
+
+---
+
+### 第十五章 - Redux Toolkit APIs Other
+
+`createSelector`
+
+- 來自 `reselect` library
+- 建立高效能的 memorized selector
+- 如果要在 Immer based 的 reducer 宣告中使用, 要用 `createDraftSafeSelector` 才能正確運行
+
+Matching Utilities
+
+- 協助建立型別安全 (type safety)
+- General purpose: `isAllOf`, `isAnyOf`
+- `createAsyncThunk` 相關的 matching utilities, `isAsyncThunkAction`, `isPending`, `isFulfilled`, `isRejected`, `isRejectedWithValue`
+- 使用 TypeScript type guards, 減少 boilerplate codes
+- 使用 Matching utilities 協助建立 TypeScript type guard functions
+
+Other Exports
+
+- `nanoid`, 來自 `nanoid/nonsecure` library
+- `miniSerializeError`
+- `copyWithStructuralSharing`
+- 來自 Immer library
+  - `createNextState`
+  - `current`
+  - `original`
+  - `isDraft`
+  - `freeze`
+- 來自 Redux library
+  - `combineReducers`
+  - `compose`
+  - `bindActionCreators`
+  - `createStore`
+  - `applyMiddleware`
+
+---
+
+RTK Query
+
+---
+
+### 第十六章 - Redux Toolkit RTK Query Overview
+
+- 用來解決最常見的 data fetching and caching 使用情境
+- 是可以獨立於 Redux 之外直接使用的 library
+- RTK Query 建立在 RTK `createSlice`, `createAsyncThunk` 之上
+
+APIs
+
+- `import { createApi } from '@reduxjs/toolkit/query'`
+- `import { createApi } from '@reduxjs/toolkit/query/react'`, 會自動生成 React Hooks 的版本
+- `createApi()`, 主要的功能
+- `fetchBaseQuery()`, 用來協助建立 baseQuery 的 function
+- `<ApiProvider />`, 如果沒有使用 Redux store 時, 可以單獨使用的 Provider
+- `setupListeners()`, 用來啟動 `refetchOnMount` 與 `refetchOnReconnect` 的功能
+
+Basic Usage
+
+- 步驟 1. 以 `createApi()` 建立 API slice
+- 步驟 2. 整合進 store, `configureStore()`
+- 步驟 3. 在 component 中使用自動生成的 React hooks
+
+---
+
+### 第十七章 - Redux Toolkit Comparison with Other Tools
+
+- 受到很多相關的 library 啟發, `React Query`, `SWR`, `Apollo`, `Urql`
+- 應該採用 RTK Query 的幾個理由
+  - 已經在使用 Redux
+  - 希望配合 Redux DevTool 一起使用
+  - 把 Data fetching 整合進 Redux
+  - 你的程式邏輯可以脫離 React
+
+Tradeoffs
+
+- 沒有自動 Normalized fetching data 和 deduplicated cache
+- Bundle Size 的增加
+
+Comparing Feature Sets
+
+---
+
+### 第十八章 - Redux Toolkit Examples
+
+- Examples in CodeSandbox
+
+---
+
+### 第十九章 - Redux Toolkit Usage With TypeScript
+
+- RTK query 本身是用 TypeScript 撰寫的, 因此可以良好的支援
+
+`createApi`
+
+- 會自動生成正確型別的 React hooks
+- 定義 `baseQuery` Type
+- 定義 `ResultType`, `QueryArg` Types
+- 定義 `queryFn` Type
+- 定義 invalidation cache tag, `providesTags`, `invalidatesTags` Types
+- 定義 `skipToken` Type 用來處理 conditional fetching
+- Error handling Types
+
+---
+
+### 第二十章 - Redux Toolkit Using RTK Query
+
+詳細的使用指南
+
+#### Queries
+
+- 僅用來讀取資料 (read)
+- `fetchBaseQuery`,
+- `createApi`,
+  - `endpoints`, 使用 `build.query` 建立
+- 相關的 hooks
+  - `useQuery`, 內部使用 `useQuerySubscription` 與 `useQueryState`
+  - `useQuerySubscription`,
+  - `useQueryState`,
+  - `useLazyQuery`, 取得 `trigger` function 用來在特定的時機觸發 query
+  - `useLazySubscription`, 取得 `trigger` function 版本的 `useQuerySubscription`
+- 實務上通常使用 `useQuery`, 其他 hooks 則是針對特定的使用情境才需要
+- query options
+  - `skip`, 預設 `false`
+  - `pollingInterval`, 預設 `0`
+  - `selectFromResult`,
+  - `refetchOnMountOrArgChange`, 預設 `false`
+  - `refetchOnFocus`, 預設 `false`
+  - `refetchOnReconnect`, 預設 `false`
+- `useQuery` 所回傳的物件包含
+  - `data`, 與 hook arg 無關的最新資料
+  - `currentData`, 依據 hook arg 的最新資料
+  - `error`, 錯誤結果
+  - `isUninitialized`, `true` 代表 query 尚未開始
+  - `isLoading`, 第一次 query 是否在進行中
+  - `isFetching`, 當前 query 是否在進行中
+  - `isSuccess`, 成功與否
+  - `isError`, 失敗與否
+  - `refetch` 強制觸發 refetch query
+- 多數使用 `data`, `isFetching`, `isLoading`
+- Query Cache Keys
+  - RTK query 會自動序列化 request parameters 來建立 query key 來進行 cache 管理
+- 從 query result 取得特定的值
+  - 可以使用重複呼叫 useQuery 並且通過 `selectFromResult` 來取得部分內容
+  - 是 memorized 版本, 只會在變動時才觸發 component re-render
+
+#### Mutations
+
+- 資料更新, 並且更新 cache
+  - 會觸發 invalidate cache 並且強制觸發 re-fetch
+- `fetchBaseQuery`
+- `createApi`, 使用 `build.mutation` 建立
+- 使用時的 hooks
+  - `useMutation`, 回傳 trigger function 與 result object
+- Result object 包含
+  - `data`,
+  - `error`,
+  - `isUninitialized`,
+  - `isLoading`,
+  - `isSuccess`,
+  - `isError`,
+  - `reset`,
+- 預設每個 `useMutation` instance 是獨立的
+  - 可以通過 `fixedCacheKey` 來建立相同的呼叫
+- Revalidation 更新本地端相關資料的 cache
+  - 建立在同一個 `createApi` 中, mutation 需要定義 `invalidatesTags`
+  - [參考範例](https://redux-toolkit.js.org/rtk-query/usage/mutations#revalidation-example)
+
+#### Cache Behavior
+
+- Cache 管理
+- Default Cache Behavior 預設行為
+  - RTK Query cache 是依據
+  - API endpoint
+  - 序列化的 query parameters
+  - Active subscription reference counts (配合 `keepUnusedDataFor` 來控制在 component unmount 後 cache 要存活的時間, 預設是 60 秒)
+- `queryCacheKey`
+- component 是 subscription 到 data 上, 因此可以通過 active subscription reference counts 來得知資料的使用狀況
+
+控制 caches
+
+- 降低 subscription cache time `keepUnusedDataFor`, 預設是 60 秒
+- 依據需要手動觸發 refetch, `refetch` function 與 `initiate` thunk action
+- 常見的情境可以通過預設的設定值控制
+  - `refetchOnMountOrArgChange`,
+  - `refetchOnFocus`
+  - `refetchOnReconnect`
+
+#### Automated Re-fetching
+
+- 利用 cache tag 來管理何時需要自動 refetch
+  - 給 Mutation 使用
+- Query 本身使用 `queryCacheKey` 來判斷
+- Tags, 定義在 `tagTypes`
+- Providing tags, `providesTags`
+- Invalidating tags, `invalidatesTags`
+
+#### Manual Cache Updates
+
+- 實現 UI first, 先更新本地端, 在等待 mutation 完成後做二次處理
+
+#### Conditional Fetching
+
+- 延遲發送 query
+- 使用 `skip` parameter
+
+#### Error Handling
+
+- 個別處理 error object
+- 集中處理, 使用 redux middleware 捕捉所有的 error
+  - `import { isRejectedWithValue } from '@reduxjs/toolkit'`
+
+#### Pagination
+
+#### Prefetching
+
+- 提早觸發 fetching 在使用者觸發頁面之前
+- 使用 `usePrefetch` hook
+  - 通過 `PrefetchOptions` 客製化
+  - `ifOlderThan`
+  - `force`
+- 自定義 helper function `usePrefetchImmediately`
+- Prefetching without hooks
+  - 使用 Redux dispatch 實現
+
+#### Polling
+
+- 以 `pollingInterval` parameter 設定自動觸發 query
+
+#### Streaming Updates
+
+- 使用 WebSockets 等等 Streaming 方式
+- 以 `onCacheEntryAdded` 實現
+
+#### Code Splitting
+
+- 切割多個 createAPI codes 來控制 bundle size
+- 以 API `injectEndpoints` 來實現串接 API
+
+#### Code Generation
+
+- 提供工具自動生成 RTK API 程式碼
+- 依據 GraphQL schema
+- 依據 OpenAPI schema
+
+#### Server Side Rendering
+
+- 使用 Next.js
+
+#### Persistence and Rehydration
+
+- `extractREhydrationInfo`
+
+#### Customizing createApi
+
+- 目前有兩種版本 `createBaseApi`, `createApi`
+- 建立客製化版本的 createApi function
+- `buildCreateApi`, `coreModule`, `reactHooksModule`
+
+#### Customizing Queries
+
+- 可以使用任何 request library
+- 通過 `baseQuery` 建立客製化的 request
+- 內建 `fetchBaseQuery`, 通過包裹 `fetch` 作為預設工具
+
+#### Usage Without React Hooks
+
+- 不使用 Hooks
+- 使用 Redux dispatch 取代
+
+#### Migrating to RTK Query
+
+- 基礎使用範例
+- https://redux-toolkit.js.org/rtk-query/usage/migrating-to-rtk-query
+
+---
+
+### 第二一章 - Redux Toolkit API Reference
+
+`createApi()`
+
+`fetchBaseQuery()`
+
+`<ApiProvider api={} />`, 只有在不與 Redux 一起使用時, 提供的 context provider
+
+`setupListeners`, 啟用 `refetchOnFocus` 與 `refetchOnReconnect` 需要配合使用的工具
+
+#### Generated API Slices
+
+API Slice overview
+
+Redux Integration
+
+Endpoints
+
+Code Splitting
+
+API Slice Utilities
+
+- 相關的工具
+- `updateQueryData`,
+- `upsertQueryData`,
+- `patchQueryData`,
+- `prefetch`,
+- `selectInvalidatedBy`,
+- `invalidateTags`,
+- `resetApiState`,
+- `getRunningQueryThunk`,
+- `getRunningMutationThunk`,
+
+React Hooks
+
+- 相關 Hooks
+- `useQuery`
+- `useMutation`
+- `useQueryState`
+- `useQuerySubscription`
+- `useLazyQuery`
+- `useLazyQuerySubscription`
+- `usePrefetch`
+
+---
+
+### 第二二章 - Redux Toolkit 舊文件
+
+#### Redux Toolkit Introduction
 
 Purpose
 
@@ -280,7 +841,7 @@ What's Included
 - `createReducer()`, 建立 reducer 不需要使用 switch, 並且使用 `Immer` 處理 immutable updates
 - `createAction()`, 自動建立 action creator
 - `createSlice()`, 快速建立 slice, 需傳入 reducer, slice name, initial state, 自動生成 action 與 action creators
-- `createAsyncThunk`, 快速建立常見的非同步呼叫 thunk, 自動生成 action 
+- `createAsyncThunk`, 快速建立常見的非同步呼叫 thunk, 自動生成 action
 - `createEntityAdapter`, 協助生成 normalized data 並且生成對應的 selectors 與 reducer
 - `createSelector`, 使用 `Reselect` 建立 memorized selector function
 
@@ -298,7 +859,7 @@ Help and Discussion
 
 ---
 
-### 第六章 - Redux Toolkit Basic Tutorial
+#### Redux Toolkit Basic Tutorial
 
 Introduction: Writing a Counter Application
 
@@ -312,13 +873,13 @@ A More Typical Counter Example
 - 純 Redux library 實作
 - 使用 ES6
 - dispatch action 以 dispatch action creator 取代
-- 以 constants 建立 action type 
+- 以 constants 建立 action type
 
 Introducing: `configureStore`
 
 - 使用 `configureStore` 取代 `createStore`, `combineReducers`
 - 並且自動啟用 ReduxDevTool 與使用數個 [middleware](https://redux-toolkit.js.org/api/getDefaultMiddleware)
-- `configureStore()` 
+- `configureStore()`
   - Input: 一個物件, 物件包含各個 slice reducers
   - Output: Redux `store`
 - [範例](https://redux-toolkit.js.org/tutorials/basic-tutorial#introducing-configurestore)
@@ -348,7 +909,7 @@ Introducing: `createReducer`
 Introducing: `createSlice`
 
 - 使用 `createSlice` 取代 `createAction`, `createReducer` 一次建立完成整個 slice
-- `createSlice()` 
+- `createSlice()`
   - Input: 一個 object 包含 name, initialState, reducers
   - Output: 一個 object 含有 `reducer`, `actions` property
 - 通常使用 ES6 destructing syntax 取值成類似
@@ -362,7 +923,7 @@ Summary
 
 ---
 
-### 第七章 - Redux Toolkit Intermediate Tutorial
+#### Redux Toolkit Intermediate Tutorial
 
 - 使用 Redux Toolkit 建立 React Redux Todos example app
 
@@ -457,7 +1018,7 @@ Using the Filters Slice
 
 ---
 
-### 第八章 - Redux Toolkit Advanced Tutorial
+#### Redux Toolkit Advanced Tutorial
 
 - 關於採用 Redux 在一般的 React 專案中
 - 使用 RTK 撰寫 async logic
@@ -469,10 +1030,10 @@ Using the Filters Slice
 - 範例應用程式是 GitHub Issue viewer
 - 使用 React, TypeScript, CSS Modules
 - 使用 feature folder structure
-  - `/api`, 
+  - `/api`,
   - `/app`, React top component
   - `/components`, shared component
-  - `/features`, 
+  - `/features`,
   - `/utils`,
 
 #### Setting up the Redux Store
@@ -490,7 +1051,7 @@ Creating the Root Reducer
 
 Store Setup and HMR
 
-- 在 `app/store.ts/` 配合 `module.hot` HMR 與 `store.replaceReducer` store 自動載入開發時新的 reducer 
+- 在 `app/store.ts/` 配合 `module.hot` HMR 與 `store.replaceReducer` store 自動載入開發時新的 reducer
 
 Rendering the `Provider`
 
@@ -498,7 +1059,7 @@ Rendering the `Provider`
 
 #### Converting the Main App Display
 
-- 分辨哪些值應該被放入 Redux, 哪些應該保留在 local 
+- 分辨哪些值應該被放入 Redux, 哪些應該保留在 local
 
 Creating the Initial State Slices
 
@@ -509,7 +1070,7 @@ Creating the Initial State Slices
 
 #### Converting the Issues List Page
 
-- 原本的 fetch 使用 `React.useEffect` 與資料儲存使用 `React.useState` 
+- 原本的 fetch 使用 `React.useEffect` 與資料儲存使用 `React.useState`
 - 把兩個邏輯試著使用 Redux 抽離出 component 交由 Redux 處理
 
 Review the Issues List Component
@@ -531,7 +1092,7 @@ Thinking in Thunks
 Logic for Fetching Github Repo Details
 
 - Adding a Reusable Thunk Function Type
-  - `import { ThunkAction } from 'redux-thunk'` 使用 `redux-thunk` 提供的 Type 
+  - `import { ThunkAction } from 'redux-thunk'` 使用 `redux-thunk` 提供的 Type
 - Adding the Repo Details Slice
   - 建立新的 slice 處理 details 頁 `features/repoSearch/repoDetailsSlice.ts`
 - Async Error Handling Logic in Thunks
@@ -579,7 +1140,7 @@ Fetching the Issue Comments
 
 ---
 
-### 第九章 - Redux Toolkit Usage Guide
+#### Redux Toolkit Usage Guide
 
 #### Store Setup
 
@@ -610,7 +1171,7 @@ Simplifying Store Setup with `configureStore`
 常見流程
 
 - 依據 action `type` 去區分更新的機制, 最常見的實現方式是 `switch`, 再來是使用 object 實現 lookup table
-- 藉由複製 state 實現 immutable update 
+- 藉由複製 state 實現 immutable update
 
 Simplifying Reducers with `createReducer`
 
@@ -624,7 +1185,7 @@ Defining Functions in Objects
   - `"Key": () => {}`, 明確的字串 key 與 arrow function
   - `Key: function () {}`, 隱性 key 與 function 實字
   - `Key () {}`, 命名函式, 名稱即為 key
-  - `[Key]: () => {}`, 可計算的 key 
+  - `[Key]: () => {}`, 可計算的 key
 
 Considerations for Using `createReducer`
 
@@ -634,7 +1195,7 @@ Considerations for Using `createReducer`
 #### Writing Action Creators
 
 - Redux 十分推薦使用 action creator 取代手動撰寫 action
-- 依循 Flux Standard Action, Action 函有 `type`, `payload` 
+- 依循 Flux Standard Action, Action 函有 `type`, `payload`
 
 Defining Action Creators with `createAction`
 
@@ -674,7 +1235,7 @@ Using Middleware to Enable Async Logic
 - 常見的解決方案 middlewares
   - `redux-thunk`, 直接實作 thunk function 傳入 dispatch, 由 `redux-thunk` 控制執行時機
   - `redux-saga`, 使用 generator
-  - `redux-observable`, 使用 RxJS observable 
+  - `redux-observable`, 使用 RxJS observable
 - RTK 推薦使用 `redux-thunk` 作為標準作法, 可以配合 `async/await` 語法取得更好的閱讀性
 - RTK 的 `configureStore()` 預設已經載入 `redux-thunk` middleware, 可以直接使用
 
@@ -686,7 +1247,7 @@ Defining Async Logic in Slices
 Redux Data Fetching Patterns
 
 - 由於使用非同步 fetching 的邏輯有固定的模式, [範例](https://redux-toolkit.js.org/usage/usage-guide#redux-data-fetching-patterns)
-- 因此 RTK `createAsyncThunk` 提供快速建置這個 fetching pattern 
+- 因此 RTK `createAsyncThunk` 提供快速建置這個 fetching pattern
 
 Async Requests with `createAsyncThunk`
 
@@ -719,11 +1280,11 @@ Using `createEntityAdapter` with Normalization Libraries
 
 Using selectors with `createEntityAdapter`
 
-- `createEntityAdapter` 會自動生成幾個常用的 selector functions, 
-  - `selectById`, 
-  - `selectIds`, 
-  - `selectEntities`, 
-  - `selectAll`, 
+- `createEntityAdapter` 會自動生成幾個常用的 selector functions,
+  - `selectById`,
+  - `selectIds`,
+  - `selectEntities`,
+  - `selectAll`,
   - `selectTotal`,
 - 可以直接配合 React-Redux 的 `useSelector` 從 Redux store 中取值
 - [範例](https://redux-toolkit.js.org/usage/usage-guide#using-selectors-with-createentityadapter)
@@ -752,21 +1313,26 @@ Use with Redux-Persist
 
 Use with React-Redux-Firebase
 
-- 使用 React-Redux-Firebase (RRF) 
+- 使用 React-Redux-Firebase (RRF)
 - [範例](https://redux-toolkit.js.org/usage/usage-guide#use-with-react-redux-firebase)
 
 ---
 
-### 第十章 - Redux Toolkit Usage With TypeScript
+#### Redux Toolkit Usage With TypeScript
 
 - Redux Toolkit 是使用 TypeScript 實作的, 因此 RTK API 很容易與 TypeScript 應用程式合作
 - 提供同時使用 Redux Toolkit 與 TypeScript 時的範例
 
 #### Using `configureStore` with TypeScript
+
 #### `createAction`
+
 #### `createReducer`
+
 #### `createSlice`
+
 #### `createAsyncThunk`
+
 #### `createEntityAdapter`
 
 ---
