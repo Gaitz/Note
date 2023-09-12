@@ -150,6 +150,45 @@ Fetching branches from other repositories
 
 ### 第三章 - Exploring Git History
 
+- Git 儲存歷史紀錄, 藉由儲存壓縮過的 snapshots,
+  - commit 表達每個 snapshots 之間的關係
+
+How to use bisect to find a regression
+
+- 使用 `git bisect` 暴力二元 s 搜尋 commit, debug 尋找出錯的 commit
+  - `git bisect` 會建立在 detached commit 上, 而不是新建一個 branch
+  - `git bisect start`, `git bisect good`, `git bisect bad`, `git bisect reset`
+
+Naming commits
+
+- 40-hexdigit object name
+- branch name
+- tag name
+- **HEAD**
+- `^`, `~` 指向往回的 commit
+- `git fetch` 的 **FETCH_HEAD**
+- `git rev-parse` 底層工具, 可以用來協助轉譯以上任何型別的 commit 名稱到他的 object name
+
+Creating tags
+
+- 使用 tag 標記任何的 commit 並且命名和留下訊息
+- `git tag <tagname> [commit]`
+
+Browsing revisions
+
+- `git log` 印出 commits 清單
+  - 可以以參數的形式指定搜尋的區間, 時間, 特定的檔案, 資料夾, 字串
+  - `git log -p` 顯示出 commit 差異
+
+Generating diffs
+
+- 使用 `git diff` 生成不同版本的差異
+- 使用 `git format-patch` 生成版本差異的檔案
+
+Viewing old file versions
+
+- Ex. `git show v2.5:fs/locks.c` 查看特定版本的特定檔案
+
 ---
 
 ### 第四章 - Developing with Git
