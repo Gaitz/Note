@@ -189,9 +189,87 @@ Viewing old file versions
 
 - Ex. `git show v2.5:fs/locks.c` 查看特定版本的特定檔案
 
+Examples:
+
+- 計算一個 branch 上的 commit 數量
+  - `git log --pretty=oneline origin..mybranch | wc -l`
+  - `git rev-list origin..mybranch | wc -l`
+- 檢查兩個 branch 是否是一樣的內容
+  - `git diff origin..master`, 比較檔案內容
+  - `git rev-list origin`, `git rev-list master`, 比較 commit hash
+  - `git log origin...master`
+- 尋找包含特定 commit 的第一個 tag
+  - `gitk`, `git name-rev --tags`, `git describe`, `git merge-base`
+- 尋找只存在單一 branch 上的 commits
+  - `git show-ref --heads`
+  - ...
+- 建立 release 的 changelog
+  - `git archive`
+- 尋找包含指定檔案和內容的 commit
+  - `git log`, `git diff tree`, `git hash object`
+
 ---
 
 ### 第四章 - Developing with Git
+
+Telling Git your name
+
+- `git config`
+  - `git config --global user.name`, `git config --global user.email`
+- config 被存放在 `.gitconfig` 中
+
+Creating a new repository
+
+- 建立資料夾並且在資料夾目錄下, `git init`
+
+How to make a commit
+
+- 三個步驟,
+  - 在 working directory 下進行一些改變
+  - 告知 Git 你做的改變
+  - 依據 2, 建立一個 commit 包含這些改變
+- `git diff --cached`, 可以查看目前 git 追蹤到與 HEAD 的差異
+- `git add`, 讓修改的內容被 git index
+- `git rm`, 從 git index 中移除
+- `git diff`, 取得 working tree 與 index file 的差異
+- `git commit`, 進行 commit
+- `git show`, 查看當前 commit 狀態, 可以檢查是否符合預期
+- `git commit -a`, 自動 index (`git add`) 同時 `commit`
+
+Creating good commit messages
+
+- 撰寫良好的 commit message, 第一行用小於 50 字元的內容作為 title (summary), 空白一行後的內容作為 description
+
+Ignoring files
+
+- 在 `.gitignore` 檔案中增加不想被 git 所記錄的檔案路徑或檔案名稱
+
+How to merge
+
+- `git merge [branch name]`, 把指定的分支合併到當前分支
+- 必須要在當前分支沒有任何尚未 commit 的改變時才能進行
+  - 因此必須先 `git commit` 現有的變動或者 `git stash` 把變動儲存在暫存空間
+- git 首先會自動合併改變, 如果遇到修改 conflicts 則會告知需要手動處理這些差異
+
+Resolving a merge
+
+- 遇到 conflicts 時
+- `git commit` 可以查看需要解決 conflicts 的檔案
+- `git status` 可以查看 conflicts
+- 當手動解決完 conflicts 後, 需要依照之前的流程 `git add`, `git commit` 把這次修改變成一個 commit
+- 可以使用 `git diff` 與 `git show` 查看差異之處協助你解決 conflicts
+  - `git show :1:`, `git show :2:`, `git show :3:`
+  - `git diff -1`, `git diff --base`, `git diff -2`, `git diff --ours`, `git diff -3`, `git diff --theirs`
+- `git log --merge`, `gitk --merge`, `git mergetool` 協助你進行修改 conflicts
+
+Undoing a merge
+
+- 放棄解決這次的 merge conflicts
+- `git merge --abort`
+
+Fast-forward merges
+
+-
 
 ---
 
