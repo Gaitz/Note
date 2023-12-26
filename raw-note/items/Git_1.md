@@ -269,19 +269,139 @@ Undoing a merge
 
 Fast-forward merges
 
--
+- 如果是直接的父代與子代的關係, 則會使用 **fast-forward** 以移動 HEAD 的 ref 取代建立一個新的 merge commit.
+- 讓結果更直觀簡潔
+
+Fixing mistakes
+
+- `git restore --staged --worktree :/`
+- 以新 commit 來修復錯誤
+  - `git revert HEAD`, 以新 commit 的方式取消前一次 commit 的改變
+- 以修改歷史的方式修復錯誤
+  - `git reset`
+  - `git commit --amend`
+- 查看舊版的檔案內容
+  - `git restore --source=HEAD^ path/to/file`, 調整 working directory 到舊檔案
+  - `git show HEAD^:path/to/file`, 僅僅查看舊檔案
+- 暫存現在進行中的內容
+  - `git stash push -m "message"`, 暫存
+  - `git stash pop`, 取出暫存
+
+Ensuring good performance
+
+- 多數指令會自動進行 `git gc`, 但是也可以明確的主動使用
+
+Ensuring reliability
+
+- `git fsck` 以 git object 為單位進行檢查和取得
+  - `dangling` 檔案會在 `gc` 後移除
+- 回復遺失的改變內容
+  - `git reflog` 取得 git 暫存的操作歷史紀錄, `reflog` 儲存的操作記錄只存在於 local 端並不會被同步
+  - 在 `reflog` 紀錄也不存在的時候, 並且在還沒 `gc` 之前, 仍然可以通過 `git fsck` 找回舊的檔案歷史
 
 ---
 
 ### 第五章 - Sharing development with others
 
+Getting updates with git pull
+
+- 使用 `git pull` 取代 `git fetch` + `git merge` 來更新到 remote 的最新版
+  - `git pull` 也可以指定合併特定的 remote branch, `git pull . branch`, `.` 代表 remote
+
+Submitting patches to a project
+
+- `git format-patch` 製作更新檔, 可以使用 email 交換更新檔給其他用戶
+
+Importing patches to a project
+
+- `git am`, (am, apply mailbox), 使用更新檔
+  - 更新時也有可能會遇到 conflict, 如同 merge 一樣進行 conflict 處理
+
+Public Git repositories
+
+- 存在一個對應的 public git repository, 供其他開發者使用 (git pull)
+- Setting up a public repository
+  - 建立一個 public 版本的 clone, `git clone --bare`
+- Exporting a Git repository via the Git protocol (推薦的)
+  - 使用 Git 協定進行檔案傳輸, `git://`
+  - 使用 `git daemon` 建立 public git server
+- Exporting a git repository via HTTP
+  - 直接使用 HTTP server 作為接口取得對應資料夾
+  - 使用 `git --bare update-server-info` 建立更多資訊
+  - 其他使用者可以通過 `git clone` 指定的 http 位置
+  - 更詳細的設定方式可以參考 [setup-git-server-over-http](https://github.com/git/git/blob/master/Documentation/howto/setup-git-server-over-http.txt)
+- Pushing changes to a public repository
+  - 通過 ssh 直接 `git push` 到 public repository
+  - `git config`, `receive.denyCurrentBranch` option
+- What to do when a push fails
+  - 在 `git push` 無法 fast-forward 時, 會需要處理
+  - 或者使用 force push `git push -f` 會直接修改掉線上版本 (修改歷史)
+  - 最好在每次進行 `git push` 前先更新到最新版
+- Setting up a shared repository
+  - 使用 `gitcvs-migration`, `git cvsimport *`
+  - 中央管理式的管理, 但是不是推薦的方案
+- Allowing web browsing of a repository
+  - 啟用 web 瀏覽 git repository 的功能
+  - 使用 `git instaweb` 和參考 `gitweb`
+- How to get a Git repository with minimal history
+  - shallow clone 使用 `git clone --depth` 指定 clone 的範圍
+  - 取代取得所有的歷史紀錄
+  - 可在之後使用 `--unshallow` 再次取得完整的歷史紀錄
+
+Examples
+
+- Maintaining topic branches for a linux subsystem maintainer
+  - 範例, 使用 Git 來維護 IA64 架構的 linux kernel
+  - Tips:
+  - 在 git config 中設定 remote 一次 push 多個目標 branch
+  - 利用 `git log` 和 `git shortlog` 來檢視 branch 間的差異
+  - `git request-pull`
+
 ---
 
 ### 第六章 - Rewriting history and maintaining patch series
 
+- Git 預設 commit 被建立後是不會被移除或取代的, 預設不會修改歷史
+- 但是仍有一些使用案例, 建立在修改歷史上
+
+Creating the perfect patch series
+
+- 建立有意義的 commit 序列
+  - 每個 commit 保持一定的順序
+  - 每個 commit 只包含單一概念的改變, 並且具有說明性的 commit message
+  - 所有的 commit 都應該是可以 build 過並且運行過測試的
+- Keeping a patch series up to date using git rebase
+  - 利用 `rebase` 調整 commit 建立有意義的序列
+  - 在 upstream 有新更新時, 避免 merge commit 產生可以先使用 `rebase` 修改歷史建立線性的 commit
+- Rewriting a single commit
+  - `git commit --amend` 調整最後一筆 commit
+  - 如果需要調整更多筆 commit 應該使用 `rebase -i` 互動模式去調整
+- Reordering or selecting from a patch series
+  - 調整多筆 commit 的順序
+  - 使用 `git format-patch` 和 `git am *.patch`
+- Using interactive rebases
+  - 使用 rebase 互動模式調整多筆 commits, `rebase -i`
+
+Problems with rewriting history
+
+- 對於修改歷史, 最麻煩的問題在於其他使用者已經使用了舊的 commits, 對於 git 來說會產生多份內容, 而不是以新的取代所有舊的內容
+- 因此最好的辦法是不要修改可能會被其他人使用到的 commits, 僅僅修改自己還在進行中的 commits
+- 已經公開的 commits 應該不再被更改
+
+Why bisecting merge commits can be harder than bisecting linear history
+
+- 每次利用 merge 產生時, git 都會分別記憶分支, 但是在使用 `git bisect` 搜尋時, 每次的 merge 分支都必須個別處理, 沒辦法一次性地搜索
+- 因此, 應該盡可能地讓 git history 是線性的, 善用 `rebase` 取代 `merge`
+
 ---
 
 ### 第七章 - Advanced branch management
+
+Fetching individual branches
+
+- 只 fetch 單一 branch 並且在 local rename
+- `git fetch origin todo:my-todo-work`, fetch from origin
+- `git fetch git://example.com/proj.git master:example-master`, fetch from git protocal
 
 ---
 
