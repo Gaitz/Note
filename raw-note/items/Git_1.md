@@ -403,9 +403,38 @@ Fetching individual branches
 - `git fetch origin todo:my-todo-work`, fetch from origin
 - `git fetch git://example.com/proj.git master:example-master`, fetch from git protocal
 
+git fetch and fast-forwards
+
+Forcing git fetch to do non-fast-forward updates
+
+- 強制清除 conflict commit 直接更新最新版
+- `git fetch -f origin`
+- 要小心這種方式會讓一些 commit 直接消失
+
+Configuring remote-tracking branches
+
+- `git config -l` 查看所有設定檔案
+- 使用 `git remote add` 註冊其他 remote 的位置並且命名
+
 ---
 
 ### 第八章 - Git concepts
+
+The Object Database
+
+- 所有的 commit 都會以 40-digit 作為 object name 儲存
+- 這些名稱是由 SHA-1 hash 而來的
+- 通過 hash 的方式對於 git 有很多好處
+  - 可以快速地比較兩個 object
+  - 由於使用相同的 hash 演算法, 因此在任何地方相同的內容可以取得相同的名稱
+  - 也因此 git 可以偵測檔案內容是否錯誤
+- Git 有四種不同類型的 object
+  - `blob`, 儲存檔案資料
+  - `tree`, 包含多個 blob 形成檔案資料架構
+  - `commit`
+  - `tag`
+
+The index
 
 ---
 
