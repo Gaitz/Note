@@ -431,10 +431,59 @@ The Object Database
 - Git 有四種不同類型的 object
   - `blob`, 儲存檔案資料
   - `tree`, 包含多個 blob 形成檔案資料架構
-  - `commit`
-  - `tag`
+  - `commit`, 以 directed acyclic graph 儲存, 檔案修改的歷史順序, 每個 commit 會包含指向 parent 的資訊
+  - `tag`, 象徵性的指向其他的 object 作為命名的捷徑
+- Commit object
+  - 連結到檔案結構形成的樹狀結構實際的節點上, 描述那些節點是從何而來
+  - 使用 `--pretty=raw` 在 `git log` 或 `git show` 指令上可以查看 commit 詳細的訊息
+  - 包含以下資訊
+  - `tree`, 該 tree object 的 SHA-1
+  - `parents`, 該父層 commit 的 SHA-1
+  - `author`, 造成檔案改變的人
+  - `committer`, 實際進行 commit 的人
+  - `comment`, 註解描述
+  - commit object 本身不儲存檔案的改變
+- Tree object
+  - 使用 `git show` 或 `git ls-tree` 可以查看 tree object 的細節訊息
+  - 儲存檔案相關的 SHA-1 names
+- Blob Objects
+  - 使用 `git show` 查看 blob object 的細節
+  - 單純的檔案 binary
+  - 檔案的 renaming 並不會影響 blob object
+- Trust
+  - 可以安心地對待其他來源的 blob object 因為 SHA-1 保證了資料的正確性
+- Tag object
+  - 可以使用 `git cat-file tag` 查看 tag 細節
+  - 包含一個 object, 註明 object type, tag 名稱, tagger, 有時候會包含一個 signature
+  - 可以使用 `git tag` 建立 tag object, 並且 `git tag` 也可以建立單純只是 reference 而沒有 tag object 的輕量化 tag
+- How Git stores objects efficiently: pack files
+  - `git count-objects` 取得整個專案裡的 loose objects (未打包的) 數量和大小
+  - 可以通過 git pack 來壓縮檔案大小
+  - 通常來說 git gc 會自動進行清除 loose objects 的工作
+  - 也可以手動通過 `git repack` + `git prune` 進行
+- Dangling objects
+  - `git fsck` 查看, git 處理中的檔案, ( 候選清除但尚未清除的 )
+  - 像是進行 `git rebase` 後的舊的節點們, 或 `git add` 並且修改過的過期檔案
+  - 換句話說, dangling objects 在 git gc 之前仍然是可以找回來的檔案內容
+  - `gitk <dangling-commit-sha-goes-here> --not --all`
+  - `git branch recovered-branch <dangling-commit-sha-goes-here>`
+  - `git show <dangling-blob/tree-sha-goes-here>`
+  - 當你確定 dangling objects 不會在被使用, 可以通過手動觸發 `git prune` 進行清除
+- Recovering from repository corruption
+  - 儘管 git 本身不容易出錯, 但是檔案系統仍然可能因為 OS 層或 hardward 層的錯誤而毀損
+  - 最好的保護還是備份
+  - 範例示範, 修復遺失 blob object 的情形
+  - 使用 `git fsck --full --no-dangling` 掃描調查遺失或錯誤的 blob object
+  - 如果有其他的備份, 可以直接把遺失的 blob 放到對應的 git folder 底下即可
+  - 如果無法可以通過, `git ls-tree`, 查詢遺失的檔案名稱
+  - 如果可以找到遺失的檔案, 可以利用 `git hash-object -w somedirectory/myfile` 去建立 blob object 並且檢視是否是我們需要的
+  - 如果不是正確的版本, 導致生成出來的 SHA-1 與遺失的 blob object 不合時, 使用 `git log --raw --all --full-history -- somedirectory/myfile` 去察看檔案版本紀錄, 嘗試修復
 
 The index
+
+- Index 是單純的 binary file, 通常存放在 `.git/index` 目錄下
+- 內容是一個依據檔案路應排序過後的 blob objects SHA-1 names
+- 可以通過 `git ls-files --stage` 查看 index 細節
 
 ---
 
