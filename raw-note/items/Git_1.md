@@ -484,22 +484,223 @@ The index
 - Index 是單純的 binary file, 通常存放在 `.git/index` 目錄下
 - 內容是一個依據檔案路應排序過後的 blob objects SHA-1 names
 - 可以通過 `git ls-files --stage` 查看 index 細節
+- Index 包含所有建立一個 tree object 所需的資訊
+  - 在 `git commit` 的時候就是通過使用 index 的資訊, 建立當前的 tree object 儲存在 git object database 裡
+- Index 包含一些資訊可以用來快速比較 working tree 跟現存的 tree object 之間是否有改變
+- Index 資訊也用來偵測 merge conflict 的位置
+- 簡單來說 index 就是當前暫存的狀態, 並且這些狀態能夠建立一個當前暫存的 tree object 來給 git 進行工作
 
 ---
 
 ### 第九章 - Submodules
 
+- Git submodules 可以讓一個 git 專案下有其他獨立的 subdirectory, 換句話說, 可以讓外部的 git 專案帶著完整的 git history 整合進來
+- `git submodule` 是在 Git 1.5.3 以後推出的
+- 在 supermodule 上可以使用 `git submodule add <repo> <path>` 去加入 submodules
+- 通過 `git submodule status` 查看狀態
+- `git submodule init`
+- `git submodule update`
+- `git submodule update` 跟 `git submodule add` 的差別在於 `git submodule update` 可以查看特殊的 commit 時間點並且建立 detached branch, 來工作
+  - 在 submodule 下更改內容需要從 detached branch 建立一個 branch 來儲存改變
+  - 並且使用 git commit 和 git push 實現更新 submodule
+  - git supermodule 則是通過 `git pull` 和 `git submodule update` 進行更新
+
+Pitfalls with submodules
+
+- submodule 必須優先於 supermodule 更新, 並且必須要 `git push` 進行發布, 如果沒有發佈的話, supermodule 在更新時會報錯
+- Git 1.7.0 之後在 supermodule 中使用 `git status` 和 `git diff` 都會有 submodules 的狀態, 來提示應該先在 submodule 進行 commit 和更新
+- 如果在 submodule 進行改並且 commit 並且沒有在 submodule 進行生成新的 branch 時, 在 supermodule 中使用 `git submodule update` 的話, 這些在 submodule 下新 commit 變動會遺失. **必須小心**, 這些遺失的改變仍然可以在 submodule 下使用 reflog 找回
+- 如果在 submodule 下變動並且尚未 commit 時, 在 supermodule 下 `git submodule update` 時, 如同平常一樣會提供錯誤訊息, 提示有變動尚未 commit
+
 ---
 
 ### 第十章 - Low-level Git operations
+
+- 大多數的 git 高階指令都是 low level git operations 的打包 script
+
+Object access and manipulation
+
+- `git cat-file`, 可以查看 git 任何型別的 object 的資訊
+- `git show`, 則是看高抽象層的東西
+- `git commit-tree`, 可以手動建立 commit object 在任何指定的 parent 和 trees 上
+- `git write-tree`, 可以手動建立 tree object
+- `git ls-tree`, 可以查看 tree object 的內容
+- `git diff-tree`, 比較兩個 tree object 的內容
+- `git mktag`, 手動建立 tag object
+- `git verify-tag`, 檢查 tag object 的簽名
+- `git tag`, 提供高階的通用指令, 來處理 tag 相關的工作, 包含建立, 刪除, 驗證
+
+The Workflow
+
+- 高階的 `git commit` 與 `git restore` 處理資料在 working tree, the index, 和 object database 之間的轉換
+- 細部的工作皆有專用的指令可以執行
+- working directory 到 index
+  - 這個行為的高階指令是 `git add`, 也是高階的封裝 `git update-index` 指令
+  - `git update-index`, 以 working directory 的資訊更新到 index
+  - 該指令預設不處理 new files 和 removed files, 換句話說他只處理更新現有的 cache, 要處理額外的資訊需要主動提供 `--add` 或 `--remove`
+- index 到 object database
+  - `git write-tree`, 把 index 資訊建立成 tree object
+- object database 到 index
+  - `git read-tree <SHA-1 of tree>`, 讀取 tree object 建立成 index 並且取代當前的 index
+- index 到 working directory
+  - 通常會直接改變 index 上面的檔案, 而不需要刻意的把 index 切換到 working directory
+  - `git checkout-index filename` 用來把 index 特定的檔案切換到 working directory, 或者使用 `-a` option 切換全部
+
+Examining the data
+
+- 查看 objects 資料
+- `git cat-file -t <objectname>`
+- `git cat-file blob|tree|commit|tag <objectname>`
+- `git ls-tree`
+- `git cat-file commit HEAD`
+
+Merging multiple trees
+
+- 常見的 Merge 是整合 2 個 tree objects 並且建立一個 commit 去達成 (two parents)
+- 然而, git 也允許實現更多個 tree objects (branches) 的 merge
+- `git merge-base <commit1> <commit2>`, 去尋找兩個 commit 最近的 shared parent, 作為之後的 merge base
+  - 查看該 commit 的資訊 `git cat-file commit <commitname> | head -1`
+- 執行 3 個 tree objects 的 merge 並且建立在 index 上, `git read-tree -m -u <origtree> <yourtree> <targettree>`
+  - 配合 `git write-tree`, 把 merge 後的 index 建立成新的 tree object 儲存起來
+- 當 merge 的 tree objects 出現 merge clashes 該處理時
+  - `git ls-files --unmerged` 查看是哪些檔案需要處理
+  - 查詢到檔案後需要手動進行處理, 使用 `git cat-file blob` 建立各個檔案的 blob objects
+  - 使用像是 `diff3` 或 `merge` commands, `git merge-file`
+  - 執行 `git update-index` 更新到 index 確認 resolved
+  - 通常不會使用 `git cat-file blob` 處理這樣的問題
+  - 而是使用 `git merge-index` 達成整合三個版本的檔案成單一個
 
 ---
 
 ### 第十一章 - Hacking Git
 
+- Git 開發者需要知道的 Git 實作細節
+
+Object storage format
+
+- git object types, `blob`, `tree`, `commit`, `tag`
+- 所有的 object 都使用 zlib, 進行檔案壓縮, 並且擁有 header 提供 type 和 size 資訊
+- object name 則是 SHA-1 該 object 的內容
+- 除了驗證 SHA-1 之外, 也可以使用 `git fsck` 去檢驗 object 在 database 的情況
+
+A birds-eye view of Git’s source code
+
+- 從 initial commit 來學習 `git switch --detach e83c5163`
+  - 常用的名稱在這個版本後改變
+  - changeset -> commit
+  - cache -> index
+- step 1. 先查看 `read-cache-ll.h`, `object.h`, `commit.h`
+  - 關於 index, object, commit
+- step 2. 查看 `sha1_name.c`, 關於 object name
+- 學習 `git log`, 來理解 the revision walker, `git rev-list`
+  - 初始版本的 git log, 只是一個 script, `git-rev-list --pretty $(git-rev-parse --default HEAD "$@") | \LESS=-S ${PAGER:-less}`
+  - 後來使用 buildin 版本的 `git log`, 實作在 `builtin/log.c`
+- step 3. 在理解 git 基本概念後, 應該就是研讀程式碼
+  - 可以來自一些自己感興趣的問題來追蹤程式碼, 像是我如何僅僅透過 object name 來查詢 blob object 的內容
+  - 起點可能是 `git show` 或 `git cat-file` command
+- Tips: 通過 `git log` 作為工具來搜尋 git source code 來查詢想看的內容
+
 ---
 
 ### 第十二章 - Git Glossary
+
+名詞解釋
+
+- alternate object database
+- bare repository
+- blob object
+- branch
+- cache
+- chain
+- changeset
+- checkout
+- cherry-picking
+- clean
+- commit
+- commit graph concept, representations and usage
+- commit-graph file
+- commit object
+- commit-ish (also committish)
+- core Git
+- DAG
+- dangling object
+- dereference
+- detached HEAD
+- directory
+- dirty
+- evil merge
+- fast-forward
+- fetch
+- file system
+- Git archive
+- gitfile
+- grafts
+- hash
+- head
+- HEAD
+- head ref
+- hook
+- index
+- index entry
+- master
+- merge
+- object
+- object database
+- object identifier (oid)
+- object name
+- object type
+- octopus
+- origin
+- overlay
+- pack
+- pack index
+- pathspec
+- top
+- literal
+- icase
+- glob
+- attr
+- exclude
+- parent
+- peel
+- pickaxe
+- plumbing
+- porcelain
+- per-worktree ref
+- pseudoref
+- pull
+- push
+- reachable
+- reachability bitmaps
+- rebase
+- ref
+- reflog
+- refspec
+- remote repository
+- remote-tracking branch
+- repository
+- resolve
+- revision
+- rewind
+- SCM
+- SHA-1
+- shallow clone
+- shallow repository
+- stash entry
+- submodule
+- superproject
+- symref
+- tag
+- tag object
+- topic branch
+- tree
+- tree object
+- tree-ish (also treeish)
+- unmerged index
+- unreachable object
+- upstream branch
+- working tree
+- worktree
 
 ---
 
