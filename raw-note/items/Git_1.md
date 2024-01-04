@@ -1,6 +1,6 @@
-## Git official documentation
+## Git official documentation, user manual
 
-### [User manual](https://git-scm.com/docs/user-manual), [Git documentation](https://git-scm.com/doc), ComputerScience/Git
+### [User manual](https://git-scm.com/docs/user-manual)
 
 ---
 
@@ -31,36 +31,6 @@ User Manual
 第十二章 - Git Glossary
 
 第十三章 - Git Quick Reference
-
-Reference
-
-第十四章 - Setup and Config
-
-第十五章 - Getting and Creating Projects
-
-第十六章 - Basic Snapshotting
-
-第十七章 - Branching and Merging
-
-第十八章 - Sharing and Updating Projects
-
-第十九章 - Inspection and Comparison
-
-第二十章 - Patching
-
-第二一章 - Debugging
-
-第二二章 - Guides
-
-第二三章 - Email
-
-第二四章 - External Systems
-
-第二五章 - Administration
-
-第二六章 - Server Admin
-
-第二七章 - Plumbing Commands
 
 ---
 
@@ -705,63 +675,3 @@ A birds-eye view of Git’s source code
 ---
 
 ### 第十三章 - Git Quick Reference
-
----
-
-Reference
-
----
-
-### 第十四章 - Setup and Config
-
----
-
-### 第十五章 - Getting and Creating Projects
-
----
-
-### 第十六章 - Basic Snapshotting
-
----
-
-### 第十七章 - Branching and Merging
-
----
-
-### 第十八章 - Sharing and Updating Projects
-
----
-
-### 第十九章 - Inspection and Comparison
-
----
-
-### 第二十章 - Patching
-
----
-
-### 第二一章 - Debugging
-
----
-
-### 第二二章 - Guides
-
----
-
-### 第二三章 - Email
-
----
-
-### 第二四章 - External Systems
-
----
-
-### 第二五章 - Administration
-
----
-
-### 第二六章 - Server Admin
-
----
-
-### 第二七章 - Plumbing Commands
