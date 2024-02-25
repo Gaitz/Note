@@ -309,7 +309,7 @@ Relational Database Management System, RDBMS
 - 別名 `AS`
   - 查詢結果以 `AS` 命名別名, 方便之後使用
 
-Join
+Inner Join 內部聯結
 
 - 第一種 Join, **no join**, `CROSS JOIN`, Cartesian Join, Comma Join
   - 單純兩個 table 的內容相乘組合成的 table
@@ -342,13 +342,142 @@ Join
 
 ### 第十章 - 外部聯結、自我聯結與聯集
 
+Outer Join 外部聯結
+
+- 與聯結的 table 順序有關
+- Outer Join 一定會提供所有的主體資料列, 無論是否有在另外一個 Table 找到對應的資料, 因此會允許出現 `Null` 資料的情況
+
+Left Outer Join 左外部聯結
+
+- `LEFT OUTER JOIN`
+- 以左側資料表作為主體去比對右側資料表
+  - 不管如何都會呈現完整的左側資料表項目, 當右側資料表沒有對應值時, 會填上 `Null`
+
+外部聯結與複數相符結果
+
+- 有多個結果相符合時, 會全部呈現
+
+Right Outer Join 右外部聯結
+
+- `RIGHT OUTER JOIN`
+- 等同於 Left Outer Join 只是搜尋的主體改成右側資料表
+
+Self Join 自我聯結
+
+- 使用同一個資料表來做 Join
+  - 即 Join 敘述的左側資料表與右側資料表相同
+- 自我參照外鍵 Self-referencing Foreign Key
+  - 這個 Foreign Key 欄位的值是同一個 table 裡的 Primary Key
+  - 通常用來表達同一個 table 裡各個 row 之間有關聯
+
+Union 聯集
+
+- `UNION` 把多個 `SELECT` 的結果組合後一起輸出
+  - 前提是, 這些 `SELECT` 分別的回傳結果需要相同數量,
+  - 預設會自動清除相同的結果 (Set)
+- `UNION ALL`, 不會自動清除相同的結果
+- 把 UNION query 的結果存成一個新的資料表, 方便後續使用
+  - `CREATE TABLE ... AS ...`
+
+Intersect 交集
+
+- `INTERSECT`
+- 不是每個 SQL 都支援
+
+Except 差集
+
+- `EXCEPT`
+- 不是每個 SQL 都支援
+
+子查詢與聯集的比較, Subquery vs. Join
+
+- **聯集執行速度比子查詢快**
+- 子查詢, 可以使用 Function, (`AVG`, `MAX`, ...) 因此提供更實用的結果
+- 使用與否, 主要取決於可閱讀性和是否需要子查詢才能提供的功能
+
 ---
 
 ### 第十一章 - 限制條件、視觀表、交易
 
+限制條件 constraint
+
+- `CHECK`,
+  - 在建立 table 時, 加上限制, 讓未來進行操作時能自動檢查, 避免預期以外的資料
+  - 與 `Where` 使用相同的條件式語法, 但是無法使用子查詢
+- 後續修改加上限制條件
+  - `ALTER TABLE ... ADD CONSTRAINT CHECK ...`
+
+視觀表 view
+
+- 把常使用的 query 建立成 View
+- `CREATE VIEW ... AS ...`
+- view 只是一個虛擬資料表 (virtual table)
+  - 不會實際保存在資料庫裡, 只有語法被保存
+- 好處
+  - 把複雜的查詢簡化成一個指令
+  - 作為對資料庫外部的介面 (interface) 使用
+  - 隱藏機密內容, 只暴露所需要的內容
+- 對 View 進行 `INSERT`, `UPDATE`, `DELETE` 是允許的, (updatable views)
+  - 在建立 View 時的指令上必須加上 `WITH CHECK OPTION` 才會檢查建立該 view 時的條件 (`WHERE`)
+  - 否則, 不會建立限制
+  - **沒有特殊的原因需要對 view 進行 `INSERT`, `UPDATE`, `DELETE`**
+- `DROP VIEW` 清除
+
+當資料庫的使用者不只一個人時, 以下技術有助於維護控制權
+
+- 使用 `CHECK` constraint
+- `VIEW`
+
+交易 Transaction
+
+- 資料庫是個 multiple thread 軟體
+- 把多個動作打包成一個 transaction
+  - 只有完全成功或者失敗, 兩種選項
+  - 失敗的話會自動 Rollback
+- ACID
+  - A, Atomicity, 單元性
+    - 每個步驟都必須完成, 否則即失敗, 沒有部分完成的階段
+  - C, Consistency, 一致性
+    - 整個資料庫維持一致的限制, 不會破壞限制
+  - I, Isolation, 獨立性
+    - 多個 transaction 不會互相影響 (同時修改)
+  - D, Durability, 耐久性
+    - 寫入永久儲存記憶體中
+- `START TRANSACTION;`, 開始一個 transaction
+- `COMMIT;`, 確認可以實現了
+- `ROLLBACK;`, 放棄並且進行 rollback
+- 儲存引擎 storage engine
+  - 資料庫的底層實作類型
+- 資料庫會為 transaction 建立 transaction log
+  - 因此, transaction 應該只在必須使用的情況下才使用
+
 ---
 
 ### 第十二章 - 安全性
+
+- 依據使用者控制權限
+- 使用者帳號 (user account)
+- 預設的第一位使用者 **root**
+  - **一定要為 root user 建立密碼**
+- 新增使用者
+  - `CREATE USER ... IDENTIFIED BY ...`
+  - 不同 SQL 語法不同
+- 新增權限設定 (permission)
+  - `GRANT ... TO ...`
+  - `WITH GRANT OPTION`, 與許給予其他使用者權限的權限
+- 撤銷權限
+  - `REVOKE ... FROM ...`
+  - `REVOKE GRANT OPTION ... FROM ...`
+    - 取消使用者給予權限的能力, 會一並取消之前賦予其他使用者的權限
+  - 預設為 `CASCADE` 權限連鎖取消
+  - `RESTRICT` 只影響目標權限, 沒有連鎖效應
+- 建立角色 (Role)
+  - `CREATE ROLE`
+  - `GRANT role_name TO user_name;`
+    - 賦予個別使用者為某些角色, 來賦予權限, 而非單獨指定
+  - `DROP ROLE ...` 移除不需要的角色設定
+- 賦予其他使用者角色的權利
+  - `WITH ADMIN OPTION`
 
 ---
 
