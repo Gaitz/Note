@@ -44,6 +44,21 @@
 
 ### 第三章 - Module 1: Introduction to Amazon web services
 
+- Client-server model
+- AWS principle: only pay for what you use
+- Cloud computing is the on-demand delivery of IT resources over the internet with pay-as-you-go pricing.
+- Deployment models for cloud computing
+  - cloud-based, 全在公開雲上
+  - on-premises, 全在本地, 私有雲
+  - hybrid, 混合雲
+- 使用 cloud computing 的優勢
+  - 不需要前期費用
+  - 不需要額外維護資料中心
+  - 不需要猜測 capacity
+  - 利用集合經濟優勢, 降低成本
+  - 加快速度與彈性
+  - 快速的建置全球化架構
+
 ---
 
 ### 第四章 - Module 2: Compute in the cloud
