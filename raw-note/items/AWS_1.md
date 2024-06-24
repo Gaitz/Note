@@ -63,6 +63,59 @@
 
 ### 第四章 - Module 2: Compute in the cloud
 
+- Amazon Elastic Compute Cloud (EC2)
+  - Launch
+    - 從 template 中選擇適合的基本設定 (OS, server, applications)
+    - 啟動 instance 然後設定 security 規則
+  - Connect
+    - 有數種方式可以連結 EC2 instance
+  - Use
+    - 開始使用
+- Amazon EC2 instance types
+  - General purpose instances
+    - 平衡的 compute, memory, networking 能力
+    - application servers, gaming servers, backend servers, 中小型資料庫
+  - Compute optimized instances
+    - 計算能力最佳化的
+    - 高效能的 web servers, compute-intensive application servers, 高性能遊戲伺服器, batch processing
+  - Memory optimized instances
+    - 記憶體最佳化的
+    - 通常處理需要大量資料在 memory 的情境
+  - Accelerated computing instances
+    - 使用硬體加速的
+    - 浮點數計算, 圖形計算, data pattern matching
+    - 適合用於 graphics applications, game streaming, application streaming
+  - Storage optimized instances
+    - 儲存最佳化的
+    - 需要大量且連續的在 local storage 進行讀寫, 擁有 10000 low-latency, random IOPS 的能力
+    - 適合用於分散式檔案系統, data warehousing applications, high-frequency online transaction processing (OLTP)
+    - 使用 input/output operations per second (IOPS), 每秒 IO 次數, 來作為測量標準
+- Amazon EC2 pricing
+  - On-demand
+    - 依據運行時間計費, 沒有最低費用也不需要預先支付
+    - 適合短期, irregular workload, 且無法暫停的工作
+    - 適合用於開發環境, 測試環境, 未知使用量的環境
+    - 不適合用於長期運行的工作, 有其他更省錢的計費方式
+  - Reserved instances
+    - 針對 on-demand instance 的折扣方案
+    - 分成兩種類型 standard reserved instances, convertible reserved instances
+    - 有分成 1 年合約或者 3 年合約
+    - 當合約到期後會自動轉成 on-demand 計費, 直到 instance 被關閉或者簽署新的 reserved instance 合約
+    - Standard reserved instances, 適合用於已經知道適合的 EC2 instance type 和 size 並且運行狀態穩定的程式, 同時也已經知道適合的 AWS region, 可以保障你的需求一定能獲得, 固定 (instance family and size, platform description, tenancy, region)
+    - Convertible reserved instances, 如果需要不同的 availability zones 和不同的 instance types 時, 以折價率換取靈活性
+  - EC2 instance saving plans
+    - 在預先指定的 regions 下簽署 1 年或 3 年合約並以小時計費, 可以享有折扣
+    - 類似於 standard reserved instance 方案, 但是不用指定 instance type 和 size, OS, tenancy 等細項
+    - 可以使用 AWS Cost Explorer 服務來進行試算
+  - Spot instances
+    - 適合用於可以靈活啟動與關閉, 並且工作內容允許中斷的情況
+    - 中斷時會預先有 2 分鐘時間的提醒, 以用來暫存狀態
+    - 使用 AWS EC2 零散的運行時間, 因此提供最高 90% off 的折扣
+  - Dedicated hosts
+    - 預定實體伺服器來運行 EC2 instances
+    - 擁有不同的計費方式
+    - 是以上所有方案裡最昂貴的
+
 ---
 
 ### 第五章 - Module 3: Global infrastructure and reliability
