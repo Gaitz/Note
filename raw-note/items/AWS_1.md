@@ -146,6 +146,37 @@ Elastic Load Balancing, ELB
 - 屬於 regional construct, region 層級的 load balancing 機制
 - 除了適用於終端使用者 (endpoint) 連結 AWS 服務之外, 也適用於內部服務之間, 像是 front-end servers 連結 back-end servers 中間也可以有個 ELB.
 
+Messaging and queueing
+
+- 一個應用程式或者一個系統是由多個 components 所結合而成
+  - tightly coupled components, 容易造成 single point failure
+  - 因此好的架構 (architecture) 是 loose coupling (去耦合的)
+- Monolithic applications
+  - 所有的 component 耦合在一起, 互相溝通是 synchronous
+- Microservices
+  - components 之間沒有耦合, 互相溝通是 asynchronous
+- Amazon Simple Notification Service (Amazon SNS)
+  - Publish/subscribe service,
+  - subscribers 可以是 webhook, AWS services (AWS Lambda), email address, ...
+- Amazon Simple Queue Service (Amazon SQS)
+  - Message queueing service
+
+Additional Compute Services
+
+- Serverless computing
+  - AWS Lambda,
+    - 有運行時間上限 (15 mins)
+    - 適合時間不長的計算工作, Event-based 情境
+- Containerized
+  - 使用 Docker container 的相關服務
+  - Amazon Elastic Container Service (Amazon ECS)
+    - Docker container
+  - Amazon Elastic Kubernetes Service (Amazon EKS)
+    - Kubernetes service
+  - AWS Fargate
+    - 配合 Amazon ECS 與 Amazon EKS 一起使用的 serverless 服務
+    - 原本的 Amazon ECS 與 Amazon EKS 都運行在 EC2 上
+
 ---
 
 ### 第五章 - Module 3: Global infrastructure and reliability
