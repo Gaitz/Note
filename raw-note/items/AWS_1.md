@@ -181,6 +181,27 @@ Additional Compute Services
 
 ### 第五章 - Module 3: Global infrastructure and reliability
 
+Global infrastructure
+
+- High availability, 高可用性
+  - 允許容錯 fault tolerance
+- 以多個不同地區的 data center 做避險, Regions
+
+AWS Regions
+
+- AWS Regions
+  - 每個 Region 是各自獨立的 (isolated)
+  - 資料不會進出 Region 除非使用者有明確要求
+- Selecting a Region
+  - Compliance, 法規限制
+  - Proximity, 距離使用者的物理距離
+  - Feature available, 想要使用的 AWS 服務是否提供
+  - Pricing, 價格, 每個 Region 計價不同
+- Availability Zones, AZ
+  - 每個 Region 裡會有多個 Availability Zones 是實體上有距離分隔的 data centers, 提供 Region 內部的容錯
+  - 推薦 AZ 層級的服務, 至少應該有兩個分散在不同的 AZ 中, 例如 EC2
+  - 如果是 Region level 的服務, 已經自動有分散在不同 AZ 的容錯能力, 例如 ELB
+
 ---
 
 ### 第六章 - Module 4: Networking
