@@ -198,9 +198,23 @@ AWS Regions
   - Feature available, 想要使用的 AWS 服務是否提供
   - Pricing, 價格, 每個 Region 計價不同
 - Availability Zones, AZ
-  - 每個 Region 裡會有多個 Availability Zones 是實體上有距離分隔的 data centers, 提供 Region 內部的容錯
+  - 每個 Region 裡會有多個 Availability Zones 是實體上有物理距離分隔的 data centers, 提供 Region 內部的容錯
   - 推薦 AZ 層級的服務, 至少應該有兩個分散在不同的 AZ 中, 例如 EC2
   - 如果是 Region level 的服務, 已經自動有分散在不同 AZ 的容錯能力, 例如 ELB
+
+Edge Locations
+
+- AWS CloudFront, AWS 的 CDN 服務
+- AWS edge location, 也運行於 AWS 的 DNS 服務, Amazon Route53
+- 運行 AWS 服務於你的 data center 中, 可以使用 Amazon Outposts, (_補_, 可能類似 OpenStack)
+
+Ways to interact with AWS services
+
+- AWS Management Console, web based 操作介面
+- AWS command line interface, CLI
+- Software development kits, SDKs
+- AWS Elastic Beanstalk, configuration based, 協助調整 capacity, load balancing, automatic scaling, Application health monitoring
+- AWS CloudFormation, AWS 的 Infrastructure as code solution, (_補_, 類似 Terraform)
 
 ---
 
