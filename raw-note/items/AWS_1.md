@@ -220,6 +220,47 @@ Ways to interact with AWS services
 
 ### 第六章 - Module 4: Networking
 
+- Amazon Virtual Private Cloud, AWS VPC
+  - Public subnet
+  - Private subnet
+- VPC 內的 resource 可以有不同的 security group 設定
+- Internet gateway, IGW
+  - 入口, 用來連接 VPC 區域與 public internet
+- Virtual private gateway
+  - 入口, 用來連接 private only resources, 建立 **VPN connection**
+  - 跟 Internet gateway 連結一樣的外部網路, 只是受到 authentication 而已, 但是仍然無法阻擋無效的連結, 產生的頻寬使用 (即一樣可以受到 DoS 攻擊)
+- AWS Direct Connect, 建立與 VPC 連結的專用通道
+  - 更近一步, 加強 VPC 區域的安全性, 避免任何外部 internet 的連結
+  - 最小化 latency 最大化 security
+  - (專用的實體網路, 需要額外的供應商協作)
+
+Subnets and Network Access Control Lists
+
+- Subnets
+  - Public subnets
+  - Private subnets
+- Internet gateway 有 network access control list (network ACL)
+  - 來檢查進入 (inbound) 與離開 (outbound) 的所有 packet
+  - 預設上, network ACL 允許任何 inbound 與 outbound 直到有額外的設定
+  - Network ACL 是 **stateless** packet filtering, 換句話說, 他是沒有記憶的, 需要每次都檢查
+  - Network ACL 只在 VPC boundary 進行檢查, 因此沒有關於內部 resource 更細緻的設定, 因此需要 Security Group
+- VPC component 有 security groups
+  - 在 VPC 內部的 resources 可以定義第二層的 packet filtering (instance level access control), 稱為 security group
+  - 預設上, security group 阻擋所有的 inbound, 開放所有的 outbound
+  - Security group 是 **stateful** packet filtering, 他會記憶過去進出的 packet 用於加速 inbound
+
+Global Networking
+
+Domain Name System (DNS)
+
+- Amazon Route 53, DNS service
+  - Routing policies
+    - latency-based routing
+    - geolocation DNS
+    - geoproximity
+    - weighted round robin
+- Amazon CloudFront, CDN service
+
 ---
 
 ### 第七章 - Module 5: Storage and databases
