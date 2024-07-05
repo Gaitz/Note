@@ -265,6 +265,61 @@ Domain Name System (DNS)
 
 ### 第七章 - Module 5: Storage and databases
 
+Instance stores and Amazon Elastic Block Store (Amazon EBS)
+
+- Instance stores
+  - 暫存的 block-level storage of EC2 instance
+  - 類似暫時的硬碟, lifecycle 跟 EC2 instance 一樣, 換句話說, 如果 EC2 instance 停止運行時 (stopped or terminated) 資料會被刪除
+  - 物理上連結著當時的 EC2 instance host 機器的硬碟 (hard drive)
+- Amazon Elastic Block Store (Amazon EBS)
+  - 提供永久儲存的 block-level storage, (virtual hard drive)
+  - 可以使用 Amazon EBS snapshot 進行備份 (incremental backup)
+
+Amazon Simple Storage Service (Amazon S3)
+
+- Object storage
+  - 每個 object 擁有 data, metadata, key (as id)
+- Amazon Simple Storage Service (Amazon S3)
+  - 提供 object-level storage 並且把資料以 object 的形式儲存在 bucket 裡
+  - 每一個 object 本身最大容量限制為 5 TB
+  - 可以設定 visibility 和 access 權限
+  - 擁有 versioning 機制, 可以查看 object 的變動
+  - 可以設置 S3 lifecycle policies 讓資料依據使用頻率自動調整儲存方案
+- Amazon S3 Storage Classes
+  - S3 擁有多種儲存類型供選擇, 計費價格通常由以易取性 (availability) 遞減
+  - S3 Standard,
+    - 資料至少被儲存在 3 個 AZ, 因此是 high availability
+  - S3 Standard-Infrequent Access (S3 Standard-IA)
+    - 較少需要存取的, 但是保持與 S3 Standard 同等的 high availability
+    - 有較低的 storage price 較高的 retrieval price
+  - S3 One Zone-Infrequent Access (S3 One Zone-IA)
+    - 只儲存在單一個 AZ 中, 因此需要有能力能自行從單一個 AZ 事件中恢復
+    - storage price 比 S3 Standard-IA 更低
+  - S3 Intelligent-Tiering
+    - 適合先前未知使用頻率, 由實際的使用頻率交給 Amazon 來決定儲存模式
+    - 在 S3 Standard 與 S3 Standard-IA 中切換
+  - S3 Glacier Instant Retrieval
+    - 長期儲存, 非常少使用的, 但是能立即取得的
+    - Retrieve object 的速度會在 milliseconds, 等同於 S3 Standard
+  - S3 Glacier Flexible Retrieval
+    - 長期儲存, 非常少使用的, 取得時間會在數分鐘到數小時之間
+    - Retrieve object 時間在 1 分鐘到 12 小時之間
+  - S3 Glacier Deep Archive
+    - 長期儲存, 非常少使用的, 取得時間會大於 12 小時
+    - Retrieve object 時間在 12 小時到 48 小時之間
+  - S3 Outposts
+    - 配合 AWS Outposts 環境使用
+    - 建置在 on-premises 環境上
+
+Comparing Amazon EBS and Amazon S3
+
+- Amazon EBS
+  - 適合會有大量小改變的檔案
+- Amazon S3
+  - 適合 write once read many 情境
+  - Web based, 每個 object 自帶 URL
+  - 不用擔心 backup, 本身已經有非常高的 durability
+
 ---
 
 ### 第八章 - Module 6: Security
