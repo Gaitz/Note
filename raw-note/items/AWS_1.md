@@ -274,6 +274,8 @@ Instance stores and Amazon Elastic Block Store (Amazon EBS)
 - Amazon Elastic Block Store (Amazon EBS)
   - 提供永久儲存的 block-level storage, (virtual hard drive)
   - 可以使用 Amazon EBS snapshot 進行備份 (incremental backup)
+  - 屬於 Availability Zone 層級服務, 只適用於單的 AZ 中
+  - 沒有 auto scaling 功能
 
 Amazon Simple Storage Service (Amazon S3)
 
@@ -319,6 +321,16 @@ Comparing Amazon EBS and Amazon S3
   - 適合 write once read many 情境
   - Web based, 每個 object 自帶 URL
   - 不用擔心 backup, 本身已經有非常高的 durability
+
+Amazon Elastic File System (Amazon EFS)
+
+- Shared file folders
+- 不同於 block storage 和 object storage,
+  - file storage 適合用於多個服務同時使用同一個資料
+- Amazon Elastic File System (Amazon EFS)
+  - AWS 提供的具有 auto scaling 的 linux file system
+  - 屬於 Regional level 的服務, 資料可以在同個 region 內, 跨多個 AZ 存取
+  - On-premises data center 也可以通過 AWS Direct Connect 存取
 
 ---
 
