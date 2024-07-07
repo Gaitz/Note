@@ -332,6 +332,42 @@ Amazon Elastic File System (Amazon EFS)
   - 屬於 Regional level 的服務, 資料可以在同個 region 內, 跨多個 AZ 存取
   - On-premises data center 也可以通過 AWS Direct Connect 存取
 
+Relational databases
+
+- 對於 AWS 管理有不同程度的服務, 分別為
+  - 直接建立在 EC2 上
+  - 建立在 Amazon RDS 上
+  - 使用 Amazon Aurora
+- Amazon Relational Database Service, (Amazon RDS)
+  - Amazon 的 relational database 服務
+  - 支援數種常見的 database engines
+  - Amazon Aurora, PostgresSQL, MySQL, MariaDB, Oracle Database, Microsoft SQL Server
+  - 內建 automated patching, backups, redundancy, failover, disaster recovery
+- Amazon Aurora,
+  - AWS 提供的 relational database
+  - 相容於 MySQL 與 PostgresSQL
+  - 內建自動備份至 S3, 6 份 Replicates 在 3 個不同的 AZ
+  - 可以設定至多 15 個 read replicas
+
+Nonrelational databases
+
+- Nonrelational databases, NoSQL
+- 其中一種類型是 key-value pairs database
+- Amazon DynamoDB
+  - Amazon 所提供的 NoSQL database
+  - 屬於 key-value database
+  - Serverless 服務
+  - Automatic scaling
+  - 是可以大量 scalable 的同時保有 millisecond response time
+  - 只適用於特殊的使用案例
+- Amazon RDS vs Amazon DynamoDB
+- Amazon RDS
+  - 支援複雜的 SQL query
+  - 換句話說, 只有會使用到複雜的 relational 分析時, 才應該選用 RDB
+- Amazon DynamoDB
+  - Query 時無法進行複雜的運算, 主要是集中所需的 collection
+  - 比起 RDB, NoSQL 有更好的 throughput, 更高的效能, 也更便宜
+
 ---
 
 ### 第八章 - Module 6: Security
