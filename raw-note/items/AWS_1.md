@@ -368,6 +368,43 @@ Nonrelational databases
   - Query 時無法進行複雜的運算, 主要是集中所需的 collection
   - 比起 RDB, NoSQL 有更好的 throughput, 更高的效能, 也更便宜
 
+Data warehousing
+
+- 當要處理的資料是不會再次變動的內容 (已經確定的, 過去的) 並且有巨大數量級
+  - 在 relational database 上會遇到瓶頸
+  - 更適合放在 data warehousing 進行處理
+  - 換句話說, 要進行資料分析的資料庫, 應該分開使用專門的資料庫類型, 即 data warehouse
+- Amazon Redshift
+  - Amazon 提供的 data warehousing 解決方案
+
+Database Migration
+
+- AWS Database Migration Service (AWS DMS)
+  - 資料庫搬移服務
+  - 用於減少 downtime
+  - 適用於相同的資料庫型別, homogenous
+  - 適用於不相同的資料庫型別, heterogenous
+  - 移動方式
+    - Source, on-premisses, EC2, RDS
+    - Target, EC2, RDS
+  - 除了適用於資料庫搬遷外, 還是用於以下情境
+  - 建立測試用的資料庫 (直接從 production 進行複製), 多個資料庫整合成一個, 動態持續的資料庫 replication
+
+Additional Database Services
+
+- Amazon DocumentDB
+  - NoSQL, document database, content management system (CMS), 支援 MongoDB
+- Amazon Neptune
+  - NoSQL, graph database
+- Amazon Quantum Ledger Database (Amazon QLDB)
+  - NoSQL, ledger database, 所有的資料都是 immutable
+- Amazon Managed Blockchain
+  - Blockchain 服務
+- Amazon ElasticCache
+  - In-memory cache, 支援 Redis 和 Memcached
+- Amazon DynamoDB Accelerator (DAX)
+  - DynamoDB 專用的 in-memory cache
+
 ---
 
 ### 第八章 - Module 6: Security
