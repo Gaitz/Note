@@ -409,6 +409,35 @@ Additional Database Services
 
 ### 第八章 - Module 6: Security
 
+AWS Shared Responsibility Model
+
+- AWS 管理 cloud 本身的安全性 (security of the cloud), AWS foundation services
+- Customer 管理在使用 cloud 裡的安全性 (security in the cloud), customer data
+
+AWS Identify and Access Management (IAM)
+
+- AWS account root user
+  - **Best Practice**: turn on MFA for root user
+  - **Best Practice**: 不要使用 root user 作為日常, 使用個別的 IAM user 取代
+- IAM users
+  - 代表一個使用者或一個服務, 會與其他 AWS services 互動
+  - 包含 name 和 credentials
+  - 預設是沒有任何權限
+  - **Best Practice**: 每個人都有一個各自的 IAM user account, 不要共用
+- IAM policies
+  - 一個 document 預先設定的權限 (permissions)
+  - `Effect`: `Allow` 或 `Deny`
+  - `Action`: 任何的 AWS API
+  - `Resource`: API 作用的對象 (object)
+  - **Best Practice**: 依據最小權限原則 (least privilege principle) 來設定權限, 不要給予任何超過工作內容的權限
+- IAM groups
+  - 與其針對每個 IAM user 做個別設定, 應該使用 group 來群體設定
+- IAM roles
+  - 主要用於暫時性的 (temporary) 權限給予
+  - **Best Practice**: IAM role 只使用在暫時性的權限給予, 不做任何長期使用
+- Multi-factor authentication, MFA
+  - 啟用 MFA 提升安全性
+
 ---
 
 ### 第九章 - Module 7: Monitoring and analytics
