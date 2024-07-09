@@ -438,6 +438,29 @@ AWS Identify and Access Management (IAM)
 - Multi-factor authentication, MFA
   - 啟用 MFA 提升安全性
 
+AWS Organizations
+
+- 集中多個 AWS accounts 集中管理, 限制所屬的 AWS services 和 resources
+- Service control policies (SCPs), 設定最大權限限制
+  - 作用對象為 OU (organization unit) 和每個獨立的帳號 (individual account)
+  - 與 IAM policies 不同的是 SCPs 是設定最大權限限制, 來進行責任隔離
+- Consolidated billing, 集合帳單支付並且設置個別限制
+- Organizational units,
+  - 每個 OU 可以設置獨立的權限
+  - 以 hierarchical 的方式建立
+  - 類似於 business unit
+
+AWS Compliance
+
+- AWS Artifact
+  - 提供 AWS security 和 compliance reports
+  - 內容包含兩類
+  - AWS Artifact Agreements, 提供與 AWS 簽訂合規合約
+  - AWS Artifact Reports, 提供由第三方檢驗的 AWS 合規報告
+- Customer Compliance Center
+  - 提供學習各種不同 AWS compliance 來合乎各種不同規定的學習資源
+  - 也可以通過查看 compliance whitepapers 和 documentation
+
 ---
 
 ### 第九章 - Module 7: Monitoring and analytics
