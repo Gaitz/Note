@@ -461,6 +461,35 @@ AWS Compliance
   - 提供學習各種不同 AWS compliance 來合乎各種不同規定的學習資源
   - 也可以通過查看 compliance whitepapers 和 documentation
 
+Distributed Denial-of-service attack, (DDoS attack)
+
+- Denial-of-service attack examples
+  - UDP flood, 針對底層網路的攻擊
+  - Slowloris attack, 針對 HTTP 層的攻擊
+- 好的程式架構 (good architecture) 就足以防禦大多數的 DDoS attack
+  - 例如使用 ELB
+- 設定嚴謹的 Security Group 可以防禦來自網路底層的攻擊
+- AWS Shield
+  - AWS 服務來協助防禦 DDoS attack
+  - Standard, 免費服務, 防禦常見的 DDoS attack
+  - Advanced, 付費服務, 提供更詳盡的分析與防禦更複雜的 DDoS attack
+- AWS WAF
+  - 可以配合 AWS Web Application Firewall (AWS WAF) 服務來防禦
+
+Additional Security Services
+
+- Encryption 在任何階段都進行加密, in store, in transit, ...
+  - secure socket layer, (SSL connection)
+- AWS Key Management Service (AWS KMS)
+  - AWS 金鑰管理
+- AWS Web Application Firewall (AWS WAF)
+  - 應用層網路管理, 通過設定 web access control list (ACL) 來阻擋
+- Amazon Inspector
+  - 自動測試調查報告, 查看是否符合安全性的 best practice
+- Amazon GuardDuty
+  - 智能偵測危害
+  - 開啟後會持續的監控 network 和 account activity
+
 ---
 
 ### 第九章 - Module 7: Monitoring and analytics
