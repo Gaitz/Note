@@ -494,6 +494,29 @@ Additional Security Services
 
 ### 第九章 - Module 7: Monitoring and analytics
 
+Amazon CloudWatch
+
+- Amazon CloudWatch
+  - 提供 monitoring, 管理 metrics, 設定 metrics alarm
+- CloudWatch alarms
+  - 可以發出 event 連結其他服務
+- CloudWatch dashboard
+  - monitoring 所有的 AWS services, 在同一個地方可以看到結果
+- Mean time to resolution, MTTR
+- Total cost of ownership, TCO
+
+AWS CloudTrail
+
+- AWS CloudTrail
+  - API auditing tool
+  - 記錄所有的 API calls, log of actions, What, Who, When, How
+  - 會有完整的歷史紀錄, 來協助除錯, 監控安全漏洞等等
+  - API call 發生後會在 15 分鐘內被記錄在 CloudTrail
+- CloudTrail Insights
+  - 可以選用的啟動 CloudTrail Insights 來自動捕捉不尋常的 API 行為
+- Trust but verify, 信任但確認
+- 紀錄會被存在 S3 buckets, 配合 Vault Lock 的使用提供無法被篡改的 log 紀錄
+
 ---
 
 ### 第十章 - Module 8: Pricing and support
