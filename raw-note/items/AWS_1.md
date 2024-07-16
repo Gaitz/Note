@@ -517,6 +517,14 @@ AWS CloudTrail
 - Trust but verify, 信任但確認
 - 紀錄會被存在 S3 buckets, 配合 Vault Lock 的使用提供無法被篡改的 log 紀錄
 
+AWS Trusted Advisor
+
+- AWS Trusted Advisor
+  - AWS 自動化調查報告, 監測是否符合 AWS best practices
+  - 分成五種類型, cost optimization, performance, security, fault tolerance, service limits
+  - 呈現方式為 no problems (green), investigations (orange), actions (red)
+  - 可以設定通知服務
+
 ---
 
 ### 第十章 - Module 8: Pricing and support
