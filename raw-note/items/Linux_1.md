@@ -192,6 +192,116 @@
 
 ### 第三章 - Linux 系統基本結構
 
+Linux terminal 模式與圖形界面模式
+
+- 使用 `alt + ctrl + F1~F6` 切換至完全獨立的字元模式
+  - 可以實現多用戶, 多工的模式
+- 圖形界面模式只是一個應用程式
+
+Linux 硬體資源管理
+
+- 查看 PCI 設備, 查看例如音效卡, 顯示卡, 網路卡, ...
+  - `lspci`
+  - `-v` 詳細模式
+- 查看 CPU 資訊
+  - `more /proc/cpuinfo`
+  - physical id 代表實體 CPU 的 ID
+  - siblings 代表邏輯核心數
+  - cpu cores 代表實體核心數
+- 查看記憶體資訊
+  - `more /proc/meminfo`
+- 查看硬碟資訊
+  - `fdisk -l`
+
+Linux 外部設備
+
+- 在 Linux 系統中, 所有的硬體設備都是以文件的方式存在
+  - 存放在 `/dev` 下
+  - `fd` 軟碟 (floppydisk),
+  - `sd` SCSI 設備, USB 通常屬於這類
+  - `hd` IDE 光碟機, `sr` SCSI 光碟機, 或者 `cdrom` 呈現
+  - `st` SCSI 磁帶機 (tape)
+- 常見檔案系統類型, 檔案系統類型就是 partition 的格式
+  - `msdos`, DOS 系統
+  - `vfat`, 支援長文件名稱的 DOS 系統
+  - `iso9660`, 光碟格式
+  - `ext2/ext3/ext4`, Linux 下常見規格
+  - `xfs`, Linux 下常見高性能日誌系統規格
+- 設備掛載 (mount)
+  - `mount -t 文件系統類型 設備名稱 掛載位置`
+  - 系統文件中的掛載位置 `/mnt` 通常用於手動掛載 (mount point), `/media` 通常用於自動掛載
+  - **掛載的是軟碟, 光碟, USB, 因此切換時, 需要 unmount 和重新 mount 新的**
+  - `umount 卸載位置`
+
+檔案系統結構
+
+- 目錄以樹狀結構呈現, hierarchical file system (HFS)
+- 很多 Linux distrubtion 檔案系統都依據 FSSTND 標準設置
+- `/` 根目錄
+- `/etc` 系統級別 configurations
+- `/usr` 應用程式和文件, 通常安裝的軟體會安裝在這個目錄下
+- `/var` 存放系統運行及軟體運行時的 log, 暫存設定
+- `/dev` 系統所有的設備
+- `/proc` 所有的內容都是 memory 的 mapping, 可以通過這個目錄來跟 memory 的內容互動,
+  - 像是修改系統運行中的 kernel 參數
+  - 也可以查詢當前的很多運行中的訊息
+- `/boot` Linux 啟動時所需的核心文件, 如果毀損會導致系統無法啟動
+- `/bin`, `/sbin` 可執行的 binary 檔案, s 即 super user, 因此 `sbin` 下放的是 root 才能執行的
+- `/home` 當前 user 的家目錄
+- `/lib` 共享的 static library
+- `/root` root user 的主目錄
+- `/run` 類似 `/media` 都是外部裝置自動掛載的位置
+- `/lost+found` 不當操作或者執行錯誤時, 遺失的文件會臨時放置在此
+- `/tmp` 暫存文件, 可能且可以隨時刪除的
+
+系統核心組成
+
+- Linux kernel
+- 官方網站 *https://www.kernel.org*
+- 完整的 kernel 一般由 5 個部份組成
+- Memory 管理, 如何有效的管理實體記憶體
+- Process 管理, process 運行調度, 實現 multitasking 系統, 如何進行 time sharing
+- Process 間的溝通
+- 虛擬文件系統
+- 網路, 實現網路協定與網路設備驅動
+
+運行機制介紹
+
+- 初始化 init 系統
+  - 首先從 BIOS 開始, 引導 linux kernel 進入 memory 中進行初始化
+  - 首先執行 PID 為 1 的 init process
+  - 依據開發順序 init 系統可以分為 `sysvinit`, `upstart`, `systemd`
+- 系統運行模式 runlevel 到 target 的改變
+  - `sysvinit` 程序下的運行模式放在 `/etc/inittab`, 對應 `runlevel`
+    - 每個 distribution 的運行模式定義不同, 但是 `0`, `1`, `6` 是有共識的
+    - `0` 關機模式, `1` 單用戶模式 (限制系統管理員模式), `6` 重起模式
+  - `systemd` 機制下使用 `target` 取代 `runlevel`
+    - `systemctl get-default` 查詢當前的運行模式
+    - 相關設定可以在 `/etc/systemd/system` 下找到
+- 系統關機過程
+  - `shutdown` 指令
+    - 可以安全的關閉 Linux 系統
+    - 可以進行 power-off, reboot, halt 等功能
+  - `halt` 指令
+    - 執行時, 會停止所有應用程序, 然後使用 `sync` 把 memory 訊息寫入硬碟中, 然後中止 kernel
+  - `init` 指令會調用系統對應的 init 系統工具
+- `systemd` 管理機制
+  - 可以進行 init 工作, 也可以管理系統與服務, 兼容 sysvinit 與 Linux 標準啟動腳本
+  - `systemd` 在系統中是用戶級別的應用程式
+  - configurtaions 在 `/etc/systemd` 目錄下
+  - 並且提供了強大的服務管理工具 `systemctl` 等同於 `sysvinit` 底下的 `service` + `chkconfig` 指令
+  - `systemctl start [...].service` 啟動服務, `systemctl stop [...].service` 停止服務,
+  - `systemctl restart [...].service` 重起或者啟動服務, `systemctl try-restart [...].service` 在運行時嘗試重起, `systemctl reload [...].service` 重新載入設定檔
+  - `systemctl enable [...].service` 註冊開機時自動運行, `systemctl disable [...].service` 關閉開機時自動運行
+  - `systemctl status [...].service` 查看服務運行狀態
+  - 電源管理 `systemctl poweroff` 關機, `systemctl reboot` 重起, `systemctl suspend` 待機, `systemctl hibernate` 休眠, `systemctl hybrid-sleep` 混合休眠
+
+Linux 與 SecureCRT
+
+- VanDyke SecureCRT 是進行 commercial SSH, Telnet client and terminal emulator 用的軟體
+- Secure Shell, SSH, 加密過的連線通道, 預設是 Port 22
+  - Linux 伺服器遠端連線通常使用 SSH 進行
+
 ---
 
 ### 第四章 - Linux 常用命令及使用技巧
