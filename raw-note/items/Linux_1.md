@@ -306,6 +306,39 @@ Linux 與 SecureCRT
 
 ### 第四章 - Linux 常用命令及使用技巧
 
+Shell
+
+- 用來跟 kernel 互動的程式, 有多個選擇, 系統常見的預設是 Bash (Bourne again shell)
+  - shell 除了是 command language 之外也是 script language
+- 作為 command language
+  - shell 程式與內建命令, 會在使用者登入時, 載入 memory 中, 一直持續到使用者登出
+  - 其他的可執行檔案, 都會在呼叫後才載入 memory
+    - 例如, `/bin/ls`
+- 作為 script language
+  - 支援程式語言常見的 expression, variable, loop, condition 等等功能
+- shell command 語法
+  - `command_name [options] [arguments]`
+  - options, 會有前綴 `-`
+  - 單一命令句裡可以用 `;` 分隔多個命令一同執行, 用 `\` 讓命令進行斷行繼續輸入
+  - Wildcard, 每個 shell 可能會有不同的語法
+    - bash 常用的有 `*` 任意, `?` 任一, `[]` 集合內元素
+  - Redirection
+    - 標準輸入: 預設是鍵盤
+    - 標準輸出, 標準錯誤輸出: 預設是螢幕
+    - 使用 `<`, `<<` 進行標準輸入重定向, `<` 從檔案輸入, `<<` 告知指定的分隔符中間的內容進行輸入
+    - 使用 `>`, `>>` 進行標準輸出重定向, `>` 從檔案輸出 (override), `>>` 從檔案輸出但是 append
+    - 使用 `2>`, `2>>` 進行標準錯誤輸出重定向
+  - Pipelines 管道
+    - 使用 `|` 串接命令, 前面命令的輸出為接續命令的輸入
+  - Quoting 特殊字元與跳脫字元
+    - `\` 跳脫字元
+    - `'` 使用單引號包夾的內容, 全部當成一般字元
+    - `"` 使用雙引號包夾的內容, 大多數當成一般字元, 但是少數會保留其作用, 例如 `$`, `\`, `\``
+  - Autocomplete 語法自動補全
+    - 使用 `Tab` 鍵
+- 常用命令
+  - `more` 查看文件內容
+
 ---
 
 ### 第五章 - Linux 下軟件的安裝與管理
