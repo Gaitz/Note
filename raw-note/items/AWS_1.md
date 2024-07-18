@@ -529,6 +529,73 @@ AWS Trusted Advisor
 
 ### 第十章 - Module 8: Pricing and support
 
+AWS Free Tier
+
+- 分成三種類型, Always Free, 12 Months Free, Trials
+
+AWS Pricing Concepts
+
+- Pay for what you use, 依據使用付費
+  - Pay less when you reserve, 預先約定以使用更低的費率
+  - Pay less with volume-based discounts when you use more, 依據使用量多寡, 調整費率
+- 使用 [AWS Pricing Calculator](https://calculator.aws/) 進行試算
+
+Billing Dashboard
+
+- AWS Billing , [查看 Billing 資訊](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html),
+
+Consolidated Billing
+
+- 使用 AWS Organizations 集合多個 AWS accounts 的帳單集中在一起支付
+- 預設 AWS Organizations 可以連結 4 個 AWS account, 可以通過 AWS Support 增加額度
+- 使用 consolidated billing 可以跨帳戶一起享有 bulk discount pricing, Savings Plans, Reserved Instance
+
+AWS Budgets
+
+- AWS Budgets, 可以建立與設定 budgets, 可以依據 usage, costs, ... 設定不同的上限
+  - 提供自行設定的通知服務 (custom alerts)
+
+AWS Cost Explorer
+
+- AWS Cost Explorer, 提供 cost 的歷史紀錄, 可以視覺化的查詢和建立客製化報表
+- 保留 12 個月的歷史紀錄
+- 使用 grouping 機制建立客製化報表
+  - 推薦使用 tag 建立更客製化塞選, tag 是使用者自訂的 key value pairs, 可以綁在各種不同的服務上
+
+AWS Support Plans
+
+- Basic support plan
+  - 免費的, 提供文件, 詢問 billing 相關問題, 有限的 AWS Trusted Advisor, 推薦使用 AWS Personal Health Dashboard 來提供相關通知
+- Developer support plan
+  - 提供 best practice guidance, client-side diagnostic tools, building-block architecture support
+  - 提供 24 hours response time 的 email 提問服務
+  - 適合在探索 AWS 服務時提供顧問服務
+- Business support plan
+  - Use-case guidance, all AWS Trusted Advisor checks, Limited support for third-party software
+  - 開始提供電話顧問服務
+  - 適合在使用 AWS + 第三方軟體時提供顧問服務
+- Enterprise On-Ramp support plan
+  - 主動提供更多顧問服務, 一年一次的 cost optimization workshop, 提供更多關於 billing, account, cost, performance 的監控
+  - 一年一次的 consultative review and architecture guidance, Infrastructure Event Management support
+  - 支援更多自動化 support automation workflows
+  - 針對緊急狀態的 30 minutes 或更少的 response time
+- Enterprise support plan
+  - 類似 On-Ramp, 但是提供所有主動支援, 並且享有緊急狀態的 15 minutes 或更少的 response time
+- 除了 basic plan 之外, 都是以月為單位來計費
+- AWS Personal Health Dashboard, 提供各服務的健康報告與衝擊通知
+- Technical Account Manager (TAM)
+  - 兩個 Enterprise support plan 都有提供
+  - 提供一個與 AWS 專屬對接的技術顧問
+  - 會主動監控並且提供指引與指導
+  - 提供 Well-Architected reviews, operations reviews, infrastructure event management
+- Well-Architected Framework
+  - Operational Excellence
+  - Security
+  - Reliability
+  - Performance Efficiency
+  - Cost Optimization
+  - Sustainability
+
 ---
 
 ### 第十一章 - Module 9: Migration and innovation
