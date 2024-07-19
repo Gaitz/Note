@@ -596,6 +596,12 @@ AWS Support Plans
   - Cost Optimization
   - Sustainability
 
+AWS Marketplace
+
+- AWS Marketplace 一個集中第三方軟體供應商, 提供運行在 AWS 上的服務 (software listings)
+- 有很多分類可以尋找適合的解決方案
+  - Infrastructure Software, DevOps, Data Products, Professional Services, Business Applications, Machine Learning, Industries, Internet of Things (IoT)
+
 ---
 
 ### 第十一章 - Module 9: Migration and innovation
