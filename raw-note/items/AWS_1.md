@@ -606,6 +606,51 @@ AWS Marketplace
 
 ### 第十一章 - Module 9: Migration and innovation
 
+AWS Cloud Adoption Framework (AWS CAF)
+
+- AWS 提供的雲端移植 framework,
+- 內容分成 6 種不同關注點 (perspectives)
+  - 主要分成大兩類
+  - Business capabilities: Business, People, Governance
+  - Technical capabilities: Platform, Security, Operations
+- Business,
+  - 確保 business 策略與目標與雲端移植的 IT 策略與目標相同
+  - 主要參與人員可能為 business managers, finance managers, budget owners, strategy stakeholder
+- People,
+  - 確保組織結構, 人員技能, 等符合需求, 並輔助 training
+  - 主要參與人員可能為 human resources, staffing, people managers
+- Governance,
+  - 瞭解如何提升人員技能與正確的流程進行, 最大化商業價值, 最小化風險
+  - 主要參與人員可能為 chief information officer (CIO), program managers, enterprise architectures, business analysts, portfolio managers
+- Platform,
+  - 提供 principles, patterns 在雲端的 new solutions 上, 協助 on-premises migrating, 主要工作在於了解與溝通
+  - 主要參與人員可能為 chief technology officer (CTO), IT managers, solutions architects
+- Security,
+  - 確保組織符合安全規範, visibility, auditability, control, agility
+  - 主要參與人員可能為 chief information security officer (CISO), IT security managers, IT security analysts
+- Operations,
+  - 定義與運行在雲上的例行工作, 以符合 business 需求
+  - 主要參與人員可能為 IT operations managers, IT support managers
+
+Migration Strategies
+
+- 六種不同的策略 (the 6 R's)
+- Rehosting
+  - 又名為 lift-and-shift
+  - 沒有任何改動的移植到雲端上
+- Replatforming
+  - 又名為 lift, tinker, and shift
+  - 進行少量的 cloud 優化, 但是不改動核心架構 (core architecture) 與程式碼
+  - 例如: migrating MySQL to AWS RDS
+- Refactoring/re-architecting
+  - 需要依據 business 需求, 依據增加功能, 增加規模, 增加效能, 來重新設計架構
+- Repurchasing
+  - 改動原先的合約, 變成新的雲端供應商的軟體合約
+- Retaining
+  - 在現階段 (1 年內) 無法移植的核心元件 (critical for the business), 但是可以在未來會進行 refactoring, 因此暫時保留在原處
+- Retiring
+  - 移除不會再使用的 applications
+
 ---
 
 ### 第十二章 - Module 10: The cloud journey
