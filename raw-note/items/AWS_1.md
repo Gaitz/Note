@@ -651,6 +651,42 @@ Migration Strategies
 - Retiring
   - 移除不會再使用的 applications
 
+AWS Snow Family
+
+- AWS Snow Family, AWS 提供的實體裝置, 用於大型的資料移動需求
+  - 在大型資料傳輸使用網路的情況下, 速度過慢的解決方案
+- AWS Snow Family members
+  - AWS Snowcone
+  - AWS Snowball
+  - AWS Snowmobile
+- 三種實體裝置有不同等級的能力 (capacity) 計算能力與容量
+- AWS Snowcone
+  - 最小型的, 提供 2 CPUs, 4 GB memory, 14 TB storage
+- AWS Snowball
+  - 提供兩種規格 storage optimized 和 compute optimized
+  - Storage optimized, 80 TB HDD + 1 TB SSD, 40 vCPUs, 80 GiB memory
+  - Compute optimized, 80 TB HDD + 28 TB SSD, 104 vCPUs, 416 GiB memory, V100 GPU
+- AWS Snowmobile
+  - 最大型的, 提供 100 PB storage
+
+Innovation with AWS
+
+- AWS 持續提供新的服務在不同的領域, 例如
+- VMWare on AWS
+- AWS DeepRacer, 工程師練習使用 machine learning 演算法
+- AWS Ground Station, 衛星服務
+- Serverless applications
+  - AWS Lambda
+- Artificial intelligence
+  - Amazon Transcribe, 轉換聲音成文字
+  - Amazon Comprehend, Discover patterns in text
+  - Amazon Fraud Detector, 監測潛在的線上詐欺行為
+  - Amazon Lex, 建立聲音及文字的 chatbot
+  - Amazon Textract, 從掃描後的文件轉換成文字
+- Machine learning
+  - Amazon SageMaker
+  - Amazon Augmented AI (Amazon A2I)
+
 ---
 
 ### 第十二章 - Module 10: The cloud journey
