@@ -691,9 +691,51 @@ Innovation with AWS
 
 ### 第十二章 - Module 10: The cloud journey
 
+The AWS Well-Architected Framework
+
+- AWS Well-Architected Framework, AWS 用來測量是否是良好的軟體架構的準則與工具
+- 分成六個面向
+- Operational excellence, 考慮運行 (run) 與監測 (monitor) 運作流程並且持續進步
+- Security, 安全性
+- Reliability, 可靠度, 從系統或基礎設施中斷後的復原能力
+- Performance efficiency, 效能使用度
+- Cost optimization, 成本最佳化
+- Sustainability, 降低能源消耗
+- 在 AWS console 可以找到 AWS Well-Architected Framework 工具
+  - 以回答問題的方式計分檢測與提供改進方式
+
+Benefits of the AWS Cloud
+
+- Trade upfront expense for variable expense.
+- Benefit from massive economies of scale.
+- Stop guessing capacity.
+- Increase speed and agility.
+- Stop spending money running and maintaining data centers.
+- Go global in minutes.
+
 ---
 
 ### 第十三章 - Module 11: AWS certified cloud practitioner basics
+
+AWS certified cloud practitioner exam
+
+- 題目來自四個主題
+  - Cloud Concepts
+  - Security and Compliance
+  - Technology
+  - Billing and Pricing
+- 700/1000 分以上即可通過
+  - 總共 65 題在 90 分鐘內答題
+  - 答錯不倒扣
+- 兩種題目類型
+  - Multiple choice, 單選
+  - Multiple response, 多選
+
+Exam Strategies
+
+- Read the full question.
+- Predict the answer before reviewing the response options.
+- Eliminate incorrect response options.
 
 ---
 
