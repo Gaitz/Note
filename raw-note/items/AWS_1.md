@@ -229,7 +229,7 @@ Ways to interact with AWS services
 - Virtual private gateway
   - 入口, 用來連接 private only resources, 建立 **VPN connection**
   - 跟 Internet gateway 連結一樣的外部網路, 只是受到 authentication 而已, 但是仍然無法阻擋無效的連結, 產生的頻寬使用 (即一樣可以受到 DoS 攻擊)
-- AWS Direct Connect, 建立與 VPC 連結的專用通道
+- AWS Direct Connect, 建立與 VPC 連結的專用通道 (實體通道)
   - 更近一步, 加強 VPC 區域的安全性, 避免任何外部 internet 的連結
   - 最小化 latency 最大化 security
   - (專用的實體網路, 需要額外的供應商協作)
@@ -429,7 +429,7 @@ AWS Identify and Access Management (IAM)
   - `Effect`: `Allow` 或 `Deny`
   - `Action`: 任何的 AWS API
   - `Resource`: API 作用的對象 (object)
-  - **Best Practice**: 依據最小權限原則 (least privilege principle) 來設定權限, 不要給予任何超過工作內容的權限
+  - **Best Practice**: 依據最小權限原則 (least privilege principle, LPP) 來設定權限, 不要給予任何超過工作內容的權限
 - IAM groups
   - 與其針對每個 IAM user 做個別設定, 應該使用 group 來群體設定
 - IAM roles
