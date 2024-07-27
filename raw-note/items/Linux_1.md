@@ -236,7 +236,7 @@ Linux 外部設備
 檔案系統結構
 
 - 目錄以樹狀結構呈現, hierarchical file system (HFS)
-- 很多 Linux distrubtion 檔案系統都依據 FSSTND 標準設置
+- 很多 Linux distribution 檔案系統都依據 FSSTND 標準設置
 - `/` 根目錄
 - `/etc` 系統級別 configurations
 - `/usr` 應用程式和文件, 通常安裝的軟體會安裝在這個目錄下
@@ -259,11 +259,11 @@ Linux 外部設備
 - Linux kernel
 - 官方網站 *https://www.kernel.org*
 - 完整的 kernel 一般由 5 個部份組成
-- Memory 管理, 如何有效的管理實體記憶體
-- Process 管理, process 運行調度, 實現 multitasking 系統, 如何進行 time sharing
-- Process 間的溝通
-- 虛擬文件系統
-- 網路, 實現網路協定與網路設備驅動
+  - Memory 管理, 如何有效的管理實體記憶體
+  - Process 管理, process 運行調度, 實現 multitasking 系統, 如何進行 time sharing
+  - Process 間的溝通
+  - 虛擬文件系統
+  - 網路, 實現網路協定與網路設備驅動
 
 運行機制介紹
 
@@ -288,7 +288,7 @@ Linux 外部設備
 - `systemd` 管理機制
   - 可以進行 init 工作, 也可以管理系統與服務, 兼容 sysvinit 與 Linux 標準啟動腳本
   - `systemd` 在系統中是用戶級別的應用程式
-  - configurtaions 在 `/etc/systemd` 目錄下
+  - configurations 在 `/etc/systemd` 目錄下
   - 並且提供了強大的服務管理工具 `systemctl` 等同於 `sysvinit` 底下的 `service` + `chkconfig` 指令
   - `systemctl start [...].service` 啟動服務, `systemctl stop [...].service` 停止服務,
   - `systemctl restart [...].service` 重起或者啟動服務, `systemctl try-restart [...].service` 在運行時嘗試重起, `systemctl reload [...].service` 重新載入設定檔
@@ -336,8 +336,32 @@ Shell
     - `"` 使用雙引號包夾的內容, 大多數當成一般字元, 但是少數會保留其作用, 例如 `$`, `\`, `\``
   - Autocomplete 語法自動補全
     - 使用 `Tab` 鍵
-- 常用命令
-  - `more` 查看文件內容
+
+系統管理與維護 常用指令
+
+- `ls` 顯示指定目錄下的內容
+  - `-l` 顯示詳細資訊
+- `pwd` 顯示當前目錄位置
+- `cd` 改變當前目錄
+- `date` 顯示或修改系統時間
+- `passwd` 設定使用者密碼
+- `su` 改變使用者身份
+  - 可以依據 options 設定對應的環境變數
+- `clear` 清除螢幕資訊
+- `man` 查詢命令說明文件
+- `who` 顯示目前登入到系統的用戶們
+- `w` 顯示登入到系統的用戶資訊
+- `uname` 顯示作業系統資訊
+- `uptime` 顯示系統運作資訊 (啟動時間, 用戶數, 系統平衡負載)
+- `last` 顯示過去登入系統的用戶資訊, 預設讀取 `/var/log` 下的 `wtmp`
+- `dmesg` 顯示開機時資訊, kernel 會將開機時的資訊儲存在 kernel buffer 中
+- `free` 顯示當前 memory 狀態資訊
+- `ps` 顯示當前系統 process 狀態資訊 (snapshot)
+  - `-ef` 顯示所有的 process
+- `top` 顯示當前系統處理器監控 (即時更新)
+  - 執行後也有可以進行互動的指令, 可以使用 `h` 或 `?` 查詢
+
+文件管理與編輯 常用指令
 
 ---
 
