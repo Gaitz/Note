@@ -436,6 +436,48 @@ Shell
 
 ### 第五章 - Linux 下軟件的安裝與管理
 
+Source code 安裝
+
+- 很多軟體都是開源的, 因此可以從原始碼開始編譯安裝
+  - 大多數都是 C 或 C++
+- 下載與解壓縮, 閱讀 README
+- 運行 configure 檔案檢測安裝環境是否合適 (所需的工具都已安裝)
+- 編譯與安裝
+  - 很多時候使用 `make`, `make install`
+  - 熟悉 `make` 與 makefile
+  - 預設的安裝路徑是 `/usr/local` 下, 但是可以自訂
+
+RPM 包方式安裝
+
+- 依據不同的 distributions 會採用不同的 package 管理工具 (`rpm`, `dpkg`)
+  - 進行安裝, 查詢, 驗證, 更新, 刪除
+- 更新管理工具 (`yum`, `apt`)
+  - 協助進行安裝與刪除, 會管理 dependency 問題, 允許多個 repository
+  - 進行檢查, 更新, 查詢已安裝, 查詢資訊,
+- `.rpm` 內容以包好編譯過後的執行檔, 因此可以直接進行安裝
+  - 只會執行解壓縮與驗證
+- RPM, Red Hat Package Manager 屬於 Red Hat 體系
+  - 安裝使用指令 `rpm`,
+  - 利用 `yum` 來管理 rpm
+- DPKG, 屬於 Debian 體系 (包含 Ubuntu)
+  - 安裝使用指令 `dpkg`
+  - 利用 `apt` 來管理 dpkg
+- _補_ APT, `apt`
+  - `update`, 從 source repositories 更新 package information
+  - `upgrade`, 更新所有目前已安裝的 packages (大更新), 不會進行任何的刪除 (remove), 如果需要刪除才能更新時會自動中止
+  - `full-upgrade`, 等同於 upgrade 進行大更新, 但是如果遇到刪除會繼續執行
+  - `install`, `reinstall`, `remove`, `purge`, 安裝與移除
+  - `autoremove`, 移除所有沒有需要使用的 packages (沒有被 dependency 的)
+  - `search` 使用 regex 搜尋 packages 列表
+  - `show` 查詢 package 資訊,
+  - `list` 列出清單等同於 `dpkg-query --list`, 可以配合 `--installed`, `--upgradeable`, `--all-versions` options 進行過濾
+  - `edit-sources` 進行手動編輯 `sources.list`
+
+二進位軟體安裝方式
+
+- 已經編譯過後可執行檔
+- 只需要進行解壓縮與安裝即可
+
 ---
 
 伺服器搭建篇
