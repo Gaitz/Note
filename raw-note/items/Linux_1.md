@@ -488,6 +488,7 @@ RPM 包方式安裝
 
 網路卡驅動安裝
 
+- 相同的驅動程式安裝邏輯, 適用於其他硬體設備
 - 如果自動取得的驅動程式不支援時, 需要手動安裝網路卡驅動程式
 - 首先檢查網路卡硬體本身是否故障
 - 查詢網路卡晶片型號
@@ -500,6 +501,23 @@ RPM 包方式安裝
 - 檢查網路卡驅動 module 是否有被加載入 kernel 中
   - Linux kernel 對硬體的操控是通過驅動程式, 而驅動程式是以可以動態載入的模組的形式存在
   - 使用 `lsmod` 指令查看當前載入 kernel 的 modules, 資料來源是 `/proc/modules`
+- 如果驅動沒有被加載時, 使用 `modprobe` 進行 module 加載進入 kernel
+  - `modprobe` 指令可以對 kernel 進行 modules 的加載或卸載並且會自動處理 dependency
+  - 舊的指令 `insmod` 與 `rmmod` 可以完全被 `modprobe` 取代
+  - `depmod` 指令可以進行 module 的 dependency 分析
+- 需要手動安裝驅動程式時
+  - 需要從硬體廠商網站或者 package manager system 中尋找, 然後把驅動程式解壓縮至 `/lib/modules` 對應的位置下, 之後進行手動加載進入 kernel
+  - 需要從原始碼編譯時, 可能會需要相依的 kernel source codes 等工具, 需要確認有 kernel-source, kernel, kernel-devel, kernel-headers, gcc, make 等工具已經有安裝
+
+配置 Linux 網路
+
+- 網路設定通常都作為系統 configuration 存在 `/etc` 目錄下, 每家 distributions 會有不同的子路徑
+  - 可以查詢或修改 hostname, hosts, dns 設定, IP 設定, ...
+- 除了直接手動修改 configuration 文件之外
+- 可以通過 `nmtui` 指令協助進行網路配置 (`NetworkManager`)
+  - `NetworkManager` 是一個 service 也是一個指令, 可以通過 `systemctl status NetworkManager` 查看啟動狀態
+
+Linux 網路應用
 
 ---
 
