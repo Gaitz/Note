@@ -519,6 +519,16 @@ RPM 包方式安裝
 
 Linux 網路應用
 
+- Linux 下的 IP 別名功能
+  - 讓一個實體網路卡有多個 IP 位置, 例如 `eth0`, `eth0:1`, ... 同個網卡有多個網路設定並且同時都有作用
+  - 使用 configuration 設定或者網路設定指令, 會有不同的影響時期, 有的只有暫時的, 有的在重啟後仍會存在
+- 開啟 Linux 代理轉發功能, IP forwarding
+  - 從系統設定檔案中修改設定並且套用
+  - 設定檔 `/etc/sysctl.conf` 中尋找 `ip_forward`
+  - 套用系統設定需要使用指令 `sysctl -p`
+- Network route 與 routing
+  - `route` 指令, 目前已經由 `ip route` 指令取代
+
 ---
 
 ### 第七章 - 架設 Linux 服務器
