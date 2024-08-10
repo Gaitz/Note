@@ -519,15 +519,22 @@ RPM 包方式安裝
 
 Linux 網路應用
 
-- Linux 下的 IP 別名功能
+- Linux 下的 IP 別名功能, 虛擬化
   - 讓一個實體網路卡有多個 IP 位置, 例如 `eth0`, `eth0:1`, ... 同個網卡有多個網路設定並且同時都有作用
   - 使用 configuration 設定或者網路設定指令, 會有不同的影響時期, 有的只有暫時的, 有的在重啟後仍會存在
 - 開啟 Linux 代理轉發功能, IP forwarding
-  - 從系統設定檔案中修改設定並且套用
-  - 設定檔 `/etc/sysctl.conf` 中尋找 `ip_forward`
-  - 套用系統設定需要使用指令 `sysctl -p`
+  - 從系統設定檔案中修改設定並且套用, `/proc/sys/net/ipv4/ip_forward` (重開機會重置)
+  - 設定檔 `/etc/sysctl.conf` 中尋找 `ip_forward` (重開機不會重置)
+    - 套用系統設定檔需要使用指令 `sysctl -p`
 - Network route 與 routing
   - `route` 指令, 目前已經由 `ip route` 指令取代
+  - 手動建立靜態路由表 static routing, 使用 `ip route` 命令進行查詢, 新增, 修改, 刪除
+  - routing table 由窄排到大, `0.0.0.0` 作為 IP 代表全部, 作為 Gateway 代表本機處理 (以 Ethernet 為例代表使用 MAC address 直接連線)
+  - 建立 routing 時, 必須是本機能有辦法連線的 IP 位置
+- 以 Linux 系統架設 Router 服務
+  - 開啟 IP forwarding 功能, 並且建立對應的 routing 設定
+  - 其他的 Router 也需要設定對應的 routing 設定才能正確的連線
+  - 與外網連線的 router 需要開啟 NAT 服務
 
 ---
 
