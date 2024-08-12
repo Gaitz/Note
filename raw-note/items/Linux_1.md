@@ -540,6 +540,28 @@ Linux 網路應用
 
 ### 第七章 - 架設 Linux 服務器
 
+OpenSSH
+
+- 已加密的方式進行數據傳輸
+  - 取代 Telnet 的安全性替代品
+- Server-side 啟動 `sshd`
+- config 一般在 `/etc/ssh/` 目錄下
+  - `man ssh_config` 查看說明文件
+- 通過指令 `systemctl start ssh`, 啟動
+  - `systemctl status ssh` 查看
+  - `systemctl stop ssh` 停止
+  - `systemctl restart ssh` 重啟
+
+Web Server
+
+- 安裝與設定 Apache (Web Server) + Tomcat (Java/JSP) 的組合
+  - Apache 是 Web Server 處理靜態頁面, 靜態資源和 Proxy 到 Tomcat 的工作
+  - Tomcat 處理 Java/JSP 的動態頁面
+- Apache 上使用 http-proxy 或 proxy-ajp 來連結 Tomcat
+- Apache 可以從官網下載 source code 從 build 開始安裝, 或者使用 package manager 安裝
+
+LAMP servers 的建立
+
 ---
 
 ### 第八章 - 構建高性能的 MySQL 資料庫
