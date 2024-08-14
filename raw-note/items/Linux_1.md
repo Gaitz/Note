@@ -562,9 +562,103 @@ Web Server
 
 LAMP servers 的建立
 
+- LAMP, 全部 open sources 的 web application 解決方案
+  - Linux, Apache, MySQL, PHP
+  - Linux, Apache HTTP server, MySQL or MariaDB, Perl or Python
+- 範例示範使用 LAMP 建立 WordPress 網站系統
+  - MariaDB, phpMyAdmin
+- 安裝 Apache, 設定, 啟動 (`systemctl`)
+- 安裝 MariaDB, 設定, 啟動 (`systemctl`)
+- 安裝 PHP, 設定, 安裝 phpMyAdmin 設定
+- 安裝 WordPress 設定, 連結 Apache 與 MariaDB
+
+DNS Server 建立
+
+- DNS, Domain Name System, 用於轉換域名成為 IP address
+- DNS Servers
+  - Master DNS
+  - Slave DNS
+  - Cache-only server
+- 使用 Bind 軟體實現 DNS server
+- 安裝
+- 設定
+  - 預設 port 為 53
+- 啟動 (`systemctl`)
+- 測試
+  - 使用 `nslookup` 測試
+
+Samba Server 建立
+
+- 讓 Windows 與 Linux 之間可以進行文件共享
+  - Linux 與 Linux 之間也可以使用
+- SMB, Server Message Block
+- CIFS, Common Internet File System
+- 使用的是 server/client model
+- 安裝 `samba`
+- 設定
+- 建立共享目錄
+- 啟動服務 `systemctl`
+- 權限控管
+
 ---
 
 ### 第八章 - 構建高性能的 MySQL 資料庫
+
+MySQL 與 MariaDB
+
+- MySQL 分成社群版與商業版
+- MariaDB 是 MySQL 社群開源版的分支
+- MySQL 目錄結構
+  - `/var/lib/mysql`,
+  - `/var/log/mysqld.log`, 日誌 log
+  - `/etc/my.cnf`, 設定文件
+  - `/etc/rc.d/init.d/mysqld`, 服務管理腳本
+  - `/usr/lib64/mysql`, 相關 library 路徑
+  - `/usr/bin/mysql*`, 二進位可執行檔位置
+
+常見的 high availability MySQL 解決方案
+
+- 如何實現資料共享和資料同步
+  - 通常以 SAN (Storage Area Network) 實現
+  - 以 rsync 或其他 DRBD 技術實現資料同步
+- 如何處理故障時的轉移, 如何在發生故障時不影響服務的情況下進行資料庫的切換
+- Master-slave 複製解決方案
+  - 使用 MySQL 提供的 log 複製, 達到資料同步
+  - Master 進行寫入工作, slaves 提供讀取服務, 達到讀寫分離
+  - 出現故障時需要通過手動切換 Master 因此只能達成 90% SLA
+  - 如果使用故障時自動切換 Master 的其他服務時, 可達 95% SLA
+- MMM 高可用解決方案
+  - Master-Master Replication Manager (MMM)
+  - 使用雙 masters 多 slaves model
+  - 雙 masters 互為 master-slave, 實現只能有單一節點進行寫入, 避免寫入衝突
+  - 此使用方案可達 99% SLA
+- Heartbeat / SAN 高可用解決方案
+  - 依靠第三方軟硬體實現
+  - 故障處理使用 Heartbeat 軟體實現, clusters 監控與管理
+  - 使用 SAN 共享資料
+  - 成本較高, 但是可達 99.99% SLA
+- Heartbeat / DRBD 高可用解決方案
+  - 依靠第三方軟硬體實現
+  - 故障處理使用 Heartbeat 軟體實現
+  - 資料共享採用 DRBD (Distributed Replicated Block Device)
+  - 較複雜, 但是可達 99.9% SLA
+- MySQL Cluster 高可用解決方案
+  - 官方主推的解決方案, 較複雜, 設定麻煩
+  - 但是可達 99.999% SLA
+
+使用 Keepalived 搭配 MySQL 雙 master 模式產生的高可用集群系統 (high availability clusters)
+
+- MySQL 複製, 本身自帶的複製功能, 以 log 日誌為基礎, 複製, 解析, 重建
+  - 單向, 非同步的, chainable
+- 這種方式實現的模式只能有一台進行寫入 (master), 其他則唯讀 (slaves)
+- 優點是
+  - 提升可靠度, Master 出問題時可以切換其他 slave 取代
+  - 實現讀寫分離, 降低負擔
+  - 網路好且負擔不大時, 可以實現 real-time 同步
+- 不同的複製模式
+  - 依照指令, 複製相同的指令在 slave 機器上執行
+  - 依照資料, 把主伺服器上變動的資料複製過去
+  - 混合型, 優先以指令複製執行, 如果無法實現則採用資料複製
 
 ---
 
