@@ -659,6 +659,45 @@ MySQL 與 MariaDB
   - 依照指令, 複製相同的指令在 slave 機器上執行
   - 依照資料, 把主伺服器上變動的資料複製過去
   - 混合型, 優先以指令複製執行, 如果無法實現則採用資料複製
+- MySQL 複製的實現原理
+  - 從 master server 複製到一或多個 slaves server 的非同步過程
+  - 在 master server 上要開啟 Binary Log 功能
+  - 會有三個 threads 參與
+    - Master server, IO thread
+    - Slave server, IO thread 與 SQL thread
+  - 由 slave server IO thread 發出請求, 請求指定 log 的位置或內容
+  - Master server IO thread 讀取後, 返回給 slave server IO thread
+  - Slave server IO thread 讀取後, 寫入對應的中繼 log 文件 (relay-log) 中, 並且儲存讀取到的相關資訊到 master-info 文件中
+  - Slaver server SQL thread 讀取中繼 Log 文件, 解析, 並且執行對應的 SQL 命令
+  - 以此來達到與 Master server 資料同步
+- MySQL 複製的常用架構
+  - 1 master, 1 slave
+  - 1 master, 多 slaves, 適用於有大量讀取需求
+  - 2 masters, 雙主互為備援, 適用於寫入要求較高, 並且避免 single point failure
+  - 2 masters, 多 slaves, 雙主, 同時加上多個 slaves
+- 架構的通用準則
+  - 同一時間只能有一個 master 進行寫入工作
+  - 一個 master 可以有多個 slaves
+  - Server ID 要確保 unique
+  - Slave server 從 master 傳遞來的資料, 可以再次傳遞給其他 slaves
+- MM 模式架構, 雙 masters
+  - 兩台 masters 資料互相同步, 互相將對方設定為 slave
+  - 通過 Keepalived 軟體, 處理錯誤監控和切換, 並且作為 reverse proxy 協助對外 IP 切換
+  - 一次只有一台 master 可以進行寫入 (對外)
+  - 配合 Keepalived 使用產生故障處理能力
+
+MMM 模式建立 MySQL 高可用集群系統
+
+- 通過第三方軟體達成雙 Master 多 Slaves 的架構, 具有讀寫分離且具有故障處理能力的多伺服器架構
+- 此架構在讀寫壓力很大時並不是很穩定, 可能會產生複製 delay, 切換失效等問題
+- 存在一個 monitor 進行個別伺服器之間的監控與調整
+- 使用 agent 的方式存在每個伺服器, 來與 monitor 進行溝通
+
+MySQL 讀寫分離解決方案
+
+- 對於新系統來說, 在應用端一開始就設計成讀寫分離的模式, 分別留有對應不同伺服器 IP 的空間
+- 對於舊系統而言, 可以使用 Proxy 模式, 增加一個虛擬中間層負責處理轉發業務
+  - 例如通過 Amoeba 或 MySQL-Proxy 軟體實現
 
 ---
 
