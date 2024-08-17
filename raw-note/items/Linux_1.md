@@ -749,6 +749,39 @@ MySQL 讀寫分離解決方案
   - 關閉系統不必要的服務
     - 舊版使用 `/etc/init.d` 進行服務的關閉與開啟
     - 新版使用 `systemctl` 進行服務的關閉與開啟
+  - 查詢特定的服務狀態
+    - 舊版 `/etc/init.d` 時, 使用 `chkconfig --list`
+    - 新版 `systemctl` 時, 使用 `systemctl status`
+  - 系統運行必要的服務 (_補_, 需要查詢當前版本的 distribution 來得知相關的服務名稱)
+    - `acpid`, 電源管理
+    - `Apmd`, 監視系統電源狀態
+    - `Kudzu`, 檢測硬體是否有變化
+    - `crond`, `cron`, cron job 運行服務
+    - `atd`, 類似 `crond` 指定時間運行指定事情的服務
+    - `iptables`, 防火牆服務
+    - `network`, 網路服務
+    - `sshd`, `ssh`, ssh 服務
+    - `syslog`, 系統日誌服務
+- 密碼登錄安全
+  - 密碼暴力破解
+    - 過短的 (6 位以下) 純數字密碼, 會被在幾分鐘內被破解
+  - 推薦放棄密碼的驗證方式
+  - 例如金鑰認證方式 (ssh), _補_ 實體金鑰
+- 其他安全設定
+  - 禁止系統回應 ping request (關閉 icmp 功能)
+    - `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`
+    - 或寫入系統開機時自動運行的指令設定檔中
+  - 限制 shell history 的數量
+    - `.bashrc` `HISTSIZE` 預設是 1000
+    - 重設限制在 30 以下, 0 代表不開啟紀錄功能
+  - 刪除系統預設中不必要的用戶 (user) 與群組 (group)
+    - 列出所有的用戶與群組 `getent passwd`, `getent group`, 或者 `/etc/passwd`, `/etc/group` 文件裡的值
+    - 刪除指令 `userdel`, `groupdel`
+  - 設定 tcp_wrappers 防火牆
+    - 相關設定依據 `/etc/hosts.allow` 與 `/etc/hosts.deny` 兩個文件
+    - 設定允許或阻擋的服務, IP, 域名之間的關係
+
+Linux 軟體防火牆 iptables
 
 ---
 
