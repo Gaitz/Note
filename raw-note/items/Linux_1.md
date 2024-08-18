@@ -783,6 +783,62 @@ MySQL 讀寫分離解決方案
 
 Linux 軟體防火牆 iptables
 
+- 防火牆可以分成兩種類型
+  - Packet Filter, 封包過濾式防火牆
+  - Application-Level Gateway, Proxy 防火牆
+- `iptables` Linux 常見的軟體防火牆, 屬於封包過濾式
+  - 設定封包過濾規則, 定義哪些應該接收, 哪些應該剔除
+  - 操作 Linux kernel 中的 `Netfilter` 防火牆機制
+  - `iptables` 具有 extension 可以擴充其能力
+- `iptables` 在架構上,
+  - 可以保護本身主機之外,
+  - 也能架設在 router server (gateway) 上進行區域型過濾, 可以達成在內網區域有多層的防火牆
+  - 對 DMZ (Demilitarized Zone) 進行安全保護
+- `iptables`
+  - 由各自獨立不同的 table 所組成,
+  - 每個 table 中都有多個 chains 可以進行設定
+  - 每個 chain 裡有 rules 與 policy
+- filter table
+  - INPUT chain, 外部進入系統的過濾
+  - OUTPUT chain, 內部往外發送的過濾
+  - FORWARD chain, 外部來傳遞到內部的過濾
+- nat table, NAT (Network Address Translation)
+  - PREROUTING chain, 進入系統需要轉換目的地地址的 (DNAT)
+  - POSTROUTING chain, 離開系統要改變來源地址的 (SNAT)
+  - OUTPUT chain, 改變本地產生 packet 的目的地地址
+- mangle table, 用來修改不同的 packet 與 head
+  - PREROUTING chain, POSTROUTING chain, OUTPUT chain, INPUT chain, FORWARD chain
+- raw table
+- security table
+- `iptables` 規則執行順序
+  - 規則是依照順序執行的, 因此順序會非常重要, 限制越嚴格的順序要在前才有作用
+- `iptables` 指令
+  - `-t`, 指定 table, 預設是 filter table
+  - `-L` `--list`, 列出所有的規則
+  - `-v`, 顯示更多內容
+  - `-n`, 以 IP 表示
+  - `-F` `--flush`,
+  - `-X` `--delete-chain`,
+  - `-Z` `--zero`,
+  - `-P` `--policy`, 針對哪個 chain 進行設定
+  - `-A` `--append`, 把新規則加在最後 (tail)
+  - `-I` `--insert`, 把新規則插入在指定位置, 如果沒有指定位置時, 預設會在 head
+  - `-i` `--in-interface`, 進入的網路介面
+  - `-o` `--out-interface`, 出去的網路介面
+  - `-p` `--protocol`, 指定協定
+  - `-s` `--source`, 來源 IP
+  - `-d` `--destination`, 目的地 IP
+  - `-j` 指定 target
+- 制定防火牆規則
+  - 可以針對不同方面進行設定, IP address, 網路介面, 網路協定, Port 號, 連線狀態 (state), MAC address
+- 行為 (target), 分成終止與非終止型, 參考 iptables extension 賦予更多種的 targets
+  - `ACCEPT` (終止型), 通過
+  - `REJECT` (終止型), 拒絕, 但是會回應
+  - `DROP` (終止型), 丟棄, 不回應
+  - `REDIRECT`, 用於 NAT 轉發到其他的 port, 再比對其他規則
+
+Linux 系統的備份
+
 ---
 
 ### 第十章 - Linux 故障排查思路與案例
