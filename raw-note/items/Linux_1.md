@@ -1027,6 +1027,101 @@ Read-only file system 錯誤與解決案例
 
 ### 第十二章 - Linux 磁盤儲存管理
 
+硬碟管理的基本概念
+
+- Linux 中所有的硬體都是以文件的方式存在, 設備文件, 存在 `/dev/` 目錄下
+- 檔案類型 `c` (character device file) 字元設備文件 與 `b` 塊狀設備文件 (block file)
+- 硬碟設備在 Linux 中的表示方式, 依據實體設備接口的不同, 對應不同的名稱
+  - IDE 硬碟, `hd` + 設備序號 + 分區編號
+  - SCSI 硬碟, `sd` + 設備序號 + 分區編號
+- 設備掛載 (mount) 與使用
+- 掛載需要知道
+  - 掛載磁碟分區的文件系統類型 (例如, ext2/ext3/ext4 )
+  - 掛載分區對應的設備文件
+  - 建立一個目錄作為掛載點
+- 預設掛載點在 `/mnt`, `/media` 但是不是強制使用, 可以自行建立
+  - 掛載時可以用 `pwd` 確認自己是否已經離開掛載點, 否則掛載時會遇到 device busy 錯誤
+- 退出設備要使用 `unmount` 卸載掛載點
+- `df -h` 命令查詢當前檔案系統使用狀況, 不需要管理者權限
+- 單一硬碟內的分區劃分 (_補_: 此種限制與劃分來自於 MBR partition table 標準, 新版的 GPT 則沒有這種限制)
+  - 分成主分區 (primary partition), 擴展分區 (extended partition), 邏輯分區 (logical partition)
+  - Primary partition 數量限制是 `4`, 並且有大小限制, 是可以用來啟動的區塊 (bootable)
+  - Extended partition 佔用 Primary partition 其一數量限制, 作為 Logical partition 的容器
+  - Logical partition 必須隸屬於 Extended partition 下
+- 指令顯示當前所有硬碟設備的分區情況, 需要管理者權限才能讀取
+  - `fdisk -l`
+  - `parted -l`
+
+使用 `fdisk` 工具進行硬碟分區劃分
+
+- 硬碟劃分工具有 `fdisk`, `cfdisk`, `parted` 等等
+- `-l` 參數作為查詢工具
+- `fdisk` 指定 device 進入互動式硬碟分割
+  - `m` 查詢所有指令
+  - `n` 建立新分區
+  - `t` 修改分區類型
+  - `p` 查看當前分區 table
+  - `w` 儲存並且進行分割
+  - `q` 離開並且放棄改變
+- 分割完之後還需要進行不同文件模式的格式化才能使用
+- _補_: `fdisk` 工具, 比較新的版本也支援 `GPT` 分區規格分割
+
+利用 `parted` 工具規劃硬碟分區
+
+- `parted` 擁有比 `fdisk` 更豐富的功能
+- 可以使用互動模式和命令模式 (可撰寫成腳本執行)
+- 兩種 partition table
+  - `MBR` (master boot record) 舊的規格, 對於 Windows 有很好的相容性, 甚至是 DOS
+  - `GPT` (GUID Partition Table) 新的規格, 沒有 MBR 的限制 (例如: 主分區數量限制為 4, 單個分區 2TB 容量上限)
+    - GPT 分區數量是沒有限制的, 但是 windows 系統具有辨識上限 128 個
+    - GPT 分區沒有 primary, extended, logical partition 的設定區別
+- 需要考量硬體支援度 UEFI 與 GPT
+  - 開機韌體分成 BIOS (舊), UEFI (新)
+- 使用指令 `parted` 進入互動模式
+  - `help` 查詢所有指令
+  - `mklabel` 建立 partition table
+  - `mkpart` 建立新分區
+  - `print` 印出相關訊息
+  - `rm` 刪除分區
+  - `select` 選擇其他設備
+
+檔案類型格式化
+
+- 在硬碟切分完分區後, 需要針對不同的分區進行檔案類型格式化
+- 使用指令 `mkfs` 進行檔案類型格式化
+
+LVM
+
+- 在分區大小設定後, 如果發現不合需求, 常見的解決方案是重新進行分區分割, 或者使用 soft link 連結分區
+- LVM (Logical Volume Manager) 是 Linux 下針對硬碟分區進行管理的一種機制
+  - 一種抽象的中間層, 介於硬碟分區與檔案系統之間
+  - 讓不需要重新設定硬碟分區的情況下, 讓檔案系統可以使用
+- Physical media, 物理儲存設備, 例如: 系統上的硬碟
+- Physical Volume, PV, 實際上的硬體分區
+- Volume Group, VG, 由多個 Physical Volume 組成, 形成類似虛擬的硬碟
+- Logical Volume, LV, 在一個 Volume Group 中, 進行虛擬的分區
+- Physical Extent, PE, 在硬碟實體分區上最小的儲存單位, 預設是 `4MB`
+- Logical Extent, LE, 在虛擬分區上 (Logical Volume) 最小的儲存單位, 單位容量需要與 Physical Extent 做一對一對應
+- 因此掛載 (mount) 時, 掛載的不是實體分區, 而是虛擬的邏輯分區 (Logical Volume, LV)
+- 需要安裝專用的工具包
+- LVM 建立與管理
+  - 在使用 LVM 之前, 實體硬碟分區, 要指定成 LVM 所能識別的種類 (`Linux LVM`)
+  - 分割完成後不需要進行格式化
+  - 使用指令 `pvcreate` 選定想要使用 LVM 的實體分區 (PV) 在未來組成 VG 使用
+  - 使用指令 `vgcreate` 選擇 PVs 組成不同的 Volume Group (VG)
+  - 使用指令 `vgchange` 啟動建立完成的 Volume Group
+  - 查詢相關資訊 `vgdisplay`, `pvdisplay`
+  - 使用指令 `lvcreate` 在指定的 VG (Volume Group) 上建立虛擬分區 (LV, Logical Volume)
+  - 使用檔案類型格式化命令 (例如: `mkfs`) 格式化虛擬分區 (LV) 來使用
+  - 一樣需要掛載 (mount) 虛擬分區後才能使用
+  - 使用指令 `vgextend` 後續新增新的 PV 進入 VG 中
+  - 使用指令 `lvextend` 或 `lvreduce` 動態調整虛擬分區 (LV) 的容量大小
+    - 並且依據不同的檔案類型選用不同工具實現大小擴充
+    - 指令 `xfs_growfs` 對應 `xfs` 檔案系統
+    - 指令 `resize2fs` 對應 `ext2/ext3/ext4` 系列檔案系統
+  - 使用指令 `pvremove`, `vgreduce`, `vgremove`, `lvremove` 進行 PV, VG, LV 的刪除或調整
+    - 執行順序要對應建立順序的反向
+
 ---
 
 ### 第十三章 - Linux 文件系統管理
