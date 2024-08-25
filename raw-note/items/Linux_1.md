@@ -1126,6 +1126,50 @@ LVM
 
 ### 第十三章 - Linux 文件系統管理
 
+檔案系統
+
+- 檔案系統是基於作業系統的
+- 是用來管理, 組織保全在硬碟驅動上資料的軟體
+  - 資料儲存佈局, 空間管理, 文件命名, 安全控制等管理
+  - 解決如何有效的儲存資料
+  - 實現資料完整性, 保證寫入與讀取是一致的
+  - 建立 metadata
+- 實現對資料存取的簡單化, 抽象化
+  - 檔案系統作為作業系統與硬碟之間的中間抽象層
+- 使用流程
+  - 選擇儲存實體介質
+  - 硬碟分區 (partition)
+    - `fdisk`, `cfdisk`, `parted`
+  - 檔案系統建立 (檔案系統格式化)
+    - `mkfs` (make file system)
+  - 掛載 (mount)
+    - `mount`
+- _補_: 檢視各個 partition 檔案系統的指令
+  - `lsblk -f` (`-f` `--fs`) 列出系統偵測到的所有 block devices
+  - `df -T` (`-T` `--print-type`) 當前掛載的檔案系統
+
+Linux 下常見檔案系統介紹
+
+- Virtual File System, VFS, 抽象化檔案系統, 讓作業系統可以用統一的介面操作不同類型的檔案系統
+- DOS 文件系統, `msdos`
+- Windows 下的 FAT 系列, `FAT16`, `FAT32`, `NTFS`
+- 光碟檔案系統, `ISO-9660`
+- 單一檔案系統, `ext2`, 日誌檔案系統 `ext3`,
+- 集群檔案系統 `gfs` (Red Hat Global File System), `OCFS2` (Oracle Cluster File System)
+- 加密檔案系統 `CFS`, 虛擬檔案系統 `/proc`, 網路檔案系統 `NFS`
+- `ext3`, `ext4` 檔案系統
+  - Linux 檔案系統演進, VFS -> ext -> ext2 -> ext3
+- `ext2` 由超級塊 (superblock), 塊組 (block group), 塊組描述符 (group descriptor) 組成
+  - 一個 block size 可以是 `1KB`, `2KB`, `4KB`, `8KB`, 可以在檔案系統建立時指定
+  - 最開始的 1024 bits 為 boot block 存放啟動程序
+  - 接下來的 1024 bits 為 superblock 存放整個檔案系統全域的資訊 (非常重要), 在檔案系統被 mount 時, 會被讀取近 memory
+    - superblock 在後續的 block group 中會存有備份
+  - `ext2` 使用 inode 來記錄檔案訊息, 每個檔案對應一個 inode (一對一對應)
+  - `ext2` 的容錯在於有多份 superblock 關鍵資料的備份和 `ext2` 系統在重啟時會通過 `fsck` 嘗試修復損壞的部分, 然而這樣產生了一定程度的效能問題
+- 為了硬碟大量讀寫造成的效能問題, 檔案系統通常使用非同步的方式進行, 修改當下只會存在 memory 中, 不會馬上寫入硬碟, 而是後續通過一個 daemon 在適當的時機進行寫入
+  - 相應的會產生資料不同步的問題, 例如寫入時系統崩潰, 導致資料同時有部分舊版部分新版, 或者在寫入 metadata 時出錯, 導致實際資料與 metadata 不一致
+- `ext3` 是一種日誌檔案系統 (Journaling file system)
+
 ---
 
 ### 第十四章 - Linux 內存管理
