@@ -1169,6 +1169,100 @@ Linux 下常見檔案系統介紹
 - 為了硬碟大量讀寫造成的效能問題, 檔案系統通常使用非同步的方式進行, 修改當下只會存在 memory 中, 不會馬上寫入硬碟, 而是後續通過一個 daemon 在適當的時機進行寫入
   - 相應的會產生資料不同步的問題, 例如寫入時系統崩潰, 導致資料同時有部分舊版部分新版, 或者在寫入 metadata 時出錯, 導致實際資料與 metadata 不一致
 - `ext3` 是一種日誌檔案系統 (Journaling file system)
+  - 直接建立在 `ext2` 新增一個特殊的 inode (Journal), `ext2` 可以直接升級使用
+  - Journal 模式, 所有的資料 (data) 與 metadata 改變都紀錄進日誌中, 減少資料遺失的機率, 但是需要更多的讀寫資源, 最慢但是最安全
+  - Ordered 模式, 只有 metadata 改變被紀錄在日誌中, 只有在資料寫入硬碟後才把 metadata 寫入日誌, 保障了資料完整性, 但是不保證資料遺失, `ext3` 的預設模式
+  - Writeback 模式, 只紀錄 metadata 改變, 但是不保證是在資料被寫入硬碟之後, (換句話說, 可能會有 metadata 已改變, 但是資料遺失的情況), 最快但是最沒保障, 類似於 `ext2`
+- `ext4` 擁有比 `ext3` 更多的新功能
+  - 支援無限制的子目錄數量, 更大的檔案系統, 更大的檔案
+  - 支援日誌校驗功能
+  - 支援快速 fsck
+  - 支援線上硬碟整理, 減少碎片化的問題
+- `ReiserFS` 高性能日誌檔案系統, 優於 `ext2`, `ext3`
+  - 對小檔案 (< 4KB) 進行效能優化 (比較於 `ext2`, `ext3`)
+  - 日誌管理系統, 保證資料寫入前, 先有日誌完成紀錄
+  - 更快速的搜尋速度, 建立在使用 B\+-tree 資料結構上
+  - 適合用於大量小檔案, 需要快速讀寫的使用場景
+  - (此檔案系統缺乏維護, 新版不會再被納入 Linux kernel 中)
+- `XFS` 日誌檔案系統
+  - 另外處理的日誌系統, 提升安全性與效能
+  - 對大檔案, 大數量支援優秀
+  - 快速的寫入速度
+  - 適合用於大量大檔案的使用案例上
+  - 相關指令
+    - 使用 `mkfs` 進行格式化
+    - 把檔案系統掛載加到 `/etc/fstab` 中, 允許系統啟動後自動加載
+    - `xfs_bmap`, 查看檔案 block 狀況
+    - `xfs_db`, 查看檔案系統碎片化狀況
+    - `xfs_fsr`, 整理檔案系統碎片
+    - `xfs_repair`, 檢查或嘗試修復受損的 xfs 檔案系統
+
+選擇檔案系統的標準
+
+- 取決於應用場景
+- 需要頻繁讀取, 小檔案眾多的應用
+  - 適合 `ext4`
+- 需要頻繁寫入的應用
+  - 適合 `XFS`, 相對於 `ext4` 有更優異的 CPU 使用表現
+- 性能要求不高, 安全性要求也不高的場景
+  - 適合 `ext3` 或 `ext2` 節省了很多硬碟性能
+  - 例如 `/tmp` 目錄
+
+NFS 的使用
+
+- `NFS`, Network FileSystem, 網路檔案系統
+  - 讓網路上不同的作業系統可以共享資料
+  - Server-client model
+  - NFS server 共享檔案目錄
+  - NFS client 不同的遠端作業系統, 可以掛載 (mount) 遠端的檔案系統, 使用上如同讀取自己本地端的檔案一樣
+- NFS 的實現原理
+  - NFS server 啟動後, 都會開啟一個任意在 1 ~ 1024 port 給 client 連接使用
+  - 因為每次的 port 都不同, 因此會使用 Remote Procedure Call, RPC 協議來協助連接
+  - 因此, 在啟動 NFS server 服務之前, 需要先啟動 RPC 服務 (`rpc.nfsd`, `rpc.mountd`), _補_: 服務名稱在各作業系統版本可能不同
+  - NFS server 啟動相關的服務, `portmap`, `nfs-utils`
+- NFS 安裝
+- NFS server 設定
+- NFS client 安裝與設定
+- NFS server 安全設定
+  - 因為 NFS 沒有用戶認證機制, 因此權限設定會非常重要
+  - 需要依循 NFS 的 best practice, 盡可能避免安全漏洞
+    - 例如: 使用最新版, 設定正確的防火牆, ...
+  - 對於共享出去的目錄, 提供 client 最低的權限,
+  - `anonuid` (指定 client uid), `anongid` (指定 client group id)
+  - 不應該開啟 `no_root_squash` 來自 NFS client 永遠不讓他拿到 root 權限
+  - 依據可能的 client 數量設定適當的 NFSD COPY 數
+- 另外一款類似的跨作業系統遠端資料共享服務 `SMB`
+  - Windows 原生, 對於 Windows 支援度更佳, 比 NFS 具有更多的功能
+
+Linux 下常用的資料恢復工具
+
+- 應該以備份作為核心, 資料恢復工具只是輔助, 來避免資料遺失
+- 如何使用 `rm -rf` 指令
+  - Linux 下沒有類似 Windows 資源回收桶的功能
+  - 因此使用 `rm` 時需要特別小心
+  - 推薦的解決方案是使用 `mv` 到 `/tmp` 下, 配合腳本設定定期清除, 取代使用 `rm`
+  - 避免資料遺失最重要的方式還是**備份**
+- 開源的資料恢復工具們
+  - `debugfs`, `R-Linux`, `ext3grep`, `extundelete`, ...
+  - `ext3grep` 與 `extundelete` 具有相似的資料恢復原理, `extundelete` 功能更強大
+- `extundelete` 基於 Linux 的資料恢復工具, 通過分析檔案系統中的日誌 (jounrel), 解析所有檔案的 inode 資訊
+  - 適用於 `ext3`, `ext4` 檔案系統
+- `extundelete` 資料恢復原理
+  - 通過 inode 資訊, 配合日誌查詢, 找到遺失資料所在的 block 區域, 使用 `dd` 將資料複製出來後重建
+  - 使用 `ls -i` 可以查詢檔案或目錄的 inode 資訊
+- 安裝 `extundelete`
+  - 從原始碼開始 build 或使用 package manager 安裝
+- `extundetele` 用法詳解
+  - 查詢 superblock 資訊, 日誌資訊, inode 資訊, block 資訊,
+  - 以時間搜尋被刪除的檔案
+  - 復原檔案 (restore)
+- 實戰
+  - 誤刪後, **第一時間**要做的是 `unmount` 被刪除的數據分區 (partition)
+  - 如果是根目錄 (`/`) 遭誤刪, 需要讓系統進入單用戶模式, 並讓根目錄以 read-only 模式 mount
+  - **避免被誤刪的資料區塊被系統重新使用**
+  - 第二步, 使用 `extundelete` 針對 partition 指定 `inode` `2`, 根目錄進行查詢
+  - 找到資料後, 使用 restore 相關指令, 復原單檔或目錄 `--retore-file`, `--restore-files`, `--retore-directory`
+  - 使用復原全部被刪除的資料 `--retore-all`, 可以配合 `--after`, `--before` 進行時間區間篩選, 配合 `date +%s` 取得時間秒數來計算
 
 ---
 
