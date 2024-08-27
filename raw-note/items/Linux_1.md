@@ -1268,6 +1268,57 @@ Linux 下常用的資料恢復工具
 
 ### 第十四章 - Linux 內存管理
 
+物理內存與虛擬內存
+
+- Physical RAM and virtual RAM
+  - 物理記憶體代表硬體實際提供的記憶體
+  - 虛擬記憶體則是由 Linux 模擬出的記憶體抽象層, 實質存取上可能不是硬體記憶體, 而是硬碟模擬的, 即 SWAP 空間
+  - 主因在於物理記憶體很快速, 但是容量不足時
+- Linux 的記憶體管理, 使用 paging 技術, kernel 在物理記憶體不足時, 會把沒有用到的資料暫存到 SWAP 空間中
+  - 不定時的使用 paging 技術調整物理記憶體的空間與資料
+  - 使用 LRU (Least recently used) 最近最少使用演算法來選擇
+- 當實體記憶體與虛擬記憶體不足以切換所需要使用的資料容量時, 會造成當機或服務異常
+
+內存的監控
+
+- `free` 指令查看記憶體空間佔用狀況, 資訊來自於 `/proc/meminfo`
+  - _補_, 資訊表示方式與代表意義會依據版本不同而不同, 需要再次查詢文件才能確認
+  - `total` 物理記憶體容量
+  - `used` 已使用的物理記憶體大小, (total - free - buffers - cache)
+  - `free` 完全沒用到的物理記憶體大小
+  - `buffers` kernel buffers 所使用的暫存大小
+  - `cache` page cache 與 slabs 所使用的暫存大小
+  - `shared` 多個 process 共享的物理記憶體空間大小
+  - `available` 大約會是 free + cache + buffers
+- `buffers` 緩衝與 `cache` 快取的差異
+  - `buffers`, 只紀錄檔案系統中的 metadata 和 tracking in-flight pages, 主要記住檔案結構的資訊, 有哪些檔案和對應的權限
+  - `cache`, 快取實際的資料
+
+交換空間 (swap) 的使用
+
+- swap area 可以是一個專用的 partition 或者一個特殊建立的檔案 (a file)
+- 使用 `dd` 指令建立 swap 用的 file
+  - 範例: `dd if=/dev/zero of=/data/swapfile bs=1024 count=65536`
+  - `bs` 一次讀寫 (r, w) 所使用的 bytes 數, 會覆蓋 `ibs` (輸入, 讀取), `obs` (輸出, 寫入) 設定值
+  - `if` 讀取的檔案
+  - `of` 輸出的檔案
+  - `count` 複製的 block 數量
+  - `/dev/zero` 特殊的偽設備, 輸出都是 0, 常用於初始化
+- 使用 `mkswap` 指令設定 file 或 partition 為 swap (建立 swap, 但是還未使用)
+- 使用 `swapon` 指令啟用 swap
+  - 可以使用 `/etc/fstab` 讓重啟後可以自動掛載
+  - `swapon -a` 會啟用所有被寫在 `/etc/fstab` 裡的 swap
+- 使用 `swapoff` 指令可以移除 swap (停用)
+  - `swapoff -a` 會停用所有寫在 `/etc/fstab` 裡的 swap
+
+查看進程 (process) 佔用內存 (memory)
+
+- `top`
+- `ps`
+- `/proc`
+- `/proc/../status`
+- 使用以上相關指令與資訊, 可以建立客製化的 script 來取得想要的資訊
+
 ---
 
 ### 第十五章 - Linux 系統進程管理
