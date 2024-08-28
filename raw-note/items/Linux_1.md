@@ -1323,6 +1323,114 @@ Linux 下常用的資料恢復工具
 
 ### 第十五章 - Linux 系統進程管理
 
+- 使用 time-sharing 技術, 讓不同的使用者不同的程式, 可以一起進行處理 (多工)
+  - 對於單核心的系統, 每個時間片斷只能進行一項工作 (單個 process)
+  - 對於多核心的系統, 每個時間片段就能執行多個任務 (多個 process)
+- Process, 一個在自身的虛擬地址空間中運行的獨立程式
+  - 對於作業系統來說, 所有在系統上運行的東西都是一個 process
+- 分類
+  - 系統進程 (system process, kernel mode), 可以進行記憶體資源分配, process 切換等管理工作, 不受 user 控制 (包含 root user)
+  - 使用者進程 (user process, user mode), 受使用者控制下運行或關閉的
+    - 交互進程, 由 shell 啟動的 process, 執行過程中與使用者交互操作
+    - 批次處理進程, 由多個 process 集合而成的 process, 會依序啟動執行
+    - 守護進程 (daemon), 一直運行的 process, 獨立於 terminial, 通常週期性的執行某些任務或者等待處理某些事件
+- 屬性, 狀態
+  - 可運行狀態, 運行中或正準備運行
+  - 可中斷的等待狀態, block 中的等待狀態, 可以接受訊號 (signal) 進入執行狀態
+  - 不可中斷的等待狀態, block 中的等待狀態, 但是不會接收或反應訊號
+  - 僵死狀態 (zombie), 每個 process 執行完成後都會進入終止狀態, 但是 parent process 尚未釋放其系統資源
+  - 暫停狀態
+- Process 之間的關係
+  - Linux 系統中以 PID (process ID), 區分不同的 process, 是有數量上限的, 預設上限是 32768, 但是是可以改動的, 依據系統為 32-bit 或 64-bit 有所不同
+  - 所有的 process 都是 `PID 1` process (啟動程序, `init` 或 `systemd`) 的後代
+  - 查詢指令 `ps -ef`, PPID 為 parent PID
+  - 每個 child process 必有其 parent process
+  - child process 關閉不會影響到 parent process
+  - 如果 parent process 在 child process 之前退出 (exit status), 會讓 child process 變成 orphan (孤兒) 進入僵死狀態, 資源無法被釋放
+  - defunct process 解決方案是由其他 process 作為其 parent process 協助資源釋放
+
+進程的監控與管理
+
+- `ps` 指令
+  - 配合 `grep` 使用捕捉想要查詢的 process
+  - `UID` 使用者 ID, `PID` process ID, `PPID` parent process ID, `TTY` 所屬的 terminal
+  - `STIME` start time, `TIME` 所使用的 CPU time, `CMD` 執行的指令
+- `ps -ef` 全部 process 標準輸出
+- `ps auxf`全部 process 使用 BSD 輸出, `f` 代表 forest, 顯示 process hierarchy
+  - `%CPU` CPU 佔比, `%MEM` 記憶體佔比,
+  - `VSZ` 虛擬記憶體大小 (in KB), `RSS` 非 swap 的實際記憶體佔用數 (in KB)
+  - `STAT` 當前狀態,
+    - `R` 運行中, `S` 可中斷的休眠, `Z` 僵死 (zombie, defunct),
+    - `<` high-priority, `N` low-priority
+    - `s` session leader, `l` multi-threaded, `+` 背景執行
+- `pstree` 指令, 監控系統 process
+  - 以樹狀結構呈現 process 之間的關係
+  - `-a` 顯示完整指令, `-n` 依據 pid 排序, `-p` 顯示 PID, `-u` 顯示 user
+  - 可以指定 PID 或指定 user
+- `top` 指令, 監控系統 process
+  - 動態 (dynamic), 即時的 (real-time) 顯示當前 process 狀態, 並且是交互模式
+  - `RES` 實際佔用的記憶體, `SHR` 共享的記憶體, `S` 狀態
+  - 交互模式指令詢問 `?`, `h`
+- `lsof` 指令, 監控系統 process
+  - `lsof`, list open files, 列出所有已開啟的檔案
+    - 由於任何東西在 Linux 都是已檔案的形式存在, 因此 `lsof` 的功用更為強大
+  - `lsof` + 檔案名稱, 可以查詢某個特定檔案由哪個 process 在使用中
+  - `lsof -c` 查詢指定 command 相關的 open files
+  - `lsof -g` 查詢指定 process group Id (PGID) 下所開啟的檔案
+  - `lsof -p` 查詢指定 PID 開啟的檔案
+  - `lsof -i` 查詢與 Internet 相關的開啟檔案, 可以依據 IP version, protocol, hostname, hostaddr, service, port 做篩選
+  - `FD` File Descriptor, 數字, 或有 `r`, `w`, `u` (r + w) 作為檔案開啟模式
+- `pgrep` 指令, 查詢 process ID
+  - 通過名稱, PPID, PGID, GID, SID, tty 等等篩選 process
+  - `pgrep` 查詢 (look up), `pkill` 發送訊號 (signal), `pidwait` 等待 (wait)
+  - `-l` `--list-name` 輸出 PID + process name
+  - `-a` `--list-full` 輸出所有訊息
+
+任務調度 crond 的使用
+
+- `crond` 在 Linux 下週期性執行某種任務或等待處理事件的一個 daemon
+  - _補_: systemd 版本使用 `systemctl status cron` 可以查詢
+- 分成兩類
+  - 系統週期性任務, 系統任務相關路徑在 `/etc/crontab`
+  - 使用者週期性任務, 每個使用者可以有自己的 crontab, 相關路徑在 `/var/spool/cron/crontabs`
+- `crontab` 指令, 進行管理
+  - 指定 file 代表把檔案加入 crontab
+  - `-u` 指定使用者, 預設是當前使用者
+  - `-e` 編輯 crontab
+  - `-l` 顯示 crontab
+  - `-r` 移除 crontab
+  - `-i` 配合 `-r` 使用會提供二次提示 `y/Y` 才確認刪除
+- `crontab` 檔案內容
+  - 每一行都代表一項任務
+  - 每個任務分成 6 個區塊
+  - `minute hour day month week command`
+  - `minute`: [0-59], `hour`: [0-23], `day`: [1-31], `month`: [1-12], `week`: [0-7] (0 與 7 都代表星期日)
+  - 特殊字元: `*` 任意值, `,` 分隔列出, `-` 範圍, `/` 頻率
+  - command 要執行的命令
+- 注意事項
+  - 注意環境變數問題, `cron` 任務執行時的環境變數與使用者當前的不同, 因此需要在腳本裡設定正確的環境變數
+  - 注意 `cron` 任務執行後的結果會通過 email 給任務所有者 (owner), 參考 `MAILTO` 環境變數, 可以查詢 `man cron` 說明文件查看說明
+  - 系統級任務與用戶級任務, 有些行為必需要使用系統級 crontab 才能執行, 例如: 定時重啟系統
+
+使用 `kill` 和 `killall` 指令終止 process
+
+- 用來關閉某些服務或者處理 zombie process
+- `kill` 指令, 依據 PID 發送訊號 (signal) 給 process
+  - 呼叫 kernel 對指定的 process (pid) 發送指定的訊號 (signal) 來實現終結 process 運行
+  - `-l` `--list` 查詢所有的 signal 選項
+  - 指定發送的訊號 `-<signal>`, `-s`, `--signal`
+  - 特殊 pid, `-1` 代表全部 process (除了 init 和 kill process 本身)
+- 常用訊號
+  - SIGKILL `9`, 強制結束, 強制性不正常結束時, kill parent process 會讓 child process 變成 orphan process, 被 pid 1 收養
+  - SIGINT `2`, 結束 process, 但是不是強制性, 一般使用 `Ctrl+c` 就是發送此訊號
+  - SIGTERM `15`, 表示正常結束 process, 預設值, 一般正常結束的情況下, kill parent process 會自動釋放 child process
+- `killall` 指令, 等同於 `kill` 但是使用的是 process name 去搜尋, 搜尋的目錄是 `/proc`
+  - `-r` `--regexp` 以 regex 方式搜尋名稱
+  - `-u` `--user` 指定使用者
+  - `-v` `--verbose` 顯示更多結果報告
+  - `-w` `--wait` 等待 process 終結
+  - `-o` `--older-than`, `-y` `--younger-than` 依據時間
+
 ---
 
 性能調優篇
@@ -1337,7 +1445,7 @@ Linux 下常用的資料恢復工具
 
 ---
 
-虛擬化與集群應用篇
+虛擬化與集應用篇
 
 ---
 
