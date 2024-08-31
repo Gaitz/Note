@@ -1183,7 +1183,7 @@ Linux 下常見檔案系統介紹
   - 日誌管理系統, 保證資料寫入前, 先有日誌完成紀錄
   - 更快速的搜尋速度, 建立在使用 B\+-tree 資料結構上
   - 適合用於大量小檔案, 需要快速讀寫的使用場景
-  - (此檔案系統缺乏維護, 新版不會再被納入 Linux kernel 中)
+  - _補_: (此檔案系統缺乏維護, 新版不會再被納入 Linux kernel 中)
 - `XFS` 日誌檔案系統
   - 另外處理的日誌系統, 提升安全性與效能
   - 對大檔案, 大數量支援優秀
@@ -1439,9 +1439,129 @@ Linux 下常用的資料恢復工具
 
 ### 第十六章 - Linux 系統優化思路
 
+- 對於性能最重要的是 Linux 作業系統與應用程式的最佳結合
+- 完成任務的有效性, 穩定性, 回應速度
+- 影響性能的因素有很多, 需要一一排查, 找出出現瓶頸的地方
+
+影響 Linux 性能的因素
+
+系統硬體資源
+
+- CPU
+  - 考慮到 CPU 數量, 頻率, 運行 symmetric multi-processing (SMP) 的核心
+  - 常受到 CPU 限制的應用: 郵件伺服器, 動態 Web 伺服器, ...
+- Memory
+  - 考慮到容量大小, 與作業系統限制
+  - 容量太小會影響速度, 容量太大則浪費資源
+  - 32 bits 作業系統對於 memory 有上限, 64 bits 作業系統幾乎沒有上限
+  - 常受到 memory 影響的應用: 列印表機服務器, 資料庫伺服器, 靜態 Web 服務器, ...
+- 硬碟 I/O
+  - 在有頻繁讀寫的應用上, 硬碟 I/O 性能至關重要
+  - RAID (Redundant Array of Independent Disk), 依據不同的 RAID 規格, 能提升不同程度的性能與安全性
+  - 常見的 RAID
+    - RAID 0, 需要 2 個硬碟以上, 單純的組成容量更大的硬碟組, 沒有容錯與修復能力, 但是提升硬碟性能與 throughput
+    - RAID 1, Mirror, 兩個硬碟完全相同, 擁有最高的安全性, 但是硬碟利用率只有 50%, 成本最高, 適合保存重要資料的場合
+    - RAID 5, 至少需要 3 個硬碟以上, 採用奇偶校驗, 允許一個硬碟故障, 提升可用性, 安全性, 讀取速度
+    - RAID 0+1, 至少需要有 4 個硬碟以上, 即 RAID 0 + RAID 1 的實現, 每個硬碟都有自己的 mirror
+- 網路頻寬
+
+作業系統相關資源
+
+- 系統安裝優化
+  - 從硬碟劃分 (partition) 與 swap 設定, 都會影響效能
+  - 依據不同的應用需求, 採用在不同的分區實現不同的 RAID 種類來進行最佳化
+    - 寫入頻繁, 安全要求不高, RAID 0
+    - 安全性要求高, 讀寫沒有要求, RAID 1
+    - 讀取要求高, 寫入沒有要求, 提供一定程度的安全性, RAID 5
+    - 讀寫要求都高, 對資料安全也有高度要求, RAID 0+1
+  - swap 設定
+    - 在過去較小的 memory (< 4 GB) 時, 通常設定 swap 為 memory 兩倍容量, 中等大小 (8GB - 16GB) swap 設定與 memory 相等
+    - 在更大的 memory 的現在, swap 的設定就不需要過大
+- Kernel 參數優化, 網路設定優化
+  - 取決於應用程式, _補_: 應該查詢所使用的應用程式相關的文件資訊
+  - 例如: 資料庫應用程式, 所需的設定優化; Web 應用, 所需的網路設定優化
+- 檔案系統優化
+  - 根據不同的應用選擇不同的檔案系統
+  - 例如依據讀寫的需求不同選擇 `ext4` 或 `XFS`
+
+應用程式的優化
+
+- 應用程式本身的優化, 更是至關重要
+- 影響效能的 bug 或者不好的軟體架構設計
+
+分析系統性能的相關人員
+
+- Linux 維運人員 (DevOps, PE)
+  - 要瞭解和掌握系統當下的運行狀態 (CPU 使用率, Memory 使用率, Process 狀態, 網路連線狀態, 開啟檔案狀態, ...)
+  - 掌握系統相關的硬體資訊和設定 (硬碟 I/O, CPU 型號, Memory 實體大小, 網路卡型號與頻寬大小)
+  - Monitoring 與 Observability 很重要, 設定即時的檢測與通知
+- 系統架構設計人員 (architect)
+  - 了解瓶頸是否來自於架構設計
+- 軟體開發人員 (developer)
+  - 了解與改進相關程式設計
+  - 例如: 改進效能不良的 SQL 語法, 演算法優化
+
+系統性能分析工具
+
+- `vmstat` 指令, Virtual Memory Statistics
+  - 一次查看關於 processes, memory, paging, block IO, traps, disks, cpu 運作的報告
+  - 可以通過 options 設定產生報告的時間間隔與次數
+  - Process
+    - `r` 運行數量
+    - `b` block 數量 (等待 IO 的 process)
+  - Memory
+    - `swpd`, swap 使用量
+    - `free`, idle 量
+    - `buff`, 作為 buffers 的使用量
+    - `cache`, 作為 cache 的使用量
+    - `inact`, inactive memory
+    - `active`, active memory
+  - Swap
+    - `si`, swapped in from disk, (從硬碟到記憶體)
+    - `so`, swapped to disk (從記憶體到硬碟)
+  - IO
+    - `bi`, 接收來自於 block device 的速度
+    - `bo`, 輸出至 block device 的速度
+  - System
+    - `in`, interrupts 數量 per second
+    - `cs`, context switches 數量 per second
+  - CPU, 百分比
+    - `us`, user time, 使用於 non-kernel code
+    - `sy`, system time, 使用於 kernel code
+    - `id`, idle time
+    - `wa`, waiting for IO, IO 等待時間
+    - `st`, 被虛擬機佔用的時間 (虛擬機偷取時間), time stolen from a virtual machine
+    - `gu`, 運行 KVM guest code
+- `iostat` 指令, I/O statistics
+  - 主要顯示硬碟讀寫的操作統計數據 (device report), 會額外提供 CPU 使用情況 (cpu report)
+- `sar` 指令, 搜集與報告系統運作資訊, 非常強大好用
+  - _補_: 需要啟動服務, `systemctl start sysstat`
+
+系統性能分析標準
+
+- 沒有固定的標準, 只有經驗性的評判
+- CPU: %usr + %sys, 使用者與系統運行佔用百分比
+- Memory: 查看 swap 使用量
+- 硬碟: CPU 的 %iowait, 等待 IO 的運行百分比
+- 好: CPU < 70%, 沒有 swap 運作, %iowait < 20%
+- 壞: CPU <= 85%, swap 運作, 每個 CPU 10 page/s, %iowait = 35%
+- 糟糕: CPU >= 90%, 更糟糕的 swap 量, %iowait >= 50%
+
+總結
+
+- 更多相關工具, 來查看系統不同面向
+  - `uptime`
+  - `free`
+  - `ps`, `top`
+  - `netstat`, `ss`
+- 遇到問題與性能瓶頸時, 需要有一個順序一一排查
+  - 例如: Network -> Memory -> CPU -> IO
+
 ---
 
 ### 第十七章 - Linux 系統性能評估與優化案例
+
+CPU 性能評估
 
 ---
 
