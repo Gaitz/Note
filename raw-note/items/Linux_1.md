@@ -1505,33 +1505,6 @@ Linux 下常用的資料恢復工具
 
 - `vmstat` 指令, Virtual Memory Statistics
   - 一次查看關於 processes, memory, paging, block IO, traps, disks, cpu 運作的報告
-  - 可以通過 options 設定產生報告的時間間隔與次數
-  - Process
-    - `r` 運行數量
-    - `b` block 數量 (等待 IO 的 process)
-  - Memory
-    - `swpd`, swap 使用量
-    - `free`, idle 量
-    - `buff`, 作為 buffers 的使用量
-    - `cache`, 作為 cache 的使用量
-    - `inact`, inactive memory
-    - `active`, active memory
-  - Swap
-    - `si`, swapped in from disk, (從硬碟到記憶體)
-    - `so`, swapped to disk (從記憶體到硬碟)
-  - IO
-    - `bi`, 接收來自於 block device 的速度
-    - `bo`, 輸出至 block device 的速度
-  - System
-    - `in`, interrupts 數量 per second
-    - `cs`, context switches 數量 per second
-  - CPU, 百分比
-    - `us`, user time, 使用於 non-kernel code
-    - `sy`, system time, 使用於 kernel code
-    - `id`, idle time
-    - `wa`, waiting for IO, IO 等待時間
-    - `st`, 被虛擬機佔用的時間 (虛擬機偷取時間), time stolen from a virtual machine
-    - `gu`, 運行 KVM guest code
 - `iostat` 指令, I/O statistics
   - 主要顯示硬碟讀寫的操作統計數據 (device report), 會額外提供 CPU 使用情況 (cpu report)
 - `sar` 指令, 搜集與報告系統運作資訊, 非常強大好用
@@ -1562,6 +1535,139 @@ Linux 下常用的資料恢復工具
 ### 第十七章 - Linux 系統性能評估與優化案例
 
 CPU 性能評估
+
+- `vmstat` 指令
+  - 可以通過 options 設定產生報告的時間間隔與次數
+  - Process
+    - `r` 運行數量
+      - 如果長期 > CPU 個數, 則代表 CPU 不足
+    - `b` block 數量 (等待 IO 的 process)
+  - Memory
+    - `swpd`, swap 使用量
+    - `free`, idle 量
+    - `buff`, 作為 buffers 的使用量 (對 block device 讀寫)
+    - `cache`, 作為 cache 的使用量
+    - `inact`, inactive memory
+    - `active`, active memory
+  - Swap
+    - `si`, swapped in from disk, (從硬碟到記憶體)
+    - `so`, swapped to disk (從記憶體到硬碟)
+    - 應該時常為 `0`, 否則代表 memory 不足
+  - IO
+    - `bi`, 接收來自於 block device 的速度 (read)
+    - `bo`, 輸出至 block device 的速度 (write)
+  - System
+    - `in`, interrupts 數量 per second
+    - `cs`, context switches 數量 per second
+  - CPU, 百分比
+    - `us`, user time, 使用於 non-kernel code
+      - 如果長期 > 50%, 則代表需要優化演算法或程式
+    - `sy`, system time, 使用於 kernel code
+    - `id`, idle time
+    - `wa`, waiting for IO, IO 等待時間
+      - 參考值是 20%, 如果長期 > 20% 則代表有硬碟讀寫的效能瓶頸
+    - `st`, 被虛擬機佔用的時間 (虛擬機偷取時間), time stolen from a virtual machine
+    - `gu`, 運行 KVM guest code
+    - us + sy 的參考值在 80%, 長時間 > 80% 則代表 CPU 資源可能不足
+- `sar` 指令
+  - 可以針對系統的各個部分做檢測, 開啟 `sar` 相關服務是會消耗效能的, 但是通常是可接受的
+  - `sar -u 3 5`, 檢測 cpu 報告間隔 3 秒進行 5 次, 最後會呈現 average 的統計數據
+  - CPU 佔用百分比
+    - `%user`, user time 佔比
+    - `%nice`, 正常運行的 process 佔比
+    - `%system`, system time 佔比
+    - `%iowait`, IO 等待時間佔比
+    - `%steal`,
+    - `%idle`, 處於空閒的時間佔比
+  - `sar -P ALL 3 5` 針對個別的 CPU 進行檢測, 避免遇到單執行緒程式佔用單獨核心過高的運算資源
+- `iostat` 指令
+  - 除了檢測硬碟 IO 之外, 可以通過 `iostat -c` 只檢測附帶的 CPU 百分比平均值
+- `uptime` 指令
+  - 輸出內容為當前時間, 系統已經運行多久, 當前登入使用者數量, 系統平均負載過去 1 分鐘, 過去 5 分鐘, 過去 15 分鐘
+- 以上四個指令只能看出 CPU 是否繁忙, 負擔過重, 無法查出原因
+  - 需要配合 `ps`, `top` 等指令查詢實際消耗的 process 試圖找出原因
+
+Memory 性能評估
+
+- `free` 指令
+  - `free -w`
+  - 主要觀察 `free`, `cache`, `available` 值, 看看 memory 的可使用量是否有不足的情況
+  - 可以搭配 `-s` 和 `-c` options 進行連續的檢測
+- `free` + `watch` 結合動態檢測 memory
+  - `watch` 指令可以用於定期執行某些指令, 然後輸出在全螢幕上, 並且可以通過 `-d` option 顯示差異之處
+  - 配合 `free` 指令變成能動態檢測 memory 狀態
+- `vmstat` 指令
+  - 通過 `vmstat` 指令可以很全面的看到 memory 是否不足
+  - 尤其觀察 `swpd`, `si`, `so` 查看 swap 的使用情形, 並且配合 CPU `wa` 查看 IO 等待時間佔比是否過高
+- `sar -r` 指令
+  - 使用 `sar -r` 指令單獨檢測 memory 的使用情形
+  - `sar` 指令比 `free` 指令更詳細的產生使用率佔比 `%`
+- 目前 memory 價格越來越低, 很少遇到單純是 memory 資源不足的問題
+  - 很高的使用佔比更可能的是應用程式本身有問題, 需要查明 (例如: memory leak)
+
+硬碟 IO 性能評估
+
+- 熟悉 RAID 各種不同的儲存方式, 可以因應不同需求選擇適當的 RAID 類型
+- 盡可能使用 memory 取代 disk IO, 速度快非常多
+- 將資料依據使用情況進行分類, 分別放在不同的硬碟中提供最佳化
+  - 長期不變的, 需要大量讀取的, 需要頻繁讀寫的
+- 在特殊需求下 (需要頻繁的寫入) 可以考慮使用 raw device 取代使用檔案系統格式化的硬碟
+  - 優點: 減少作為中間層的檔案系統運行的消耗
+  - 缺點: 不易管理, 需要更專業的操作
+- `sar -d` 指令
+  - 使用 `sar -d` 檢測硬碟資訊
+  - `DEV`, 設備名稱
+  - `tps`, 每秒 IO 流量
+  - `rkB/s`, 每秒讀取 kB 數 (read)
+  - `wkB/s`, 每秒寫入 kB 數 (write)
+  - `dkB/s`, discarded
+  - `areq-sz`, 平均 IO request 的大小 (size)
+  - `aqu-sz`, 平均 queue 的長度大小 (queue size)
+  - `await`, 平均 IO request 等待時間
+  - `%util`, 單位時間內 IO 操作的時間佔比
+  - 特別關注於 `areq-sz`, `aqu-sz`, `await`, `%util` 數值, 查看 IO 使用是否有瓶頸
+- `iostat -d` 指令
+  - 檢測硬碟使用資訊
+  - 速率相關的數值是統計於啟動時間到現在, 可以用來評估 IO 性能
+  - 主要查看 `kB_read/s` 與 `kB_wrtn/s` 數值大小, 評估是讀取使用還是寫入使用頻繁
+  - 長時間超大量的硬碟讀寫肯定會造成性能問題
+  - 通過指令 `iostat -x` 可以查看更多統計數據
+    - _補_: 可以配合 `man iostat` 查看文件, 只列出所需的統計數據
+- `vmstat -d` 指令
+  - 使用 `vmstat -d` 單獨檢測硬碟使用資訊
+  - 會分別列出 reads, writes, IO
+- 對於 block device 的性能影響, 要來自多方面的評估與調整
+  - 首先, 進行應用程式對硬碟讀取的優化, 能使用 memory 就不要使用 block device
+  - 對於硬碟存取的方式進行優化, 選擇適合的 RAID 方案
+  - 更深入研究是否需要使用 raw device 取代檔案系統操作
+
+網路性能評估
+
+- 網路直接影響服務的穩定度和可靠度
+- `ping` 指令
+  - 檢測網路的連通性
+  - 檢視兩台主機之間的連線, 是否可連, 連線速度 (time), 連線品質 (packet loss) 如何
+- `netstat` 指令 (舊版 net-tools), _補_: 新版本使用 `ss`, `ip` 指令取代
+  - `netstat -i` 依據 interface 檢視流量
+  - `netstat -r` 檢查路由表
+  - `ss` 檢查當前連線
+  - `ip route` 查詢路由表
+- `sar -n` 指令查詢網路相關資訊
+  - `sar -n DEV`, `DEV` 網路接口資訊, `EDEV` 網路錯誤資訊, `SOCK` 網路 socket 連線資訊,
+  - _補_: `sar -n` 功能非常強大, 還有很多不同的關鍵字與統計數據可以查詢, 需要配合 `man sar` 查看文件
+- 可以搭配 `traceroute` (路由檢測), `nslookup` (DNS 檢測) 排查網路問題
+
+優化案例分析
+
+- 書中以兩個案例進行分析與優化
+  - 動態內容的 Web 網站伺服器, 使用 LAMP 架構
+  - 動態與靜態內容的 Web 網站伺服器, 使用 Java + Tomcat + MySQL 架構
+- _補_:
+  - 從遇到問題的狀況 (incident, issues) 開始分析
+  - 從系統各個面向查詢性能使用狀況, CPU, Memory, IO, Networking, Process, ...
+  - 進而調整應用程式相關的設定檔, 例如: Apache config, Tomcat config, ...
+  - 繼續觀察然後發現有應用程式優化的機會, 例如: 修改 PHP 程式內容, 優化演算法等等
+  - 最後發現需要調整系統架構, 以支持更好的服務品質, 例如: 導入 Tomcat + Apache 分別處理靜態與動態回應, 資料庫分到別的伺服器上並且實現讀寫分離架構, ...
 
 ---
 
