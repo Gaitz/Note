@@ -1677,9 +1677,41 @@ Memory 性能評估
 
 ### 第十八章 - 虛擬化雲計算平台
 
+OpenVZ
+
+- 開源的, Linux 平台作業系統虛擬化解決方案
+- host OS 與 guest OS 都必須是 Linux
+- host OS 與 guest OS 共用同一個 Linux kernel, 因此不能單獨升級版本
+
+KVM
+
+- KVM, Kernel-based Virtual Machine
+- 開源的, 需要硬體支援的, 硬體虛擬化技術
+- 支援所有 x86 CPU
+- 基於 Linux kernel (host)
+
+Proxmox VE
+
+- Proxmox VE, Proxmox Virtual Environment
+- 開源的虛擬化平台, 允許使用 OpenVZ, KVM 等虛擬化技術
+- 基於 Debian Etch 版本的虛擬化環境
+  - 因此安裝需要有 Debian OS
+- 提供 Web 管理介面
+
+安裝 Proxmox VE
+
+Proxmox VE 的使用
+
+- 建立 OpenVZ 虛擬機
+- 建立 KVM
+
 ---
 
 ### 第十九章 - 高性能集群軟件 Keepalived
+
+- 建立有彈性, 高可用的服務, 以 cluster 的方式建立提供單一伺服器做不到的性能
+
+集群的定義 (cluster)
 
 ---
 
