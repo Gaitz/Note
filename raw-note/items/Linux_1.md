@@ -1713,6 +1713,109 @@ Proxmox VE 的使用
 
 集群的定義 (cluster)
 
+- 一組協同工作的服務集合, 提供比單一服務更穩定, 更高效, 更有擴張性
+  - 從外部來, 集群就是一個獨立的服務實體
+- 一般由 2 個或以上的 server 組成
+- 集群節點 (node) 之間可以互相通信, 基於 RS232 線的 hearbeat 監控, 或用單獨網卡實現 hearbeat 監控
+  - 來實現擴張功能, 可以靈活的增減擴充
+- 當某個節點出現故障時, 能夠自動接管替換故障節點的資源, 實現故障處理, 提供高可用性
+- cluster 內部有資料共享, 每個運行節點都能使用
+
+Cluster 特典與功能
+
+- 高可用性
+  - 有些服務必須保證服務能 24 小時不間斷運行, 單一服務器很難拿到這種要求
+  - Cluster 最大的優點就是高可用性, 具有自動故障處理
+- 可擴張性
+  - Cluster 能夠依據需求, 動態的增減所需的服務節點
+- 負載平衡 (load balancer)
+  - Cluster 可以靈活, 有效的分擔系統負載, 依據自行定義的 load balancer strategy 分配工作到各個服務節點
+- 錯誤恢復 (recovery)
+  - 一個任務在一個節點上沒有完成時, 其他節點能接著完成, 提供錯誤服務功能
+- 心跳監測 (heartbeat)
+  - 為了 cluser 實現以上功能, cluster 需要能監控各個節點的狀態
+  - 使 heartbeat 技術, 保持內部節點之間的有效性
+  - 通過 RS232 線或者單獨的網卡來實現
+- 飄移 IP 地址 (virtual IP)
+  - 因為服務節點會時常更換, 因此除了主機本身的實際 IP 之外, 對於 cluster 管理而言, 使用的是 virtual IP
+  - 對外提供服務的是 virtual IP, 由 cluster 管理是指向哪台服務節點 (實際 IP)
+
+Cluster 的分類
+
+- 高可用集群 (High Availability Cluster, HA 集群)
+  - 主要實現的功能是保障能夠持久不間斷的提供服務
+  - 常見的 HA, 雙機互備, 多機互備, (備援的機器數量與啟用的服務有所不同)
+  - 由 2 台以上的機器進行互相備援, active / standby (backup)
+  - 一台作為主服務器 (action server), 其餘的作為備用服務器 (standby server)
+  - 通過 heartbeat 與客製化的故障監測, 在需要的時候進行 IP 切換, 由於切換的時間非常短暫, 外部用戶感受不出來
+  - 一般是通過軟體來實現, HeartBeat HA, Red Hat 的 RHCS, 其他商用軟體 ROSE, Keepalived 等
+- 負載均衡集群 (Load Balance Cluster, LB 集群)
+  - 2 台以上的機器組成, 由前端負載調度與後端服務節點組成
+  - 依據不同的策略 (strategy) 決定如何分配給後端服務節點
+  - 與 HA 集群不同之處在於, 後端服務節點每個都提供服務而不是備援
+  - 通常也會加上錯誤偵測, 才能避免持續把任務交給故障的節點
+  - 一般是通過軟體來實現, LVS 集群, Oracle 的 RAC 集群, 硬體支援有 F5 Networks
+- 分散式計算集群
+  - 由集群提供單台服務器無法提供的運算性能
+  - 常見的實現平台 Hadoop, Spark 這樣的分散式計算集群平台
+  - Hadoop 相關的 HDFS 可以把大數據存在分散式的檔案系統中, 使用 MapReduce 把計算任務平行發到各個運算節點上同時計算 (Map), 再集結成單一資料 (Reduce)
+
+HA 集群中的相關術語
+
+- 節點 (node)
+  - 運行 Heartbeat 的一個獨立主機,
+  - 在 High Availability Cluster 中, 節點會分為主節點與備用節點, 服務運行中或者等待支援
+- 資源 (resource)
+  - 節點中可控制的實體, 當故障發生時, 資源能被其他節點接管
+  - 硬碟分區 (partition), 檔案系統
+  - NFS
+  - IP 地址
+  - 應用程式服務
+- 事件 (event)
+  - 可能發生的事情, 由事件去驅動對應的處理與轉移
+  - 節點系統故障, 網路連線故障, 網路卡故障, 應用程式故障
+- 動作 (action)
+  - 作為事件發生時的應對方式, 常常是以 script 的方式存在, 事件發生時執行指定的 script
+
+Keepalived 簡介
+
+- Linux 下輕量級的高可用解決方案, 與 HeartBeat HA, Rose HA 一樣實現類似的功能
+  - 建立在 LVS (Linux Virtual Server) 之上
+- 提供 HA 所需的基本功能, 例如 Heartbeat, 資源接管, 監測系統服務, IP 切換等等
+- Keepalived 的用途
+  - 基於 LVS 而設計的, 用來監控 cluster 中各個節點的狀態
+  - 並且實現錯誤管理, 移除故障節點, 加入新運作節點
+  - VRRP (Virtual Router Redundancy Protocol)
+- VRRP (Virtual Router Redundancy Protocol) 與工作原理
+  - 在網路環境中, 機器之間的通訊都是通過 Router 實現, 因此 Router 成了 single point failure
+  - 因此, 使用 VRRP (Virtual Router Redundancy Protocol), 實現 Router 的虛擬化, 以產生備援機制
+  - VRRP 使用 2 台以上的物理路由器產生一台虛擬路由器, 配合 Virutal IP
+  - 只有一台物理路由在運作 (Master), 其他的實體路由器為備援 (Backup) 只需要監控 Master Router 的運作狀況適時的接手
+  - 當 master router 出現故障時 (由 master router 發送的 VRRP 封包, backup routers 沒有接收到時), 由 backup routers 進行選舉, 產生出新的 master router 負責接管業務
+- Keepalived 工作原理
+  - Keepalived 運行在 TCP/IP 模型中的, 網路層 (internet layer), 傳輸層 (transport layer), 應用層 (application layer)
+  - 網路層, Keepalived 使用 ICMP 協定封包, 進行故障監測
+  - 傳輸層, Keepalived 可以監測 TCP 或 UDP 的 port, 來進行應用程式故障監測
+  - 應用層, Keepalived 允許用戶客製化自行定義應用層的故障監測
+- Keepalived 的體系結構
+  - 分成 kernel space 與 user space
+- kernel space 中使用
+  - IPVS, 是 LVS 的插件, 進行基於 IP 的 load balance (此功能對於 Keepalived 是 optional)
+    - Director server, Virtual IP (VIP)
+  - NETLINK, 負責進行實現路由與網路相關功能
+- user space 中分成四個部分
+  - Scheduler I/O Multiplexer, 負責任務請求調度
+  - Memory Management (Mngt), 負責訪問 memory 的管理
+  - Control Plane (Configuration filer parser), 負責 configuration 的編譯, 解析
+  - Core components 核心模組
+    - Watch Dog, Linux 下的工具, 負責進行監控裝置的檢測與對應處理 (重啟或關閉)
+    - Checkers, 實現對於 server 的狀態監測與故障隔離
+    - VRRP Stack, 使用 VRRP 實現 failover
+    - IPVS wrapper, 對應 kernel space 的 IPVS
+    - Netlink Reflector, 實現 Virutal IP 設置與切換, 對應 kernel space 的 NETLINK
+
+Keepalived 安裝與配置
+
 ---
 
 ### 第二十章 - 負載均衡集群 LVS 與 HAProxy
