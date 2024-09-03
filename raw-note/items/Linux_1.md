@@ -1816,9 +1816,154 @@ Keepalived 簡介
 
 Keepalived 安裝與配置
 
+Keepalived 的 Global Configuration
+
+Keepalived 的 VRRPD 配置
+
+Keepalived 的 LVS 配置
+
+- 因為 Keepalived 是建立在 LVS 之上, 因此除了 Keepalived 的 High Availability 之外, 也能開啟 LVS 的 Load Balance 設定
+
+Keepalived 基礎功能應用實例
+
+- 建立使用 HTTPD 服務的 Master + Backup 雙機 Keepalived cluster
+- 設定與分別啟動 master server 和 backup server
+- 測試故障切換 (failover)
+- 測試故障恢復後的行為
+  - 推薦使用不搶佔的設定 (nopreempt) 來避免不必要的切換
+- 通過 `vrrp_script` 腳本客製化錯誤監測邏輯
+  - 使用 `killall -0 [name]` 來檢測指定的 process 是否存在
+  - 自行撰寫腳本, 監測錯誤, 正常回傳 `0`, 錯誤回傳 `1`
+- Master 與 Backup 角色選舉策略 (election)
+  - 通過 `priority` 與 `weight` 兩個值來計算選擇
+  - 設定時有一個準則是 `weight` 的絕對值要大於 Master `priority` 與 Backup `priority` 值的差
+  - 錯誤的設定 `priority` 與 `weight` 會導致故障切換失敗, 必須十分注意
+
 ---
 
 ### 第二十章 - 負載均衡集群 LVS 與 HAProxy
+
+LVS
+
+- Linux Virtual Server, LVS
+- 提供 Load Balance 服務
+
+LVS 體系結構
+
+- LVS cluster 由三個部分組成
+  - 前端的負載均衡層 (Load Balancer)
+  - 中間的服務器群組 (Server Array)
+  - 最底層的資料共享儲存層 (Shared Storage)
+- Load Balancer, 由一台或多台的 Director Server 組成, 主要的作用就像是 Router 一樣把用戶請求轉發到 Real Server 上
+- Server Array, 一組提供服務的 Real Servers, 依據需求實際應用時, 也有 Director Server 兼職 Real Server 的可能
+- Shared Storage, 共享的資料儲存伺服器群, 可以是 RAID, NFS, GFS (Red Hat), OCFS2 (Oracle) 檔案系統
+
+LVS cluster 的特點
+
+- IP 負載均衡
+  - 有很多不同的實現方式
+  - 基於 DNS domain name, 基於 client-side 資訊, 基於應用層, 基於 IP address
+  - LVS 的 IP load balance, 使用 IPVS 模組實現
+  - Director Server 上使用模擬出的 IP (virtual IP, VIP)
+  - 機制又分為 NAT, TUN, DR
+  - VS/NAT (Virtual Server via Network Address Translation)
+    - 轉換 VIP 和 port 到 Real Server IP 和 port
+    - 都需要經過 Director Server 進行改寫, 因此可能造成效能瓶頸
+  - VS/TUN (Virtual Server via IP Tunneling)
+    - 採用 IP Tunnel 技術連結 client request 到 real server
+    - Director servers 與 Real servers 可以不在同一個網路區段
+  - VS/DR (Virtual Server via Direct Routing)
+    - 直接使用 MAC address 轉發
+    - 速度最快
+    - Director servers 與 Real servers 必須於同個網路區段內 (物理網卡連接)
+- 負載調度演算法
+  - 有八種演算法, Round Robin, Weighted Round Robin, Least Connections, Weighted Least Connections, Locality-Based Least Connections, Locality-Based Least Connections with Replication, Destination Hashing, Source Hashing
+  - Round Robin 與 Weighted Round Robin, 輪流平均分配和帶有權重的輪流平均分配
+  - Least Connections 與 Weighted Least Connections, 分配給連線數最小和帶有權重的版本, 適合每台服務伺服器都擁有相等的工作能力時
+- 高可用性
+- 高可靠性
+- 適用環境
+  - Director Server 只支援 Linux, FreeBSD 系統, 和大多數的 TCP, UDP 應用協定
+  - Real server 則沒有任何限制
+- 開源軟體
+  - GPL (GNU Public License) 發行的自由軟體
+
+LVS 的安裝與使用
+
+- 安裝 IPVS
+- `ipvsadm` 指令
+  - virtual-service-address, 虛擬伺服器 IP
+  - real-service-address, Real server 的 IP
+  - scheduler 指定演算法
+
+通過 Keepalived 搭建 LVS 高可用性集群系統 (High Availability Cluster)
+
+- 兩台 Director server 組成 keepaliaved master 和 backup
+
+測試
+
+- 高可用性功能測試
+  - 模擬 master director server 故障和復原後的情形
+- 負載均衡測試
+  - 訪問對外的 virtual IP 測試 load balance
+- 故障切換測試
+  - 模擬 real server 故障情形和復原
+
+HAProxy
+
+- Load balance 實現方式, 可以分成
+  - 依據硬體設備, 例如: F5, Big-IP
+  - 依據作業系統, 例如: LVS
+  - 依據純軟體, 例如: HAProxy, Nginx
+- HAProxy
+  - 開源的, 高性能, 基於 TCP 與 HTTP 的 load balance 服務
+  - 高可靠性, 穩定性
+  - 支持 200,000 - 500,000 requests per second
+  - 支援多種 load balance stragety, 支援 keep session
+  - 支持虛擬主機功能
+  - 適合用於並發量特別大和需要持久連線的系統, 例如大流量的 Web 服務或 MySQL cluster 讀取的 load balance
+  - _補_: 持續發展中, 目前有更多功能支援, 例如支援 gRPC, HTTP/3 等等現代技術
+- 基於 ISO layer 4 (Transport Layer), ISO layer 7 (Application Layer)
+  - Transport Layer 的 load balancer, 也被稱為第四層 switch
+    - 例如: TCP 依據 load balance stragety 直接修改 destination IP 轉發 SYN 連線請求
+    - 依據需要可能也會改寫 source IP, 就如同 router 一樣
+  - Application Layer 的 load balancer, 也被稱為第七層 switch, 內容交換器
+    - 可以依據應用層的資訊來進行 load balance, 例如: 網站的 URL, domain name, 瀏覽器種類, 語言等等
+    - 如同 Proxy server 一般
+    - 對於第七層轉發會需要建立 2 個 TCP 連線 (client - load balancer - real server)
+    - 效能比起第四層一定會更差一些
+- 與 LVS 的比較
+  - LVS 基於 Linux 作業系統實現, HAProxy 基於第三方軟體實現
+  - LVS 基於 Transport Layer (layer 4), HAProxy 基於 Transport Layer (layer 4) 或 Application Layer (layer 7)
+  - 性能上一定是 LVS 優於 HAProxy, 需要依據使用需求選擇
+- _補_: 與 Ngnix 的比較
+  - 兩者似乎很相似
+  - HAProxy 專注於作為 load balance 並且提供更多更複雜的功能與設定
+  - Ngnix 專注作為 web server 但是配合基本的 load balance 功能
+
+HAProxy 基礎配置與應用實例
+
+- 安裝簡單但配置複雜
+- Configuration 分成 5 個部分
+  - global
+    - 關於 process 全域的, 與作業系統相關的設定
+  - defaults
+    - 對於 frontend, backend, listen 的預設值
+  - frontend
+    - load balancer
+  - backend
+    - 實際服務的 servers 設定
+  - listen
+    - frontend + backend 的集合設定, 作為版本向後相容而持續存在
+- 通過 HAProxy 的 ACL 規則實現 load balance
+- 管理與維護
+  - 安裝完成後會生成存在`安裝目錄下的 /sbin` 中的可執行檔案, 通過這個檔案進行 HAProxy 的管理
+- 使用 HAProxy 的 Web 監控平台
+
+搭建 HAProxy + Keepalived 高可用負載均衡系統
+
+- 設定
+- 測試
 
 ---
 
