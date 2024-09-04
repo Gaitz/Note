@@ -83,7 +83,6 @@
   - 使用者多, 資源多, 容易取得, 應用廣泛
 - 桌面平台首選 Ubuntu Linux
 - 企業應用首選 RHEL/CentOS
-
   - 付費的 Red Hat 商用版
   - 免費的 CentOS
 
@@ -102,7 +101,7 @@
   - 初級階段
     - 了解 Linux 多種安裝方式
     - 掌握常見指令
-    - 掌握軟體安裝方法 (from source code / from package managerment)
+    - 掌握軟體安裝方法 (from source code / from package management)
     - 掌握系統結構及運行原理
     - 掌握 vi, shell, pipeline, I/O redirect, input/output 等基本的 shell programming
     - 網路基本設定
@@ -239,7 +238,7 @@ Linux 外部設備
 - 很多 Linux distribution 檔案系統都依據 FSSTND 標準設置
 - `/` 根目錄
 - `/etc` 系統級別 configurations
-- `/usr` 應用程式和文件, 通常安裝的軟體會安裝在這個目錄下
+- `/usr` (user system resource) 應用程式和文件, 通常安裝的軟體會安裝在這個目錄下
 - `/var` 存放系統運行及軟體運行時的 log, 暫存設定
 - `/dev` 系統所有的設備
 - `/proc` 所有的內容都是 memory 的 mapping, 可以通過這個目錄來跟 memory 的內容互動,
