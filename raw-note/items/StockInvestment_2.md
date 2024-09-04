@@ -1,6 +1,6 @@
 ## 巴菲特原則
 
-### 巴菲特原則 _瑪麗巴菲特_, Investment/Stock
+### BOOK resource: 巴菲特原則 _瑪麗巴菲特_, Investment/Stock
 
 ---
 
