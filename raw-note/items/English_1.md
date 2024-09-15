@@ -20,9 +20,9 @@
   - British, American, Canadian, Australian, New Zealand accents
   - 聽以上國家的線上廣播電台, 熟悉與學習聽不同的口音
 - 聽各種不同國家的線上廣播, 聽討論議題 (discuss topical issues) 的內容, 從中聽到別人表達觀點的方式
-- 練習口說讀出各個英文字母
+- 練習口說讀出各個英文字母 (spelling)
 
-Test tips
+Test tips:
 
 Getting ready to listen
 
@@ -107,6 +107,8 @@ Contrasting ideas
   - _The Times_, _The Guardian_, _The Australian_, _The New Zealand Herald_, _The New Yorker_, _The Washington Post_
 - 全方位得加強英文的字彙 (vocabulary), 文法 (grammar) 和建立 reading, writing, listening, speaking 的技巧和能力
   - 不要僅僅專注於考試測驗策略
+
+Test tips:
 
 Reading strategies
 
@@ -200,6 +202,12 @@ General Training Reading
 - 在練習寫作時, 用口說的方式讀出自己所寫的文章, 看看是否有很多的重複 (repetitive), 句子是否都很相似, 重新思考句子結構和使用的詞彙
 - 把自己常有的拼寫錯誤紀錄成冊, 並且時常複習, 把單字重複多寫幾次, 有助於練習拼音
 - 從新聞中的社論或者其他具有個人觀點的文章, 練習閱讀和自己是否同意這個觀點, 嘗試寫下自己的觀點
+- 考試考驗的是 flexible use of language, 更多練習寫作與閱讀
+- 學習英文的時候應該與自己的母語做比較, 比較詞彙, 比較文法, 可以避免一些常見的錯誤
+- 確認自己的手寫 (handwriting) 是良好可閱讀的
+- 自己的錯誤通常會頻繁的發生一樣的錯誤, 因此應該紀錄自己的錯誤, 並且刻意的頻繁練習, 來避免自己常犯的錯誤
+
+Test tips:
 
 Academic Writing Task 1 - Describing a chart, table or graph
 
@@ -277,9 +285,86 @@ Writing Task 2 - Getting ready to write
   - Step 1. decide on your own position or attitude
   - Step 2. note down any ideas about the topic
   - Step 3. organise your ideas into paragraphs
+  - coherence, 觀點之間需要有清楚的連接, 並且組織成段落結構
+- Getting started - writing an introduction
+  - 不能直接複製問題中的字彙, 而是要用自己的詞彙重新描述
+
+Writing Task 2 - Expressing your ideas clearly
+
+- Linking ideas - cohesion
+  - 考驗 Coherence and Cohesion, 考驗觀點如何被組織和連結
+  - 寫作前先是先規劃, 有助於提升有邏輯的組織結構
+- Lexical Resource - avoiding repetition
+  - 避免使用題目中的字彙, 避免重複性, 盡可能使用廣泛的詞彙
+- Using the correct style
+  - 撰寫 essay 是相對正式的文章, 因此應該避免使用縮寫或 casual 的詞彙
+- Expressing a personal view
+- Reaching a conclusion
+
+Writing Task 2 - Checking and correcting
+
+- Developing your ideas clearly
+  - 評分 Grammatical Accuracy, 因此應該正確使用文法和儘可能使用廣泛的文法結構
+- Grammatical Accuracy
+  - your spelling
+  - your grammar
+  - your punctuation
+  - your handwriting
+- Assessing your language
 
 ---
 
 ### 第四章 - IELTS Speaking
+
+- 寫作與口說是不同的
+- 口說更容易犯文法錯誤, 因為更少有時間思考, 應該錄音然後聽寫檢查, 看看自己有沒有犯文法錯誤
+- 閱讀報紙和新聞, 跟上當前時事和討論, 並且有自己的觀點
+- 檢測自己的口說能力, 通過讀出一段文章給別人聽, 看看容不容易理解, 或者通過錄音, 自己重聽一次, 看看容不容易理解
+- 過去時態加 `ed` 時, 有三種發音變化 `/t`, `/d`, `/Id/` 如何區分
+- 口說時正確的停頓 (intonation) 和連音 (chunking), 語調 (stress)
+  - 練習方式, 嘗試模仿母語者的說話方式, 複製相同的停頓, 連音, 語調
+- 練習時, 可以錄影, 重新觀看給自己打分, 並且找出應該加強的部分
+
+Test tips:
+
+The Speaking Test - Part 1
+
+- Getting ready to speak
+  - 確認談話的時候有看著考官, 使用有禮貌且友善的回答, 並且注意自己的身體語言, 身體語言也是溝通很重要的一部分
+  - 提早到考場, 才能避免匆匆忙忙和過於緊張, 可以在考試前一天先到考場熟悉一次環境
+- Part 1 - talking about familiar topics
+  - 考驗的是自然的對話, 如果考官發現是準備過的回答, 會主動中斷並且換題目
+- Using the right tense - Grammatical Range and Accuracy
+  - 注意聽清楚問題, 才能選擇正確的回答時態 (correct tense)
+  - 回答 yes/no 問題時, 除了回答 yes/no 之外, 也要說出理由
+
+Part 2 - Giving a talk
+
+- Understanding the task
+  - 談話中只能快速的掃過自己的 note, 而不是看著 note 讀出來, 始終看著考官保持對話的情境
+  - 如果對話中沒有點子時, 應該給自己一個重新的開始, 在略看一下自己的 note 和考題
+- Improving Fluency and Coherence
+- Organising your notes and your talk
+  - 寫 note 不應該寫太多, 或太完整的句子
+  - Note 的用意在於能快速得取得回答的靈感, 找到能達成此目的的 note 撰寫方式
+
+Part 3 - Talking about abstract topics
+
+- Talking about abstract topics
+  - 注意聽考官的問題, 確認自己能完整且合適的回答
+  - 測驗的重點在於對於每個問題都能充分的回答, 盡可能延伸自已的回答
+  - Part 3 的回答重點在於提供自己的觀點
+- Agreeing an disagreeing
+  - 不用擔心觀點不同, 可以不同意考官的想法, 考試重點在於展現自己的語言能力和觀點
+- Improving your Lexical Resource score
+
+Checking, correcting and assessing
+
+- Dealing with problems
+- Pronunciation, intonation and 'chunking'
+  - Individual sounds, 相似或容易混淆的發音
+  - 過去時態加 `ed` 時, 有三種發音變化 `/t`, `/d`, `/Id/` 如何區分
+  - Stress, intonation, and running words together
+- ## Assessing yourself and improving your score
 
 ---
