@@ -77,6 +77,8 @@
 
 - _The Careful Writer_, 1965, Theodore M. Bernstein
 - _Modern English Usage_, 1926, H. W. Fowler
+- 文法書, _The Elements of Style_, William Strunk, E. B. White
+- _The Art of Readable Writing_, 1949, Rudolph Flesch
 
 多讀一點書
 
@@ -177,9 +179,69 @@ Less vs. Fewer
 
 ### 第四章 - Level 4
 
+字的用法
+
+- 描述性的
+  - 字典中的解釋, 是文字在某個時空下的解釋
+  - 字典沒辦法告訴你字彙的微妙差異和如何創造風格
+  - 也沒辦法區分好的作者與壞的作者
+- 規範性的
+  - 立下規定和方向, 用評估, 矯正, 改良, 來檢視哪些字彙是更適當的
+  - 優秀評論者的著作
+  - H. W. Fowler, Bergen Evans, William Strunk, E. B. White, Rudolph Flesch, Wilson Follett, Jacques Barzun, Theodore M. Bernstein, Harry Shaw, Norman Lewis, Edward D. Johnson, William and Mary Morris, J. N. Hook, James J. Kilpatrick, William Zinsser, Constance Hale, Patricia T. O'Conner, Barbara Wallraff, Richard Lederer, Bryan A. Garner, William Safire
+- 累積字彙與學會正確用法, 就像是買鋼琴和知道如何彈奏一樣
+- _Simple and Direct: A Rhetoric for Writers_, 1985, Jacues Barzun
+  - > 學習用字的代價, 是強烈自我意識的開發
+  - 在閱讀時, 講話時, 聽別人講話時, 隨時注意用字
+  - 隨時注意到文字的存在, 感知文字的存在, 而不是視而不見, 聽而不覺
+
+I 或 me
+
+- for me
+- between me
+- 正確的使用受格, 當不確定時就把其他的人只留下 I 或 me 就可知道哪個才是正確的
+
+常見的錯誤發音與混淆字
+
+- _補_: 注意發音, 務必查字典確認
+
 ---
 
 ### 第五章 - Level 5
+
+成為談吐文雅的人
+
+- 注重發音是訓練談吐文雅的第一步
+- 投入時間與精力去學習如何正確發音
+- 增加字彙量 -> 如何正確精準的使用字彙 -> 成為談吐文雅的人
+- 隨便的發音與正確的發音
+- 最難的不是學會新字彙的唸法而是矯正已經唸錯的字
+  - 仔細注意別人的發音
+  - 查字典時一定要看發音
+  - 學會看懂字典裡的音標
+- 訓練自己的耳朵去注意發音
+- 仔細注意周遭的發音
+  - 留意不對勁或不尋常的發音, 然後通過字典重新確認
+- 勤查字典裡的發音, 不只是查新字彙的發音, 也要查那些早已認得並認為發音正確的字
+- 要避免的壞習慣
+  - 胡亂猜測發音, 不確定時就需要查字典確認
+  - 盲目地模仿別人的發音, (可能因此學到錯誤的發音), 某個很聰明或有成就的人, 不代表他就是個談吐文雅的人
+- _Dissertations on the English Language_, Noah Webster
+- 不要把自己的發音或別人的發音視為理所當然, 只要有疑慮就查字典確認
+
+認識音標
+
+- 認識音標
+- 重視重音的位置
+
+英文的複數
+
+- 單數名詞結尾 `-is` 發音 `[IS]` 改成複數要變成 `-es`並且發音成`[-iz]`
+- 源自拉丁文, 以 `a` 結尾的複數名詞,
+  - 例如: media, bacteria
+  - 對應的單數是: medium, bacterium
+- 很多字彙有英文複數與拉丁文複數用法, 有些時候拉丁文複數用法會是已經過時或過於賣弄的用法
+  - 例如: syllabus, octopus, formula, forum, stadium, memorandum, antenna, appendix
 
 ---
 
