@@ -243,24 +243,124 @@ I 或 me
 - 很多字彙有英文複數與拉丁文複數用法, 有些時候拉丁文複數用法會是已經過時或過於賣弄的用法
   - 例如: syllabus, octopus, formula, forum, stadium, memorandum, antenna, appendix
 
+學習字彙的三大原則
+
+- 字彙依據難易度排列
+- 人們會認得某個難度以下全部或大部分字彙, 某個程度以上只會認得少數, 甚至完全認不得超越以上的字彙
+- 學習介於會和不會的字時, 學習速度最快
+
+複習
+
+- 想要最大效率擴展字彙, 並且永遠記住
+- 複習的時間要和學習的時間一樣長
+- 提升字彙能力的方法就是不斷學習, 熟能生巧
+- 認識字彙與學會運用字彙的差別
+  - 就像是門外漢和專家的差別
+  - 認識字彙是基本能力, 學會運用字彙才能卓越不凡
+- 謹慎精準用字的人通常是成功卓越的人
+
 ---
 
 ### 第六章 - Level 6
+
+- 像鍛鍊肌肉一樣, 不斷學習與保持字彙
+
+希臘文
+
+- 很多英文字彙都是來自於希臘文
+- 尤其是希臘人名
+  - 例如: Procrustes -> Procrustean; Draco -> draconian; Epicurus -> epicurean; Pyrrho -> Pyrrhonism, Pyrrhonist
+- 或者希臘地名
+  - 例如: Boeotia -> Boeotian; Arcadia -> Arcadian; Soloi -> solecism; Laodicea -> Laodicean
+
+流行字 (vogue-word)
+
+- 留意萬用的流行字
+- 避開或者正確的使用
 
 ---
 
 ### 第七章 - Level 7
 
+錯誤用字
+
+- 贅字
+- 近似音症候群
+- 流行語
+- 錯用副詞
+- 行話
+
+贅字 (redundancy)
+
+- _A Dictionary of Contemporary American USage_, 1957, Bergen Evans
+- 贅字源自於不清楚字彙的精確定義
+- 訓練自己的耳朵去關注, 仔細聆聽出贅字的錯誤
+
+近似音症候群 (The Sounds-Like Syndrome)
+
+- 單字意思上明確不同, 但是因為近似音而遭到大量誤用, 並且以訛傳訛下去
+- _補_: 學習新字的時候, 要十分小心不要成了以訛傳訛的一部分, 通過字典確認並且懷疑來源作者是否有正確的使用或者似是而非
+
+流行語
+
+- 突然流行起來, 並且大家盲從使用, 沒有想過字彙本身原本的意思或力量
+- 過度使用造成語意疲乏, 喪失字彙原本的力量
+- _The Appropriate Word_, 1990, J. N. Hook
+- _Modern American Usage_, 1966, Wilson Follett
+
+錯用副詞, 副詞冗詞
+
+- 副詞使用不當會減弱語言的力量
+  - 濫用的情形來自於移除該副詞也不會造成語意上的喪失, 甚至會更簡潔而更有力量
+- _Simple and Direct_, 1985, Jacques Barzun
+- 口語跟寫作上應該要有所區別, 口語可以非正式, 比較囉唆, 但是寫作應該要準確, 簡單
+- 流暢的文章不能有贅字, 首先刪除的通常是副詞
+  - 寫作上, 不要寫太多, 避免太多字眼及過度渲染, 盡量刪減文字, 以求文章清楚, 簡潔
+
+行話 (jargon)
+
+- 專門的, 深奧的, 只為了炫耀, 不必要且難以理解的
+- 更多的時候是利用過多的文字來包裝不足的資訊
+- 不要使用行話, 直接說出你要說的意思
+
 ---
 
 ### 第八章 - Level 8
+
+名字變字彙 (eponym)
+
+- 某個名字變成了字彙
+- _Dictionary of Eponyms: Names That Became Words_, 1972, Robert Hendrickson
+
+Pronunciation 發音錯誤
+
+- 同個字在不同詞性時有不同的發音, 應該正確使用
+- _The Big Book of Beastly Mispronunciations_, 1999, Houghton Mifflin
 
 ---
 
 ### 第九章 - Level 9
 
+外來字與片語
+
+- 借自法文的
+- 借自拉丁文的
+
+一個字彙因為近似音症候群導致意思一直衍生成與原意完全不同
+
+- `effete`
+
 ---
 
 ### 第十章 - Level 10
+
+number vs. amount
+
+- a number of
+  - 可數的, 可列舉的
+  - **a number** of 會形成複數型, 後面應該接複數動詞
+  - **the number** of 會形成單數型, 後面應該接單數動詞
+- the amount of
+  - 視為整體的東西, 大量的, 整體的
 
 ---
