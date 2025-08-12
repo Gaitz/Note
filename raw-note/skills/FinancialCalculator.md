@@ -251,16 +251,18 @@ Breakeven worksheet
 - 什麼是 `DPB`, 折現回收期, Discounted payback period
   - Ans: 考慮折現率的回收期
 - 什麼是 `IRR`, 內部報酬率, Internal rate of return
-  - Ans: 年化報酬率, 衡量現金流的報酬率
+  - Ans: 衡量現金流的報酬率以期為單位, 當以一年為一期時, 又稱為年化報酬率
   - 淨現值法 (Net Present Value Method), 考量現金流的折現率, 計算所有收入與支出在考量折現率的情況下, 折回現值的和
   - `IRR` 內部報酬率, 是**淨現值法 = 0 時的折現率** (複利報酬率)
   - IRR 計算方法, 假設現金流期間的收入的再投資報酬率等於內在報酬率
+  - IRR 計算不一定是唯一解, 並且計算較複雜
 - 什麼是 `RI`, 再投資利率, Reinvestment rate
   - Ans: 現金流期間, 每筆收入再投資的投資報酬率
-- 什麼是 `MOD`, 修正內部報酬率, Modified Internal rate of return
-  - Ans: IRR 計算時增加再投資利率 (RI) 這個變數
-  - 允許自行設定再投資報酬率, 這樣算下來的終值比較符合現實, 在由此反推內部報酬率
-  - 以股票為例, 分配的現金股利, 不一定每次都能用相同的複利報酬率再進行投資
+- 什麼是 `MOD`, 修正內部報酬率, Modified Internal rate of return, MIRR
+  - Ans: IRR 計算時增加 Reinvestment rate (收入的複利折現率) 和 Finance rate (資金取得的折現率) 兩個變數
+  - 允許自行設定再投資報酬率和資金取得折現率, 這樣算下來的終值比較符合現實, 在由此反推複利報酬率
+  - 以股票為例, 分配的現金股利, 不一定每次都能用相同的複利報酬率再進行投資, 資金取得的折現率也不一定跟報酬率一樣高
+  - MIRR 計算只有唯一解, 並且計算較簡單
 - 什麼是名目利率 (Nominal rate) 和年有效利率 (Annual effective rate)
   - 名目利率 (Nominal rate), 帳面利率, 以一年為單位的單利
   - 年有效利率 (Annual effective rate), 如果一年內有多次複利反推後的利率
