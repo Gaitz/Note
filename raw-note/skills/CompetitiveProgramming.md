@@ -4,39 +4,7 @@
 
 ---
 
-Strategies
-
-- Brute force
-- Greedy
-- Two pointer / Three pointers
-- Filtering vs. Generating
-- Divide and conquer
-  - 通常會自動形成 recursive 演算法
-- Recursive
-  - 思考三步驟 TRUST the function, find green box, find base case
-
-Data Structure and Operations
-
-- String
-- Array
-- Stack
-
-Practice Resources:
-
-- USACO TRAINING
-- codeforces problem set
-
-C++
-
-- STL
-  - `vector`
-  - `set`
-  - `tuple`
-  - `sort()`
-
----
-
-My Game Plan
+### My Game Plan
 
 - 先看一輪所有的題目
 - 解題應該由負擔最輕的開始, 做到最困難的
@@ -58,20 +26,49 @@ My Game Plan
   - 嘗試最佳化, 只有在需要的時候最佳化, 並且只最佳化到需要的程度, 並且必須保留之前所有可以運行的各種版本, 使用最極端的測試案例檢測實際的 runtime
 - 草圖: 演算法, 複雜度, 相關的數字, 資料結構, tricky details
 
----
+#### 解題思考流程
 
-### 練習方式
-
-- 嘗試自行回答
-- 紙上寫程式
-- 紙上寫測試
-- 電腦上實現
-- 依據難度, 類型做練習
-- 依據類型做題, 可以找出自己的弱項, 然後加強學習
-- 永遠要詳細的描述空間與時間複雜度
-- 紙筆優先
+1. 仔細聽懂題目
+1. 畫出範例
+1. 說出暴力解, 解釋空間與時間複雜度
+1. 最佳化
+1. 逐步檢視, 仔細檢查思考出來的演算法
+1. 實作程式碼
+1. 測試
 
 ---
+
+Checklists
+
+### Strategies Checklist
+
+- Brute force
+- Greedy
+- Two pointer / Three pointers
+- Filtering vs. Generating
+- Divide and conquer
+  - 通常會自動形成 recursive 演算法
+- Recursive
+  - 思考三步驟 TRUST the function, find green box, find base case
+
+### Data Structure and Operations
+
+- String
+- Array
+- Stack
+
+#### 最佳化的技巧
+
+- BUD, 瓶頸, 不必要的工作, 重複的工作
+- DIY, 實際手動操作範例
+- 簡化與歸納
+- 底條件與疊加, 會自動生成遞迴解法
+- 資料結構腦力激盪, 嘗試思考常見的資料結構
+- 最理想執行時間
+
+---
+
+Details
 
 ### 題目種類
 
@@ -96,8 +93,6 @@ My Game Plan
 - Math
 - Backtracking
 - Divide and Conquer
-
----
 
 ### 通用 Tips
 
@@ -124,25 +119,6 @@ My Game Plan
 - 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
 - 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
 
-#### 解題思考流程
-
-1. 仔細聽懂題目
-1. 畫出範例
-1. 說出暴力解, 解釋空間與時間複雜度
-1. 最佳化
-1. 逐步檢視, 仔細檢查思考出來的演算法
-1. 實作程式碼
-1. 測試
-
-#### 最佳化的技巧
-
-- BUD, 瓶頸, 不必要的工作, 重複的工作
-- DIY, 實際手動操作範例
-- 簡化與歸納
-- 底條件與疊加, 會自動生成遞迴解法
-- 資料結構腦力激盪, 嘗試思考常見的資料結構
-- 最理想執行時間
-
 #### 計算時間與空間複雜度
 
 - 永遠要詳細的描述空間與時間複雜度
@@ -158,8 +134,6 @@ My Game Plan
 - 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
 - 複雜度分析可以嘗試分析實際的 input 可以得到更精準的複雜度
 - 利用 worst case 實際計算複雜度
-
----
 
 ### 各類型 Tips
 
@@ -294,3 +268,35 @@ My Game Plan
   - **Kadane's algorithm**, `O(n)`, 依序加入動態配置 Dynamic Programming, 利用前項最佳解, 來推導當前最佳解
 - Longest palindromic substring
   - **Manacher's algorithm**, `O(n)`,
+
+---
+
+References
+
+### Practice Resources:
+
+- USACO TRAINING
+- codeforces problem set
+
+### 練習方式
+
+- 嘗試自行回答
+- 紙上寫程式
+- 紙上寫測試
+- 電腦上實現
+- 依據難度, 類型做練習
+- 依據類型做題, 可以找出自己的弱項, 然後加強學習
+- 永遠要詳細的描述空間與時間複雜度
+- 紙筆優先
+
+### Programming Languages
+
+#### C++
+
+- STL
+  - `vector`
+  - `set`
+  - `tuple`
+  - `sort()`
+
+---
