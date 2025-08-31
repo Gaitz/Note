@@ -1,14 +1,15 @@
-## Leetcode - Blind Curated 75
+## Competitive Programming
 
-### Computer Science, [Leetcode - Blind Curated 75](https://leetcode.com/list/xoqag3yj/)
-
----
-
-### 題目
-
-- Performance level:
-- Memory level:
-
-Note:
+### Computer Science
 
 ---
+
+### Stuck problems
+
+USACO training
+
+Codeforces
+
+- [B. Minimize Inversions](https://codeforces.com/problemset/problem/1918/B)
+
+[Leetcode - Blind Curated 75](https://leetcode.com/list/xoqag3yj/)
