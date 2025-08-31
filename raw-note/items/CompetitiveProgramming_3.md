@@ -1,4 +1,8 @@
-TOC
+## USACO Training
+
+### [USACO Training](https://usaco.training/), ComputerScience/CompetitiveProgramming
+
+---
 
 CHAPTER 1
 
@@ -175,8 +179,8 @@ Search Techniques
     - 空間複雜度是 O(V), 最糟的情況會需要記住所有的節點, 例如一條直線
 - BFS, Breadth First Search
   - 一次處理完一層, 才往下一層走
-  - 把當前節點加入 queue 中, 然後從 queue 中取出一個節點進行計算, 然後把所有子節點加入 queue 中
   - 通常與 queue 資料結構有關
+  - 把當前節點加入 queue 中, 然後從 queue 中取出一個節點進行計算, 然後把所有子節點加入 queue 中
   - 搜尋複雜度是 O(c^d), c 代表每層有多少決定, d 代表深度
   - 空間複雜度是 O(V), 最糟的情況需要一次把所有節點存入 queue 中
 - Depth First Search with Iterative Deepening (DFS+ID, IDS, IDDFS)
@@ -199,6 +203,6 @@ Search Techniques
 
 補充
 
-- Backtracking 就是指 dfs 走訪時往回走的情況
+- Backtracking 就是指 DFS 走訪時往回走的情況
 
 ---
