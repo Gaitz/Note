@@ -4,7 +4,7 @@
 
 ---
 
-### My Game Plan
+## My Game Plan
 
 - 先看一輪所有的題目
 - 解題應該由負擔最輕的開始, 做到最困難的
@@ -26,7 +26,7 @@
   - 嘗試最佳化, 只有在需要的時候最佳化, 並且只最佳化到需要的程度, 並且必須保留之前所有可以運行的各種版本, 使用最極端的測試案例檢測實際的 runtime
 - 草圖: 演算法, 複雜度, 相關的數字, 資料結構, tricky details
 
-#### 解題思考流程
+### 解題思考流程
 
 1. 仔細聽懂題目
 1. 畫出範例
@@ -38,7 +38,14 @@
 
 ---
 
-Checklists
+## Checklists
+
+### My checklist
+
+- 1 Traveling the input
+- 2 Sorted the input
+- 3 Hashmap trick, (anything can be an input)
+- 4 Use the constraint of input, output, value range, ...
 
 ### Strategies Checklist
 
@@ -57,6 +64,22 @@ Checklists
 - Array
 - Stack
 
+### Methods check list
+
+- Greedy Algorithm,
+  - 每個步驟都尋求局部最佳解 (local optimal solution) 最後即得到全域最佳解 (global optimal solution)
+  - 也許不是最佳解但是可以快速找到近似解
+- Divide and conquer,
+  - Divide 原問題太難, 先切割成子問題
+  - Conquer, 嘗試解決子問題
+  - Combine, 組合子問題解答變成原問題解答
+- Dynamic Programming,
+  - 試著以子問題的最佳解來推導母問題最佳解, (子問題最佳解可以組合出母問題最佳解)
+  - 因此通常需要儲存子問題的解 (需要佔用空間, 通常用到方格)
+  - 可以視為 Divide and conquer + memorization
+- NP complete
+  - 辨識出無法以多項式時間解決的問題
+
 #### 最佳化的技巧
 
 - BUD, 瓶頸, 不必要的工作, 重複的工作
@@ -68,7 +91,7 @@ Checklists
 
 ---
 
-Details
+## Details
 
 ### 題目種類
 
@@ -119,7 +142,7 @@ Details
 - 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
 - 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
 
-#### 計算時間與空間複雜度
+### 計算時間與空間複雜度
 
 - 永遠要詳細的描述空間與時間複雜度
 - 實際計算執行次數
@@ -242,27 +265,9 @@ Details
 - 適合在問題組合非常多種時, 可以先以非常小的問題慢慢建立起解答
 - 針對 Dynamic Programming 的空間使用率, 可以藉由觀察每一次真正所需要使用到的範圍, 去做空間使用率的減少
 
----
+### Specific Algorithms
 
-### Methods check list
-
-- Greedy Algorithm,
-  - 每個步驟都尋求局部最佳解 (local optimal solution) 最後即得到全域最佳解 (global optimal solution)
-  - 也許不是最佳解但是可以快速找到近似解
-- Divide and conquer,
-  - Divide 原問題太難, 先切割成子問題
-  - Conquer, 嘗試解決子問題
-  - Combine, 組合子問題解答變成原問題解答
-- Dynamic Programming,
-  - 試著以子問題的最佳解來推導母問題最佳解, (子問題最佳解可以組合出母問題最佳解)
-  - 因此通常需要儲存子問題的解 (需要佔用空間, 通常用到方格)
-  - 可以視為 Divide and conquer + memorization
-- NP complete
-  - 辨識出無法以多項式時間解決的問題
-
----
-
-### clever algorithms
+#### clever algorithms
 
 - Maximum subarray sum,
   - **Kadane's algorithm**, `O(n)`, 依序加入動態配置 Dynamic Programming, 利用前項最佳解, 來推導當前最佳解
@@ -271,7 +276,7 @@ Details
 
 ---
 
-References
+## References
 
 ### Practice Resources:
 
