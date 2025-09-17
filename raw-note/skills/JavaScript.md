@@ -4,11 +4,15 @@
 
 ---
 
-第一章 - Common Questions
+第一章 - Interview Common Questions
+
+第二章 - Dive into Javascript
 
 ---
 
-### 第一章 - Common Questions
+第一章 - Interview Common Questions
+
+---
 
 - JavaScript data types
 
@@ -129,3 +133,83 @@
   - 新生代被視為可能會更快清除的, 在新生代經過數次 garbage collection 後仍存活會被移動到 **Old generation**
   - New generation, 使用 **Scavenge** algorithm, 把空間分成兩半 **semispace**, 以區塊整體複製移動為基礎, 減少 memory fragment
   - Old generation, 使用 **Mark-Sweep** algorithm, 全部空間都使用記憶與清除模式, 可能會造成 memory fragment 但是空間利用率高
+
+---
+
+第二章 - Dive into Javascript
+
+---
+
+String
+
+- `charCodeAt` vs `codePointAt`
+  - **關鍵 JavaScript String 的 length 與 index 數的是 UTF-16 的 code units, 而非 code points**
+    - 因此在字元中包含 BMP 以外的字元時, UTF-16 會需要 2 個 code units 來實現 (16 \* 2 = 32 bits),
+    - 此時 index 與 length 就會在 code units 與 code points 上具有區別
+  - `charCodeAt`, 取得指定位置的 UTF-16 code unit, (UTF-16 code unit = 16 bits, 因此值的範圍在 2^16 = 65536, 0..65535)
+  - `codePointAt`, 分成兩個情況,
+    - 如果指定位置是 UTF-16 中的 leading surrogate 則回傳相對應的 Unicode code point
+    - 如果指定位置是 UTF-16 中的 tail surrogate 則回傳該 tail surrogate 的 code unit 值
+  - `charAt`, 回傳指定 index 位置的一個字串,
+    - 如果此時 index 位置是屬於 UTF-16 中的 BMP 字串, 則回傳該字串
+    - 如果此時 index 指向的 code unit 並非是 BMP 內的字元, 則回傳值是以字串表達的該 code unit 的值, 以開頭 `\u` 加上他的編號
+  - `at`, 輸入值允許正整數與負整數, 負整數時則是反向尋找, 輸出值是一個字串
+    - 效果等同於 `charAt`, 但是允許負數從反向數; 而 `charAt` 的輸入值只允許正整數
+- 關鍵字 UTF-8, UTF-16, Unicode
+  - 電腦編碼, 持續擴張與統一標準
+  - Unicode, 統一標準與擴充
+  - UTF, Unicode Transformation Format
+  - UTF-8 編碼系統, 為 Unicode 標準的一種表示方式, 多數網路協定的預設編碼, 也是多數軟體與程式語言的預設編碼
+  - UTF-16 編碼系統, 為 Unicode 標準的一種表示方式
+- 關鍵字 Unicode Plane
+  - 一個 plane 大小為 2^16 (65536) 個 code points
+  - Unicode 標準中可以被分為 17 個 plane, plane 0 ~ plane 16
+  - `U+` 標示的前兩個 16 bits 代表的就是 plane 編號
+  - 17 planes 限制是因為 UTF-16 的容量上限所導致
+  - 目前並不是所有的 planes 都已經被使用, 仍有很多 plane 尚未規劃用途
+- 關鍵字 code point, code unit
+  - code point 代表 unique number for each character
+  - code unit 代表一個編碼系統中最小的長度單位
+    - UTF-8, 8 bits 即 1 byte 為最小單位,
+    - UTF-16, 16 bits 即 2 bytes 為最小單位
+- 關鍵字 ASCII code, 範圍在 2^7 = 128 個 code points
+- 關鍵字 Endianness
+  - Big-endian, 高位元組 (byte) 放置於低記憶體位置
+    - 網路協定主流使用
+  - Small-endian, 低位元組 (byte) 放置於低記憶體位置
+    - 多數 CPU 使用
+- 關鍵字 Byte Order Mark, BOM
+  - 用來標示文字是 big-endian 還是 small-endian
+  - 通常使用 Unicode 中的 `U+FEFF` 來做標示, `FE FF` 為 big-endian ; `FF FE` 為 small-endian
+- 編碼標準中通常是長度可變的, 為了向下相容和節省空間, 麻煩點在於會帶來額外的計算
+- UTF-8, 長度範圍在 1 ~ 4 bytes, 甚至可以持續擴充
+  - **向下相容 ASCII code**, 因此最開始的 `0x00` ~ `0x7F` 完全等同於 ASCII 編碼
+  - 由前幾個位元決定, 此次是以幾個 bytes 為單位形成的 code point
+  - 第一個 bit 以 `0` 開頭則為 ASCII, 只需要 1 個 byte, 除去最高位剩下的 7 位元剛好符合 ASCII 的需求, 因此完全相等
+  - 開頭為 `110` 代表 2 個 bytes, `1110` 代表 3 bytes, 以此類推
+  - 並且每個 byte 除了首個 byte 之外的, 數值都以 `10` 開頭
+  - 理論上 UTF-8 可以允許的 code points 範圍比 UTF-16 更廣
+- UTF-16, 長度範圍則是 2 or 4 bytes
+  - 支援 1,112,064 個 Unicode 中的 code points
+  - 向下相容和最常用的部分 (Unicode 中的 Base Multilingual Plane, BMP), 每個 code point 只需要 2 個 bytes (16 bits) 即可
+    - 此時等價於 UCS-2
+  - 擴充的部分 (U+10000 ~ U+10FFFF, Supplementary Planes) 才需要 4 個 bytes (32 bits) 組成 surrogate pair
+  - surrogate pair 可以被分為 lead surrogate 與 tail surrogate,
+    - 針對 Unicode 序號 - `0x10000` 取得的 20 bits 二進制, 分成前 10 bits 與後 10 bits
+    - 前 10 bits + `0xD800` 加上前綴的 `110110` 即得 16 bits 的 lead surrogate
+    - 後 10 bits + `0xDC00` 加上前綴的 `110111` 即得 16 bits 的 tail surrogate
+    - 附註: `0xD800` 的前 8 bits 為 `1101 1000`; `0xDC00` 的前 8 bits 為 `1101 1100`
+  - 因為在 Unicode 中的 `0xD800` ~ `0xDFFF` 在 BMP 中為保留區塊, 不會有 code point 對應,
+    - 因此 UTF-16 把這個範圍的值作為 lead surrogate 與 tail surrogate 的範圍使用
+  - UTF-16 中 BMP 的 16bits, lead surrogate 與 tail surrogate 的值範圍剛好是互斥的,
+    - 因此具備 self-synchronizing, 可以從單一個 16 bits 就能得知他是屬於哪個部分
+- 選用 UTF-8 還是 UTF-16 取決於所需字元的範圍
+  - 在過去 May 2019 以前 Windows 和 Qt 只支援 UTF-16, 在此之後 UTF-8 幾乎是最推薦使用的編碼系統也是預設的編碼系統
+  - 通常英文字母多的情況下使用 UTF-8 有空間優勢
+  - 在中文字比較多的情況下使用 UTF-16 比較有空間優勢
+  - 這是因為在 BMP 中的中文字, 在 UTF-8 以 3 bytes 來表示, 而 BMP 中所有的字在 UTF-16 都是 2 bytes 來表示
+- 1 byte = 8 bits
+- a hex can represent 4 bits, 2^4 = 16
+- a byte = 8 bits, 2 個 hex 可以表示, 其範圍在 2^8 = 256
+- 2 bytes = 16 bits, 4 個 hex 可以表示, 其範圍在 2^16 = 65536
+- 在看程式語言時, 可以關注一下他們的 String 中的函式支援的是 UTF-8 還是 UTF-16
