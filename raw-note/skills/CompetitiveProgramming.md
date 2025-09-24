@@ -140,50 +140,66 @@ Algorithm Methodology
 
 Notices
 
-- 清楚問題的輸入與輸出的型別與可進行的操作
-- 複雜流程應該被抽成有意義的函式, 然後組合成可閱讀的程式碼
-- 完成前記得 trace code with example 找到可能沒處理到的 case.
-- 遞迴中止條件放在最開頭, 來保障正確性
-- 遞迴可以利用物件型別回傳多個資料
-- 如果 case 結束記得 return 避免錯誤
-- Immutable 與 mutable 如果只是 read 減少不必要的空間
-- 複雜的問題: 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
-- 如果單一個迴圈或直接處理太困難, 試著不要一個迴圈做完, 而是分成多個步驟處理
-- 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
+- Input, Output
+  - 清楚問題的輸入與輸出的型別與可進行的操作
+- Readability and KISS
+  - 複雜流程應該被抽成有意義的函式, 然後組合成可閱讀的程式碼
+- Edge cases
+  - 完成前記得 trace code with example 找到可能沒處理到的 case.
+  - 必須學著自己找 edge cases examples, 可以從 operator 的各種情況分類
+  - 檢查特殊案例與基本案例
+- Recursive
+  - 遞迴可以利用物件型別回傳多個資料
+- Common errors
+  - 遞迴中止條件放在最開頭, 來保障正確性
+  - 如果 case 結束記得 return 避免錯誤
+- Memory usage
+  - Immutable 與 mutable 如果只是 read 減少不必要的空間
 
 Tricks
 
-- 紙筆優先
-- 觀察問題特性, 尋找獨特的優化方式
-- 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
-- 試著思考所有能儲存的東西, 並且觀察是否有用, 不管是得到最佳解或者是優化空間複雜度
-- 沒想法時試著操作資料, 然後查看是否有用
-- 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
-- Index pointers
-- Hash table, 優化搜尋, T: O(1), S: O(N)
-- Sort first, T: O(N \* LogN), 先排序
-- Scan and find candidate, 搜尋尋找候選者
-- Recursive, 遞迴解, 因為 call stack 的關係會產生額外的 space
-- Backtracking, 一邊優化的遞迴解
+- 1 Manually
+  - 紙筆優先
+  - 圖形題, 先視覺化畫出實際的圖, 來觀察
+  - 複雜的問題: 先手寫每一步執行步驟, 最後才歸納成演算法, 然後才實作, 並且分成多個 function 來處理細節
+- 2 Loop
+  - 如果單一個迴圈或直接處理太困難, 試著不要一個迴圈做完, 而是分成多個步驟處理
+- 3 Tricky points
+  - 觀察問題特性, 尋找獨特的優化方式
+  - 嚴格思考問題定義與解的相關邏輯，也許有更簡單的作法
+- 4 Partial solutions
+  - 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
+- 5 Store and computation
+  - 試著思考所有能儲存的東西, 並且觀察是否有用, 不管是得到最佳解或者是優化空間複雜度
+  - 沒想法時試著操作資料, 然後查看是否有用
+- 6 More cases
+  - 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
+- 7 Candidates, filtering algorithm
+  - Scan and find candidate, 搜尋尋找候選者
 
 ### 計算時間與空間複雜度
 
 - 永遠要詳細的描述空間與時間複雜度
-- 實際計算執行次數
 - 正確區分變數
 - while loop
-- 遞迴
 - Recursive, 遞迴解, 因為 call stack 的關係會產生額外的 space
+  - 遞迴解，肯定需要額外的空間複雜度
 
 Tricks
 
-- 等加級數
-- 等比級數
-- 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
-- 注意呼叫內部函式或已有函式的複雜度
-- 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
-- 複雜度分析可以嘗試分析實際的 input 可以得到更精準的複雜度
-- 利用 worst case 實際計算複雜度
+- Manually
+  - 複雜度分析可以嘗試分析實際的 input 可以得到更精準的複雜度
+  - 實際計算執行次數
+  - 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+- Worst cases
+  - 利用 worst case 實際計算複雜度
+- Calculation
+  - 等加級數
+  - 等比級數
+- Common cases
+  - 記得字串尋找 (find) 比對 string matching 所需要的時間複雜度是 O(n + m), n, m 為分別的字串長度, KMP 演算法
+- Common errors
+  - 注意呼叫內部函式或已有函式的複雜度
 
 ### 各類型 Tips
 
@@ -191,43 +207,47 @@ Tricks
 
 Basics
 
-- 利用 Hash Table: insert, search O(1), 缺點是需要 O(n) 空間複雜度
+- 字串就是陣列
 - 字串問題相關,
   - 字元編碼 (ASCII / Unicode)
   - 空白, 大小寫, 重複字元, 字串長度,
   - 排序
   - 字串連接, 自己與自己相連或與其他相連
-- 字串就是陣列
+- 利用 Hash Table: insert, search O(1), 缺點是需要 O(n) 空間複雜度
 
 Notices
 
-- Hash table memory, 計算且儲存 S: O(N)
-- 注意剩餘條件或迴圈跑完後的狀況, 除了中途正確的 return 外，特別注意最後的 return 應該回傳的內容
-- 檢查特殊案例與基本案例
-- 嚴格思考問題定義與解的相關邏輯，也許有更簡單的作法
-- 遞迴解，肯定需要額外的空間複雜度
-- 在 JavaScript 中, 需要注意 code unit 與 code point 的差別在 UTF-16 中遇到擴充字元時。
+- Hash
+  - Hash table memory, 計算且儲存 S: O(N)
+- Common errors
+  - 注意剩餘條件或迴圈跑完後的狀況, 除了中途正確的 return 外，特別注意最後的 return 應該回傳的內容
+  - 在 JavaScript 中, 需要注意 code unit 與 code point 的差別在 UTF-16 中遇到擴充字元時。
 
 Tricks
 
-- 利用 Sorted O(n log n), **思考排序過後是不是更容易處理**, 缺點是排序需要 O(n log n) 的時間複雜度
-- 利用 字串連接, 觀察連接後是否更好處理
-- 嘗試排序 T: O(N \* LogN), 排序後利用有序這個條件來更有效率地尋找解
-- Index pointers, 處理陣列時, 使用 one pointer 或 two pointers 等等方式嘗試
+- 1 sort
+  - 嘗試排序 T: O(N \* LogN), 排序後利用有序這個條件來更有效率地尋找解
+  - 利用 Sorted O(n log n), **思考排序過後是不是更容易處理**, 缺點是排序需要 O(n log n) 的時間複雜度
+- 2 concat
+  - 利用 字串連接, 觀察連接後是否更好處理
+- 3 go from two side
+  - **嘗試從左走訪陣列跟從右邊走訪陣列, 嘗試一次只做一部份的解最後才整合**
+  - **最佳化的兩種情況 1. 一次處理雙向, 2. 一次處理單向但是處理兩次, 最好兩種都想想看選擇出最簡單實作的**
+- 4 Hash
+  - Hash table 優化搜尋
+- 5 index and pointers
+  - Index pointers, 處理陣列時, 使用 one pointer 或 two pointers 等等方式嘗試
+  - 試著以儲存 index 來處理字串問題, 而非儲存字串本身
+  - 計算 square 時, 試著使用 **two pointers** 逼近
+- 6 to Unicode code points
+  - 字元可以轉換成 ASCII code 或 Unicode 後做運算
 - 找出回傳的模式並且優先計算格式, 才補值
 - 把問題 array 的值，依序加入思考每次的結果是否可以重用
 - 依據定義尋找候選答案，然後再計算出最佳解
 - 思考 bottleneck 原本的功能並且以更 tricky 的方式實現相同功能
-- 字元可以轉換成 ASCII code 或 Unicode 後做運算
-- Hash table 優化搜尋
-- **嘗試從左走訪陣列跟從右邊走訪陣列, 嘗試一次只做一部份的解最後才整合**
-- **最佳化的兩種情況 1. 一次處理雙向, 2. 一次處理單向但是處理兩次, 最好兩種都想想看選擇出最簡單實作的**
-- 圖形題, 先視覺化畫出實際的圖, 來觀察
 - 沒有想法時, 先思考 brute force 然後減少重複的部分
 - 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
 - 資料的順序, 可以避免不必要的計算
-- 試著以儲存 index 來處理字串問題, 而非儲存字串本身
-- 計算 square 時, 試著使用 **two pointers** 逼近
 
 #### Linked List
 
@@ -306,6 +326,8 @@ Tricks
 
 Notices
 
+- Recursive, 遞迴解, 因為 call stack 的關係會產生額外的 space
+- Backtracking, 一邊優化的遞迴解
 - 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
 - 複雜度分析需要練習, 並不這麼直觀
 
