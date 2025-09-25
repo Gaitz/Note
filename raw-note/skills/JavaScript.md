@@ -6,6 +6,8 @@
 
 第一章 - Common Questions
 
+第二章 - Study
+
 ---
 
 ### 第一章 - Common Questions
@@ -129,3 +131,24 @@
   - 新生代被視為可能會更快清除的, 在新生代經過數次 garbage collection 後仍存活會被移動到 **Old generation**
   - New generation, 使用 **Scavenge** algorithm, 把空間分成兩半 **semispace**, 以區塊整體複製移動為基礎, 減少 memory fragment
   - Old generation, 使用 **Mark-Sweep** algorithm, 全部空間都使用記憶與清除模式, 可能會造成 memory fragment 但是空間利用率高
+
+---
+
+第二章 - study
+
+---
+
+WeakRef
+
+- 特性
+  - weak ref 意味著物件並不會影響所持有的成員的 garbage collection
+  - 換句話說, 他不會佔用 ref 而讓 garbage collection 無法執行
+- 用途
+  - 多用於即使被 garbage collection 也沒關係的情況
+  - 例如: cache 的實作, 資源的 manager (像是 event 的集中管理)
+- Object `WeakRef`
+  - `deref()` 取值
+- `WeakMap`
+- `WeakSet`
+- `FinalizationRegistry`
+  - 註冊物件被 garbage collection 時, 執行 callback
