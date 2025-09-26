@@ -169,13 +169,23 @@ Tricks
   - 嚴格思考問題定義與解的相關邏輯，也許有更簡單的作法
 - 4 Partial solutions
   - 試著達到與解相關的部分成果, 然後再一步一步變成真正的解
+  - 4.1 return data structure first
+    - 找出回傳的模式並且優先計算格式, 才補值
 - 5 Store and computation
   - 試著思考所有能儲存的東西, 並且觀察是否有用, 不管是得到最佳解或者是優化空間複雜度
   - 沒想法時試著操作資料, 然後查看是否有用
+  - 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
 - 6 More cases
   - 先舉多個不同的 cases 為例子再想演算法, 否則常有不能處理的情況
 - 7 Candidates, filtering algorithm
   - Scan and find candidate, 搜尋尋找候選者
+  - 依據定義尋找候選答案，然後再計算出最佳解
+- 8 Divide and conquer, dynamic programming, greedy algorithms
+  - 把問題的值，依序加入思考每次的結果是否可以重用
+- 9 Optimization
+  - 思考 bottleneck 原本的功能並且以更 tricky 的方式實現相同功能
+- 10 Brute force, naive solution
+  - 沒有想法時, 先思考 brute force 然後減少重複的部分
 
 ### 計算時間與空間複雜度
 
@@ -215,6 +225,15 @@ Basics
   - 字串連接, 自己與自己相連或與其他相連
 - 利用 Hash Table: insert, search O(1), 缺點是需要 O(n) 空間複雜度
 
+String
+
+- Common data structures
+  - Trie/Prefix tree
+  - Suffix tree
+- Famous algorithms
+  - `Rabin Karp algorithm`, search for substring with a rolling hash
+  - `KMP algorithm`, search for substring, Time: , Space:
+
 Notices
 
 - Hash
@@ -222,17 +241,24 @@ Notices
 - Common errors
   - 注意剩餘條件或迴圈跑完後的狀況, 除了中途正確的 return 外，特別注意最後的 return 應該回傳的內容
   - 在 JavaScript 中, 需要注意 code unit 與 code point 的差別在 UTF-16 中遇到擴充字元時。
+- String input
+  - 詢問 case sensitivity
+  - 詢問 string character encoding
+  - 詢問 string input character set
 
 Tricks
 
 - 1 sort
   - 嘗試排序 T: O(N \* LogN), 排序後利用有序這個條件來更有效率地尋找解
   - 利用 Sorted O(n log n), **思考排序過後是不是更容易處理**, 缺點是排序需要 O(n log n) 的時間複雜度
+  - 資料的順序, 可以避免不必要的計算
 - 2 concat
   - 利用 字串連接, 觀察連接後是否更好處理
+  - concat take O(n) time complexity
 - 3 go from two side
   - **嘗試從左走訪陣列跟從右邊走訪陣列, 嘗試一次只做一部份的解最後才整合**
   - **最佳化的兩種情況 1. 一次處理雙向, 2. 一次處理單向但是處理兩次, 最好兩種都想想看選擇出最簡單實作的**
+  - 3.1 prefix and postfix
 - 4 Hash
   - Hash table 優化搜尋
 - 5 index and pointers
@@ -241,13 +267,20 @@ Tricks
   - 計算 square 時, 試著使用 **two pointers** 逼近
 - 6 to Unicode code points
   - 字元可以轉換成 ASCII code 或 Unicode 後做運算
-- 找出回傳的模式並且優先計算格式, 才補值
-- 把問題 array 的值，依序加入思考每次的結果是否可以重用
-- 依據定義尋找候選答案，然後再計算出最佳解
-- 思考 bottleneck 原本的功能並且以更 tricky 的方式實現相同功能
-- 沒有想法時, 先思考 brute force 然後減少重複的部分
-- 試著儲存某些結果, 來觀察是否有用, 最後試著減少所使用的空間
-- 資料的順序, 可以避免不必要的計算
+- 7 Two pointers and sliding window technique
+
+Edge cases and corner cases
+
+- String
+  - empty string
+  - string with one or two char
+  - with repeated char
+  - with only distinct char
+- Array
+  - empty array
+  - array with one or two elements
+  - repeated elements
+  - duplicated elements in the sequence
 
 #### Linked List
 
