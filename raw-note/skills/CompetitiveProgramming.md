@@ -43,10 +43,11 @@
 
 ### My checklist
 
-- 1 Traveling the input
-- 2 Sorted the input
-- 3 Hashmap trick, (anything can be an input)
-- 4 Use the constraint of input, output, value range, ...
+- 1 Brute force (everything on its own), (and find out the bottleneck)
+- 2 Traveling the input
+- 3 Sorted the input
+- 4 Hashmap trick, (anything can be an input)
+- 5 Use the constraint of input, output, value range, ...
 
 ### Strategies Checklist
 
