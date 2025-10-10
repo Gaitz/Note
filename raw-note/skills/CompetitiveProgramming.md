@@ -29,13 +29,16 @@
 
 ### 解題思考流程
 
-1. 仔細聽懂題目
+1. 仔細聽懂題目, 詢問, 確認且列出 constraints
 1. 畫出範例
 1. 說出暴力解, 解釋空間與時間複雜度
-1. 最佳化
-1. 逐步檢視, 仔細檢查思考出來的演算法
+1. 如果不符合需求則尋找下一個演算法 (持續優化, 直到滿意才進行實作)
+1. 寫出演算法的流程 pseudo codes
 1. 實作程式碼
-1. 測試
+1. 手動一步一步使用範例進行測試
+1. 找出更多 edge cases, 並且手動測試
+1. 再次尋找是否有性能優化的機會 (optimization)
+1. 嘗試讓程式碼更有可閱讀性 (refactor for clean code)
 
 ---
 
@@ -44,6 +47,7 @@
 ### My checklist
 
 - 1 Brute force (everything on its own), (and find out the bottleneck)
+  - loop everything or just follow the definition of the question
 - 2 Traveling the input
 - 3 Sorted the input
 - 4 Hashmap trick, (anything can be an input)
