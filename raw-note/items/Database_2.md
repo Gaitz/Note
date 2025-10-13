@@ -85,6 +85,51 @@ SQL
 - **SQL data statements**, 操作資料
 - **SQL transaction statements**, 設置交易 (transaction)
 
+SQL 並非 procedural programming language
+
+- 無法控制命令的執行方式
+- 一切由資料庫引擎中的 optimizer 決定執行方式
+- 多數資料庫系統允許使用 optimizer hints 去影響最佳化的執行方式
+- 因此, 資料庫系統無法建立出完整的應用程式, 而是需要配合其他程式語言一起使用
+- 一些與 SQL 整合好的程式語言, 例如: PL/SQL, MySQL stored procedure, Transact-SQL
+- 其他程式語言則需要使用 toolkit 或者 API 來撰寫 SQL statement 並且與資料庫系統溝通
+  - 例如: Java: JDBC, Go: database/sql, ...
+- 圖形化工具來與資料庫系統互動
+  - 例如: Squirrel
+
+SQL 範例
+
+- `SELECT`, `FROM`, `WHERE`
+- comment, `/*` ... `*/`
+- 查詢句
+  - 會用到哪些 table, 列在 `FROM`
+  - 篩選目標資料的條件, 列在 `WHERE`
+  - 想要讀取哪些欄位 (column), 列在 `SELECT`
+- 填入資料
+  - `INSERT INTO`
+  - `VALUES`
+- 修改資料
+  - `UPDATE`
+  - `SET`
+- **撰寫 SQL 相關程式時, 應該要檢查 SQL 執行完的回傳結果, 以確保如預期的執行**
+
+SQL 關聯式資料庫系統
+
+- 商業版
+  - Oracle Database
+  - 微軟的 SQL Server
+  - IBM 的 DB2 Universal Database
+- 社群版 (open source)
+  - PostgreSQL
+  - MySQL server
+- 資料庫實作是否符合 ANSI 標準, 是 SQL 語法是否可以移植使用的關鍵之一
+
+額外的參考書
+
+- C.J. Date, _Database in Depth: Relational Theory for Practitioners_
+- C.J. Date, _An Introduction to Database Systems_
+- C.J. Date, _The Database Relational Model: A Retrospective Review and Analysis_
+
 ---
 
 ### 第二章 - 建立並填製資料庫
