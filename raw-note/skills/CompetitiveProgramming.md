@@ -88,7 +88,7 @@
 
 #### 最佳化的技巧
 
-- BUD, 瓶頸, 不必要的工作, 重複的工作
+- BUD, 瓶頸 ( bottleneck ), 不必要的工作 ( unnecessary work ), 重複的工作 ( duplicated work )
 - DIY, 實際手動操作範例
 - 簡化與歸納
 - 底條件與疊加, 會自動生成遞迴解法
