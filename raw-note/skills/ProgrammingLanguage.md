@@ -4,9 +4,7 @@
 
 ---
 
----
-
-Programming Language Checklist
+Learning Programming Language Checklist
 
 - 是否需要編譯
 - 是否具有型別
