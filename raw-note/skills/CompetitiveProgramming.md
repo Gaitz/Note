@@ -53,7 +53,9 @@
 - 3 Traveling the input
 - 4 Sorted the input
 - 5 Hashmap trick, (anything can be an input)
-- 6 Use the constraint of input, output, value range, ...
+- 6 Two pointers or multiple pointers trick
+  - 找到計算的公式, 嘗試控制一個變量依序, 去執行
+- 7 Use the constraint of input, output, value range, ...
 
 ### Strategies Checklist
 
