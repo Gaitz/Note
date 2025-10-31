@@ -1,4 +1,4 @@
-## Programming Language
+## Learning Programming Language
 
 ### Computer Science
 
@@ -6,15 +6,16 @@
 
 Learning Programming Language Checklist
 
-- 是否需要編譯
-- 是否具有型別
+- 是否需要編譯, interpreted vs compiled
+- 是否具有型別,
 - 所支援的 programming paradigms
 - Basic
   - Variable
+  - Scope
+  - Data Types and Data Structures ( number, string, array, ... )
   - Control Flow ( `if`, `switch`, ... ), Loop and Iteration ( `for`, `while`, ... )
   - Function
   - Operators
-  - Data Types and Data Structures ( number, string, array, ... )
   - Error handling
   - Regular Expression ( 通常都會有支援的正規表達式 )
   - Class and Object ( 當支援物件導向時 )
