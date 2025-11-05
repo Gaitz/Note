@@ -131,6 +131,10 @@
   - 2 使用圖形化介面, `pgAdmin` 或者其他的 GUI
   - 3 使用客製化的程式與 server 互動
 - 這個 tutorial 中都使用 `psql` 進行互動
+- _補_,
+  - `psql -l` list all available databases
+  - `\d`, 列出所有的 tables (display)
+  - `\d [table_name]`, 列出指定的 table column 定義
 - `psql [database_name]` 進入交互式界面
   - 不指定 database 名稱時, 預設是 OS user name
 - 進入 `psql` 交互界面後
@@ -379,9 +383,191 @@ Tutorial
 
 2.6 Joins Between Tables
 
+`JOIN ON`
+
+- 多個 table 一起搜尋, 或者針對同一個 table 一次搜尋多次
+- 這項技術被稱為 `join`
+- 組合不同 table instances 的 rows, 通過 expression 指定他們如何配對
+- 範例: `SELECT * FROM weather JOIN cities ON city = name;`
+  - 想要同時顯示都市的氣候和都市位置資訊, 這些內容存在兩個 table 中, weather table 與 cities table
+  - 藉由 join 兩個 table, 而連結的方式是藉由 weather table 中的 name 與 cities table 中的 city 欄位
+- 這種 join 方式 (**inner join**) 只會取得完全符合的結果, 交集 (intersection) 的部分
+  - 換句話說, 如果 weather table 中存在資料, 但是 cities table 沒有資料的城市, 則不會顯示其 weather 資訊
+- 因為每個 column name 只有在自己的 table 內是唯一的, 因此在 join 時可能會產生 column name 相同的情況, 會分不清楚所屬
+  - 需要藉由 table 作為指名 `table.column`
+
+`FROM WHERE`
+
+- 上面這種類型的 `JOIN`/`ON` 模式可以被改寫成, 範例:
+- ```sql
+  SELECT *
+      FROM weather, cities
+      WHERE city = name;
+  ```
+- 這種語法比 `JOIN`/`ON` 更早出現
+- 簡單地將所有的 tables 列在 `FROM`
+- 並把 comparison expression 寫在 `WHERE` 中
+- 語意上來說 `FROM WHERE` 方式屬於 implicit syntax; `JOIN`/`ON` 屬於 explicit syntax, 明確表明 JOIN 關係
+- 使用 `JOIN/ON` 明確表明其意圖是比 `FROM WHERE` 更好的做法
+
+**Outer join**, `LEFT OUTER JOIN`, `RIGHT OUTER JOIN`, `FULL OUTER JOIN`
+
+- ```sql
+  SELECT *
+      FROM weather LEFT OUTER JOIN cities ON weather.city = cities.name;
+  ```
+- `LEFT OUTER JOIN`, 我們需要左側 table 所有的資料, 並且在符合條件情況下列出 JOIN table 的資料
+  - 如果找不到對應的資料時, 則以 empty values 取代
+- `RIGHT OUTER JOIN`, 概念上等同於 LEFT JOIN, 只不過需要列出的是右側 table 所有的資料
+- `FULL OUTER JOIN`, 概念上等於 LEFT JOIN + RIGHT JOIN, 兩個 table 都必須列出所有的資料
+- **OUTER keyword 是選用的**
+  - 可以直接使用 `LEFT JOIN`, `RIGHT JOIN`, `FULL JOIN`
+
+**Self Join**
+
+- Join 相同的 table 來進行搜尋, 即 self join
+- 範例: 想要找出一個城市最低溫低於其他城市且最高溫高於其他城市時, 需要 self join weather table 來尋找
+- ```sql
+  SELECT w1.city, w1.temp_lo AS low, w1.temp_hi AS high,
+        w2.city, w2.temp_lo AS low, w2.temp_hi AS high
+      FROM weather w1 JOIN weather w2
+          ON w1.temp_lo < w2.temp_lo AND w1.temp_hi > w2.temp_hi;
+  ```
+- self join 因為使用相同的 table, 因此無法直接使用 table 名稱進行區分
+  - 因此可以使用別名語法, Example: `weather w1`, `weather w2`
+- 別名語法也常廣泛使用在其他 query 上
+  - 例如: `SELECT * FROM weather w JOIN cities c ON w.city = c.name;`
+
+Convention
+
+- 保持 SQL 命令的穩定度是重點
+- `SELECT` 的 column 用明確指名取代 `*` 是更好的做法
+- 在 `SELECT` join 時, 每個指名都使用 qualify 的方式指明, 換句話說都必須包含 `table.column`
+  - 這樣的好處是在未來如果 table 的 column name 增加或修改產生碰撞時不會產生問題
+  - 範例
+  - ```sql
+    SELECT weather.city, weather.temp_lo, weather.temp_hi,
+          weather.prcp, weather.date, cities.location
+        FROM weather JOIN cities ON weather.city = cities.name;
+    ```
+
+---
+
+2.7 Aggregate Functions
+
+Aggregate functions
+
+- 由多個 input rows 計算出單一個值
+- 常見的 aggregate functions
+  - `count()`, `sum()`, `avg()`, `max()`, `min()`
+- 範例: `SELECT max(temp_lo) FROM weather;`
+- 假設此時想要尋找溫度最高的指定城市時,
+  - 無法使用 `SELECT city FROM weather WHERE temp_lo = max(temp_lo);     -- WRONG`
+  - 這樣的語法, aggregate functions 需要 `WHERE` 子句來決定作用的 rows 為何
+  - 因此需要使用 subquery 做法, 先計算出 aggregate function 的結果
+
+**subquery**
+
+- 範例:
+- ```sql
+  SELECT city FROM weather
+      WHERE temp_lo = (SELECT max(temp_lo) FROM weather);
+  ```
+- 在 `WHERE` 下使用 `()` 建立並且先運行一個 query
+
+`GROUP BY`
+
+- Aggregate 也常常與 `GROUP BY` 一起使用
+- 範例: 我們想要列出 weather 中以 city 為單位, 計算出每個 city 有幾個 rows 和最低溫的上限是多少
+- ```sql
+  SELECT city, count(*), max(temp_lo)
+      FROM weather
+      GROUP BY city;
+  ```
+- 此時的結果會以 city 為單位, 並且 aggregate function 分別以個別 city 為單位進行計算
+
+`HAVING`
+
+- 對於 `GROUP BY` 的結果, 增加額外的篩選
+- 範例:
+- ```sql
+  SELECT city, count(*), max(temp_lo)
+      FROM weather
+      GROUP BY city
+      HAVING max(temp_lo) < 40;
+  ```
+- 如何區分 `WHERE` 與 `HAVING` 的使用時機
+- `WHERE` 用來篩選 input rows
+  - 早於 `GROUP BY` 與 aggregate function 的運作
+  - 因此 WHERE 子句無法包含 aggregate function 直接作用, 而需要使用 subquery
+- `HAVING` 則是通常必須與 aggregate function 一起作用
+  - (`HAVING` 獨立於 aggregate function 之外使用的情境, 通常可以直接由 `WHERE` 取代)
+  - `HAVING` 作用於 aggregation function 與 GROUP BY 之後, 換句話說, 是針對搜尋結果再次篩選
+  - 因此, 優先使用 `WHERE` 取代 `HAVING` 是更好的做法, 節省一些不必要的計算
+
+`LIKE`
+
+- 在 `WHERE` 中使用 pattern matching 篩選
+- 範例: 只搜尋 city 中以 S 開頭的
+- ```sql
+  SELECT city, count(*), max(temp_lo)
+      FROM weather
+      WHERE city LIKE 'S%'
+      GROUP BY city;
+  ```
+
+`FILTER`
+
+- 屬於**單一個** aggregation function 的 option
+- `FILTER` 與 `WHERE` 十分相似, 重點在於篩選作用於指定 aggregate function 的 rows
+  - 先篩選 input rows 早於 aggregation function 計算, 因此可以減少計算
+  - 但是只針對單一個指定的 aggregate function
+- 範例:
+- ```sql
+  SELECT city, count(*) FILTER (WHERE temp_lo < 45), max(temp_lo)
+      FROM weather
+      GROUP BY city;
+  ```
+
+---
+
+2.8 Updates
+
+`UPDATE`
+
+- 更新搜尋結果
+- 範例:
+- ```sql
+  UPDATE weather
+      SET temp_hi = temp_hi - 2,  temp_lo = temp_lo - 2
+      WHERE date > '1994-11-28';
+  ```
+- `UPDATE`, `SET`
+
+---
+
+2.9 Deletions
+
+`DELETE`
+
+- 從 table 中刪除 rows
+  - 範例: `DELETE FROM weather WHERE city = 'Hayward';`
+- 刪除 table 中所有的 rows, 要**特別小心的指令**
+  - 範例: `DELETE FROM tablename;`
+  - 系統不會進行確認, 並且會直接刪除所有的內容
+
+`DROP TABLE`
+
+- 從資料庫中移除整個 table
+- 範例: `DROP TABLE weather, cities;`
+
 ---
 
 3 Advanced Features
+
+---
+
+3.1 Introduction
 
 ---
 
@@ -414,3 +600,7 @@ Tutorial
 ---
 
 第十章 - Bibliography
+
+```
+
+```
