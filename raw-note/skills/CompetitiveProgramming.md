@@ -25,7 +25,6 @@
   - 使用 trivial test case 驗證整體的正確性
   - 嘗試破壞程式碼, 使用特殊案例來驗證正確性
   - 嘗試最佳化, 只有在需要的時候最佳化, 並且只最佳化到需要的程度, 並且必須保留之前所有可以運行的各種版本, 使用最極端的測試案例檢測實際的 runtime
-- 草圖: 演算法, 複雜度, 相關的數字, 資料結構, tricky details
 
 ### 解題思考流程
 
@@ -33,6 +32,7 @@
   - Input constraints, Output constraints, Algorithm constraints
 - 畫出範例
 - 說出暴力解, 解釋空間與時間複雜度
+  - 觀察暴力解, 尋找 BUD 與 tricky points
 - 如果不符合需求則尋找下一個演算法 (持續優化, 直到滿意才進行實作)
 - 寫出演算法的流程 pseudo codes
 - 實作程式碼
@@ -72,6 +72,7 @@
 
 - String
 - Array
+- Hash table (map)
 - Stack
 
 ### Methods check list
@@ -194,7 +195,7 @@ Tricks
 - 9 Optimization
   - 思考 bottleneck 原本的功能並且以更 tricky 的方式實現相同功能
 - 10 Brute force, naive solution
-  - 沒有想法時, 先思考 brute force 然後減少重複的部分
+  - 沒有想法時, 先思考 brute force 然後觀察關鍵點, 減少重複的部分
 
 ### 計算時間與空間複雜度
 
@@ -291,6 +292,75 @@ Edge cases and corner cases
   - repeated elements
   - duplicated elements in the sequence
 
+#### Hash map and trie
+
+Basic
+
+- Hash map, 一個 key value pairs 的集合
+- 建立在 hash function 上, 一種計算通過儲存的內容物 (content) 計算出 index
+- hashing 是常見用來以 space 換取 time 的 tradeoff 手法
+  - 取得指定內容的 index 比起線性搜尋 O(n), 可以加速到 O(1) on average
+- worse case 與 hashing 的問題在於 hash function 的選用
+  - Worse cases 發生在於出現大量的 hash collisions
+  - 常見的應對之法
+  - Separate chaining, 以 linked list 串接 hash collisions 的內容
+  - Open addressing, 所有的資料存在固定的 array 中, 不使用額外的空間進行串聯, 而是以一種固定的方式尋找空格來處理 hash collisions
+- Time complexity
+  - On average, Search, Insert, Remove O(1)
+
+Notices
+
+- Trie, suffix trie, 以 characters 做成的 hash map 可以用於實現以字首序搜尋
+  - key point 有 end symbol 作為結尾
+
+Tricks
+
+#### Recursion
+
+Notices
+
+- Recursive, 遞迴解, 因為 call stack 的關係一定會產生額外的 space
+- Backtracking, 一邊優化的遞迴解
+- 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
+- 複雜度分析需要練習, 並不這麼直觀
+- 所有的 recursive solution 都可以以 stack 改寫成 iterative
+- 有些程式語言提供 tail-call optimization
+
+Tricks
+
+- 對於遞迴一定要想到 cache 來提升速度
+- 必須看出 recursive 的行動模式然後以 caching 提升速度
+  - 例如 fibonacci number, interweavingStrings 計算
+
+#### Stack and Queue
+
+Stack
+
+- 支援 push, pop 的資料結構, 後進先出 (Last in, first out, LIFO)
+- 底層實作可以通過 array 或者 linked list
+- Time complexity
+  - Top/Peek O(1)
+  - Push, Pop O(1)
+  - isEmpty, O(1)
+  - Search, O(n)
+
+Edge cases
+
+- Stack
+  - empty stack
+  - with one item
+  - with two items
+
+Notices
+
+- 遞迴中止條件放在最開頭, 來保障正確性
+
+Tricks
+
+- Stack, 可以用於把遞迴演算法改成迭代演算法時使用
+- Queue, 常用於廣度優先搜尋 BFS, 實現 Cache
+- Stack 與 Queue 可以用來儲存待處理的事項並且在適當的時機取出來處理
+
 #### Linked List
 
 - 模組化, 抽離函式
@@ -307,18 +377,6 @@ Tricks
 - 思考遞迴解與迭代解
 - 補齊長度
 - 嘗試記錄移動的距離
-
-#### Stack and Queue
-
-Notices
-
-- 遞迴中止條件放在最開頭, 來保障正確性
-
-Tricks
-
-- Stack, 可以用於把遞迴演算法改成迭代演算法時使用
-- Queue, 常用於廣度優先搜尋 BFS, 實現 Cache
-- Stack 與 Queue 可以用來儲存待處理的事項並且在適當的時機取出來處理
 
 #### Heap
 
@@ -354,30 +412,6 @@ Tricks
 - 遞迴回傳多資料型態
 - 利用數量平衡機率產生隨機
 - **可以儲存: 目前搜尋到的目標數量**, 以數量來判斷是否找齊
-
-#### Hash map and trie
-
-Notices
-
-- Trie, suffix trie, 以 characters 做成的 hash map 可以用於實現以字首序搜尋
-  - key point 有 end symbol 作為結尾
-
-Tricks
-
-#### Recursion
-
-Notices
-
-- Recursive, 遞迴解, 因為 call stack 的關係會產生額外的 space
-- Backtracking, 一邊優化的遞迴解
-- 遞迴型複雜度分析可以畫出完整的樹狀結構來計算
-- 複雜度分析需要練習, 並不這麼直觀
-
-Tricks
-
-- 對於遞迴一定要想到 cache 來提升速度
-- 必須看出 recursive 的行動模式然後以 caching 提升速度
-  - 例如 fibonacci number, interweavingStrings 計算
 
 #### Sorting and Searching
 
