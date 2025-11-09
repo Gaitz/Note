@@ -2,6 +2,8 @@
 
 ### Computer Science
 
+collection of algorithms that I learned
+
 ---
 
 Sorting
@@ -26,5 +28,15 @@ Bucket sort
 Searching
 
 ---
+
+---
+
+Data structures
+
+---
+
+Min/max stack
+
+- 可以隨時以 O(1) time complexity 讀取 min/max 的 stack
 
 ---

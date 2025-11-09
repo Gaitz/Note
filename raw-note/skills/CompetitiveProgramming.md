@@ -51,11 +51,11 @@
   - loop everything or just follow the definition of the question
 - 2 Do it manually
 - 3 Traveling the input
-- 4 Sorted the input
-- 5 Hashmap trick, (anything can be an input)
-- 6 Two pointers or multiple pointers trick
+- 4 Memorize
+  - 4.1 Hashmap trick, (anything can be an input)
+- 5 Data structure tricks
+- 6 Use the constraint of input, output, value range, ...
   - 找到計算的公式, 嘗試控制一個變量依序, 去執行
-- 7 Use the constraint of input, output, value range, ...
 
 ### Strategies Checklist
 
@@ -74,6 +74,7 @@
 - Array
 - Hash table (map)
 - Stack
+  - min Stack, max Stack (always track the min or max in O(1) time)
 
 ### Methods check list
 
@@ -275,9 +276,10 @@ Tricks
   - Index pointers, 處理陣列時, 使用 one pointer 或 two pointers 等等方式嘗試
   - 試著以儲存 index 來處理字串問題, 而非儲存字串本身
   - 計算 square 時, 試著使用 **two pointers** 逼近
-- 6 to Unicode code points
+- 6 Prefix and postfix array
+- 7 to Unicode code points
   - 字元可以轉換成 ASCII code 或 Unicode 後做運算
-- 7 Two pointers and sliding window technique
+- 8 Two pointers and sliding window technique
 
 Edge cases and corner cases
 
