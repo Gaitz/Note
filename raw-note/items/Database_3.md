@@ -569,6 +569,55 @@ Aggregate functions
 
 3.1 Introduction
 
+- Tutorial 程式碼在 `advanced.sql ` 範例中可以找到
+
+---
+
+3.2 Views
+
+`CREATE VIEW`
+
+- 以建立 `VIEW` 取代複雜的 query, 使用 VIEW 如同一般的 table 一樣
+  - _補_, 用來封裝細節, 像是建立使用者介面一樣
+- VIEW 幾乎可以像是 table 一樣使用, 在 VIEW 上建立 VIEW 也是尋常做法
+- 範例:
+- ```sql
+  CREATE VIEW myview AS
+      SELECT name, temp_lo, temp_hi, prcp, date, location
+          FROM weather, cities
+          WHERE city = name;
+
+  SELECT * FROM myview;
+  ```
+
+Best practices & conventions
+
+- 大量使用 VIEW 去封裝常用到且複雜的 query 是好的做法, good
+  SQL database design
+- 在隱藏且不改變資料庫細節的情況下, 可以隨著應用程式的發展與使用去調整 VIEW
+
+---
+
+3.3 Foreign Keys
+
+`references`
+
+- 範例:
+- ```sql
+  CREATE TABLE cities (
+          name     varchar(80) primary key,
+          location point
+  );
+
+  CREATE TABLE weather (
+          city      varchar(80) references cities(name),
+          temp_lo   int,
+          temp_hi   int,
+          prcp      real,
+          date      date
+  );
+  ```
+
 ---
 
 第三章 - II. The SQL Language
@@ -600,6 +649,10 @@ Aggregate functions
 ---
 
 第十章 - Bibliography
+
+```
+
+```
 
 ```
 
