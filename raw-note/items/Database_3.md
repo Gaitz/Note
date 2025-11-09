@@ -602,7 +602,12 @@ Best practices & conventions
 
 `references`
 
-- 範例:
+- 通過定義讓資料庫去限制 (constraints) 必須存在資料的相依性
+  - 換句話說, 通過 `references` 去指定該欄位的資料必須是先存在於其他 table 中的值
+  - 在正規化的資料庫下, 存在自己 table 中有其他 table 的值,
+  - 此時這個值必是 Foreign keys, 用來關聯其他 table 用的關鍵欄位,
+  - 因此可以通過定義 constraints, 讓資料庫來保證其值的存在
+- 範例: weather table 中的 city, 必須是 cities table 中已經存在的 name 值
 - ```sql
   CREATE TABLE cities (
           name     varchar(80) primary key,
@@ -617,6 +622,16 @@ Best practices & conventions
           date      date
   );
   ```
+
+Best practices & conventions
+
+- Constraints foreign keys 的做法, 是可以提高資料庫品質的做法, 被強烈推薦使用
+
+---
+
+3.4 Transactions
+
+-
 
 ---
 
