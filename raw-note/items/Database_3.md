@@ -590,6 +590,10 @@ Aggregate functions
   SELECT * FROM myview;
   ```
 
+`DROP VIEW`
+
+- _補_, 用來移除 view
+
 Best practices & conventions
 
 - 大量使用 VIEW 去封裝常用到且複雜的 query 是好的做法, good
@@ -631,7 +635,54 @@ Best practices & conventions
 
 3.4 Transactions
 
--
+- _補_, !! 還是沒有很懂 transaction 如何處理 concurrent 問題的 !!
+  - 以領錢例子為例, 假設有兩個 clients 同時發動提領相同帳戶的 transactions 會發生什麼事情
+  - 因為必須確保銀行帳戶不會 < 0, 是否機率性的時間差, 能避開這項檢測
+- Transaction 是所有資料庫系統中的最重要且關鍵的概念之一
+  - a transaction is that it bundles multiple steps into a single, all-or-nothing operation.
+  - 並且當錯誤發生時, 該 transaction 中已經完成的中間狀態不會被更新到資料庫中
+- Atomic updates
+  - 一個 transaction 中間的狀態不會被其他 concurrent operations 得知
+  - 只有在 transaction 完成之後, 其他 operations (包含其他 transactions) 才能得知新的狀態
+- **Atomic** operation
+- 對於資料庫而言, transaction **保證**只有成功與失敗
+  - 並且資料庫保證 transaction 是結果被寫入 permanent storage 時, 才會被認為是成功
+- 由資料庫系統來處理最麻煩且最容易出錯的 concurrent 問題
+
+Note
+
+- 每個資料庫系統的 transaction 語法與慣例不同, 需要參照所用的資料庫系統文件
+
+`BEGIN;`, `COMMIT;`
+
+- PostgreSQL 中的 transaction 語法是以 `BEGIN:` 到 `COMMIT;` 所包裹形成的
+- ```sql
+  BEGIN;
+  UPDATE accounts SET balance = balance - 100.00
+      WHERE name = 'Alice';
+  -- etc etc
+  COMMIT;
+  ```
+
+PostgreSQL
+
+- 把所有的 statement 都視為 transaction
+- 因此, single statement 其實是有 implicit 的 `BEGIN` 與 `COMMIT`
+- 與此區別, 多於一個 statements 形成的 transaction 被稱為 transaction block
+
+`SAVEPOINT`, `ROLLBACK TO`
+
+- 更細緻的操控 transaction block
+- 通過建立 `SAVEPOINT` 允許 transaction 中的部分結果寫入資料庫
+  - **這裡的寫入資料庫結果並不會被其他的 operantions 感知, 必須等到 transaction block 完成才行**
+- 通過 `ROLLBACK TO` 只 rollback 到指定的 `SAVEPOINT`
+- 這樣的 `SAVEPOINT` 與 `ROLLBACK TO` 允許重複發生
+  - 如果確定不需要重複發生時, 可以通過 release save points 來關閉, 並且釋出一些效能
+- `ROLLBACK TO` 是唯一介入 transaction 運作控制權的手段
+
+---
+
+3.5 Window Functions
 
 ---
 
@@ -664,6 +715,10 @@ Best practices & conventions
 ---
 
 第十章 - Bibliography
+
+```
+
+```
 
 ```
 
