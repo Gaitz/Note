@@ -46,7 +46,7 @@
 
 資料庫的發展歷史
 
-- database, 說穿了就是彼此有關聯的資訊集合 (**補**, set)
+- database, 說穿了就是彼此有關聯的資訊集合 (_補_, set)
 - 最早被發展出來的應用程式之一, 為了解決手動維護紙本資料的困擾
   - 並且隨著硬體與軟體的發展, 現代的資料庫系統, 可處理的資料量與速度是過往無法想像的數量級
 
@@ -136,7 +136,36 @@ SQL 關聯式資料庫系統
 
 建立一個 MySQL 資料庫
 
+- 安裝並且啟動一套 MySQL server, 從本地端或者使用雲端服務 (Amazon Web Services, Google Cloud)
+- 啟動 cli 工具 `mysql`, 並且進入資料庫系統
+- 使用 MySQL 官方提供的範例資料庫 sakila, https://dev.mysql.com/doc/index-other.html
+  - 下載並且執行相關的 `.sql` 腳本 (`sakila-schema.sql`, `sakila-data.sql`)
+- _補_, 在 PostgreSQL 中使用 sakila 範例
+  - PostgreSQL 無法直接執行 MySQL 官方提供的腳本, 因為有使用到特定資料庫的語法, 因此無法直接相容
+  - 使用第三方建立的 `.sql`, GitHub repo: https://github.com/jOOQ/sakila/tree/main
+  - 執行 schema -> 執行 insert data
+
 使用命令列工具 mysql
+
+- MySQL 的 cli 工具, `mysql`
+- 登入資料庫 server (建立連線), `mysql -u root -p`
+- 查看所有現存的 databases, `show databases;`
+- 選擇要操作的 database, 範例: `use sakila;`
+- 查詢當下日期與時間, `SELECT now();`
+- 離開 mysql cli, `quit;`, `exit;`
+- `dual` table,
+  - Oracle Database 要求所有的 SELECT 必須包含 `FROM`, 因此內建一個 dummy table `dual` 來符合這個要求
+  - MySQL database 為了語法相容性, 也有內建一個相同名稱的 dummy table
+  - _補_, PostgreSQL 中並不內建這個 dummy table
+- _補_, in PostgreSQL
+  - cli, `psql`
+  - login, `psql -d database_name`
+  - list database, psql 中 `\l`, 外部 `psql -l`
+  - change using database, `\c` (connect 的意思)
+  - 查看當前連線的資訊, `\conninfo`
+  - 查詢當下日期與時間, `SELECT now();`
+  - 顯示執行所花的時間, `\timing` 預設是 off
+  - 離開 cli, `\q`
 
 MySQL 的資料型別
 

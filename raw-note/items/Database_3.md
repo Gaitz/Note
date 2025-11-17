@@ -107,7 +107,7 @@
   - 3 PostgreSQL user 的使用者權限不足, 無法執行 `createdb`
 - Database naming convention
   - 通常會與 user name 一致, 直接執行 `createdb` 不加參數會預設 database 名稱為使用者名稱
-- `dropdb` 指令
+- `dropdb` cli 指令
   - 移除存在的資料庫
   - 這個指令沒有預設的名稱設定, 需要指定
   - **這個指令無法被 undo 需小心使用**
@@ -118,7 +118,7 @@
   - `PGUSER`, postgreSQL user name
   - `PGDATABASE`, database name
   - `PGDATA`, 指定檔案資料夾位置
-- _補_,
+- _補_, cli 指令
   - `initdb`, 屬於安裝流程的一部分, 用來初始化儲存位置的檔案結構
   - `createdb`, 用於建立新的資料庫
 
