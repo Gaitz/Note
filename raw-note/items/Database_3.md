@@ -684,6 +684,117 @@ PostgreSQL
 
 3.5 Window Functions
 
+- Window functions, 與當前 row 有關並且跨越多個 rows 的計算
+  - 與此同時, 最終結果呈現的仍是以原始的 row 為單位
+  - 換句話說, 輸出結果的格式等同於不使用 window function 直接 select table 的結果一樣
+- 與 aggregate function 的差異在於 aggregate function 把計算結果形成一個值並且作為輸出結果, 而非以原始的 row 為單位呈現
+
+`OVER`, `PARTITION BY`
+
+- 範例:
+- ```sql
+  SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;
+  ```
+- 語法上等同於在 aggregate function 後面加上 `OVER` 關鍵字, 使之變成 window function
+  - 用來區別一般 function 與 window function 的差別就在於 `OVER`
+- `PARTITION BY`,
+  - 用 `PARTITION BY` 連接的 expression 把 rows 分割成 partition (group) 來給 window function 進行計算
+- `OVER` + `PARTITION BY`
+  - 意味著該 row 所屬的 partition 視為 window function 此次所運算的範圍
+
+`OVER`, `PARTITION BY`, `ORDER BY`
+
+- 可以在 `OVER` window function 使用 `PARTITION BY` 進行分組的同時
+  - 只針對分組進行 `ORDER BY`
+- 範例:
+- ```sql
+  SELECT depname, empno, salary,
+         row_number() OVER (PARTITION BY depname ORDER BY salary DESC)
+  FROM empsalary;
+  ```
+- 使用 `ORDER BY` 並不一定要配合 `PARTITION BY` 使用, 可以單獨使用作用於所有的 rows
+
+`OVER`
+
+- 通過 `OVER` keyword 後面的 expression 來控制指定且單獨的 function
+- 後方的限制條件, 可以被視為是一組 subquery 產生的 virtual table
+  - 與 subquery `WHERE`, `GROUP BY`, `HAVING` 類似
+
+window frame
+
+- window frame, window function 的運作範圍,
+  - 會依據不同的函數而有不同的運作空間, 並非總是全部的 rows
+  - 範例: `sum()` + `ORDER BY` 以下兩個語句的輸出結果全然不同
+  - `SELECT salary, sum(salary) OVER () FROM empsalary;`
+  - `SELECT salary, sum(salary) OVER (ORDER BY salary) FROM empsalary;`
+- window function 只能在 `SELECT` 語句中使用
+  - 運作是在 `GROUP BY`, `HAVING`, `WHERE` 語句作用之後
+- 並且 window function 是在其他 aggregate function 運作完之後才執行
+  - 換句話說, 這意味著可以在 window function 中使用 aggregate function 的結果
+
+sub-select
+
+- 如果要使用 window function 進行篩選 (filter) 計算時, 可以配合 sub-select 使用
+- 範例:
+- ```sql
+  SELECT depname, empno, salary, enroll_date
+  FROM
+    (SELECT depname, empno, salary, enroll_date,
+       row_number() OVER (PARTITION BY depname ORDER BY salary DESC, empno) AS pos
+       FROM empsalary
+    ) AS ss
+  WHERE pos < 3;
+  ```
+
+`WINDOW`
+
+- 當一個 select 中使用到複數個 window function 時, 並且他們運作的 window frame 相同時,
+  - 可以通過關鍵字 `WINDOW` 提出設定來重用
+- 範例:
+- ```sql
+  SELECT sum(salary) OVER w, avg(salary) OVER w
+    FROM empsalary
+    WINDOW w AS (PARTITION BY depname ORDER BY salary DESC);
+  ```
+
+---
+
+3.6 Inheritance
+
+`INHERITS`
+
+- 來自物件導向的概念, 用於定義相互關聯, 但是具有差異的類別
+- 在 PostgreSQL 中, 一個 table 允許 inherit 0 ~ 多個 table, (具有多重繼承)
+- 範例:
+- ```sql
+  CREATE TABLE cities (
+    name       text,
+    population real,
+    elevation  int     -- (in ft)
+  );
+
+  CREATE TABLE capitals (
+    state      char(2) UNIQUE NOT NULL
+  ) INHERITS (cities);
+  ```
+
+`ONLY`
+
+- 使用 `ONLY` keyword 指定特定的 table, 此時結果不會包含其繼承子代相關的 table
+- 適用於 `SELECT`, `UPDATE`, `DELETE`
+- 一般 query 範例:
+- ```sql
+  SELECT name, elevation
+    FROM cities
+    WHERE elevation > 500;
+  ```
+- 使用 `ONLY` 時的範例
+- ```sql
+  SELECT name, elevation
+      FROM ONLY cities
+      WHERE elevation > 500;
+  ```
+
 ---
 
 第三章 - II. The SQL Language
@@ -715,15 +826,3 @@ PostgreSQL
 ---
 
 第十章 - Bibliography
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
