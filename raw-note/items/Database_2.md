@@ -134,6 +134,8 @@ SQL 關聯式資料庫系統
 
 ### 第二章 - 建立並填製資料庫
 
+---
+
 建立一個 MySQL 資料庫
 
 - 安裝並且啟動一套 MySQL server, 從本地端或者使用雲端服務 (Amazon Web Services, Google Cloud)
@@ -144,6 +146,8 @@ SQL 關聯式資料庫系統
   - PostgreSQL 無法直接執行 MySQL 官方提供的腳本, 因為有使用到特定資料庫的語法, 因此無法直接相容
   - 使用第三方建立的 `.sql`, GitHub repo: https://github.com/jOOQ/sakila/tree/main
   - 執行 schema -> 執行 insert data
+
+---
 
 使用命令列工具 mysql
 
@@ -167,7 +171,78 @@ SQL 關聯式資料庫系統
   - 顯示執行所花的時間, `\timing` 預設是 off
   - 離開 cli, `\q`
 
+---
+
 MySQL 的資料型別
+
+- 資料庫系統之間的差異, 通常會出現在特殊資料型別, 例如: XML, JSON, ...
+- 其他基本的資料型別, 通常都會實作
+
+字元資料, (有長度上限的)
+
+- 固定長度, `char()`, 上限: 255 bytes
+- 非固定長度, `varchar()`, 上限: 65,535 bytes
+- **每個資料庫系統實作資料型別的容量上限, 是不同的**
+  - Oracle Database, 對於 `char` 上限 2000 bytes, `varchar2` 4000 bytes, `clob` ...
+  - SQL Server, `char`, `varchar` 8000 bytes, `varchar(max)` 單個上限可達 2GB
+- _補_, PostgreSQL
+  - 固定長度, `character(n)`, `char(n)`, `bpchar(n)`, 有長度上限
+  - 非固定長度, `character varying(n)`, `varchar(n)`, 有長度上限
+
+convention
+
+- 如果資料的字串長度都一致, 應該使用 `char` 型別, 例如: 省份的所寫
+
+字元集 (character sets)
+
+- 資料庫所支援的編碼集合
+- 多位元組字元集 (multibyte character sets)
+- mysql> `SHOW CHARACTER SET;`
+- 可以為字元型別欄位, 選定不同的 character set (encoding)
+  - 範例: `varchar(20) character set latin1`
+- MySQL, 對資料庫進行預設值設定, `create database [database_name] character set [character_set_name];`
+- _補_, PostgreSQL 不支援 mixed encoding
+  - encoding 的設置是屬於 database 階層的, 不允許個別的資料型別有個別的 encoding 設置
+  - `psql -l` 可以看到所有的資料庫與其編碼格式
+  - `SHOW server_encoding;`, `SHOW client_encoding;`
+
+文字資料
+
+- 儲存文字資料大於 `varchar()` 的上限時
+- MySQL 文字型別
+  - `tinytext`, 255 bytes, 2^8
+  - `text`, 65,535 bytes, 2^16
+  - `mediumtext`, 16,777,215 bytes, 2^24
+  - `longtext`, 4,294,967,295 bytes, 2^32
+- **如果文字儲存超過該型別的上限時, 多餘的部分會被截斷**
+- 輸入文字的尾端多餘的空白不會被自動移除
+- 對 `text` 型別進行 排序, 分組時, 只有前 1024 bytes 文字會有作用
+- MySQL 中文字型別是各異的; 但是其他資料庫實作不一樣
+  - SQL Server, 只有一個文字型別用於儲存大量字元資料
+  - DB2, Oracle 採用 `clob` (Character Large Object) 來儲存
+- MySQL 中隨著版本更新 `varchar()` 支援的上限 >= `tinytext` 與 `text`, 因此後兩者逐漸失去使用情境
+- _補_, PostgreSQL
+  - `bpchar`, 無上限, 會自動刪除尾端的空白字元
+  - `text`, 無上限
+
+數字資料 (numeric)
+
+- 整數型別 (integers)
+- 可以加註 unsigned 表明所有的值都是 >= 0
+- MySQL integers
+  - `tinyint` (1 byte), signed: -128 ~ 127; unsigned: 0 ~ 255
+  - `smallint` (2 bytes), signed: -32768 ~ 32767; unsigned: 0 ~ 65535
+  - `mediumint` (3 bytes), signed: -8388608 ~ 8388607; unsigned: 0 ~ 16777215
+  - `int` (4 bytes), signed: -2147483648 ~ 2147483647; unsigned: 0 ~ 4294967295
+  - `bigint` (8 bytes), signed: -2^63 ~ 2^63 -1; unsigned: 0 ~ 2^64 -1
+- MySQL 浮點數
+  - `float(p, s)`
+  - `double(p, s)`
+  - (options) 可以指定 precision 小數點左右邊加起來的位數, 與 scale, 小數點後的位數
+  - 超過位數會四捨五入或者出現錯誤
+  - 一樣可以分成 signed, unsigned (作為限制的一種, 不影響有效位數)
+
+---
 
 建立資料表
 
