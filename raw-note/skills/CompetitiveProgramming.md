@@ -104,6 +104,7 @@
 #### 個人常見錯誤
 
 - !! 使用 while loop 時, 記得處理 index
+- !! 記得 JavaScript 的 sort 一定要傳入 compare function
 
 ---
 
