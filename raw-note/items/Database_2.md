@@ -241,12 +241,185 @@ convention
   - (options) 可以指定 precision 小數點左右邊加起來的位數, 與 scale, 小數點後的位數
   - 超過位數會四捨五入或者出現錯誤
   - 一樣可以分成 signed, unsigned (作為限制的一種, 不影響有效位數)
+- _補_, PostgreSQL
+  - PostgreSQL 裡沒有 unsigned
+  - 整數型別分成 `smallint` (2 bytes), `integer` (4 bytes), `bigint` (8 bytes)
+  - 自定義: `decimal` == `numeric`,
+  - 浮點數: `real`, `double precision`
+
+時序資料 (temporal)
+
+- 處理時間與日期
+- MySQL
+  - `date`, YYYY-MM-DD
+  - `datetime`, YYYY-MM-DD HH-MI-SS
+  - `timestamp`, YYYY-MM-DD HH-MI-SS
+  - `year`, YYYY
+  - `time`, HHH:MI:SS
+- 對 `datetime`, `timestamp`, `time` 可以多定義秒數的精確值, 最多可以到小數點後 6 位
+- **每個資料庫系統對於時間日期允許的範圍不同**
+  - 主要差別在於對過去年份的支援度
+- 針對不同的使用情境選用適當的型別
 
 ---
 
-建立資料表
+建立資料表, create table
+
+步驟 1 設計
+
+- 1 思考需要哪些資料
+- 2 決定欄位名稱與資料型別
+
+步驟 2 細分 (normalization)
+
+- 資料正規化
+- 確保資料庫中不出現 1 重複的資料, 2 複合式欄位 (compound columns)
+  - compound columns 拆分成多個獨立欄位
+  - 例如: 拆分 name 成 first_name, last_name 兩個欄位
+  - 例如: 拆分地址成特定細化的欄位 postal_code, country, state, city, street, ...
+- 拆分欄位到個別的資料表中 (another table)
+  - 例如: favorite_food table
+- 決定 primary key 欄位
+- 決定 foreign key 欄位
+- 正規化的程度, 與細緻化的程度, 取決於使用情境
+
+步驟 3 建立 SQL 語句
+
+`CREATE TABLE`
+
+- MySQL 範例:
+- ```sql
+  CREATE TABLE person (
+    person_id SMALLINT UNSIGNED,
+    fname VARCHAR(20),
+    lname VARCHAR(20),
+    eye_color ENUM('BR', 'BL', 'GR'),
+    birth_date DATE,
+    street VARCHAR(30),
+    city VARCHAR(20),
+    state VARCHAR(20),
+    country VARCHAR(20),
+    postal_code VARCHAR(20),
+    CONSTRAINT pk_person PRIMARY KEY (person_id)
+  );
+  ```
+- _補_, 等價的 PostgreSQL 語法
+- ```sql
+  CREATE TYPE eye_color AS ENUM ('BR', 'BL', 'GR');
+  CREATE TABLE person (
+    person_id SERIAL,
+    fname VARCHAR(20),
+    lname VARCHAR(20),
+    eye_color eye_color,
+    birth_date DATE,
+    street VARCHAR(30),
+    city VARCHAR(20),
+    state VARCHAR(20),
+    country VARCHAR(20),
+    postal_code VARCHAR(20),
+    CONSTRAINT pk_person PRIMARY KEY (person_id)
+  );
+  ```
+
+`CONSTRAINT`, `PRIMARY KEY`, `FOREIGN KEY`
+
+- **primary key constraint**
+- 主動加上 `CONSTRAINT`, `PRIMARY KEY` 來指定 primary key 欄位
+- 主動加上 `CONSTRAINT`, `FOREIGN KEY` 來指定 foreign key 欄位
+- MySQL 範例:
+- ```sql
+    CREATE TABLE person (
+      person_id SMALLINT UNSIGNED,
+      CONSTRAINT pk_person PRIMARY KEY (person_id)
+    )
+  ```
+- MySQL 範例 2:
+- ```sql
+    CREATE TABLE favorite_food (
+      person_id SMALLINT UNSIGNED,
+      food VARCHAR(20),
+      CONSTRAINT pk_favorite_food PRIMARY KEY (person_id, food),
+      CONSTRAINT fk_fav_food_person_id FOREIGN KEY (person_id)
+      REFERENCES person (person_id)
+    );
+  ```
+- _補_, PostgreSQL 也有相同語法
+  - 有兩種方式加上 PRIMARY KEY CONSTRAINT
+    - 差異在於 CONSTRAINT 的 name 是否可以自訂
+  - 1 在欄位型別的後面加上 `PRIMARY KEY`
+    - 範例: `person_id SERIAL PRIMARY KEY`
+    - 此時 PostgreSQL 會自動生成 constraint name
+  - 2 使用 `CONSTRAINT` 標明
+    - 範例: `CONSTRAINT pk_person PRIMARY KEY (person_id)`
+    - 可以自訂 constraint name
+
+`CHECK`
+
+- **check constraint**
+- 限制指定欄位的輸入值
+- 範例:
+- ```sql
+    eye_color CHAR(2) CHECK (eye_color IN ('BR', 'BL', 'GR')),
+  ```
+- _補_, PostgreSQL 也有相同語法
+
+`ENUM`
+
+- MySQL enum 型別
+- 範例: `eye_color ENUM('BR', 'BL', 'GR'),
+- _補_, PostgreSQL 也有 ENUM
+  - 不過語法不同, 不是直接用在 CREATE TABLE 中
+  - 而是需要使用 `CREATE TYPE ... AS ENUM ();` 來定義 ENUM
+  - 範例:
+  - ```sql
+      CREATE TYPE eye_color AS ENUM ('BR', 'BL', 'GR');
+    ```
+- _補_, PostgreSQL 查詢 custom types
+  - `psql` 中, `\dT` or `\dT+` for verbose
+
+MySQL `describe`
+
+- 查看 table 定義
+- `describe [table_name]`, `desc [table_name]`
+- _補_, PostgreSQL
+  - 在 `psql` 中, 可以使用 `\d` 來查看 table 定義
+
+Null
+
+- 無法提供預設值
+- 對 column 可以加上 `NOT NULL` constraint 來表明不得為空
+
+`REFERENCES`, `FOREIGN KEY`
+
+- `REFERENCES` 用來表明一個 column 的值, 必須是已經存在於其他指定的 table column
+- PostgreSQL 範例:
+  - ```sql
+      CREATE TABLE favorite_food (
+        person_id SERIAL REFERENCES person (person_id),
+        food VARCHAR(20),
+        CONSTRAINT pk_favorite_food PRIMARY KEY (person_id, food)
+      );
+    ```
+  - 即 product_no 這個欄位必須是存在 products table 中的 product_no column 裡的值
+- 如同 `PRIMARY KEY` 與 `CONSTRAINT ... PRIMARY KEY` 的差異
+  - `REFERENCES` 實現的也是 foreign key constraint 的功能, 但是無法指定 constraint 名稱 (implicitly)
+- (explicit) 明確的表明 foreign key constraint 則是使用 `CONSTRAINT` `FOREIGN KEY` + `REFERENCES`
+  - PostgreSQL 範例:
+  - ```sql
+      CREATE TABLE favorite_food (
+        person_id SERIAL,
+        food VARCHAR(20),
+        CONSTRAINT pk_favorite_food PRIMARY KEY (person_id, food),
+        CONSTRAINT fk_fav_food_person_id FOREIGN KEY (person_id) REFERENCES person (person_id)
+      );
+    ```
+
+---
 
 為資料表填入資料或更改資料表
+
+- 練習 SQL 中的四種基本操作
+  - `insert`, `update`, `delete`, `select`
 
 不好的敘述寫法
 
