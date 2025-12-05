@@ -512,6 +512,242 @@ Sakila 資料庫
 
 ### 第三章 - 基礎查詢
 
+查詢的機制
+
+- 登入且資料庫連線
+- 資料庫系統會指定一個識別碼給每一個連線
+- MySQL, 會有 `MySQL connection id`
+- _補_, PostgreSQL
+  - `SELECT pg_backend_pid();` 取得連線使用的 pid
+- 一個指令的執行資料庫系統需要確認
+  - 1 是否有權限執行該指令
+  - 2 是否有權限操作目標資料
+  - 3 語法是否正確
+- 合法的指令會被轉交給 query optimizer 來決定如何執行, 產生 execution plan
+  - 資料庫使用者可以通過一些方式來影響 query optimizer 的選擇, 來為自己的使用情境做最佳化
+  - 例如: 產生和檢索 execution plan, index 的使用, query hints, 調整資料庫的啟動參數, ...
+- 資料庫查詢完成後會產生 result set 回傳給呼叫指令的連線介面
+  - 由介面來決定如何顯示結果
+
+查詢的子句
+
+- 查詢敘述通常由多個 clauses 所組成, 但是並非每個都需要被使用
+- `SELECT` 唯一必要的 clause
+- `FROM`, 標明參與的資料表以及如何結合
+- `WHERE`, 過濾不想要的資料
+- `GROUP BY`, 按照共同欄位 (column) 來進行資料分組
+- `HAVING`, 過濾掉不想要的群組 (group)
+- `ORDER BY`, 依照一個或多個欄位 (columns) 來對 result set 進行排序
+
+`SELECT` 子句
+
+- SELECT 子句的任務是
+  - 決定哪些候選欄位可以進入 result set
+- 除了標明欄位以外, `SELECT` 還能接受
+  - 1 literal value, 例如: 數值, 字串
+  - 2 expression (運算),
+  - 3 呼叫內建函式,
+  - 4 呼叫使用者自訂函式
+- `*`,
+  - `SELECT * FROM language;` 顯示 language 資料表中所有的欄位
+- 指定特定欄位
+  - `SELECT language_id, name, last_update FROM language;`
+- ```sql
+  SELECT language_id,
+    'COMMON' language_usgage,
+    language_id * 3.1415927 lang_pi_value,
+    UPPER(name) language_name
+  FROM language;
+  ```
+- SELECT 內建函式
+  - MySQL, `SELECT version(), user(), database();`
+  - _補_, 內建函式屬於資料庫系統專屬, 因此不一定是通用函式, 每家資料庫系統擁有自己不同的內建函式庫
+
+欄位的別名
+
+- 為輸出結果欄位, 進行重新命名 (別名)
+- 可以直接加在欄位敘述後面後面指定,
+- 或者使用 `AS` 關鍵字 (選用)
+- `SELECT language_id id FROM language;`
+- `SELECT language_id AS id FROM language;`
+- 以上兩個敘述功能是一樣的, 屬於程式碼風格的選用
+
+消除重複的內容
+
+- `DISTINCT`
+  - `SELECT DISTINCT actor_id FROM film_actor;`
+- 如果單純要確認資料是否重複時, 使用 `DISTINCT` 是**很花時間的運算**
+  - 要產生一組 unique 的結果集合來確認重複性, 需要先排序 order by 和 distinct 因此在資料量很大的時候是**很花時間的運算**
+- **應該要花時間了解要處理的資料集合, 本身是否存在重複的可能性**
+
+`FROM` 子句
+
+- `FROM` 子句定義了, 查詢會用到的資料表, 以及如何將資料表連結在一起的方式
+
+資料表
+
+- 一組彼此相關的資料表
+- 可以分成四種形態
+  - 永久性資料表 (以 `CREATE TABLE` 建立的)
+  - 導出的資料表 (通過子查詢回傳並儲存在記憶體中的資料)
+  - 臨時資料表 (儲存在記憶體中的資料 (volatile))
+  - 虛擬資料表 (以 `CREATE VIEW` 建立的)
+- 以上四種資料表都可以用在 `FROM` 子句中
+
+導出的 (從子查詢產生) 的資料表
+
+- 在 `FROM` 子句下, 以小括號 `()` 建立起的子查詢
+  - 子查詢會產生一個導出的資料表, 給予其他子句進行使用
+- 這樣的**子查詢產生的資料表只存在於查詢期間, 之後就會被棄置**
+- ```sql
+  SELECT concat(cust.last_name, ', ', cust.first_name) full_name
+  FROM (
+    SELECT first_name, last_name, email
+    FROM customer
+    WHERE first_name = 'JESSIE'
+  ) cust;
+  ```
+- 外圍的查詢 (containing query)
+- 以別名來參照子查詢的結果
+
+臨時資料表 (`TEMPORARY`)
+
+- `TEMPORARY`
+- 每個資料庫系統實作的方式不同, 但是都允許定義臨時性的資料表,
+  - 使用上幾乎等同於永久性資料表,
+  - 唯一的差異在於資料會在某個時刻消失, 被釋放
+  - 例如: transaction 結束時, 資料庫 connection 結束時
+  - Oracle Database 的處理則較為特殊, 會保留臨時資料表的定義, 供未來使用
+- ```sql
+  CREATE TEMPORARY TABLE actors_j (
+    actor_id SMALLINT,
+    first_name varchar(45),
+    last_name varchar(45)
+  );
+  ```
+- ```sql
+  INSERT INTO actors_j
+    SELECT actor_id, first_name, last_name
+    FROM actor
+    WHERE last_name LIKE 'J%';
+  ```
+
+檢視表 (`VIEW`)
+
+- 外觀與行為都與資料表 (`TABLE`) 類似, 但是沒有實際的資料
+- 而是一種 `SELECT` 的封裝
+- 當操作 VIEW 時, 資料庫系統會自動整合語法與 VIEW 定義, 來形成最終的指令
+- 主要的用途在於
+  - 1 對資料庫使用者隱藏部分的欄位 (_補_, 權限管理)
+  - 2 簡化複雜的資料表設計, (_補_, 依據使用情境建立, 而不需要修改實際的 table)
+- ```sql
+  CREATE VIEW cust_vw AS
+  SELECT customer_id, first_name, last_name, active
+  FROM customer;
+  ```
+
+資料表的連結 `JOIN`, `ON`
+
+- 在 `FROM` 子句中描述, 數個資料表之間的連結方式
+- 以下示範 `INNER JOIN`, 條件則是在 `ON` 子句下描述
+- ```sql
+  SELECT customer.first_name, customer.last_name,
+    rental.rental_date rental_time
+  FROM customer
+    INNER JOIN rental
+    ON customer.customer_id = rental.customer_id
+  WHERE date(rental.rental_date) = '2005-06-14';
+  ```
+
+定義資料表的別名
+
+- 當要在不同子句中參照不同的資料表欄位時, 必須要有個方式描述這個欄位來自於哪個資料表
+- 使用全名, 資料表名稱 (table) `.` 欄位名稱 (column), 範例: `employee.emp_id`
+- 使用別名, 為資料表命名一個別名 (alias), 然後參照欄位
+- 使用別名的目的是**要更簡潔並且不容易造成混淆**
+- ```sql
+  SELECT c.first_name, c.last_name, r.rental_date rental_time
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  WHERE date(r.rental_date) = '2005-06-14';
+  ```
+
+`WHERE` 子句
+
+- `WHERE` 子句, 一種將沒有興趣的 row 從 result set 中剔除的手段
+  - _補_, 用來篩選有興趣的資料
+- ```sql
+  SELECT title
+  FROM film
+  WHERE (rating = 'G' AND rental_duration >= 7)
+    OR (rating = 'PG-13' AND rental_duration < 4);
+  ```
+- 使用 `AND`, `OR`, `NOT` 邏輯算子 (Logical Operators) 來組合條件
+- 使用 `()` 來指定運算順序
+
+`GROUP BY` 和 `HAVING` 子句
+
+- 讓資料庫系統針對 result set 進行某些操作後再顯示
+- `GROUP BY` 根據欄位的值 (column) 進行分組 (grouping)
+- `HAVING` 子句,
+  - 當使用 `GROUP BY` 之後, 可以通過 `HAVING` 對分組進行篩選
+  - 類似於作用於 GROUP 的 WHERE 子句
+- ```sql
+  SELECT c.first_name, c.last_name, count(*)
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  GROUP BY c.first_name, c.last_name
+  HAVING count(*) >= 40;
+  ```
+
+`ORDER BY` 子句
+
+- 一般的 result set 結果並不保證任何順序
+- 要讓結果是以有序的方式排列, 需要使用 `ORDER BY` 子句
+- `ORDER BY`
+  - 讓結果集合進行排序, 可以通過欄位 (column), 或者欄位相關的表示式 (expressions)
+- PostgreSQL example:
+- ```sql
+  SELECT c.first_name, c.last_name,
+    r.rental_date::time rental_time
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  WHERE date(r.rental_date) = '2005-06-14'
+  ORDER BY c.last_name, c.first_name;
+  ```
+
+降幂與升幂的排序, `ASC`, `DESC`, `LIMIT`
+
+- `ASC`, 排序的預設是升幂的 (ascending)
+- `DESC`, 使用關鍵字指定為降幂 (descending)
+- `LIMIT`, 指定只顯示前幾筆數量
+- PostgreSQL example:
+- ```sql
+  SELECT c.first_name, c.last_name, r.rental_date::time rental_time
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  WHERE date(r.rental_date) = '2005-06-14'
+  ORDER BY r.rental_date::time DESC
+  LIMIT 10;
+  ```
+
+以欄位的數字定位來指定排序
+
+- 以欄位的排序數字, 來指定排序欄位
+- ```sql
+  SELECT c.first_name, c.last_name, r.rental_date::time rental_time
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  WHERE date(r.rental_date) = '2005-06-14'
+  ORDER BY 3 DESC;
+  ```
+- _補_, 不推薦使用, 因為容易出錯
+
 ---
 
 ### 第四章 - 篩選
