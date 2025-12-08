@@ -12,6 +12,7 @@ Sorting
 
 Bucket sort
 
+- 前提條件: 輸入值的區間是有限, 且可接受的數量時
 - **當值區間是有限且可接受的數量時**
   - 常用於優化排序效能時使用, 時間複雜度最佳可以達到 O(n)
 - 建立多個 bucket 並把輸入放入桶內
@@ -28,6 +29,13 @@ Bucket sort
 Searching
 
 ---
+
+Binary Search
+
+- 遇到**已經排序好的資料結構**並且**搜尋的方向跟排序大小有關係**時
+  - Binary Search 是很好的搜尋工具, Time: O(log n)
+- 前提條件:
+  - Sorted
 
 ---
 
