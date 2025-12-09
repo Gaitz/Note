@@ -752,6 +752,217 @@ Sakila 資料庫
 
 ### 第四章 - 篩選
 
+- `WHERE` 子句, 針對 rows 進行篩選
+- `filter conditions
+- `HAVING` 子句, 針對 groupoing 進行篩選
+
+條件評估
+
+- conditions
+- 以 `AND`, `OR` 區隔
+
+小括號的運用
+
+- 在複雜的條件中, 最好使用 `()` 來明確的表示優先順序
+- 有助於可閱讀性, 和資料庫系統的解析
+
+`NOT` 算子的使用
+
+- `NOT` 算子
+- ```sql
+  WHERE NOT (first_name = 'STEVEN' OR last_name = 'YOUNG')
+    AND create_date > '2006-01-01'
+  ```
+- 等價的 `<>` 算子與 `!=` 算子
+- ```sql
+    WHERE first_name <> 'STEVEN' AND last_name <> 'YOUNG'
+      AND create_date > '2006-01-01'
+  ```
+
+建構條件
+
+- conditions 由 expressions, 加上 operators 組成
+- Expression 可以是
+  - 一個數值 (value)
+  - 一個欄位 (column)
+  - 一個字串 (string)
+  - 一個內建函式, Example: `concat()`
+  - 一個子查詢 sub-query
+  - 一連串的表示式, Example: `('Boston', 'New York', 'Chicago')`
+- Operators
+  - 比較算子 (Comparison Functions and Operators)
+  - 算數算子 (Mathematical Functions and Operators)
+  - _補_ ,邏輯算子 (Logical Operators)
+  - _補_, ...
+
+條件的類型
+
+等式條件 (equality conditions)
+
+- 大部分會寫成 `column = experssion` 的形式
+- 範例:
+- ```sql
+  SELECT c.email
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  WHERE date(r.rental_date) = '2005-06-14';
+  ```
+
+不等式條件 (inequality condition)
+
+- `<>` 算子與 `!=` 算子, 兩者是等價的
+- 範例:
+- ```sql
+  SELECT c.email
+  FROM customer c
+    INNER JOIN rental r
+    ON c.customer_id = r.customer_id
+  WHERE date(r.rental_date) <> '2005-06-14';
+  ```
+
+利用等式條件來修改資料
+
+- 等式與不等式條件常用於 `UPDATE` 與 `DELETE` 中
+
+以範圍構成的條件
+
+- 以範圍來操作數值, 時序資料, ...
+- 比較算子 (Comparison Functions and Operators)
+  - `<`, `>`, `<=` `>=`, `=`, `<>`, `!=`
+- 範例:
+- ```sql
+  SELECT customer_id, rental_date
+  FROM rental
+  WHERE rental_date < '2005-05-25';
+  ```
+
+`BETWEEN AND` 算子
+
+- 使用 `BETWEEN` 算子來同時設定上下界
+  - 這個算子, 只是 `<=`, `>=` 的語法糖
+  - `a BETWEEN x AND y` 等價於 `a >= x AND a <= y`
+- 輸入值的順序, 必須是下界限, 然後上界限
+- 並且上下界都會**被包含在範圍之內**, _補_, 意味著 `=`
+- 範例:
+- ```sql
+  SELECT customer_id, rental_date
+  FROM rental
+  WHERE rental_date BETWEEN '2005-06-14' AND '2005-06-16';
+  ```
+
+字串的範圍
+
+- `BETWEEN AND` 與比較算子都適用於字串
+  - 依據其字元順序
+- 範例:
+- ```sql
+  SELECT last_name, first_name
+  FROM customer
+  WHERE last_name BETWEEN 'FA' AND 'FR';
+  ```
+
+依成員構成的條件, `IN`, `()`
+
+- 使用 `IN` 算子, 作用於候選集合上
+- 範例:
+- ```sql
+  SELECT title, rating
+  FROM film
+  WHERE rating IN ('G', 'PG');
+  ```
+- _補_, PostgreSQL, Row and Array Comparisons
+
+子查詢的使用
+
+- 使用 `IN` 算子加上 `()` subquery
+  - 讓 `IN` 算子作用於透過子查詢產生的結果集合上
+- 範例:
+- ```sql
+  SELECT title, rating
+  FROM film
+  WHERE rating IN (
+    SELECT rating FROM film
+    WHERE title LIKE '%PET%'
+  );
+  ```
+- _補_, PostgreSQL, Subquery Expressions
+
+`NOT IN` 的使用
+
+- `NOT IN`
+- 不存在集合中
+
+比對符合條件
+
+- 處理字串條件的方法
+- 1 使用內建字串函式配合比較算子
+- 範例:
+- ```sql
+  SELECT last_name, first_name
+  FROM customer
+  WHERE left(last_name, 1) = 'Q';
+  ```
+- _補_, PostgreSQL, String Functions and Operators
+
+利用萬用字元 `LIKE`
+
+- 使用萬用字元建立比對 pattern
+- `-`, 取代單一字元
+- `%`, 取代任意數量的字元
+- 配合 `LIKE` 算子進行比對
+- 範例:
+- ```sql
+  SELECT last_name, first_name
+  FROM customer
+  WHERE last_name LIKE '_A_T%S';
+  ```
+
+利用正規表示式, regular expressions
+
+- 對於更複雜的字串比對, 可以使用內建的 regular expression
+- 幾乎每個資料庫系統都支援 regular expressions
+  - 但是**每個資料庫系統的使用語法不同**, 需要個別確認
+- MySQL 範例:
+- ```sql
+  SELECT last_name, first_name
+  FROM customer
+  WHERE last_name REGEXP '^[QY]';
+  ```
+- PostgreSQL 範例:
+- ```sql
+  SELECT last_name, first_name
+  FROM customer
+  WHERE last_name ~ '^[QY]';
+  ```
+- _補_, PostgreSQL, Pattern Matching
+
+`NULL` 那四個字的咒語
+
+- `NULL` 值的多重含義
+  - 1 不適用此欄位
+  - 2 資料值還未知
+  - 3 資料值還未定義
+- 在資料庫系統中的 `NULL` 值的特殊性質
+  - 1 expression 可以為 `NULL`, 但是不等於 NULL
+  - 2 **兩個 NULL 值是不相等的**
+- 要判斷 NULL 值**必須使用**
+  - `IS NULL` 算子
+  - `IS NOT NULL` 算子
+  - 而**不能使用比較算子**, `=`, `!=`
+- 範例:
+- ```sql
+  SELECT rental_id, customer_id
+  FROM rental
+  WHERE return_date IS NULL;
+  ```
+- 常見錯誤
+  - 使用比較算子來判斷 NULL 值
+    - 必須使用 `IS NULL`, 與 `IS NOT NULL` 算子進行
+- 常見錯誤
+  - **使用 `NOT BETWEEN` 算子時的結果並不會包含 `NULL`**
+    - 如果需要 `NULL` 值, 必須手動加上條件 `IS NULL`
+
 ---
 
 ### 第五章 - 查詢多個資料表
