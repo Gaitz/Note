@@ -400,7 +400,7 @@ Null
         CONSTRAINT pk_favorite_food PRIMARY KEY (person_id, food)
       );
     ```
-  - 即 product_no 這個欄位必須是存在 products table 中的 product_no column 裡的值
+  - 即 person_id 這個欄位必須是存在 person table 中的 person_id column 裡的值
 - 如同 `PRIMARY KEY` 與 `CONSTRAINT ... PRIMARY KEY` 的差異
   - `REFERENCES` 實現的也是 foreign key constraint 的功能, 但是無法指定 constraint 名稱 (implicitly)
 - (explicit) 明確的表明 foreign key constraint 則是使用 `CONSTRAINT` `FOREIGN KEY` + `REFERENCES`
@@ -494,11 +494,11 @@ Null
 
 ---
 
-不好的敘述寫法
+常見錯誤
 
 - 違反規則的 INSERT 會丟出錯誤訊息
-- 違反 primary key 欄位需要 unique
-- 違反 foreign key 需要先存在另外的 table 中 (_補_, `REFERENCES`)
+- 違反 **primary key 欄位需要 unique**
+- 違反 **foreign key 需要先存在另外的 table 中** (_補_, `REFERENCES`)
 - 違反 ENUM 的輸入值
 - 違反日期輸入格式
 
@@ -507,6 +507,7 @@ Null
 Sakila 資料庫
 
 - MySQL 所提供的範例資料庫, 模擬 DVD 出租連鎖店的資料庫
+- _補_, PostgreSQL 可以找到開源的移植版本, 以供練習
 
 ---
 
@@ -966,6 +967,145 @@ Sakila 資料庫
 ---
 
 ### 第五章 - 查詢多個資料表
+
+什麼是結合 (JOIN)
+
+- 組合資料表
+- 當查詢涉及多個資料表時
+  - 通過欄位中的 foreign key 來連結其他的資料表
+- foreign key 是選擇性使用 constraint
+  - 使用 join 時並不需要一定要有 foreign key constraint
+
+笛卡爾乘積 (Cartesian product)
+
+- Cartesian product, 所有資料表的欄位進行排列組合形成的乘積
+  - 也是 CROSS JOIN 的結果
+- _補_, Cross join 不需要有 `ON` 進行連接, 只是資料表單純地進行 Cartesian product 的結果
+- MySQL 範例:
+- ```sql
+  SELECT c.first_name, c.last_name, a.address
+  FROM customer c JOIN address a;
+  ```
+- _補_, PostgreSQL 範例:
+- ```sql
+  SELECT c.first_name, c.last_name, a.address
+  FROM customer c CROSS JOIN address a;
+  ```
+- PostgreSQL 需要明確表明 `CROSS JOIN`
+
+Inner Joins
+
+- 使用 `ON` keyword 描述, `JOIN` 時所對應的欄位名稱
+  - INNER JOIN, 最常見的 JOIN 方式, 也是 `JOIN` 的預設模式
+  - 使用 `INNER JOIN` keyword 可以明確表明使用的 JOIN 類型
+- INNER JOIN 在兩個對應欄位如果遇到 NULL 或找不到時, 其結果不會出現在結果集合中
+  - 與之相對的是如果在其一欄位找不到時, 仍輸出結果, 就需要使用 OUTER JOIN
+- MySQL 範例:
+- ```sql
+  SELECT c.first_name, c.last_name, a.address
+  FROM customer c JOIN address a
+  ON c.address_id = a.address_id;
+  ```
+  - _補_, PostgreSQL 語法相同
+- 當 `ON` 所連結的 key 在兩個欄位中擁有相同名稱時, 可以使用 `USING` keyword 取代
+  - 範例如下:
+  - ```sql
+      SELECT c.first_name, c.last_name, a.address
+      FROM customer c JOIN address a
+      USING (address_id);
+    ```
+- `USING` 屬於特定情況下的語法糖, 取決於程式風格使用
+
+ANSI 的 Join 語法
+
+- 採用 ANSI SQL 標準, SQL 92 版本
+- 所有的主流資料庫系統都支援 SQL92 標準版的語法
+- 但是在此之前仍有舊版的語法使用
+  - 範例:
+  - ```sql
+      SELECT c.first_name, c.last_name, a.address
+      FROM customer c, address a
+      WHERE c.address_id = a.address_id;
+    ```
+- 使用 SQL92 標準版的好處
+  - 可閱讀性更高
+  - 不容易出錯
+  - 各家資料庫通用
+
+結合三個以上的資料表
+
+- 一次結合兩個資料表
+- 結合三個資料表的範例:
+- ```sql
+  SELECT c.first_name, c.last_name, ct.city
+  FROM customer c
+    INNER JOIN address a
+    ON c.address_id = a.address_id
+    INNER JOIN city ct
+    ON a.city_id = ct.city_id
+  ORDER BY ct.city;
+  ```
+
+結合的順序重要嗎?
+
+- 因為資料庫系統 SQL 語法是非程序式語言 (Non-procedural Language)
+- 換句話說, JOIN 的語法順序不會影響執行順序, 執行順序是由資料庫系統本身決定的
+- 如果要刻意影響資料庫的 JOIN 順序時, 就需要依據不同的資料庫系統使用不同的語法來影響最佳化的選擇
+  - MySQL: `STRAIGHT_JOIN`
+  - SQL Server: `force order`
+  - Oracle: `ordered`, `leading`
+
+將子查詢當成資料表來使用
+
+- 把子查詢的結果作為一個 table 來參與 JOIN
+- 使用時機取決於效能最佳化或者程式可閲讀性, 而使用子查詢
+- 範例:
+- ```sql
+  SELECT c.first_name, c.last_name, addr.address, addr.city
+  FROM customer c
+    INNER JOIN (
+      SELECT a.address_id, a.address, ct.city
+      FROM address a
+        INNER JOIN city ct
+        ON a.city_id = ct.city_id
+      WHERE a.district = 'California'
+    ) addr
+    ON c.address_id = addr.address_id;
+  ```
+
+重復使用同一個資料表
+
+- 在進行資料表結合時, 有時候會需要建立重複的組合,
+  - 因此會重復使用到相同的一個資料表, 但是以不同的別名進行操作
+- 範例: 尋找兩位演員所共演的所有電影的電影名稱
+- ```sql
+  SELECT f.title
+  FROM film f
+    INNER JOIN film_actor fa1
+    ON f.film_id = fa1.film_id
+    INNER JOIN actor a1
+    ON fa1.actor_id = a1.actor_id
+    INNER JOIN film_actor fa2
+    ON f.film_id = fa2.film_id
+    INNER JOIN actor a2
+    ON fa2.actor_id = a2.actor_id
+  WHERE (a1.first_name = 'CATE' AND a1.last_name = 'MCQUEEN')
+    AND (a2.first_name = 'CUBA' AND a2.last_name = 'BIRCH');
+  ```
+
+自我結合 (self-join)
+
+- 有些資料表中會有包含自我參照的外來鍵 (self-referencing foreign key)
+  - 有一個欄位指向自己的 primary key
+- 範例: 在 film table 中擁有一個欄位叫做 prequel_film_id 作為指向續集
+  - 此時可以使用 self join 尋找擁有續集的所有電影
+- ```sql
+  SELECT f.title, f_prnt.title prequel
+  FROM film f
+    INNER JOIN film f_prnt
+    ON f_prnt.film_id = f.prequel_film_id
+  WHERE f.prequel_film_id IS NOT NULL;
+  ```
 
 ---
 
