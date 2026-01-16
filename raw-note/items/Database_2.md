@@ -1111,6 +1111,146 @@ ANSI 的 Join 語法
 
 ### 第六章 - 集合的運用
 
+- 以集合的角度看待資料
+
+集合的理論基礎
+
+- union (聯集)
+- intersection (交集)
+- except (差集)
+- (A union B) except (A intersect B)
+  - (A except B) union (B except A)
+  - _補_, symmetric difference
+
+現實中的集合理論
+
+- 在資料庫中的運用
+  - 兩組資料集合必須有相同的欄位數量
+  - 對應的資料欄位型別需要一致, 或者有辦法型別轉換
+- 運用集合算子在兩個 SELECT 敘述中
+- 範例:
+- ```sql
+  SELECT 1 num, 'abc' str
+  UNION
+  SELECT 9 num, 'xyz' str;
+  ```
+- 組合式查詢 (compound query)
+  - 以集合算子組合多組單獨執行查詢的查詢結果, 形成最終的查詢結果集合
+  - _補_, PostgreSQL, Combining Queries (UNION, INTERSECT, EXCEPT)
+
+集合運算子
+
+- 額外選用的 `ALL` keyword
+  - 不排除重複的值
+- 預設是會排除重複的值, _補_, 概念上等同於在最終的結果集合上加上 DISTINCT 運算
+
+`UNION`, `UNION ALL` 運算子
+
+- 範例: 尋找所有在 customer 與 actor 清單中姓名指定開頭的集合
+- `UNION ALL` 範例:
+- ```sql
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%'
+  UNION ALL
+  SELECT a.first_name, a.last_name
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%';
+  ```
+- `UNION` 範例:
+- ```sql
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%'
+  UNION
+  SELECT a.first_name, a.last_name
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%';
+  ```
+- 差異在於是否消除重複的資料
+
+`INTERSECT`, `INTERSECT ALL` 運算子
+
+- `INTERSECT` 範例
+  - 尋找中 customer 與 actor 符合條件且同名同姓的人
+- ```sql
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%'
+  INTERSECT
+  SELECT a.first_name, a.last_name
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%';
+  ```
+
+`EXCEPT`, `EXCEPT ALL` 運算子
+
+- `EXCEPT` 範例
+  - 尋找 actor 中符合條件的姓名, 但是剔除 customer 中相同條件的姓名
+- ```sql
+  SELECT a.first_name, a.last_name
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%'
+  EXCEPT
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%';
+  ```
+- A `EXCEPT ALL` B
+  - 只會把出現在 B 集合的重複資料從 A 集合中移除一次
+  - 意味著 A 集合可能會存在多餘重複數量的相同資料
+
+集合運算子的規則
+
+將組合式查詢的結果排序
+
+- 在對組合式查詢結果使用 `ORDER BY` 時的欄位名稱需要使用第一組查詢的欄位名稱
+- 因此推薦在使用組合式查詢時, 兩個查詢都使用相同的輸出欄位名稱 (使用別名產生一致)
+- 可以正確執行的範例: 使用第一組結果的欄位名稱進行排序
+- ```sql
+  SELECT a.first_name fname, a.last_name lname
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%'
+  UNION ALL
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%'
+  ORDER BY lname, fname;
+  ```
+- 會出現錯誤的範例: 使用第二組結果的欄位名稱進行排序
+- ```sql
+  SELECT a.first_name fname, a.last_name lname
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%'
+  UNION ALL
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%'
+  ORDER BY last_name, first_name;
+  ```
+
+集合運算子的優先性
+
+- 作用於多組集合運算子的優先順序
+  - 一般而言是由上而下的順序
+  - `INTERSECT` 運算子的順序優於其他算子
+  - 可以使用 `()` 改變執行的優先順序
+- 範例:
+- ```sql
+  SELECT a.first_name, a.last_name
+  FROM actor a
+  WHERE a.first_name LIKE 'J%' AND a.last_name LIKE 'D%'
+  UNION (
+    SELECT a.first_name fname, a.last_name lname
+    FROM actor a
+    WHERE a.first_name LIKE 'M%' AND a.last_name LIKE 'T%'
+    UNION ALL
+    SELECT c.first_name, c.last_name
+    FROM customer c
+    WHERE c.first_name LIKE 'J%' AND c.last_name LIKE 'D%'
+  );
+  ```
+
 ---
 
 ### 第七章 - 資料的產生, 操作與轉換
