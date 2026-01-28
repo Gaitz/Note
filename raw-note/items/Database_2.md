@@ -1006,7 +1006,9 @@ Inner Joins
   FROM customer c JOIN address a
   ON c.address_id = a.address_id;
   ```
+
   - _補_, PostgreSQL 語法相同
+
 - 當 `ON` 所連結的 key 在兩個欄位中擁有相同名稱時, 可以使用 `USING` keyword 取代
   - 範例如下:
   - ```sql
@@ -1254,6 +1256,256 @@ ANSI 的 Join 語法
 ---
 
 ### 第七章 - 資料的產生, 操作與轉換
+
+- 關於資料的操作, 各家資料庫系統有屬於自己不同的內建函數
+- 資料型別與其容量上限與細節, 在各家資料庫系統也有所不同
+- 實際情況應該參照所使用的資料庫系統的文件說明
+
+處理字串資料
+
+- 資料型別與其容量限制
+  - 資料型別分成 SQL 標準 + 各家資料庫擴充的
+- 主要分為固定長度, 不固定長度但有上限, 不固定長度並且無上限
+
+產生字串
+
+- 面對超過字串容量上限的操作, 各家資料庫系統有不同的應對行為
+  - 主要分成兩種應對方式, 1 丟出錯誤, 2 截斷
+
+包含單引號
+
+- 字串以 `'` 單引號包裹
+- 遇到字串中需要包含單引號時, 需要使用跳脫字元 (escape)
+- 預設的跳脫 `'` 單引好的方式是, 重複兩次 `''`
+  - 範例: `'it''s'`
+- _補_, PostgreSQL 中,
+  - 1 除了使用 `''` 來跳脫單引號, `'it''s'`
+  - 2 可以使用 escape string, 以 `\` 來跳脫單引號, 範例: `E'it\'s'`
+  - 3 可以使用 dollar-quoted string, 以 `$$` 作為 string quoting, 範例: `$$it's$$`
+- _補_, 處理字串
+  - Input: 需要思考輸入的字串, 是否需要跳脫, 以及如何處理
+  - Input: 如何應對 SQL injection
+  - Output: 輸出的格式是否包含跳脫字元
+
+包含特殊字元
+
+- 串聯字串 `||` 或者其他各自資料庫專屬的語法
+- 當遇到特殊字元與超過 ASCII 的字元集時, 需要考量所選定的資料庫字串編碼方式, 例如: `UTF-8`
+- 與各家資料庫所提供的字串相關函式
+
+字串的操作
+
+- 字串操作的函式, 在每個資料庫系統中都不太一樣, 需要參照自己所使用的資料庫系統文件
+
+會回傳數字的字串函式
+
+- 取得字元數量的函式
+  - MySQL: `length()`
+  - SQL server: `len()`
+  - _補_, PostgreSQL: `char_length ( text ) → integer`
+- 取得子字串的位置
+  - MySQL: `position()`
+  - _補_, PostgreSQL: `position ( substring text IN string text ) → integer`
+  - **!! 字串位置是以 1 為起始, 而非 0 !!**, 回傳 0 代表沒有找到
+- 書中還提到其他幾個 MySQL 的字串函式
+  - `locate()`
+  - `strcmp()`
+- 使用 `LIKE`, regexp 來運算判斷
+  - MySQL 中回傳值為 `1` 代表 true, `0` 代表 false
+  - _補_, PostgreSQL: 範例：
+  - PostgreSQL 回傳值使用 `t` 與 `f`
+  - ```sql
+    SELECT title, title LIKE '%R'
+    FROM film
+    LIMIT 5;
+    ```
+  - ```sql
+    SELECT title, REGEXP_LIKE (title, 'R$')
+    FROM film
+    LIMIT 5;
+    ```
+
+會回傳字串的字串函式
+
+- 連結字串
+  - MySQL: `concat()`
+  - _補_, PostgreSQL
+    - `text || text → text`
+    - `concat ( val1 "any" [, val2 "any" [, ...] ] ) → text`
+    - `concat_ws ( sep text, val1 "any" [, val2 "any" [, ...] ] ) → text`
+- 插入字串
+  - MySQL: `insert()`
+  - Oracle Database: `replace()`
+  - SQL server: `replace()`, `stuff()`
+  - _補_, PostgreSQL
+    - `regexp_replace()`, `format()`, ...
+- 取出子字串
+  - MySQL: `SUBSTRING()`
+  - _補_, PostgreSQL
+    - `substr()`, `regexp_substr()`, `substring()`
+
+處理數值資料
+
+- 算術算子, Mathematical Operators
+  - `+`, `-`, `*`, `/`, ...
+
+執行算術函式, Mathematical Functions
+
+- _補_, 參考各家資料庫文件
+
+控制數值的精度
+
+- 控制進位與捨去小數點
+- MySQL:
+  - `ceil()` 下一個較大的整數,
+  - `floor()` 下一個較小的整數,
+  - `round()` 四捨五入,
+  - `truncate()` 無條件捨去
+- _補_, PostgreSQL
+  - `floor()`
+  - `ceil()`, `ceiling()`
+  - `round ( numeric ) → numeric`, `round ( v numeric, s integer ) → numeric`
+  - `trunc ( numeric ) → numeric`, `trunc ( v numeric, s integer ) → numeric`
+
+處理有號資料
+
+- 處理正負號
+- MySQL:
+  - `sign()`, 回傳正負號
+  - `abs()`, 回傳絕對值
+- _補_, PostgreSQL
+  - `sign ( numeric ) → numeric`
+  - `abs ( numeric_type ) → numeric_type`
+
+處理時序資料
+
+- 處理時序資料最麻煩的地方在於有很多不同的描述方式
+
+處理時區
+
+- 時區 (time zones), 和日光節約時間 (daylight saving time) 的採用與否
+- 早期採用的標準是格林威治標準時間 (Greenwich Mean Time), GMT
+  - 其他時區採用與 GMT 所相差的小時數來表示, 例如: GMT -5:00, 美東時間比格林威治早 5 小時
+- 現在採用的是世界協調時間 (Coordinated Universal Time), UTC
+  - 以世界各地的原子鐘, 產生的世界時間 (Universal Time), 並且盡可能對齊 GMT 規則
+  - 多數時候可以與 GMT 互換
+- MySQL: `utc_timestamp()`, 取得當下的 UTC timestamp
+  - SQL server: `getutcdate()`
+  - _補_, PostgreSQL: `current_timestamp`
+- 一般資料庫系統的預設時區是伺服器所在的時區
+- 可以手動變更時區設定, MySQL: `SET time_zone`
+  - Oracle Database: `ALTER SESSION TIMEZONE`
+- _補_, PostgreSQL
+  - `SHOW TIMEZONE;`
+  - 修改 time zone 設定可以分成不同的層級 (系統, 個別資料庫, 個別使用者, 個別 session), 並區分暫時性或永久性
+  - 修改當下 session, `SET TIME ZONE 'value'` is an alias for `SET timezone TO 'value'`
+
+產生時序資料
+
+- 產生時序資料
+  - 從現有的時序欄位複製
+  - 執行內建函數產生時序資料
+  - 使用字串型別讓資料庫進行轉換成時序資料
+
+時序資料的字串呈現方式
+
+- 處理字串時序資料的格式
+  - 型別與預設格式
+  - date: YYYY-MM-DD
+  - datetime: YYYY-MM-DD HH:MI:SS
+  - timestamp: YYYY-MM-DD HH:MI:SS
+  - time: HHH:MI:SS
+  - _補_, 查詢使用的資料庫系統文件, 來確認格式
+- 範例: 當傳入字串型別運作於時序型別欄位時, 資料庫會嘗試進行解析並且轉換型別
+- ```sql
+  UPDATE rental
+  SET return_date = '2019-09-17 15:30:00'
+  WHERE rental_id = 99999;
+  ```
+
+從字串轉換到日期
+
+- 當資料庫沒有預期要進行自行轉換時, 可以使用關鍵字進行型別轉換
+- MySQL: `CAST()`
+  - 範例: `SELECT CAST('2019-09-17 15:30:00' AS DATETIME);`
+- _補_, PostgreSQL,
+  - PostgreSQL 中也有 `CAST (source_type AS target_type)`
+  - 但是 PostgreSQL 中剛好沒有 DATETIME 這個型別
+  - 因此如果要實現等同於上面範例的做法是 `SELECT CAST('2019-09-17 15:30:00' AS TIMESTAMP);`
+
+產生日期的函式
+
+- 使用不符合預期格式的字串型別的轉換型別
+- 可以指定格式協助資料庫解析
+- MySQL: `STR_TO_DATE()`, 使用類似 C 語言的方式, 以 `%M`, `%m`, `%d`, ... 的方式指定格式
+  - Oracle Database: `to_date()`
+  - SQL Server: `convert()`
+  - _補_ PostgreSQL: Data Type Formatting Functions
+    - `to_date ( text, text ) → date`,
+    - `to_timestamp ( text, text ) → timestamp with time zone`
+- 以函式生成當下的時間型別
+  - MySQL: `CURRENT_DATE()`, `CURRENT_TIME()`, `CURRENT_TIMESTAMP()`
+  - Oracle Database: `current_date()`, `current_timestamp()`
+  - SQL Server: `current_timestamp()`
+  - _補_ PostgreSQL:
+    - `current_date`, `current_time`, `current_timestamp`, `now()`, ...
+
+操作時序資料
+
+- 操作時序資料的內建函式
+- 參考各家資料庫系統文件, 語法都各有差異
+  - 就算名稱相同, 細節與參數可能不同
+
+會回傳日期的時序函式
+
+- 日期的運算函式
+  - MySQL: `date_add()`
+  - MySQL: `INTERVAL` 指定參數的型別
+  - SQL Server: `DATEADD()`
+  - Oracle Database: `ADD_MONTHS()`
+- _補_, PostgreSQL
+  - `+`, `-`, `*`, `/` 算子可以運用在時間上
+  - 也有 `date_add()`, ...
+- 找到區間內的最後一天, 特別常用於月份, 尤其是處理 2 月時
+  - MySQL: `last_day()`
+  - Oracle Database: `last_day()`
+  - SQL Server 沒有提供
+- _補_, PostgreSQL
+  - PostgreSQL 中沒有提供 last_day 函式
+  - 但是可以使用 `date_trunc()` 與 `INTERVAL` 實現類似功能
+  - `SELECT (DATE_TRUNC('MONTH', input_date) + INTERVAL '1 MONTH - 1 DAY')::DATE;`
+
+會回傳字串的時序函式
+
+- 解析時序資料產生時間或日期的部分資訊
+- MySQL: `dayname()` 回傳星期幾的字串
+- `extract()` 屬於 SQL 標準,
+  - 建議使用這個更為通用的語法, 幾乎所有資料庫系統都有實作
+  - SQL Server, 使用 `datepart()`
+- _補_, PostgreSQL, 9.9.1. EXTRACT, date_part
+  - `date_part` 取得數值
+  - `date_subtract` 取得 timestamp
+  - `extract` 取得數值
+
+會回傳數字的時序函式
+
+- MySQL: `DATEDIFF()` 計算出兩個時間之間的區間值
+- SQL Server: `DATEDIFF()`
+- Oracle Database: 支援 `-` 時間減法
+- _補_, PostgreSQL
+  - 支援時間運算子, `+`, `-`, `*`, `/`
+
+轉換用的函式
+
+- 每個資料庫系統都有各自用來轉換型別的函式
+  - 但是推薦使用 SQL 標準的 `CAST()` 函式
+  - 幾乎所有的資料庫系統都有實作
+- `CAST (source_type AS target_type)`, 使用 `CAST` 與 `AS` keywords
+- MySQL 應對字串轉譯成數字時,
+  - `CAST('999ABC111' AS INTEGER);` 會跳出 warning 但是繼續執行而非丟出 error
+  - _補_, PostgreSQL 同等的指令會丟出 ERROR
+- CAST 字串轉譯成時序資料時, 字串需符合時序資料的預設模式, 無法使用客製化的格式
+  - 需要轉譯客製化的格式時, 還是需要參照各家資料庫系統所提供的專屬函式
 
 ---
 
