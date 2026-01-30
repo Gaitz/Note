@@ -1513,6 +1513,177 @@ ANSI 的 Join 語法
 
 ---
 
+- 不只是使用資料庫原始資料, 而是通過資料庫整理的資料
+
+分組的概念
+
+- `GROUP BY`, 指定用於整合的欄位
+- `COUNT()`, aggregate function
+  - `*` 意味著使用所有集合中的資料
+- `HAVING`, 作用於 GROUP 的 WHERE 語法,
+  - 因為 WHERE 語法作用於 GROUP BY 之前, 因此無法以 WHERE 語法進行篩選 GROUP 後的資料
+- 範例:
+- ```sql
+  SELECT customer_id, COUNT(*)
+  FROM rental
+  GROUP BY customer_id
+  HAVING COUNT(*) >= 40
+  ORDER BY COUNT DESC;
+  ```
+
+彙整函式
+
+- Aggregate function 針對一個分組中的資料進行特定操作
+- 每個資料庫系統有不同專屬的 aggregation function
+- 主流資料庫系統都有實作的通用函式為
+  - `MAX()`, 回傳集合中的最大值
+  - `MIN()`, 回傳集合中的最小值
+  - `AVG()`, 回傳集合中的平均值
+  - `SUM()`, 回傳集合中的資料總和
+  - `COUNT()`, 回傳集合中的資料數
+- 範例: 沒有 GROUP BY 但是可以直接使用 aggregation function
+  - 這時候作用的群組是 implicit group, 意味著 payment 裡所有的 rows 都屬於一個集合中
+  - 因此此時的 aggregation function 作用於所有的 rows
+- ```sql
+  SELECT MAX(amount), MIN(amount), AVG(amount), SUM(amount), COUNT(*) FROM payment;
+  ```
+
+隱性與顯性的分組
+
+- implicit group, 即資料表中所有的 rows 都屬於同一個 group
+- explicit group, 即使用 `GROUP BY` 指定分組的方式
+
+計算個別不同的值
+
+- 使用 `COUNT()` 時, 可以配合 `DISTINCT` 針對不同的值進行計算數量,
+  - 原本使用 `COUNT(*)` 則是集合中所有值的總數
+- 範例: 使用隱性 group 進行, 針對 customer_id 欄位計算數量時, 使用 `DISTINCT` 所產生的效果
+- ```sql
+  SELECT COUNT(customer_id) num_rows, COUNT(DISTINCT customer_id) num_customers FROM payment;
+  ```
+
+利用表示式
+
+- 在 aggregation function 中使用表示式
+- MySQL 範例: 計算出起租日到歸還日間隔最長的紀錄
+- ```sql
+  SELECT MAX(datediff(return_date, rental_date))
+  FROM rental;
+  ```
+- _補_: PostgreSQL 範例
+  - `SELECT MAX(return_date - rental_date) FROM rental;`
+
+Nulls 的處理方式
+
+- 進行任何數值計算時, 都應該考慮到 Null 值的處理
+- 每個 aggregation function 是否會自動忽略 Null 需要參考文件
+- 範例: 此 table 中含有 Null 值
+- ```sql
+  SELECT COUNT(*) num_rows,
+    COUNT(val) num_vals,
+    SUM(val) total,
+    MAX(val) max_val,
+    AVG(val) avg_val
+  FROM number_tbl;
+  ```
+- 此時的輸出, `SUM(val)`, `MAX(val)`, `AVG(val)`, 與 `COUNT(val)` 都會自動略過 Null
+  - 而 `COUNT(*)` 會計算 Null 值
+
+產生分組
+
+- 很多時候從事資料分析的人都會將原始資料重新整理, 以符合自己的需求
+- 讓資料進行分組 `GROUP BY`
+
+單一欄位分組
+
+- 最簡單也最常用
+- 範例: 找出單一演員曾演出的作品數量
+- ```sql
+  SELECT actor_id, count(*)
+  FROM film_actor
+  GROUP BY actor_id;
+  ```
+
+多重欄位分組
+
+- 產生跨越多個欄位進行的分組
+- 範例: 找出每個演員演出過的各個分級影片的數量
+- ```sql
+  SELECT fa.actor_id, f.rating, count(*)
+  FROM film_actor fa
+    INNER JOIN film f
+    ON fa.film_id = f.film_id
+  GROUP BY fa.actor_id, f.rating
+  ORDER BY 1, 2;
+  ```
+
+按照表示式分組
+
+- 利用表示式產生的值來進行分組
+- 範例: 依據年份將租賃記錄進行分組
+- ```sql
+  SELECT EXTRACT(YEAR FROM rental_date) AS year,
+    COUNT(*) how_many
+  FROM rental
+  GROUP BY year;
+  ```
+
+產生小結 (rollups)
+
+- MySQL `WITH ROLLUP`, 在進行 GROUP BY 計算時, 額外產生小結計算
+- MySQL 範例:
+- ```sql
+  SELECT fa.actor_id, f.rating, count(*)
+  FROM film_actor fa
+    INNER JOIN film f
+    ON fa.film_id = f.film_id
+  GROUP BY fa.actor_id, f.rating WITH ROLLUP
+  ORDER BY 1,2;
+  ```
+- Oracle Database 語法與 PostgreSQL 相同
+  - 使用 `GROUP BY ROLLUP(fa.actor_id, f.rating)`
+  - 此種語法的優點在於, 可以指定 ROLLUP 的對象, 只在需要的時候進行
+  - 例如: `GROUP BY a, ROLLUP(b, c)
+- _補_, PostgreSQL `ROLLUP` 語法不同, 範例如下
+  - ```sql
+    SELECT fa.actor_id, f.rating, count(*)
+    FROM film_actor fa
+      INNER JOIN film f
+      ON fa.film_id = f.film_id
+    GROUP BY ROLLUP(fa.actor_id, f.rating)
+    ORDER BY 1,2;
+    ```
+- `CUBE`, MySQL 不支援此語法
+  - SQL Server, Oracle Database, PostgreSQL 都支援
+- _補_, PostgreSQL, 7.2.4. GROUPING SETS, CUBE, and ROLLUP
+  - 在一個指令中完成, 更進階的 `GROUP BY` 使用 `GROUPING SETS` 任意組合, 提供最常見的兩種集合方式 `ROLLUP` 與 `CUBE`
+  - 使用 `GROUPING SETS` 任意組合 GROUPING 的模式
+    - `()` 空集合等同於隱性集合, 即所有的 rows
+  - 使用 `ROLLUP` 照 GROUPING 的順序, 每次都進行小結計算
+  - 使用 `CUBE` 所有的子集合都變成一種 GROUPING 模式, 即 power set
+  - 在 `GROUP BY` 子句中, 可以任意組合以上三種語法
+    - 並且可以在其中配合 `DISTINCT` 移除重複的 GROUPING SET
+
+分組的篩選條件
+
+- `HAVING` 為分組之後的資料加上篩選條件
+- 篩選條件的語法 `WHERE` 作用在 `GROUP BY` 之前
+  - `HAVING` 作用在 `GROUP BY` 之後
+- 範例: 篩選出分級在 'G' 與 'PG' 的影片, 並且以 actor_id 和 rating 進行分組, 篩選出分組影片大於 9 的集合
+- ```sql
+  SELECT fa.actor_id, f.rating, count(*)
+  FROM film_actor fa
+    INNER JOIN film f
+    ON fa.film_id = f.film_id
+  WHERE f.rating IN ('G', 'PG')
+  GROUP BY fa.actor_id, f.rating
+  HAVING count(*) > 9;
+  ```
+- 進行篩選時, 思考操作的是原始資料, 還是已分組的資料,
+  - 然後把篩選條件分別寫在 `WHERE` 子句或 `HAVING` 子句中
+
+---
+
 ### 第九章 - 子查詢
 
 ---
