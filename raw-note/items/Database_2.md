@@ -44,6 +44,8 @@
 
 ### 第一章 - 一點背景知識
 
+---
+
 資料庫的發展歷史
 
 - database, 說穿了就是彼此有關聯的資訊集合 (_補_, set)
@@ -513,6 +515,8 @@ Sakila 資料庫
 
 ### 第三章 - 基礎查詢
 
+---
+
 查詢的機制
 
 - 登入且資料庫連線
@@ -753,6 +757,8 @@ Sakila 資料庫
 
 ### 第四章 - 篩選
 
+---
+
 - `WHERE` 子句, 針對 rows 進行篩選
 - `filter conditions
 - `HAVING` 子句, 針對 groupoing 進行篩選
@@ -968,6 +974,8 @@ Sakila 資料庫
 
 ### 第五章 - 查詢多個資料表
 
+---
+
 什麼是結合 (JOIN)
 
 - 組合資料表
@@ -1006,8 +1014,7 @@ Inner Joins
   FROM customer c JOIN address a
   ON c.address_id = a.address_id;
   ```
-
-  - _補_, PostgreSQL 語法相同
+- _補_, PostgreSQL 語法相同
 
 - 當 `ON` 所連結的 key 在兩個欄位中擁有相同名稱時, 可以使用 `USING` keyword 取代
   - 範例如下:
@@ -1113,6 +1120,8 @@ ANSI 的 Join 語法
 
 ### 第六章 - 集合的運用
 
+---
+
 - 以集合的角度看待資料
 
 集合的理論基礎
@@ -1143,8 +1152,8 @@ ANSI 的 Join 語法
 集合運算子
 
 - 額外選用的 `ALL` keyword
-  - 不排除重複的值
-- 預設是會排除重複的值, _補_, 概念上等同於在最終的結果集合上加上 DISTINCT 運算
+  - **不排除重複的值**
+- **預設是會排除重複的值**, _補_, 概念上等同於在最終的結果集合上加上 `DISTINCT` 運算
 
 `UNION`, `UNION ALL` 運算子
 
@@ -1256,6 +1265,8 @@ ANSI 的 Join 語法
 ---
 
 ### 第七章 - 資料的產生, 操作與轉換
+
+---
 
 - 關於資料的操作, 各家資料庫系統有屬於自己不同的內建函數
 - 資料型別與其容量上限與細節, 在各家資料庫系統也有所不同
@@ -1685,6 +1696,322 @@ Nulls 的處理方式
 ---
 
 ### 第九章 - 子查詢
+
+---
+
+- 子查詢是強大的工具
+
+子查詢是什麼?
+
+- subquery 子查詢
+  - 一段包含在另一個 SQL 敘述的查詢
+  - 子查詢必須由 `()` 包裹
+  - 通常會在 containing statement 完成前先運算
+  - 子查詢的結果如同一般查詢一樣會回傳一個結果集合
+  - 當外圍敘述執行完成後, 子查詢所回傳的資料集合會被棄置
+  - 子查詢就像是在 statement scope 內建立臨時資料表一樣
+- 範例:
+- ```sql
+  SELECT customer_id, first_name, last_name
+  FROM customer
+  WHERE customer_id = (SELECT MAX(customer_id) FROM customer);
+  ```
+
+子查詢的類型
+
+- 子查詢的第一種分類是由功能來區分
+- 非關聯式子查詢 (noncorrelated subqueries), 子查詢完全自成一體
+  - 大多數使用時機
+- 關聯式子查詢 (correlated subqueries), 子查詢需要參照外圍敘述的欄位
+  - 使用時機通常與 `UPDATE` 或 `DELETE` 有關
+- 子查詢的第二種分類是依據回傳結果集合的類型
+- 單一欄位一筆資料, 又稱為 scalar subquery 純量子查詢
+  - 可以放在條件式的任一側, 通常搭配比較運算子使用
+- 單一欄位多筆資料
+- 多重欄位多筆資料
+
+非關聯式子查詢
+
+- 大多時候子查詢都屬於這種類型
+- 範例: 搜尋任何不在 India 的城市
+- ```sql
+  SELECT city_id, city
+  FROM city
+  WHERE country_id != (
+    SELECT country_id FROM country WHERE country = 'India'
+  );
+  ```
+- **當把子查詢的結果用在等式查詢 (`=`, `!=`) 時, 如果子查詢的結果多於一筆時 (非純量結果) 會報出錯誤**
+
+回傳多筆單一欄位資料的子查詢
+
+- 回傳多於一筆資料的子查詢無法用在等式判斷 (`=`, `!=`, `<>`) 上
+- 但是單一欄位多筆資料的子查詢, 可以配合其他運算子
+  - `IN`, `NOT IN`, `ALL`, `ANY`
+
+`IN` 和 `NOT IN` 運算子
+
+- 雖然無法使用等式判斷來對應多筆資料, 但是可以使用 `IN`, `NOT IN` 來判斷使否屬於該集合中
+- 範例: 使用 `IN` 運算子判斷集合
+- ```sql
+  SELECT country_id FROM country WHERE country IN ('Canada', 'Mexico');
+  ```
+- 常見的情況是 `IN` 與 `NOT IN` 使用子查詢生成的結果集合來進行判斷
+- 範例: 查詢國家不屬於 Canada, Mexico 的所有城市
+- ```sql
+  SELECT city_id, city
+  FROM city
+  WHERE country_id NOT IN
+  ( SELECT country_id
+    FROM country
+    WHERE country IN ('Canada', 'Mexico')
+  );
+  ```
+
+`ALL` 運算子
+
+- 比較整個子查詢的結果集合, 並且要整個結果集合都成立才條件成立
+- `<> ALL` 等價於 `NOT IN`
+  - 隨各自喜歡的語法和可閱讀性
+- 範例: 查詢超過所有北美地區租片次數的客戶
+- ```sql
+  SELECT customer_id, COUNT(*)
+  FROM rental
+  GROUP BY customer_id
+  HAVING count(*) > ALL
+    (
+      SELECT count(*)
+      FROM rental r
+        INNER JOIN customer c
+        ON r.customer_id = c.customer_id
+        INNER JOIN address a
+        ON c.address_id = a.address_id
+        INNER JOIN city ct
+        ON a.city_id = ct.city_id
+        INNER JOIN country co
+        ON ct.country_id = co.country_id
+      WHERE co.country IN ('United States', 'Mexico', 'Canada')
+      GROUP BY r.customer_id
+    );
+  ```
+
+`ANY` 運算子
+
+- 類似 ALL 比較整個子查詢的結果集合
+  - 但是 `ANY` 只要任一成立則條件成立
+- `IN` 等價於 `= ANY`
+  - 隨各自喜歡的語法和可閲讀性
+- 範例: 查詢任何支付總金額比任一三個國家支付總金額還高的客人
+- ```sql
+  SELECT customer_id, SUM(amount)
+  FROM payment
+  GROUP BY customer_id
+  HAVING SUM(amount) > ANY
+    (
+      SELECT SUM(p.amount)
+      FROM payment p
+        INNER JOIN customer c
+        ON p.customer_id = c.customer_id
+        INNER JOIN address a
+        ON c.address_id = a.address_id
+        INNER JOIN city ct
+        ON a.city_id = ct.city_id
+        INNER JOIN country co
+        ON ct.country_id = co.country_id
+      WHERE co.country IN ('Bolivia', 'Paraguay', 'Chile')
+      GROUP BY co.country
+    );
+  ```
+
+多重欄位子查詢
+
+- 回傳多重欄位的子查詢比對
+- 比對多重欄位需要欄位有固定的順序
+- 範例: 尋找演員姓氏為 MONROE 並且有出演過 PG 級別電影的演員 ID 和該影片 ID
+- ```sql
+  SELECT actor_id, film_id
+  FROM film_actor
+  WHERE (actor_id, film_id) IN
+    (
+      SELECT a.actor_id, f.film_id
+      FROM actor a
+        CROSS JOIN film f
+      WHERE a.last_name = 'MONROE'
+        AND f.rating = 'PG'
+    );
+  ```
+- 使用單一欄位子查詢的相同結果的搜尋
+- ```sql
+  SELECT fa.actor_id, fa.film_id
+  FROM film_actor fa
+  WHERE fa.actor_id IN
+    (SELECT actor_id FROM actor WHERE last_name = 'MONROE')
+    AND fa.film_id IN
+    (SELECT film_id FROM film WHERE rating = 'PG');
+  ```
+
+關聯式子查詢
+
+- 子查詢與外層查詢有關聯 (dependent) 時, 稱為關聯式子查詢
+  - 子查詢會參照到外層查詢的欄位
+  - **執行的順序與非關聯式子查詢不同**
+  - 針對外查詢的**每個結果都會執行一次**子查詢
+  - _補_, 先執行外層查詢, 並且針對每個查詢結果進行一次子查詢
+    - 因此如果外層查詢的結果很多時, 容易引起效能問題
+- 範例 1: 尋找租賃次數剛好 20 次的客人姓名
+  - 這個範例形成關聯式子查詢的關鍵在於子查詢中的 `c.customer_id` 參照到外部的欄位
+  - 因為關聯式子查詢會根據外部的次數, 都進行一次子查詢, 因此這個查詢中的子查詢執行次數等同於 customer table 中的資料數量
+- ```sql
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE 20 = (
+    SELECT count(*) FROM rental r
+    WHERE r.customer_id = c.customer_id
+  );
+  ```
+- 範例 2: 尋找租片總金額在 180 到 240 之間的客人姓名
+  - 這個關聯式子查詢執行次數一樣等同於 customer table 的資料數量
+- ```sql
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE (
+    SELECT sum(p.amount) FROM payment p
+    WHERE p.customer_id = c.customer_id
+  ) BETWEEN 180 AND 240;
+  ```
+
+`EXISTS` 運算子
+
+- 常用於配合子查詢的判別算子 `EXISTS` 與 `NOT EXISTS`
+- 只是需要用來判斷子查詢是否有回傳結果, 但是不需要理會回傳的資料內容
+- 範例: 尋找在 2005-05-25 以前有租過片的客人
+- ```sql
+  SELECT c.first_name, c.last_name
+  FROM customer c
+  WHERE EXISTS (
+    SELECT 1 FROM rental r
+    WHERE r.customer_id = c.customer_id
+    AND date(r.rental_date) < '2005-05-25'
+  );
+  ```
+- 使用 `EXISTS` 時, 不需要理會回傳值, 因此**慣例**通常會使用 `SELECT 1` 或 `SELECT *`
+  - 使用任何 SELECT 都不會影響結果
+- 範例: 尋找從未演出過 R 級片的演員姓名
+- ```sql
+  SELECT a.first_name, a.last_name
+  FROM actor a
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM film_actor fa
+      INNER JOIN film f ON f.film_id = fa.film_id
+    WHERE fa.actor_id = a.actor_id
+      AND f.rating = 'R'
+  );
+  ```
+
+以關聯式子查詢來操作資料
+
+- 關聯式子查詢也大量被使用在 `UPDATE`, `DELETE`, `INSERT` 敘述中
+- 範例 1: 以每位 customer 最新的 rental_date 來更新 last_update 欄位
+- ```sql
+  UPDATE customer c
+  SET last_update = (
+    SELECT max(r.rental_date) FROM rental r
+    WHERE r.customer_id = c.customer_id
+  );
+  ```
+- 範例 1 改進版: 為了避免子查詢沒有結果而產生 last_update 被賦值為 null 的情況
+  - 增加 WHERE 子句進行判斷有租過片
+- ```sql
+  UPDATE customer c
+  SET last_update = (
+    SELECT max(r.rental_date) FROM rental r
+    WHERE r.customer_id = c.customer_id )
+  WHERE EXISTS (
+    SELECT 1 FROM rental r
+    WHERE r.customer_id = c.customer_id
+  );
+  ```
+- _補_, PostgreSQL 中可以使用 `EXPLAIN` 來分析 SQL 語句的執行
+- 使用於 `DELETE` 子句的情境
+- PostgreSQL 範例: 刪除到今日為止在過去一年沒有租過片的客人資料
+- ```sql
+  DELETE FROM customer c
+  WHERE 365 < ALL (
+    SELECT EXTRACT (DAY FROM (now() - r.rental_date)) days_since_last_rental
+    FROM rental r
+    WHERE r.customer_id = c.customer_id
+  );
+  ```
+- **MySQL 中** DELETE 敘述不能使用資料表別名, 以上範例必須改成 `DELETE FROM customer` 不加別名的版本
+
+使用子查詢的時機
+
+將子查詢當作資料來源
+
+- 以子查詢產生的結果集當成一個 table 作為資料來源
+  - 子查詢極具彈性, 幾乎可以建構出任何所需要的資料表
+- 範例: 查詢使用者姓名和他的租賃次數和總金額
+- ```sql
+  SELECT c.first_name, c.last_name,
+    pymnt.num_rentals, pymnt.tot_payments
+  FROM customer c
+    INNER JOIN (
+      SELECT customer_id,
+        count(*) num_rentals,
+        sum(amount) tot_payments
+      FROM payment
+      GROUP BY customer_id
+    ) pymnt
+  ON c.customer_id = pymnt.customer_id;
+  ```
+- 進階功能 `CROSS APPLY`, `OUTER APPLY` 可以協助在此情境中使用關聯式子查詢
+
+打造資料
+
+- 利用子查詢的彈性, 來產生原本沒有事先定義過的資料格式
+  - _補_, **十分強大的使用情境**
+- 範例: 想要按照客戶付款的金額進行分組
+- 1 產生分組的描述
+  - 使用集合算子產生分組定義
+- ```sql
+  SELECT 'Small Fry' name, 0 low_limit, 74.99 high_limit
+  UNION ALL
+  SELECT 'Average Joes' name, 75 low_limit, 149.99 high_limit
+  UNION ALL
+  SELECT 'Heavy Hitters' name, 150 low_limit, 99999999.99 high_limit;
+  ```
+- 2 配合子查詢把分組定義與資料組合再一起
+- ```sql
+  SELECT pymnt_grps.name, count(*) num_custoemrs
+  FROM (
+    SELECT customer_id,
+      count(*) num_rentals,
+      sum(amount) tot_payments
+    FROM payment
+    GROUP BY customer_id
+  ) pymnt
+  INNER JOIN (
+    SELECT 'Small Fry' name, 0 low_limit, 74.99 high_limit
+    UNION ALL
+    SELECT 'Average Joes' name, 75 low_limit, 149.99 high_limit
+    UNION ALL
+    SELECT 'Heavy Hitters' name, 150 low_limit, 99999999.99 high_limit
+  ) pymnt_grps
+  ON pymnt.tot_payments BETWEEN pymnt_grps.low_limit AND pymnt_grps.high_limit
+  GROUP BY pymnt_grps.name;
+  ```
+- 分組定義的子查詢, 也可以變成永久性或暫時性的資料表 (table),
+  - 但是這樣細小且無資料的定義資料表更適合以臨時子查詢的方式定義
+  - _補_, 取決於管理資料庫系統的方式與表達模式
+
+任務導向的子查詢
+
+通常資料表運算式
+
+把子查詢當成產生表示式的工具
+
+子查詢概要
 
 ---
 
