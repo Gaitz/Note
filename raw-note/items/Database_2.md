@@ -2007,15 +2007,150 @@ Nulls 的處理方式
 
 任務導向的子查詢
 
+- 把要進行分組作業的 table 以子查詢的方式先單獨做完, 再結合其他資訊的表單
+  - 比起把全部的 table 整合之後才進行運算, **效能可能會更好**, 可閱讀性可能也更好
+- 範例: 查詢包含租賃次數, 總金額, 客戶名稱和所在城市
+- ```sql
+  SELECT c.first_name, c.last_name, ct.city, pymnt.tot_payments, pymnt.tot_rentals
+  FROM (
+    SELECT customer_id, count(*) tot_rentals, sum(amount) tot_payments
+    FROM payment
+    GROUP BY customer_id
+  ) pymnt
+  INNER JOIN customer c
+    ON pymnt.customer_id = c.customer_id
+  INNER JOIN address a
+    ON c.address_id = a.address_id
+  INNER JOIN city ct
+    ON a.city_id = ct.city_id;
+  ```
+- 範例: 同樣的事情但是組合所有的 table 後才進行運算
+- ```sql
+  SELECT c.first_name, c.last_name, ct.city, sum(p.amount) tot_payments, count(*) tot_rentals
+  FROM payment p
+  INNER JOIN customer c
+    ON p.customer_id = c.customer_id
+  INNER JOIN address a
+    ON c.address_id = a.address_id
+  INNER JOIN city ct
+    ON a.city_id = ct.city_id
+  GROUP BY c.first_name, c.last_name, ct.city;
+  ```
+
 通常資料表運算式
+
+- Common table expressions, CTE
+- 在單一大型查詢中的輔助工具, 把複雜的命令拆成個別小部分
+- 使用 `WITH` keyword 來實現, 並且可以串聯, 後面直接接續主要命令
+- 範例:
+- ```sql
+  WITH actors_s AS (
+    SELECT actor_id, first_name, last_name
+    FROM actor
+    WHERE last_name LIKE 'S%'
+  ),
+  actors_s_pg AS (
+    SELECT s.actor_id, s.first_name, s.last_name,
+      f.film_id, f.title
+    FROM actors_s s
+      INNER JOIN film_actor fa
+      ON  s.actor_id = fa.actor_id
+      INNER JOIN film f
+      ON f.film_id = fa.film_id
+    WHERE f.rating = 'PG'
+  ),
+  actors_s_pg_revenue AS (
+    SELECT spg.first_name, spg.last_name, p.amount
+    FROM actors_s_pg spg
+      INNER JOIN inventory i
+      ON i.film_id = spg.film_id
+      INNER JOIN rental r
+      ON i.inventory_id = r.inventory_id
+      INNER JOIN payment p
+      ON r.rental_id = p.rental_id
+  )
+  SELECT spg_rev.first_name, spg_rev.last_name, sum(spg_rev.amount) tot_revenue
+  FROM actors_s_pg_revenue spg_rev
+  GROUP BY spg_rev.first_name, spg_rev.last_name
+  ORDER BY 3 desc;
+  ```
 
 把子查詢當成產生表示式的工具
 
+- 子查詢可以用於任何 expression 出現的場合, 包括 SELECT, ORDER BY, INSERT 敘述中
+- 範例: 把子查詢用於 SELECT expression
+  - 這個例子中 customer table 會被搜尋三次, 分別在三個子查詢中
+  - 但是這個例子中不需要將 payment table 與 customer table 進行組合
+- ```sql
+  SELECT (
+    SELECT c.first_name FROM customer c
+    WHERE c.customer_id = p.customer_id
+  ) first_name, (
+    SELECT c.last_name FROM customer c
+    WHERE c.customer_id = p.customer_id
+  ) last_name, (
+    SELECT ct.city FROM customer c
+    INNER JOIN address a
+      ON c.address_id = a.address_id
+    INNER JOIN city ct
+      ON a.city_id = ct.city_id
+    WHERE c.customer_id = p.customer_id
+  ) city,
+    sum(p.amount) tot_payments,
+    count(*) tot_rentals
+  FROM payment p
+  GROUP BY p.customer_id;
+  ```
+- 範例: 把子查詢用於 ORDER BY expression 中
+  - 以純量子查詢的結果作為 ORDER BY 的依據
+- ```sql
+  SELECT a.actor_id, a.first_name, a.last_name
+  FROM actor a
+  ORDER BY (
+    SELECT count(*) FROM film_actor fa
+    WHERE fa.actor_id = a.actor_id
+  ) DESC;
+  ```
+- 範例: 利用子查詢來提供 INSERT 的輸入值
+  - 尤其是輸入值是來自於資料庫系統中, 形成關聯的 table
+- ```sql
+  INSERT INTO film_actor (actor_id, film_id, last_update)
+  VALUES (
+    (SELECT actor_id FROM actor WHERE first_name = 'JENNIFER' AND last_name = 'DAVIS'),
+    (SELECT film_id FROM film WHERE title = 'ACE GOLDFINGER'),
+    now()
+  );
+  ```
+
 子查詢概要
+
+- 多使用不斷實驗各種子查詢的用法, 慢慢的在撰寫複雜的 SQL statement 時, 就會更以子查詢的方式撰寫
 
 ---
 
 ### 第十章 - 再談結合
+
+- 本章著重說明 INNER JOIN 以外的結合方式, 包含 OUTER JOIN 和 CROSS JOIN
+
+Outer Joins
+
+- `INNER JOIN` 不會考慮到結合條件失敗時的情況, 結果集合只存在結合條件成功的內容
+- 範例:
+- ```sql
+  SELECT f.film_id, f.title, count(*) num_copies
+  FROM film f
+    INNER JOIN inventory i
+    USING (film_id)
+  GROUP BY f.film_id, f.title;
+  ```
+
+Left 與 Right Outer Joins 的比較
+
+三方 Outer Join
+
+Cross Joins
+
+Natural Joins
 
 ---
 
