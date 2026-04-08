@@ -2135,7 +2135,9 @@ Nulls 的處理方式
 Outer Joins
 
 - `INNER JOIN` 不會考慮到結合條件失敗時的情況, 結果集合只存在結合條件成功的內容
-- 範例:
+- 範例: 以影片列表為影片單位, 來計算庫存中每個影片的庫存量
+  - 此時問題是影片列表中有 1000 筆影片, 但是有 42 部影片不在庫存中
+  - 因此, 使用 INNER JOIN 時, 這 42 部影片不會出現在結果集合中
 - ```sql
   SELECT f.film_id, f.title, count(*) num_copies
   FROM film f
@@ -2143,18 +2145,229 @@ Outer Joins
     USING (film_id)
   GROUP BY f.film_id, f.title;
   ```
+- 範例: 如果想要無論是否存在於庫存中, 都必須輸出該影片的結果, 找不到時顯示 0 庫存
+  - 那麼此時需要以 film table 為主體, 使用 OUTER JOIN 並且注意到此時計算的數量是 inventory_id,
+  - 換句話說, count 在該影片 inventory_id 是 `null` 時則是 0, 因此 0 庫存符合預期
+- ```sql
+  SELECT f.film_id, f.title, count(i.inventory_id) num_copies
+  FROM film f
+    LEFT OUTER JOIN inventory i
+    ON f.film_id = i.film_id
+  GROUP BY f.film_id, f.title;
+  ```
+- OUTER JOIN 一定會把指定的那一方的所有資料都輸出到結果集合中, 而無法 INNER JOIN 的部分則會補上 `null`
 
 Left 與 Right Outer Joins 的比較
 
+- `LEFT OUTER JOIN` 與 `RIGHT OUTER JOIN` 的差異在於指定左邊還是右邊的 table 作為一定要輸出的主體
+
 三方 Outer Join
+
+- 也許會想要進行兩個以上的資料表都進行 OUTER JOIN
+- 範例: 必須輸出 film 和 inventory table 並且結合 rental table 的資料
+  - 此時在 LEFT OUTER JOIN 左側的兩個 table 為 film 和 inventory 是必須出現的資料
+  - 結合語法是有順序的, 並且要對應結合的條件
+- ```sql
+  SELECT f.film_id, f.title, i.inventory_id, r.rental_date
+  FROM film f
+    LEFT OUTER JOIN inventory i
+    ON f.film_id = i.film_id
+    LEFT OUTER JOIN rental r
+    ON i.inventory_id = r.inventory_id
+  WHERE f.film_id BETWEEN 13 AND 15;
+  ```
 
 Cross Joins
 
+- 笛卡兒乘積 `CROSS JOIN`
+- 兩個 table 所有的資料表進行結合, 並且不指定結合的條件, _補_, 結果是對應的窮舉, 即笛卡爾乘積
+- 範例: 列舉出所有 category 與 language 的組合結果
+- ```sql
+  SELECT c.name category_name, l.name language_name
+  FROM category c
+    CROSS JOIN language l;
+  ```
+- CROSS JOIN 的應用
+- 假設我們要生成一整年的日期為其建立一個資料表
+  - 我們可以使用 CROSS JOIN 生成一年所需的數量, 並且配合日期運算生成我們要的結果
+- 範例: 組合出 400 筆資料 10 \* 10 \* 4
+- ```sql
+  SELECT ones.num, tens.num, hundreds.num, ones.num + tens.num + hundreds.num AS sum
+  FROM (
+    SELECT 0 num UNION ALL
+    SELECT 1 num UNION ALL
+    SELECT 2 num UNION ALL
+    SELECT 3 num UNION ALL
+    SELECT 4 num UNION ALL
+    SELECT 5 num UNION ALL
+    SELECT 6 num UNION ALL
+    SELECT 7 num UNION ALL
+    SELECT 8 num UNION ALL
+    SELECT 9 num
+  ) ones
+  CROSS JOIN (
+    SELECT 0 num UNION ALL
+    SELECT 10 num UNION ALL
+    SELECT 20 num UNION ALL
+    SELECT 30 num UNION ALL
+    SELECT 40 num UNION ALL
+    SELECT 50 num UNION ALL
+    SELECT 60 num UNION ALL
+    SELECT 70 num UNION ALL
+    SELECT 80 num UNION ALL
+    SELECT 90 num
+  ) tens
+  CROSS JOIN (
+    SELECT 0 num UNION ALL
+    SELECT 100 num UNION ALL
+    SELECT 200 num UNION ALL
+    SELECT 300 num
+  ) hundreds;
+  ```
+- PostgreSQL 範例: 配合日期運算
+- ```sql
+  SELECT (DATE '2020-01-01' + MAKE_INTERVAL (DAYS => (ones.num + tens.num + hundreds.num))) dt
+  FROM (
+      SELECT 0 num UNION ALL
+      SELECT 1 num UNION ALL
+      SELECT 2 num UNION ALL
+      SELECT 3 num UNION ALL
+      SELECT 4 num UNION ALL
+      SELECT 5 num UNION ALL
+      SELECT 6 num UNION ALL
+      SELECT 7 num UNION ALL
+      SELECT 8 num UNION ALL
+      SELECT 9 num
+    ) ones
+    CROSS JOIN (
+      SELECT 0 num UNION ALL
+      SELECT 10 num UNION ALL
+      SELECT 20 num UNION ALL
+      SELECT 30 num UNION ALL
+      SELECT 40 num UNION ALL
+      SELECT 50 num UNION ALL
+      SELECT 60 num UNION ALL
+      SELECT 70 num UNION ALL
+      SELECT 80 num UNION ALL
+      SELECT 90 num
+    ) tens
+    CROSS JOIN (
+      SELECT 0 num UNION ALL
+      SELECT 100 num UNION ALL
+      SELECT 200 num UNION ALL
+      SELECT 300 num
+    ) hundreds
+  WHERE (DATE '2020-01-01' + MAKE_INTERVAL (DAYS => (ones.num + tens.num + hundreds.num))) < '2021-01-01'
+  ORDER BY dt;
+  ```
+- _補_, PostgreSQL 中有一個更實用的語法可以達成以上需求 `generate_series()`
+  - ```sql
+    SELECT day::date
+    FROM generate_series(
+        '2020-01-01'::date,
+        '2020-12-31'::date,
+        '1 day'::interval
+    ) AS day;
+    ```
+- PostgreSQL 範例: 生成一個包含 2005 所有日期並且計算出每日租賃數量的報表
+  - 這是一個複雜的 SQL 語句, 包含了 aggregate function, GROUP, 子查詢, OUTER JOIN, CROSS JOIN, UNION ALL, 日期的運算
+  - _補_, 關於日期生成的部分可以用更簡單的語法進行撰寫
+- ```sql
+  SELECT days.date date, count(r.rental_id) num_rentals
+  FROM rental r
+    RIGHT OUTER JOIN (
+      SELECT (DATE '2005-01-01' + MAKE_INTERVAL (DAYS => (ones.num + tens.num + hundreds.num)))::DATE date
+      FROM (
+          SELECT 0 num UNION ALL
+          SELECT 1 num UNION ALL
+          SELECT 2 num UNION ALL
+          SELECT 3 num UNION ALL
+          SELECT 4 num UNION ALL
+          SELECT 5 num UNION ALL
+          SELECT 6 num UNION ALL
+          SELECT 7 num UNION ALL
+          SELECT 8 num UNION ALL
+          SELECT 9 num
+        ) ones
+        CROSS JOIN (
+          SELECT 0 num UNION ALL
+          SELECT 10 num UNION ALL
+          SELECT 20 num UNION ALL
+          SELECT 30 num UNION ALL
+          SELECT 40 num UNION ALL
+          SELECT 50 num UNION ALL
+          SELECT 60 num UNION ALL
+          SELECT 70 num UNION ALL
+          SELECT 80 num UNION ALL
+          SELECT 90 num
+        ) tens
+        CROSS JOIN (
+          SELECT 0 num UNION ALL
+          SELECT 100 num UNION ALL
+          SELECT 200 num UNION ALL
+          SELECT 300 num
+        ) hundreds
+      WHERE (DATE '2005-01-01' + MAKE_INTERVAL (DAYS => (ones.num + tens.num + hundreds.num))) < '2006-01-01'
+      ORDER BY date
+    ) AS days
+    ON r.rental_date::DATE = days.date
+  GROUP BY days.date
+  ORDER BY 1;
+  ```
+
 Natural Joins
+
+- 不指定結合的條件, 交由資料庫自行決定的語法 `NATURAL JOIN`
+- 範例: 對 customer table 與 rental table 進行 NATURAL JOIN
+  - 問題在於這兩個 table 中除了 customer_id 以外, 還有 last_update 這個欄位都為同名欄位
+  - 因此資料庫選擇的是 last_update 作為結合欄位, 而非我們期望的 customer_id
+- ```sql
+  SELECT c.first_name, c.last_name, r.rental_date::date
+  FROM customer c
+    NATURAL JOIN rental r;
+  ```
+- 因此, 我們最好還是乖乖使用 INNER JOIN 並且加上明確的結合條件
+  - 避免意外也提供更好的可閱讀性
 
 ---
 
 ### 第十一章 - 條件邏輯
+
+- 在 SQL 敘述中產生分支處理, 可以任意運用在 SELECT, INSERT, UPDATE, DELETE 等敘述中
+
+何謂條件邏輯?
+
+- 賦予多個程式路徑的能力
+- 範例: customer table 中的 active 欄位以數字儲存 0 代表 inactive, 1 代表 active
+  - 我們希望在生成的時候產生對應的字串以用於報表中
+- ```sql
+  SELECT first_name, last_name,
+    CASE
+      WHEN active = 1 THEN 'ACTIVE'
+      ELSE 'INACTIVE'
+    END activity_type
+  FROM customer;
+  ```
+- `CASE`, `WHEN`, `THEN`, `ELSE`, `END`
+- _補_, PostgreSQL, Conditional Expressions
+
+case 表示式
+
+搜尋式 case 表示式
+
+簡易式 case 表示式
+
+case 表示式的範例
+
+結果集合再轉換
+
+檢查存在與否
+
+除以零的錯誤
+
+依條件進行更新
+
+Null 值的處理
 
 ---
 
