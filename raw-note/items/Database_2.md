@@ -2353,25 +2353,238 @@ Natural Joins
 
 case 表示式
 
-搜尋式 case 表示式
+- 各家主流資料庫系統都有內建個別不同的函式, 用來達成 IF-THEN-ELSE 的功能
+- `CASE` 表示式屬於 SQL92 標準, 因此各家資料庫都有支援
+- `CASE` 語法直接屬於 SQL 語法, 因此可以直接應用在 SELECT, INSERT, UPDATE, DELETE 敘述中
 
-簡易式 case 表示式
+搜尋式 case 表示式 (searched case expression), _補_, 一般的 IF ELSE
+
+- 語法
+  - ELSE 語句是選用的
+  - 如同常見的 IF ELSE 語句, 具有 lazy evaluation
+  - 每個分支的回傳結果必須要是同一個型別的
+- ```sql
+  CASE
+    WHEN C1 THEN E1
+    WHEN C2 THEN E2
+    ...
+    WHEN CN THEN EN
+    [ELSE ED]
+  END
+  ```
+- 範例: CASE 條件中使用關聯式子查詢產生結果
+  - 依據資料實際的特性, 這種敘述可能比 table JOIN 和 GROUP 更有效率
+- ```sql
+  SELECT c.first_name, c.last_name,
+    CASE
+      WHEN active = 0 THEN 0
+      ELSE (
+        SELECT count(*)
+        FROM rental r
+        WHERE r.customer_id = c.customer_id
+      )
+    END num_rentals
+  FROM customer c;
+  ```
+
+簡易式 case 表示式 (simple case expression), _補_, 類似 switch 語法
+
+- 語法
+  - 較無彈性, 只能做單純的比對
+  - 推薦優先使用上一種語法, 除非條件非常簡單
+- ```sql
+  CASE V0
+    WHEN V1 THEN E1
+    WHEN V2 THEN E2
+    ...
+    WHEN VN THEN EN
+    [ELSE ED]
+  END
+  ```
+- 範例:
+- ```sql
+  CASE category.name
+    WHEN 'Children' THEN 'All Ages'
+    WHEN 'Horror' THEN 'Adult'
+    WHEN 'Music' THEN 'Teens'
+    ELSE 'Other'
+  END
+  ```
 
 case 表示式的範例
 
 結果集合再轉換
 
+- 把 CASE 篩選用在 SELECT 敘述中, 來呈現不同型態的結果集合
+- PostgreSQL 範例: 資料行列轉換
+  - 對於簡易的情境, 可以這樣使用
+  - 更複雜的行列轉換, 需要參照更進階的語法, pivot table, 在各家資料庫系統有不同的實作
+  - _補_, PostgreSQL 的實現是有一個 extension 叫做 crosstab 提供這個功能
+- ```sql
+  SELECT extract(MONTH FROM rental_date) rental_month,
+    count(*) num_rentals
+  FROM rental
+  WHERE rental_date BETWEEN '2005-05-01' AND '2005-08-01'
+  GROUP BY extract(MONTH FROM rental_date);
+  ```
+- ```sql
+  SELECT
+    sum(CASE WHEN extract(MONTH FROM rental_date) = 5 THEN 1 ELSE 0 END) May_rentals,
+    sum(CASE WHEN extract(MONTH FROM rental_date) = 6 THEN 1 ELSE 0 END) June_rentals,
+    sum(CASE WHEN extract(MONTH FROM rental_date) = 7 THEN 1 ELSE 0 END) July_rentals
+  FROM rental
+  WHERE rental_date BETWEEN '2005-05-01' AND '2005-08-01';
+  ```
+
 檢查存在與否
+
+- 把 CASE 篩選用在 SELECT 敘述中, 配合關聯式子查詢實現檢查存在與否
+  - `WHEN EXISTS`
+- 範例:
+- ```sql
+  SELECT a.first_name, a.last_name,
+    CASE
+      WHEN EXISTS (
+        SELECT 1 FROM film_actor fa
+          INNER JOIN film f USING(film_id)
+        WHERE fa.actor_id = a.actor_id
+          AND f.rating = 'G'
+      ) THEN 'Y'
+      ELSE 'N'
+    END g_actor,
+    CASE
+      WHEN EXISTS (
+        SELECT 1 FROM film_actor fa
+          INNER JOIN film f USING(film_id)
+        WHERE fa.actor_id = a.actor_id
+          AND f.rating = 'PG'
+      ) THEN 'Y'
+      ELSE 'N'
+    END pg_actor,
+    CASE
+      WHEN EXISTS (
+        SELECT 1 FROM film_actor fa
+          INNER JOIN film f USING(film_id)
+        WHERE fa.actor_id = a.actor_id
+          AND f.rating = 'NC-17'
+      ) THEN 'Y'
+      ELSE 'N'
+    END nc17_actor
+  FROM actor a
+  WHERE a.last_name LIKE 'S%' OR a.first_name LIKE 'S%';
+  ```
+- 範例 2: 使用 simple case expression 來調整輸出值
+- ```sql
+  SELECT f.title,
+    CASE (
+      SELECT count(*) FROM inventory i
+      WHERE i.film_id = f.film_id
+    )
+      WHEN 0 THEN 'Out of Stock'
+      WHEN 1 THEN 'Scarce'
+      WHEN 2 THEN 'Scarce'
+      WHEN 3 THEN 'Available'
+      WHEN 4 THEN 'Available'
+      ELSE 'Common'
+    END film_availability
+  FROM film f;
+  ```
 
 除以零的錯誤
 
+- 在 MySQL 中除零, 不會丟出錯誤而是自動設定結果為 NULL
+- 其他資料庫系統, 通常會丟出錯誤, 包含 Oracle Database, PostgreSQL, ...
+- 範例: 計算客戶的平均支付金額
+  - 使用 CASE 判別來避免除零錯誤
+- ```sql
+  SELECT c.first_name, c.last_name,
+    sum(p.amount) tot_payment_amt,
+    count(p.amount) num_payments,
+    (sum(p.amount) /
+      CASE WHEN count(p.amount) = 0 THEN 1
+        ELSE count(p.amount)
+      END
+    ) avg_payment
+  FROM customer c
+    LEFT OUTER JOIN payment p
+    ON c.customer_id = p.customer_id
+  GROUP BY c.first_name, c.last_name;
+  ```
+
 依條件進行更新
 
+- 把 CASE 條件判別用在 UPDATE 敘述中
+- 範例: 配合關聯式子查詢, 條件設定 customer 的 active 值
+- ```sql
+  UPDATE customer c
+  SET active =
+    CASE
+      WHEN 90 <= (
+        SELECT extract(DAY FROM now() - max(rental_date))
+        FROM rental r
+        WHERE r.customer_id = c.customer_id
+      ) THEN 0
+      ELSE 1
+    END
+  ;
+  ```
+
 Null 值的處理
+
+- Null 值的處理
+  - 輸出 Null 時候的處理
+  - 和運算中可能遇到 Null 的處理
+- 範例:
+- ```sql
+  SELECT c.first_name, c.last_name,
+    CASE
+      WHEN a.address IS NULL THEN 'Unknown'
+      ELSE a.address
+    END address,
+    CASE
+      WHEN ct.city IS NULL THEN 'Unknown'
+      ELSE ct.city
+    END city,
+    CASE
+      WHEN cn.country IS NULL THEN 'Unknown'
+      ELSE cn.country
+    END country
+  FROM customer c
+    LEFT OUTER JOIN address a
+    ON c.address_id = a.address_id
+    LEFT OUTER JOIN city ct
+    ON a.city_id = ct.city_id
+    LEFT OUTER JOIN country cn
+    ON ct.country_id = cn.country_id;
+  ```
 
 ---
 
 ### 第十二章 - 交易
+
+- 交易, Transactions
+- 將 SQL 敘述集合成群, 並且只有全部執行成功, 才會視為成功
+- 一種全有或全無的機制
+
+多使用者的資料庫
+
+- 當一個系統所有使用者只進行讀取時, 沒什麼特別需要處理的
+- 但是當有使用者**同時**在進行新增或修改資料時, 就有情況需要處理了
+- _補_, 讀寫分離架構, Read/Write Splitting
+
+Locking
+
+鎖定的細緻度
+
+何謂交易?
+
+展開一筆交易
+
+結束交易
+
+交易儲存點
+
+選擇一種儲存引擎
 
 ---
 
