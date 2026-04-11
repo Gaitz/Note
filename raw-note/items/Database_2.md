@@ -2574,21 +2574,238 @@ Null 值的處理
 
 Locking
 
-鎖定的細緻度
+- 鎖定 locking, 當一個操作被鎖定時, 其他想要進行修改甚至閱讀鎖定資料的使用者就必須等待
+- 資料庫針對鎖定 locking 的機制分類
+- 第一種, 寫入需取得 write lock, 讀取也需取得 read lock
+- 第二種, 寫入需取得 write lock, 但是讀取不需要, 由資料庫系統來控制讀取的 versioning
+- 兩種策略各有利弊
+- 微軟的 SQL Server 採用第一種, 同時具備 write lock 與 read lock
+- Oracle Database 則採用第二種, 使用 write lock + versioning
+- MySQL 則可以依據所選擇的 storage engine 儲存引擎來選擇
+- _補_, PostgreSQL 使用第二種 write lock + versioning
+
+鎖定的細緻度 (granularities)
+
+- 關於鎖定機制的細緻度, 不同層級
+- Table locks, 資料表鎖定
+  - 不讓多位使用者同時修改同一資料表中的資料
+- Page locks, 記憶體頁面鎖定
+  - 不讓多位使用者同時修改同一個記憶體頁面的資料 (一個 page 通常容量在 2KB 到 16KB 之間)
+- Row locks, 資料列鎖定
+  - 不讓多位使用者同時修改資料表中的同一筆 (row) 資料
+- 之間的差異在於等待時間與進行鎖定的難易度和消耗的資源
+  - 鎖定整個 table 最簡單, 但是使用者等待時間最長
+  - 鎖定一個 row 對於使用者來說最不需要等待, 而資料庫處理卻較複雜
+- 微軟的 SQL Server 三者皆採用, 並且中間會動態的調整鎖定的細緻度 (Lock Escalation)
+- Oracle Database 只採用 row lock 資料列鎖定
+- MySQL Server 則依據所選擇的儲存引擎而定
+- _補_, PostgreSQL 三者皆採用並且不會動態調整細緻度
 
 何謂交易?
 
+- 要處理的問題是當資料庫系統突然離線, 使用者突然中斷程式執行, ... 例外處理
+- 並且要處理多位使用者同時操作相同的資料的情境
+- 交易機制 (transaction) 是打包多道 SQL 敘述,
+  - 並且只允許完全成功或者失敗兩種結果 (**atomicity**)
+- 成功時會進行 commit; 而失敗時會進行 rollback
+- 錯誤處理情境:
+  - 1 伺服器在進行到 commit 或 rollback 之前就斷線了, 則伺服器在重啟後必須先還原完成 (rollback) 才能繼續運行
+  - 2 已經進行 commit 但是資料還未寫入永久記憶體中, 則伺服器在重啟後必須先完成寫入永久記憶體 (**durability**)
+
 展開一筆交易
+
+- 展開交易, 資料庫系統分成兩類
+- 第一類, (Implicitly) 針對每個 session 資料庫系統會自動維護一個對應的 transaction
+  - 此時所有的命令都屬於一個 transaction 的內容, 需要手動的進行 commit 或 rollback
+- 第二類, (Explicitly) 必須明確的用語法展開一筆 transaction, 一般情況下個別 SQL 敘述會被自動的單獨 commit
+  - **autocommit mode**
+- Oracle Database 採用第一類, 優點是每個 SQL 命令都有機會可以 rollback
+- MySQL 與 SQL Server 採用第二類, 此時一但按下 Enter 就會自動 commit 沒有機會可以 rollback
+  - 而使用交易需要使用明確的命令
+  - 但是這個 autocommit mode 是可以關閉的
+- **推薦進入資料庫系統時, 都關閉 autocommit mode**
+  - 養成習慣以 transaction 的方式提交所有的命令, 這樣在出錯的時候能更好的救援
+- _補_,
+  - PostgreSQL, autocommit mode 預設是開啟的
+  - 可以通過語法關閉 `\set AUTOCOMMIT off`
+  - `psql -v AUTOCOMMIT=off`
 
 結束交易
 
+- 無論是 Implicitly 或者 Explicitly 展開 transaction
+  - 只有在明確命令 commit 並且交易完成後, 變更的內容才會真正寫入並且釋出被鎖住的資源
+  - 要還原異動, 則是明確使用 rollback 命令
+- 除了明確的 commit 與 rollback 命令之外, 有些情境會自動結束當前的 transaction
+- 1 伺服器關閉, 此時這筆交易會在重啟後自動 rollback
+- 2 下達關於 schema 相關的命令時, 會立刻提交當前的 transaction
+  - 因為與 schema 相關的命令無法 rollback, 例如: 新增 table, 修改 table, 新增 index, ...
+- 3 明確展開另一個新的 transaction, 這會自動提交先前的 transaction
+- 4 資料庫系統偵測到 deadlock 並且與你的 transaction 有關, 此時會自動 rollback 當前的 transaction 並且收到錯誤訊息
+- **當時常出現 deadlock 導致 transaction 被 rollback 時**,
+  - **應該檢查應用層的邏輯**, 保持正確的資料存取順序
+
 交易儲存點
 
+- 某些情況下交易中發生問題, 但是不想要整個交易進行 rollback
+  - 而是只 rollback 到指定的 savepoint
+- 所有的 savepoint 必須要有一個名稱, 並且在一個交易內允許多個 savepoints
+- 範例: `SAVEPOINT my_savepoint;`
+- 範例: `ROLLBACK TO SAVEPOINT my_savepoint;`
+- 範例: 淘汰產品 XYZ
+  - 各家關於 transaction 的語法可能有所不同, 需要參照各自的文件
+  - 例如: SQL Server 就得改用 `save transaction` 來建立 savepoint
+- ```sql
+  START TRANSACTION;
+
+  UPDATE product
+  SET date_retired = CURRENT_TIMESTAMP()
+  WHERE product_cd = 'XYZ';
+  SAVEPOINT before_close_accounts;
+
+  UPDATE account
+  SET status = 'CLOSED', close_date = CURRENT_TIMESTAMP(),
+    last_activity_date = CURRENT_TIMESTAMP()
+  WHERE product_cd = 'XYZ';
+
+  ROLLBACK TO SAVEPOINT before_close_accounts;
+  COMMIT;
+  ```
+
+- _補_, PostgreSQL 範例
+- ```sql
+  BEGIN;
+  UPDATE accounts SET balance = balance - 100.00
+      WHERE name = 'Alice';
+  SAVEPOINT my_savepoint;
+  UPDATE accounts SET balance = balance + 100.00
+      WHERE name = 'Bob';
+  -- oops ... forget that and use Wally's account
+  ROLLBACK TO my_savepoint;
+  UPDATE accounts SET balance = balance + 100.00
+      WHERE name = 'Wally';
+  COMMIT;
+  ```
+
 選擇一種儲存引擎
+
+- Oracle Database 與微軟的 SQL Server 都各自使用一套程式碼來控制底層運作
+- 而 MySQL 允許你選擇儲存引擎 (storage engine), 甚至針對不同的 table 選用不同的 storage engine
+- `MyISAM`, 非交易式, 採用資料表鎖定 (table lock)
+- `MEMORY`, 非交易式, 專供記憶體內的資料表使用
+- `CSV`, 交易式, 資料儲存在 CSV 格式中
+- `InnoDB`, 交易式, 採用資料列層級鎖定 (row lock)
+- `Merge`, 讓多個相等的 MyISAM 看起來像單一個資料表, table partitioning
+- `Archive`, 儲存大量無 index 資料, 主要用於 archival purpose
+- MySQL 中以 `show table status` 可以查詢的到個別資料表的 storage engine 類型
+  - 以 `ALTER TABLE ... ENGINE` 可以修改所使用的 storage engine
 
 ---
 
 ### 第十三章 - 索引與約束條件
+
+- 資料庫中會間接影響撰寫程式的功能 index 與 constraint
+
+索引 (index)
+
+- 在插入 (INSERT) 一筆資料的時候, 資料庫不會特別將資料放在特定的位置
+  - 伺服器會對每個 table 保存一個可用的空間清單, 把新增的資料放置到任何可用的空間中
+- 在查詢時, 伺服器會需要走訪 table 中的**所有資料**, 稱為 table scan
+- 範例: 搜尋特定姓名的使用者
+  - 此時需要走訪整個 customer table 一個一個比對
+- ```sql
+  SELECT first_name, last_name
+  FROM customer
+  WHERE last_name LIKE 'Y%';
+  ```
+- 當資料數量持續增加時, 進行 table scan 的速度會越來越慢
+  - 到一個**臨界點**時, 查詢的響應時間就會超越合理的時間
+- 資料庫系統中提供 index 功能來**加速查詢**
+  - 讓你只需檢查資料表中的部分資料, 而不需要完整檢視每筆資料
+- **Index 本身也是一種特殊的 table, 但是他不會包含所有的資料, 只需要包含用來搜尋的資料, 以及對應到原始資料的位置資訊**
+- 當有了 Index 後, 就會由查詢最佳化工具, 來決定該 index 是否有助於查詢, 如果有用就會採用
+  - 當有多個 index 存在時, 會由最佳化工具來選擇
+- _補_, 選擇對哪一個建立 index 取決於常用的命令會依據哪個欄位而建立
+
+建立索引, `CREATE INDEX`
+
+- MySQL 範例: 對 customer table 的 email 欄位建立 index 並且命名為 idx_email
+  - MySQL 將 index 視為 table 的附屬元件, 因此使用 `ALTER TABLE` 來附加 index
+- ```sql
+  ALTER TABLE customer
+  ADD INDEX idx_email (email);
+  ```
+- SQL Server 與 Oracle 範例:
+  - 其他資料庫系統把 Index 視為獨立的
+  - _補_, PostgreSQL 也使用此語法
+- ```sql
+  CREATE INDEX idx_email
+  ON customer (email);
+  ```
+- MySQL 範例: 查詢既有 index
+- ```sql
+  SHOW INDEX FROM customer \G;
+  ```
+- _補_, PostgreSQL
+  - 在 `psql` 中使用 `\d [table_name or index_name]` 查詢 table 詳細資料, 其中包含 index 資訊
+- 在 MySQL 中, 伺服器會為 CREATE TABLE 時設定的 primary key 欄位建立一個名為 PRIMARY 的 index
+  - 是為了用於後續的 primary key contraint
+- MySQL 範例: 移除 index
+- ```sql
+  ALTER TABLE customer
+  DROP INDEX idx_email;
+  ```
+- SQL Server 範例: `DROP INDEX idx_email ON customer;`
+- Oracle Database 範例: `DROP INDEX idx_email;`
+- _補_, PostgreSQL 移除現有的 index
+  - `DROP INDEX index_name;`
+
+獨特性索引 (unique index), `CREATE UNIQUE INDEX`
+
+- 在設計資料庫 schema 時, 務必要考量哪些欄位可以允許重複的資料, 哪些則是必須唯一存在
+- Unique index, 同時具有 index 加速查詢的功能, 並且加上唯一性檢查
+- MySQL 範例: 建立 unique index
+- ```sql
+  ALTER TABLE customer
+  ADD UNIQUE idx_email (email);
+  ```
+- SQL Server 與 Oracle Database 範例: 建立 unique index
+  - _補_, PostgreSQL 也使用相同語法
+- ```sql
+  CREATE UNIQUE INDEX idx_email
+  ON customer (email);
+  ```
+- 當 INSERT 時遇到 unique index 欄位, 則會進行唯一性檢查, 如果有重複的資料時會丟出錯誤
+  - _補_, PostgreSQL 的錯誤訊息如下
+  - ```
+    ERROR:  duplicate key value violates unique constraint "idx_email"
+    DETAIL:  Key (email)=(MARY.SMITH@sakilacustomer.org) already exists.
+    ```
+- 對於 PRIMARY KEY 欄位, 不需要額外加上 UNIQUE INDEX, 因為預設已經具備唯一性檢查
+
+多重欄位索引
+
+- 如果時常會**同時**搜尋多個欄位, 就可以針對多欄位進行 INDEX 設定
+- MySQL 範例: 為 last_name 與 first_name 欄位同時設定 INDEX
+- ```sql
+  ALTER TABLE customer
+  ADD INDEX idx_full_name (last_name, first_name);
+  ```
+
+索引的種類
+
+B-tree 索引
+
+二元圖索引
+
+文字索引
+
+如何運用索引？
+
+索引的缺陷
+
+約束條件
+
+建立約束條件
 
 ---
 
