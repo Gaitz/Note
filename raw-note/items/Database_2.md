@@ -2786,26 +2786,120 @@ Locking
 
 - 如果時常會**同時**搜尋多個欄位, 就可以針對多欄位進行 INDEX 設定
 - MySQL 範例: 為 last_name 與 first_name 欄位同時設定 INDEX
+  - **設定多重欄位 index 的欄位順序, 是有意義的**
+  - 以這個例子為例, last_name 然後才是 first_name
+  - 因此這個 index 可以在同時搜尋 last_name + first_name 時提供幫助
+  - 在對於單獨 last_name 搜尋時也能提供幫助, 但是單獨使用 first_name 搜尋時沒有作用
 - ```sql
   ALTER TABLE customer
   ADD INDEX idx_full_name (last_name, first_name);
   ```
+- 建立多重欄位 index 時, 需要謹慎考量欄位順序, 來提高這個 index 的效用
 
 索引的種類
 
-B-tree 索引
+B-tree 索引, balanced-tree indexes
 
-二元圖索引
+- 平衡樹索引 (balanced-tree indexes, B-tree index)
+  - **適合適用於 high-cardinality 資料, 即欄位中不重複的資料很多時**, 高基數資料
+- MySQL, Oracle Database, SQL Server 預設的 index 都是 B-tree index
+  - 除非額外指定
+- B-tree index 是以樹狀結構配置,
+  - 具備至少一層的 branch nodes (分枝節點),
+  - 分枝的末梢只有一層 leaf nodes (葉節點)
+- leaf nodes 才存資料; branch nodes 只作為引導
+- 當原始的 table 要進行 INSERT, UPDATE, DELETE 的修改時,
+  - 伺服器會嘗試保持 index tree balanced (維持平衡樹的狀態)
+- 只有當樹狀結構保持平衡的狀態 (balanced), 才能在搜尋上快速地走到葉節點並找到所需的資料值
 
-文字索引
+二元圖索引, bitmap indexes
+
+- 當想要加速搜尋的欄位中含有很多重複的資料時, **low-cardinality**, 低基數資料
+  - 此時 B-tree indexes 會非常難維持 balanced
+  - 因此需要不同的 index 策略
+- 二元圖索引 (bitmap indexes) 就是**適用於 low-cardinality 資料情境**
+  - 該 index 會對不重複的資料分開個別維護一個 bitmap
+  - 此時, 當搜尋特定值時, 只需要挑出該 bitmap 來進行處理即可
+- **適合用於資料值的類型有限的欄位**, 例如: 銷售季度, 地理區域, 產品, 業務人員等等
+- Oracle Database 範例: 針對只有兩個狀態的欄位進行 index 設定
+- ```sql
+  CREATE BITMAP INDEX idx_active ON customer (active);
+  ```
+- _補_, PostgreSQL 並**沒有**像是 Oracle Database 一樣的語法來直接建立 BITMAP INDEX
+- _補_, PostgreSQL 也有數種不同的 Index Types, 參照 Index Types 和 Performance Tips 文件
+
+文字索引, fulltext
+
+- 處理大量文件資料時, 可能需要搜尋文件中的字詞或者片語
+  - 傳統的 index 並不適用這樣的情境
+  - 文件搜尋屬於專門技術
+- 個別的資料庫系統都有針對文件特製的 index 和搜尋機制
+- MySQL 和微軟的 SQL Server 採用名為 fulltext 的 index 機制
+- Oracle Database 則採用名為 Oracle Text 的工具
+- _補_, PostgreSQL 文件中有專門一章討論, Chapter 12. Full Text Search
 
 如何運用索引？
 
+- 使用 `EXPLAIN` 語法讓資料庫提供執行計劃 (execution plan)
+  - 各家資料庫系統都有各自查詢執行計劃的語法
+  - SQL Server 使用 `set show plan_text on`
+  - Oracle Database 使用 `explain plan` 語法將執行計劃寫入一個名為 plan_table 的特殊資料表中
+  - _補_, PostgreSQL 一樣使用 `EXPLAIN` 語法, 添加在任何 SQL statment 之前即可生成 execution plan
+- PostgreSQL 範例: 查詢 execution plan
+- ```sql
+  EXPLAIN SELECT customer_id, first_name, last_name
+  FROM customer
+  WHERE first_name LIKE 'S%' AND last_name LIKE 'p%';
+  ```
+- 從中查詢伺服器決定使用的搜尋方式 (type) 和使用的 index
+  - 範圍掃描 (range scan)
+- **查詢調校**, 是專門的學問
+  - 需要查詢所使用的資料庫系統文件, 尋找有哪些手段可以使用
+  - 調校包含檢視 SQL 敘述, 判斷伺服器有哪些資源可以用來執行
+  - 可以是修改 SQL 敘述本身, 或者調整資料庫的資源
+- _補_,
+  - PostgreSQL 查詢文件 Performance Tips
+
 索引的缺陷
 
-約束條件
+- Index 不是萬能的工具, 不是越多越好
+- Index 會建立一個特殊的資料表
+- 有關的 index 越多, 當資料要進行異動時 (增, 刪, 改), 參與的資料表越多, **則整體的速度越慢**
+- 此外 index 資料表也要**佔用硬碟空間**
+- 使用 Index 的策略
+  - 1 只有當**明確需要時**才使用
+  - 2 如果 Index 只有在特殊的目的使用時, 最好是使用時才建立, 並且使用後就把 index 拿掉,下次要用時再加上去
+  - 3 使用情境分成需要使用 index 時, 和不需要 index 並且可能造成負擔時; 分成兩個時段分別移除和重新加上 index
+- 把 index 控制在剛好的數量
+- **常見策略**
+- 1 確定所有 primary key 都有 index, 如果是多重欄位 primary key 則可以考慮針對部分欄位進行 index 或者以不同順序添加 index
+- 2 欄位作為其他的 foreign key 索引用時, 也針對這個欄位製作成 index
+  - 理由是伺服器在進行刪除資料時, 都會對 foreign key 欄位進行檢查, 因此勢必會進行特定值的搜尋
+- 3 有些欄位常作為檢索資料使用時, 例如大部分的日期欄位和短字串的欄位 (2 ~ 50個字元)
+- **觀察**資料表在**現實收到的**查詢命令, 並且檢視伺服器的執行計劃, 再修改 index 策略, 以符合**實際常見的查詢路徑**
+
+約束條件, constraints
+
+- 針對一個資料表的單一或者多個欄位添加的限制
+- 主鍵約束條件, Primary Keys
+  - 用來保障資料表中一個或多欄位資料的獨特性
+  - 屬於一種特殊的獨特性約束條件
+- 外來鍵約束條件, Foreign Keys
+  - 限制資料表中的一個或多欄位資料, 必須等同於另外一個資料表中的 PRIMARY KEY
+- 獨特性約束條件, Unique Constraints
+  - 保障資料表中一個或多欄位資料的獨特性
+- 檢查約束條件, Check Constraints, Not-Null Constraints, ...
+  - 限制欄位中所允許的資料值
+- 沒有約束條件的話, 資料庫的資料一致性 (data integrity) 就容易產生問題, 而產生 orphaned rows
+  - 有約束條件的話, 在試圖變更, 修改, 移動資料時, 就能適時地發出錯誤訊息
+- MySQL 上需要使用外來鍵約束條件時, 必須確定所選擇的 storage engine 是 InnoDB
+- _補_, PostgreSQL 可以參考文件 5.5. Constraints
 
 建立約束條件
+
+- 通常會在 `CREATE TABLE` 敘述時一同定義
+  - 也可以在事後以 `ALTER TABLE` 進行添加
+- 範例:
 
 ---
 
