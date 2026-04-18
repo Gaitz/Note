@@ -2999,6 +2999,48 @@ CREATE INDEX idx_payment_date_amount ON payment (payment_date, amount);
 
 ### 第十四章 - Views
 
+- 良好設計的應用程式, 通常只會公開一部分的介面, 把其他實作的細節隱藏起來
+  - 在日後修改設計, 也不會影響到使用者
+- 資料庫中以 VIEW 來實現, 允許使用者只通過 VIEW 介面存取資料, 把實際的資料表隱藏起來
+
+何謂檢視表 VIEW
+
+- VIEW 只是某一種查詢資料的機制而已
+  - 不涉及資料的儲存, 意味著不會添加硬碟空間
+- 要建立一個 VIEW, 只要建立一個 SELECT 敘述並加上一個名稱,
+  - 此時其他使用者是通過這個 SELECT 敘述建立的 VIEW 存取資料, 就如同使用其他 table 一樣
+- 範例: 假設對 customer 這個 TABLE 產生一個隱藏 email 欄位的 VIEW
+  - 讓不同權限的使用者, 使用這個 VIEW
+- ```sql
+  CREATE VIEW customer_vw (
+    customer_id,
+    first_name,
+    last_name,
+    email
+  ) AS SELECT
+    customer_id,
+    first_name,
+    last_name,
+    concat(substr(email,1,2), '*****', substr(email, -4)) email
+  FROM customer;
+  ```
+
+為何要使用檢視表？
+
+資料安全
+
+資料彙整
+
+隱藏複雜性
+
+結合已區隔的資料
+
+可供更新的檢視表
+
+更新一個簡單的檢視表
+
+更新複雜的檢視表
+
 ---
 
 ### 第十五章 - 中繼資料
