@@ -3009,8 +3009,10 @@ CREATE INDEX idx_payment_date_amount ON payment (payment_date, amount);
   - 不涉及資料的儲存, 意味著不會添加硬碟空間
 - 要建立一個 VIEW, 只要建立一個 SELECT 敘述並加上一個名稱,
   - 此時其他使用者是通過這個 SELECT 敘述建立的 VIEW 存取資料, 就如同使用其他 table 一樣
-- 範例: 假設對 customer 這個 TABLE 產生一個隱藏 email 欄位的 VIEW
-  - 讓不同權限的使用者, 使用這個 VIEW
+- 範例: 假設對 customer 這個 TABLE 產生一個隱藏 email 欄位的 VIEW, 讓不同權限的使用者, 使用這個 VIEW
+  - 上半部 `CREATE VIEW` 用來描述 VIEW 所該擁有的欄位
+  - 下半部 `AS SELECT` 則具體描述對應的欄位來源
+  - 資料庫會儲存 VIEW 的定義, 在此時不會做任何的執行
 - ```sql
   CREATE VIEW customer_vw (
     customer_id,
@@ -3024,26 +3026,253 @@ CREATE INDEX idx_payment_date_amount ON payment (payment_date, amount);
     concat(substr(email,1,2), '*****', substr(email, -4)) email
   FROM customer;
   ```
+- 範例: 查詢 VIEW table
+  - 一但建立 VIEW 之後, 就可以如同操作一般的 table 一樣操作 VIEW table
+- ```sql
+  SELECT first_name, last_name, email
+  FROM customer_vw;
+  ```
+- MySQL, Oracle 範例: 查看 VIEW table 的定義
+  - _補_, PostgreSQL 中使用 `\d+ customer_vw` 查詢
+- ```sql
+  describe customer_vw;
+  ```
+- 範例: 對 VIEW table 使用 SELECT 敘述中的子句操作
+  - 例如 aggregate function, GROUP BY, HAVING, ORDER BY, ...
+- ```sql
+  SELECT first_name, count(*), min(last_name), max(last_name)
+  FROM customer_vw
+  WHERE first_name LIKE 'J%'
+  GROUP BY first_name
+  HAVING count(*) > 1
+  ORDER BY 1;
+  ```
+- 範例: 結合 customer_vw table 與 payment table 找出一次性支付金額大於 11 的客人
+  - 把 VIEW table 與其他 table 進行結合,
+- ```sql
+  SELECT cv.first_name, cv.last_name, p.amount
+  FROM customer_vw cv
+    INNER JOIN payment p
+    ON cv.customer_id = p.customer_id
+  WHERE p.amount >= 11;
+  ```
 
 為何要使用檢視表？
 
 資料安全
 
+- 隱藏資料表, 譬如不要將 SELECT 權限開給所有的使用者
+- 而是建立數個 VIEW table, 讓不同的使用者操作不同的 VIEW table
+- 範例: 為行銷團隊, 建立一個只包含活躍的用戶 customer VIEW table
+  - 使用 WHERE 建立一個篩選過後的 table
+- ```sql
+  CREATE VIEW active_customer_vw (
+    customer_id, first_name, last_name, email
+  )
+  AS SELECT
+    customer_id, first_name, last_name,
+    concat(substr(email, 1, 2), '******', substr(email, -4)) email
+  FROM customer
+  WHERE active = 1;
+  ```
+- Oracle Database 的另一種功能, Virtual Private Database, VPD
+  - 以建立 policies 的方式讓資料庫伺服器自動修改命令敘述
+- _補_, PostgreSQL 中有名為 Row Level Security, RLS 的功能
+  - 也是以建立 policies 的方式, 控制使用者權限
+
 資料彙整
+
+- 應用程式經常會需要彙整資料, 可以直接讓資料庫彙整好資料後一次呈現
+- 以建立 VIEW 的方式撰寫彙整資料的邏輯, 讓外部應用程式只需要操作這個 VIEW 即可
+- 範例:
+- ```sql
+  CREATE VIEW sales_by_film_category
+  AS SELECT
+    c.name AS category,
+    SUM(p.amount) AS total_sales
+  FROM payment p
+    INNER JOIN rental r USING (rental_id)
+    INNER JOIN inventory i USING (inventory_id)
+    INNER JOIN film f USING (film_id)
+    INNER JOIN film_category fc USING (film_id)
+    INNER JOIN category c USING (category_id)
+  GROUP BY c.name
+  ORDER BY total_sales DESC;
+  ```
+- 當使用 VIEW 的方式, 效能出現問題時
+  - 只需要把彙整資料建立成一個實際的 table 並且修改這個 VIEW 的定義指向實際的 table 就可以提高查詢效能
+  - 並且不需要外部應用程式修改介面
 
 隱藏複雜性
 
+- 使用 VIEW 的常見理由之一, 避免使用者直接面對複雜的資料
+  - 尤其是當我們需要複雜的資料表結合或複雜的子查詢時
+- 範例: 產生與 film 相關的統計資料報表
+  - 需要 film_id, title, description, rating, category_name
+  - 和計算 num_actors, inventory_cnt, num_rentals
+- 製作成 VIEW table 的優點在於
+  - 提供一個實作好的介面
+  - 並且操作這個 VIEW 的時候, 只有使用到的欄位才會觸發實際的查詢
+  - 換句話說, 以下複雜的子查詢只有在對應的欄位使用到的時候才會進行運算
+- ```sql
+  CREATE VIEW film_stats
+  AS SELECT
+    f.film_id, f.title, f.description, f.rating,
+    (
+      SELECT c.name
+      FROM category c
+        INNER JOIN film_category fc
+        ON c.category_id = fc.category_id
+    ) category_name,
+    (
+      SELECT count(*)
+      FROM film_actor fa
+      WHERE fa.film_id = f.film_id
+    ) num_actors,
+    (
+      SELECT count(*)
+      FROM inventory i
+      WHERE i.film_id = f.film_id
+    ) inventory_cnt,
+    (
+      SELECT count(*)
+      FROM inventory i
+        INNER JOIN rental r
+        ON i.inventory_id = r.inventory_id
+      WHERE i.film_id = f.film_id
+    ) num_rentals
+  FROM film f;
+  ```
+
 結合已區隔的資料
+
+- 在資料庫設計中經常會將大型資料表打散成較小的資料表, 以改善效能
+  - 因此在情境需要的時候, 反而可以使用 VIEW 來達成組合這些小的資料表來使用
+  - 好處是隱藏效能優化的設計細節, 對外使用統一的介面
+- 這種實作的好處是直接把 payment table 換成 payment VIEW 並不會改變介面
+  - 但是可以進行效能優化的實作 (分割資料表)
+- 範例: 實作為了優化查詢速度, 把 payment 資料分散在 payment_historic 與 payment_current 兩個 table 中
+  - 當需要完整資料的時候, 使用 VIEW 來操作
+- ```sql
+  CREATE VIEW payment_all (
+    payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
+  )
+  AS SELECT
+    payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
+  FROM payment_historic
+  UNION ALL
+  SELECT
+    payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
+  FROM payment_current;
+  ```
 
 可供更新的檢視表
 
+- 只要符合限制, 是允許直接通過 VIEW table 進行更新的
+  - 各家資料庫系統的限制可能不同, 需要參照文件
+- MySQL 可更新 VIEW 的限制
+  - 不包含 aggregate functions
+  - 不包含 GROUP BY, HAVING
+  - 在 SELECT 或 FROM 子句中不包含子查詢, WHERE 裡的子查詢不能參照 FROM 裡的資料表 (_補_, 不允許關聯式子查詢)
+  - 不包含 UNION, UNION ALL, DISTINCT
+  - FROM 子句中必須包含一個 table 或其他可供更新的 VIEW
+  - 涉及多個資料表時, 則 WHERE 必須是以 INNER JOIN 所結合的
+
 更新一個簡單的檢視表
 
+- 範例: 以可供更新的 VIEW 來更新指定 customer 的 last_name
+- ```sql
+  CREATE VIEW customer_vw (
+    customer_id, first_name, last_name, email
+  )
+  AS SELECT
+    customer_id, first_name, last_name,
+    concat (substr(email, 1, 2), '*****', substr(email, -4)) email
+  FROM customer;
+
+  UPDATE customer_vw
+  SET last_name = 'SMITH-ALLEN'
+  WHERE customer_id = 1;
+  ```
+
+- 在此範例中, 無法以 VIEW 更新 email 欄位, 因為 email 欄位是由推導而得的
+  - 從邏輯上來說這樣也是合理的, 因為這個 VIEW 的建立目的就是為了隱藏 email 欄位
+- ```sql
+  --- will throw an ERROR
+  UPDATE customer_vw
+  SET email = 'MARY.SMITH-ALLEN@sakilacustomer.org'
+  WHERE customer_id = 1;
+  ```
+- 這個 VIEW 無法進行 INSERT 原因是
+  - 1 其中含有被推導的欄位
+  - 2 不包含所有關於新增 customer 所需的欄位
+- ```sql
+  INSERT INTO customer_vw (
+    customer_id, first_name, last_name
+  )
+  VALUES (
+    99999, 'ROBERT', 'SIMPSON'
+  );
+  ```
+
 更新複雜的檢視表
+
+- _補_, 更新複雜的 VIEW 需要參照各家的資料庫限制, 有許多不同之處
+- MySQL 範例: 更新一個來自多個資料表結合的 VIEW
+  - _補_, PostgreSQL 無法直接執行這種多個資料表結合的 VIEW, 需要額外的功能輔助 (INSERT OF UPDATE trigger)
+  - _補_, 換句話說, 要針對複雜的 VIEW 進行除了讀取之外的功能, 可能都需要額外的加工; 但是此時可能已經超越 VIEW 被建立的原因 (用於隱藏細節)
+- ```sql
+  CREATE VIEW customer_details
+  AS SELECT
+    c.customer_id, c.store_id, c.first_name, c.last_name, c.address_id, c.active, c.create_date,
+    a.address, a.postal_code,
+    ct.city,
+    cn.country
+  FROM customer c
+    INNER JOIN address a
+    ON c.address_id = a.address_id
+    INNER JOIN city ct
+    ON a.city_id = ct.city_id
+    INNER JOIN country cn
+    ON ct.country_id = cn.country_id;
+
+  UPDATE customer_details
+  SET last_name = 'SMITH-ALLEN', active = 0
+  WHERE customer_id = 1;
+
+  UPDATE customer_details
+  SET address = '999 Mockingbird Lane'
+  WHERE customer_id = 1;
+  ```
+
+- MySQL 範例: 嘗試對於一個 VIEW 同時更新兩個 table 中的欄位
+  - 此時會丟出錯誤, 無法同時更新多個 table
+- ```sql
+  UPDATE customer_details
+  SET last_name = 'SMITH-ALLEN', active = 0
+    address = '999 Mockingbird Lane'
+  WHERE customer_id = 1;
+  ```
 
 ---
 
 ### 第十五章 - 中繼資料
+
+- 中繼資料, metadata
+
+描述資料用的資料
+
+- 關於資料本身的資料
+
+information_schema
+
+操作中繼資料
+
+產生架構用的命令碼
+
+部署驗證
+
+動態產生的 SQL
 
 ---
 
