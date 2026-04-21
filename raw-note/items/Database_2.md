@@ -3262,7 +3262,29 @@ CREATE INDEX idx_payment_date_amount ON payment (payment_date, amount);
 
 描述資料用的資料
 
-- 關於資料本身的資料
+- 關於資料本身的資料, 例如:
+  - 資料表名稱, 資料表儲存資訊, 儲存引擎
+  - 欄位名稱, 欄位資料型別, 欄位的預設值
+  - NOT NULL 的欄位約束條件
+  - PRIMARY KEY 的所在欄位, PRIMARY KEY 的名稱, PRIMARY KEY 的 INDEX 名稱
+  - INDEX 名稱, INDEX 類型, INDEX 所在的欄位, INDEX 欄位的排序方式, INDEX 的儲存資訊
+  - FOREIGN KEY 名稱, FOREIGN KEY 所在的欄位, 與 FOREIGN KEY 關聯的資料表和欄位
+- 這些資料被稱為 data dictionary 或 system catalog
+  - 資料庫伺服器必須保存且維護這些資料, 才能驗證和執行 SQL 敘述
+  - 只能通過正確的機制進行修改, 例如: ALTER TABLE
+- 各家資料庫系統, 有各自自己一套的 meta data 機制
+  - 其中 information schema 屬於 SQL 標準, 因此通常具備可移植性
+- Oracle Database
+  - user_tables, all_constraints
+  - system-stored procedure: dbms_metadata
+- SQL Server
+  - system-stored procedure: sp_tables
+  - information_schema
+- MySQL
+  - information_metadata
+- _補_, PostgreSQL
+  - 專屬: system catalogs 和 PostgreSQL-specific views
+  - SQL 標準的 information schema
 
 information_schema
 
