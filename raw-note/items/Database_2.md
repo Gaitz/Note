@@ -3288,17 +3288,133 @@ CREATE INDEX idx_payment_date_amount ON payment (payment_date, amount);
 
 information_schema
 
+- information_schema 的資料是以 VIEW 的方式存在
+- 範例: 查詢 `information_schema.tables`
+- ```sql
+  SELECT table_name, table_type
+  FROM information_schema.tables;
+  ```
+- 範例: 以 `information_schema.views` 查詢所有可以更新的 VIEW
+- ```sql
+  SELECT table_name, table_schema, table_catalog, is_updatable
+  FROM information_schema.views
+  WHERE is_updatable='YES';
+  ```
+- 範例: 以 `information_schema.columns` 來查詢 film table 的欄位資訊
+  - 查詢欄位名稱, 資料型別, 字元長度上限, 數值精度並且以定義時的順序排序
+- ```sql
+  SELECT column_name,
+    data_type,
+    character_maximum_length char_max_len,
+    numeric_precision num_prcsn, numeric_scale num_scale
+  FROM information_schema.columns
+  WHERE table_name = 'film'
+  ORDER BY ordinal_position;
+  ```
+- MySQL 範例: 以 `information_schema.statistics` 查詢 index 相關資訊
+  - 這個 table 屬於 MySQL 專有
+  - _補_, PostgreSQL 可以從專屬的 `pg_indexes` VIEW 中查詢資料
+- ```sql
+  SELECT index_name, non_unique, seq_in_index, column_name
+  FROM information_schema.statistics
+  WHERE table_name = 'rental'
+  ORDER BY 1, 3;
+  ```
+- 範例: 以 `information_schema.table_constraints` 查詢 table 的限制條件
+- ```sql
+  SELECT constraint_name, table_name, constraint_type
+  FROM information_schema.table_constraints
+  WHERE table_name = 'rental'
+  ORDER BY 3, 1;
+  ```
+- information_schema 所有的資訊, 屬於各家資料庫系統有所不同
+  - _補_, PostgreSQL 可以參考文件 https://www.postgresql.org/docs/current/information-schema.html
+
 操作中繼資料
+
+- _補_, 與中繼資料相關的程式碼, 都依據資料庫系統不同有很大的差別, 需要參照各家資料庫的文件來實作
 
 產生架構用的命令碼
 
+- 範例: 使用 SQL 敘述以 information_schema 中的資料, 建立出可執行的 SQL 語法
+  - 使用外部其他程式語言更容易實現
+  - 很多外部工具提供類似功能
+  - 範例中單純以 SQL 敘述實現
+- _補_, 非常困難, 因為資料庫系統的不同語法非常不同, 可以移植性很低
+  - 並且所需要參考的細節很多, 跨多個 information_schema 甚至無法單純搜集齊全
+- _補_, PostgreSQL 中
+  - 可以使用 CLI 工具, `pg_dump -U username -t table_name --schema-only database_name` 去查詢所使用的 SQL script
+  - 使用 GUI 工具 `pgAdmin` 也有功能可以直接取得
+
 部署驗證
 
+- 使用 SQL 語法, 生成當前資料庫系統的部署資料, 用來驗證執行前與執行後的結果
+- PostgreSQL 範例:
+- ```sql
+  SELECT tbl.table_name, (
+      SELECT count(*) FROM information_schema.columns clm
+      WHERE clm.table_schema = tbl.table_schema
+        AND clm.table_name = tbl.table_name
+    ) num_columns, (
+      SELECT count(*) FROM pg_indexes
+      WHERE tablename = tbl.table_name
+    ) num_indexes, (
+      SELECT count(*) FROM information_schema.table_constraints tc
+      WHERE tc.table_schema = tbl.table_schema
+        AND tc.table_name = tbl.table_name
+        AND tc.constraint_type = 'PRIMARY KEY'
+    ) num_primary_keys
+  FROM information_schema.tables tbl
+  WHERE tbl.table_type = 'BASE TABLE' AND tbl.table_schema = 'public'
+  ORDER BY 1;
+  ```
+
 動態產生的 SQL
+
+- 涵蓋 SQL 語言的 superset
+  - Oracle 的 PL/SQL 語言
+  - 微軟的 Transact-SQL 語言
+  - _補_, PostgreSQL 中也有 PL/pgSQL 語言
+- 而其他外部的程式語言本身的語法並沒有包含 SQL 敘述的部分, 因此其中的 SQL 敘述是以字串的方式進行處理
+- 大部分的資料庫系統都允許以**字串**為形式傳入 SQL 敘述給伺服器
+  - 而是以 **dynamic SQL execution** 的方式
+  - _補_, PostgreSQL 主要用於 PL/pgSQL 中
+  - _補_, 這種方式也是各家資料庫系統有個別的語法, 需參照各自的文件
+    - Oracle: EXECUTE IMMEDIATE 指令
+    - SQL Server: sp_executesql 指令
+    - MySQL: PREPARE, EXECUTE, DEALLOCATE
+- 主要是因為指令是在 run time 組合而成的, 或者需要配合外部資源所形成的
+  - 因此, 無法將 SQL 敘述寫死在程式碼中
+- _補_, 用於優化 SQL 伺服器效能的手法
+  - `PREPARE`, `EXECUTE` 用於讓資料庫伺服器避免重複的 parse 階段
+    - 搭配的 `DEALLOCATE` 用於釋放 `PREPARE` 所佔用的資源
+  - 最大的用處在於在單一個 session 中, 有重複大量相似的 SQL 敘述時的效能優化
+  - 用法類似於 function 定義與執行, 和釋放佔用資源
+- 主流做法, 還是以 General-purpose programming language 或者 PL/SQL 來實現
 
 ---
 
 ### 第十六章 - 分析函式
+
+分析函式的概念
+
+資料窗口
+
+局部排序
+
+排名
+
+排名函式
+
+產生多種排名
+
+報表函式
+
+Window Frames
+
+Lag 和 Lead
+
+串接欄位值
 
 ---
 
