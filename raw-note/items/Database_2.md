@@ -3396,11 +3396,49 @@ information_schema
 
 ### 第十六章 - 分析函式
 
+- 一般來說, 進行資料分析都是在資料庫伺服器以外的地方
+  - 使用 Excel, R, Python 等外部的程式語言或工具進行
+- 但是, SQL 本身也內建一些分析函式, 可以進行資料分析
+
 分析函式的概念
 
-資料窗口
+資料窗口 (windows), _補_, window function + aggregate function
 
-局部排序
+- PostgreSQL 範例: 計算出一年中以月為單位最高累積銷售額和以季為單位最高的每月累積銷售額
+  - 使用到 window function 來配合 aggregate function 來進行分類運算
+  - `OVER ()` 關鍵字使用 window function 配合 `PARTITION BY` 分割結果集合
+  - _補_, 讓 aggregate function 指運作在指定的 window 上 (分割)
+- ```sql
+  SELECT EXTRACT(QUARTER FROM payment_date) AS quarter,
+    TO_CHAR(payment_date, 'Month') month_nm,
+    sum(amount) monthly_sales,
+    max(sum(amount)) over () max_overall_sales,
+    max(sum(amount)) over (partition by EXTRACT(QUARTER FROM payment_date)) max_qrtrr_sales
+  FROM payment
+  WHERE EXTRACT(YEAR FROM payment_date) = 2005
+  GROUP BY TO_CHAR(payment_date, 'Month'), EXTRACT(QUARTER FROM payment_date);
+  ```
+- _補_, PostgreSQL 參考文件: Chapter 3. Advanced Features, 3.5. Window Functions
+
+局部排序, `RANK()`, `ROW_NUMBER()`, `DENSE_RANK()`
+
+- PostgreSQL 範例: 依據月份對每月累積銷售額進行排序並且添加順序值
+  - 通過 window function 達成添加局部排序的順序值
+- ```sql
+  SELECT EXTRACT(QUARTER FROM payment_date) AS quarter,
+    to_char(payment_date, 'Month') month_nm,
+    sum(amount) monthly_sales,
+    rank() OVER (ORDER BY sum(amount) DESC) sales_rank
+  FROM payment
+  WHERE EXTRACT(YEAR FROM payment_date) = 2005
+  GROUP BY to_char(payment_date, 'Month'), EXTRACT(QUARTER FROM payment_date)
+  ORDER BY monthly_sales;
+  ```
+- _補_, PostgreSQL 參考文件: Chapter 9. Functions and Operators, 9.22. Window Functions
+  - 包含可以搭配使用的 window function
+- _補_,
+  - 比較 `row_number()`, `rank()`, `dense_rank()` 的差別
+  - 主要差異在於應對數值相同時的行為
 
 排名
 
