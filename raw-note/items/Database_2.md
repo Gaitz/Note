@@ -3394,11 +3394,14 @@ information_schema
 
 ---
 
-### 第十六章 - 分析函式
+### 第十六章 - 分析函式, (window functions)
 
 - 一般來說, 進行資料分析都是在資料庫伺服器以外的地方
   - 使用 Excel, R, Python 等外部的程式語言或工具進行
 - 但是, SQL 本身也內建一些分析函式, 可以進行資料分析
+  - 排序
+  - 找出極端值
+  - 找出常見的統計值
 
 分析函式的概念
 
@@ -3424,6 +3427,7 @@ information_schema
 
 - PostgreSQL 範例: 依據月份對每月累積銷售額進行排序並且添加順序值
   - 通過 window function 達成添加局部排序的順序值
+  - window function `rank()` 中的 `ORDER BY` 是用來指定排序的方式
 - ```sql
   SELECT EXTRACT(QUARTER FROM payment_date) AS quarter,
     to_char(payment_date, 'Month') month_nm,
@@ -3439,14 +3443,67 @@ information_schema
 - _補_,
   - 比較 `row_number()`, `rank()`, `dense_rank()` 的差別
   - 主要差異在於應對數值相同時的行為
+- PostgreSQL 範例: 產生季度排序值
+- ```sql
+  SELECT EXTRACT(QUARTER FROM payment_date) AS quarter,
+    to_char(payment_date, 'Month') month_nm,
+    sum(amount) monthly_sales,
+    rank() OVER (
+      PARTITION BY EXTRACT(QUARTER FROM payment_date)
+      ORDER BY sum(amount) DESC
+    ) qrtr_sales_rank
+  FROM payment
+  WHERE EXTRACT(YEAR FROM payment_date) = 2005
+  GROUP BY to_char(payment_date, 'Month'), EXTRACT(QUARTER FROM payment_date)
+  ORDER BY quarter, qrtr_sales_rank;
+  ```
 
 排名
 
 排名函式
 
+- SQL 標準中的排名用函式, 以下三種函式的**差異在於處理平手的做法**
+- `row_number`, 每筆資料都有獨一無二的排序數字, 但是平手時則是隨機決定
+- `rank`, 平手時排序數字相同, 但是會佔用後續排序數字, 意味著下一個非平手的數字看起來有斷層
+- `dense_rank`, 平手時排序數字相同, 但是不會佔用後續的排序數字, 意味著不會產生斷層
+- 範例: 對每個客人所租賃的次數, 使用三種排序函式產生排序數字
+- ```sql
+  SELECT customer_id, count(*) num_rentals,
+    row_number() over (order by count(*) desc) row_numbers_rank,
+    rank() over (order by count(*) desc) rank_rnk,
+    dense_rank() over (order by count(*) desc) dense_rank_rnk
+  FROM rental
+  GROUP BY customer_id
+  ORDER BY num_rentals desc;
+  ```
+
 產生多種排名
 
+- PostgreSQL 範例: 對每個月的租賃次數進行排序取出每個月前 5 名的客人
+  - 此時要對排序的 window function 進行 partition 成每個月
+  - 如果要對經過 window function 運算後的結果集合進行篩選, 必須使用子查詢或者 CTE 的方式參照結果集合
+- ```sql
+  WITH month_rental_rank AS (
+    SELECT customer_id,
+      EXTRACT (MONTH FROM rental_date) rental_month,
+      count(*) num_rentals,
+      rank() over (
+        partition by EXTRACT (MONTH FROM rental_date)
+        order by count(*) desc
+      ) month_rnk
+    FROM rental
+    GROUP BY customer_id, rental_month
+    ORDER BY rental_month, num_rentals DESC
+  )
+  SELECT customer_id, to_char(to_timestamp(rental_month::text, 'MM'), 'Month') AS month, num_rentals, month_rnk AS ranking
+  FROM month_rental_rank
+  WHERE month_rnk <= 5
+  ORDER BY rental_month, num_rentals desc, ranking;
+  ```
+
 報表函式
+
+- 使用 window function + `partition by` 取代 aggregate function + `group by` 來計算
 
 Window Frames
 
