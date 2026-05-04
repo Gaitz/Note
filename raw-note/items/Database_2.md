@@ -3503,9 +3503,57 @@ information_schema
 
 報表函式
 
-- 使用 window function + `partition by` 取代 aggregate function + `group by` 來計算
+- 使用 aggregate function + window function + `partition by` 取代 aggregate function + `group by` 來計算
+- PostgreSQL 範例: 使用 OVER 取代 GROUP BY 來計算每月累積和總和
+- ```sql
+  SELECT TO_CHAR(payment_date, 'Month') payment_month,
+    amount,
+    SUM(amount) OVER (PARTITION BY EXTRACT (MONTH FROM payment_date)) monthly_total,
+    SUM(amount) OVER () grand_total
+  FROM payment
+  WHERE amount >= 10
+  ORDER BY payment_month;
+  ```
+- PostgreSQL 範例: 同時使用 GROUP BY 與 window funciton 來計算每月累積值對總額的百分比
+  - 使用 Month 作為 GROUP BY 的切分
+  - 因此 SUM(amount) 代表的是每月總和, SUM(SUM(amount)) OVER () 代表的是每月總和的總和即全部加總
+- ```sql
+  SELECT TO_CHAR(payment_date, 'Month') payment_month,
+    SUM(amount) month_total,
+    ROUND((SUM(amount) / SUM(SUM(amount)) OVER ()) * 100, 2) pct_of_total,
+    SUM(month_total) OVER () test
+  FROM payment
+  GROUP BY TO_CHAR(payment_date, 'Month');
+  ```
+- PostgreSQL 範例: 以 window function 計算比較, 找出 MAX 與 MIN 並且標注
+- ```sql
+  SELECT TO_CHAR(payment_date, 'Month') payment_month,
+    SUM(amount) month_total,
+    CASE SUM(amount)
+      WHEN MAX(SUM(amount)) over () THEN 'Highest'
+      WHEN MIN(SUM(amount)) over () THEN 'Lowest'
+      ELSE 'Middle'
+    END descriptor
+  FROM payment
+  GROUP BY TO_CHAR(payment_date, 'Month');
+  ```
 
 Window Frames
+
+- 產生 window 的方式
+  - `PARTITION BY` 照共同值來進行分組
+- 如果此時不是以共同值來進行分組, 而是更複雜的分組方式
+  - 例如: 產生累進小計的分組
+- PostgreSQL 範例: 產生累進小計的 frame 分組
+  - `ROWS UNBOUNDED PRECEDING` 此時的 window frame 代表的是從結果集合的起頭開始, 直到當前的這一筆資料為止
+- ```sql
+  SELECT TO_CHAR(payment_date, 'YYYY-WW') payment_yearweek,
+    SUM(amount) week_total,
+    SUM(SUM(amount)) OVER (ORDER BY TO_CHAR(payment_date, 'YYYY-WW')) rolling_sum
+  FROM payment
+  GROUP BY TO_CHAR(payment_date, 'YYYY-WW')
+  ORDER BY 1;
+  ```
 
 Lag 和 Lead
 
