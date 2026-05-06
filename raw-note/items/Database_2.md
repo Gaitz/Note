@@ -760,7 +760,7 @@ Sakila 資料庫
 ---
 
 - `WHERE` 子句, 針對 rows 進行篩選
-- `filter conditions
+- `FILTER` conditions
 - `HAVING` 子句, 針對 groupoing 進行篩選
 
 條件評估
@@ -3408,9 +3408,9 @@ information_schema
 資料窗口 (windows), _補_, window function + aggregate function
 
 - PostgreSQL 範例: 計算出一年中以月為單位最高累積銷售額和以季為單位最高的每月累積銷售額
-  - 使用到 window function 來配合 aggregate function 來進行分類運算
-  - `OVER ()` 關鍵字使用 window function 配合 `PARTITION BY` 分割結果集合
-  - _補_, 讓 aggregate function 指運作在指定的 window 上 (分割)
+  - 以 aggregate function 加上 window frame (`OVER`) 變成 window function 來進行分類運算
+  - 以 `OVER ()` 關鍵字使用 window function, 其中使用 `PARTITION BY` 分割結果集合
+  - _補_, 讓 aggregate function 只運作在指定的 window 上 (分割)
 - ```sql
   SELECT EXTRACT(QUARTER FROM payment_date) AS quarter,
     TO_CHAR(payment_date, 'Month') month_nm,
@@ -3421,13 +3421,21 @@ information_schema
   WHERE EXTRACT(YEAR FROM payment_date) = 2005
   GROUP BY TO_CHAR(payment_date, 'Month'), EXTRACT(QUARTER FROM payment_date);
   ```
-- _補_, PostgreSQL 參考文件: Chapter 3. Advanced Features, 3.5. Window Functions
+- _補_, PostgreSQL 參考文件:
+  - Chapter 3. Advanced Features, 3.5. Window Functions
+  - Chapter 9. Functions and Operators, 9.22. Window Functions
+- _補_, PostgreSQL
+  - window function 用來計算跨越 rows 形成的集合, 必須使用 `OVER` 關鍵字來呼叫
+  - aggregate function 也可以配合 `OVER` 關鍵字一同使用變成 window function
+  - 比起 aggregate function 已經使用 GROUP BY 進行分類; window function 則允許客製化分類的方式
+  - 並且 window function 可以運作允許跨越當前的 row
 
 局部排序, `RANK()`, `ROW_NUMBER()`, `DENSE_RANK()`
 
 - PostgreSQL 範例: 依據月份對每月累積銷售額進行排序並且添加順序值
   - 通過 window function 達成添加局部排序的順序值
   - window function `rank()` 中的 `ORDER BY` 是用來指定排序的方式
+  - 在 `OVER` 中使用 `ORDER BY` 會形成的 window frame 是從最開始的 row 到當前的 row 包含與當前 row 相等值的 rows
 - ```sql
   SELECT EXTRACT(QUARTER FROM payment_date) AS quarter,
     to_char(payment_date, 'Month') month_nm,
@@ -3439,7 +3447,7 @@ information_schema
   ORDER BY monthly_sales;
   ```
 - _補_, PostgreSQL 參考文件: Chapter 9. Functions and Operators, 9.22. Window Functions
-  - 包含可以搭配使用的 window function
+  - 包含所有可用的 window function 列表
 - _補_,
   - 比較 `row_number()`, `rank()`, `dense_rank()` 的差別
   - 主要差異在於應對數值相同時的行為
@@ -3520,8 +3528,7 @@ information_schema
 - ```sql
   SELECT TO_CHAR(payment_date, 'Month') payment_month,
     SUM(amount) month_total,
-    ROUND((SUM(amount) / SUM(SUM(amount)) OVER ()) * 100, 2) pct_of_total,
-    SUM(month_total) OVER () test
+    ROUND((SUM(amount) / SUM(SUM(amount)) OVER ()) * 100, 2) pct_of_total
   FROM payment
   GROUP BY TO_CHAR(payment_date, 'Month');
   ```
@@ -3540,24 +3547,112 @@ information_schema
 
 Window Frames
 
-- 產生 window 的方式
+- 產生 window frame 的方式
   - `PARTITION BY` 照共同值來進行分組
 - 如果此時不是以共同值來進行分組, 而是更複雜的分組方式
   - 例如: 產生累進小計的分組
 - PostgreSQL 範例: 產生累進小計的 frame 分組
   - `ROWS UNBOUNDED PRECEDING` 此時的 window frame 代表的是從結果集合的起頭開始, 直到當前的這一筆資料為止
+  - _補_, `ROWS` 代表作用於 ROW
+  - _補_, 並且 frame_start 為 `UNBOUNDED PRECEDING` 代表從起頭開始
+  - _補_, frame_end 沒有明確表明時, 預設是 `CURRENT ROW`
 - ```sql
-  SELECT TO_CHAR(payment_date, 'YYYY-WW') payment_yearweek,
+  SELECT TO_CHAR(payment_date, 'IYYYIW') payment_yearweek,
     SUM(amount) week_total,
-    SUM(SUM(amount)) OVER (ORDER BY TO_CHAR(payment_date, 'YYYY-WW')) rolling_sum
+    SUM(SUM(amount))
+      OVER (
+        ORDER BY TO_CHAR(payment_date, 'IYYYIW')
+        ROWS UNBOUNDED PRECEDING
+      ) rolling_sum
   FROM payment
-  GROUP BY TO_CHAR(payment_date, 'YYYY-WW')
+  GROUP BY TO_CHAR(payment_date, 'IYYYIW')
+  ORDER BY 1;
+  ```
+- _補_, PostgreSQL
+  - 對 window frame 進行更細緻的處理, 在 `OVER` 中使用 `RANGE`, `ROWS`, `GROUPS`
+  - 參考語法文件: Chapter 4. SQL Syntax, 4.2.8. Window Function Calls
+- PostgreSQL 範例: 使用 window frame 來計算當前週 + 前後兩週的平均值
+  - `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING`
+  - 代表作用在 `ROWS` 並且 frame_start 是 `1 PRECEDING` 和 frame_end 是 `1 FOLLOWING`
+  - 要注意的是這個案例中, 第一項與最後一項會是只有兩週的平均值, 因為他們分別沒有前一項跟後一項
+- ```sql
+  SELECT TO_CHAR(payment_date, 'IYYY-IW') payment_yearweek,
+    SUM(amount) week_total,
+    ROUND(AVG(SUM(amount)) OVER (
+      ORDER BY TO_CHAR(payment_date, 'IYYY-IW')
+      ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+    ), 2) rolling_3wk_avg
+  FROM payment
+  GROUP BY TO_CHAR(payment_date, 'IYYY-IW')
+  ORDER BY 1;
+  ```
+- PostgreSQL 範例: window frame 的間隔, 使用間隔時間來決定, 計算七天平均值
+- ```sql
+  SELECT payment_date::DATE,
+    SUM(amount),
+    AVG(SUM(amount)) OVER (
+      ORDER BY payment_date::DATE
+      RANGE BETWEEN INTERVAL '3 days' PRECEDING
+        AND INTERVAL '3 days' FOLLOWING
+    ) seven_days_avg
+  FROM payment
+  WHERE payment_date BETWEEN '2005-07-01' AND '2005-09-01'
+  GROUP BY payment_date::DATE
   ORDER BY 1;
   ```
 
 Lag 和 Lead
 
+- 在同一個結果集合中, 比較其他 ROW 的值
+- PostgreSQL 範例: 從結果集合中取出前一項和後一項的值
+  - 使用 `LAG` window function 取得當前 ROW 之前的值
+  - 使用 `LEAD` window function 取得當前 ROW 之後的值
+- ```sql
+  SELECT TO_CHAR(payment_date, 'IYYYIW') payment_week,
+    SUM(amount) week_total,
+    LAG(SUM(amount), 1) OVER w AS prev_wk_tot,
+    LEAD(SUM(amount), 1) OVER w AS next_wk_tot
+  FROM payment
+  GROUP BY payment_week
+  WINDOW w AS (ORDER BY TO_CHAR(payment_date, 'IYYYIW'))
+  ORDER BY 1;
+  ```
+- PostgreSQL 範例: 計算與前一週的差異值百分比
+- ```sql
+  SELECT TO_CHAR(payment_date, 'IYYYIW') payment_week,
+    SUM(amount) week_total,
+    ROUND(
+      (SUM(amount) - LAG(SUM(amount), 1) OVER w)
+      / (LAG(SUM(amount), 1) OVER w) * 100,
+      1
+    ) pct_diff
+  FROM payment
+  GROUP BY payment_week
+  WINDOW w AS (ORDER BY TO_CHAR(payment_date, 'IYYYIW'))
+  ORDER BY payment_week;
+  ```
+
 串接欄位值
+
+- 整理與調整資料
+  - 可以用於去正規化 (denormalize) 和藉此生成其他的文件規格, 例如: JSON, XML
+- PostgreSQL 範例: 為每部只有三個演員的電影整理出一個欄位包含所有演員的姓氏, 並且以姓氏排序
+  - MySQL 使用的語法是 `group_concat()`
+  - SQL Server 使用的語法是 `string_agg`
+  - Oracle 使用的語法是 `listagg`
+  - _補_, PostgreSQL 也是 `string_agg`
+- ```sql
+  SELECT f.title,
+    string_agg(a.last_name, ', ' ORDER BY a.last_name) actors
+  FROM actor a
+    INNER JOIN film_actor fa
+    ON a.actor_id = fa.actor_id
+    INNER JOIN film f
+    ON fa.film_id = f.film_id
+  GROUP BY f.title
+  HAVING count(*) = 3;
+  ```
+- _補_, PostgreSQL 參考文件, Chapter 9. Functions and Operators, 9.21. Aggregate Functions
 
 ---
 
