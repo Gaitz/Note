@@ -3658,6 +3658,100 @@ Lag 和 Lead
 
 ### 第十七章 - 操作大型資料庫
 
+- 在過去硬碟容量是 MB 級, 而現在是 TB 與 PD 級別
+- 關聯式資料庫在資料量持續飆升時遇到各種挑戰
+- 通過 partitioning, clustering, sharding 三種技術讓關聯式資料庫的資料分散
+- 或者直接轉換到其他專門處理 big data 的資料庫系統上
+
+分割 (partitioning)
+
+- 當資料持續增加時, 會在這些處理中感覺到越來越困難和耗時
+  - 查詢執行時需要掃描整個資料表
+  - 建立和重建 Index
+  - 資料歸檔和刪除
+  - 產生資料表和 Index 的統計數字
+  - 資料表移位
+  - 備份資料庫
+- 最好趁資料表剛建立的時候, 就將大型資料表進行拆分, 即 partition (分割區)
+- 因此可以進行分個別處理, 甚至同步處理
+- _補_, PostgreSQL 文件: Chapter 5. Data Definition, 5.12. Table Partitioning
+  - 經驗法則, 當資料的量開始大於伺服器所擁有的 memory size 時, 就應該進行 partitioning
+  - 猜測因為當資料的量大於記憶體容量時, 開始會需要 I/O operation 而這個是十分緩慢的操作
+
+分割的概念
+
+- Partitioning 的概念始於 1990 的 Oracle, 而後被移植到所有主流的資料庫系統上
+- 一但資料表進行分割, 代表會出現兩個以上的資料表分區**擁有相同的定義**, 不過其中的**資料集合互相不重複**
+  - 例如: 以銷售資料為例, 可以以月份進行分割, 或者以地理區域進行分割, ...
+- 一但資料表被分割過後, 這個資料表本身就變成虛擬概念, 有點類似於 VIEW
+  - 資料表實體與 Index 是建立在個別 paritition 上
+- 此時可以對分割區進行個別的管理
+  - 個別分割區必定儲存在不同的 tablespace 上
+  - 不同的分割區可以使用不同的壓縮
+  - 不同的分割區可以使用不同的 Index 策略
+  - 不同的分割區可能有些統計資料是不變的, 而其他需要定時更新
+  - 有些個別的分割區可以持續存在記憶體中 (pinned), 或者存在快取中 (flash storage tier)
+- 資料表分割後, 可以增加資料儲存與管理的彈性, 對使用者來說則是維持統一的介面
+
+資料表的分割
+
+- 水平分割 (horizontal partitioning)
+  - 即整個 row 會在同一個資料表裡, 只是把不同的 row 分散到不同的 table 中
+- 垂直分割 (vertically partitioning)
+  - 即一部分的 column 會被分散到其他的 partition 裡
+- 水平分割時, 需要決定一個分割鍵 (partition key), 即依據哪一個欄位進行分割
+  - 分割函式 (partitioning function) 會套用在這個 partition key 上, 來決定每筆 row 應該被屬哪一個分割區中
+
+索引的分割
+
+- 如果進行分割的資料表中擁有 Index
+- 全域索引, global index
+  - 跨分割區讓索引保持不變
+  - 全域索引對於與 partition key 無關的欄位的查詢時, 十分有用
+  - 因為此時的查詢, 必須進行遍歷所有的分割區, 如果此時有 global index 存在就可以被使用
+- 局部索引, local index
+  - 每個分割區有獨立的索引
+
+分割的手法
+
+- 各家資料庫系統有自家獨特的分割功能, 但是以下提供最常見的分割手法
+- _補_,
+  - PostgreSQL 內建的 partitioning 方式
+  - Range partitioining
+  - List partitioning
+  - Hash partitioning
+
+範圍分割法 (range partitioning)
+
+- 第一種實作出來並且最廣泛使用的分割方式
+- range partitioning 適用於多種不同的資料型別, 但是最常見的是日期範圍
+- PostgreSQL 範例: 以 sale_date 為 sales table 進行 range partitioning
+- ```sql
+
+  ```
+
+清單分割法
+
+雜湊分割法
+
+複合式分割法
+
+分割的好處
+
+叢集 (clustering)
+
+切片 (sharding)
+
+大數據
+
+Hadoop
+
+NoSQL 與文件型資料庫
+
+雲端運算
+
+結論
+
 ---
 
 ### 第十八章 - SQL 與大數據
