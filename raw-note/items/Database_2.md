@@ -3677,11 +3677,13 @@ Lag 和 Lead
 - _補_, PostgreSQL 文件: Chapter 5. Data Definition, 5.12. Table Partitioning
   - 經驗法則, 當資料的量開始大於伺服器所擁有的 memory size 時, 就應該進行 partitioning
   - 猜測因為當資料的量大於記憶體容量時, 開始會需要 I/O operation 而這個是十分緩慢的操作
+- _補_, Partitioning 是允許 sub-partitioning 的
+  - 換句話說, 一個 table 被 partitioining 後成為的 partition table 可以再次進行 partitioning
 
 分割的概念
 
 - Partitioning 的概念始於 1990 的 Oracle, 而後被移植到所有主流的資料庫系統上
-- 一但資料表進行分割, 代表會出現兩個以上的資料表分區**擁有相同的定義**, 不過其中的**資料集合互相不重複**
+- 一但資料表進行分割, 代表會出現兩個以上的資料表分區**擁有相同的定義**, 不過其中的**資料集合必須互相不重複**
   - 例如: 以銷售資料為例, 可以以月份進行分割, 或者以地理區域進行分割, ...
 - 一但資料表被分割過後, 這個資料表本身就變成虛擬概念, 有點類似於 VIEW
   - 資料表實體與 Index 是建立在個別 paritition 上
@@ -3725,8 +3727,58 @@ Lag 和 Lead
 
 - 第一種實作出來並且最廣泛使用的分割方式
 - range partitioning 適用於多種不同的資料型別, 但是最常見的是日期範圍
-- PostgreSQL 範例: 以 sale_date 為 sales table 進行 range partitioning
+- _補_, MySQL 語法與 PostgreSQL 不同, 需要參照各自的文件
+- PostgreSQL 範例: 以 sale_date 為 sales table 以月進行 range partitioning
+  - 建立 TABLE 時就表明是 `PARTITION BY` 的父層架構
+  - 建立 partition TABLE 表明是 `PARTITION OF` 屬於哪一個父層 TABLE 的 partition table
+  - 建立以 partition key 欄位為依據的 INDEX, 雖然非必須, 但是多數情境下是十分有效的
+- _補_, 參考文件:
+  - 1 SQL Commands, CREATE TABLE
+  - 2 Chapter 5. Data Definition, 5.12. Table Partitioning
 - ```sql
+  CREATE TABLE sales (
+    sale_id SERIAL NOT NULL,
+    cust_id INTEGER NOT NULL,
+    store_id INTEGER NOT NULL,
+    sale_date DATE NOT NULL,
+    amount NUMERIC (9, 2)
+  ) PARTITION BY RANGE (sale_date);
+
+  CREATE INDEX ON sales (sale_date);
+
+  CREATE TABLE sales_s1 PARTITION OF sales FOR VALUES FROM (MINVALUE) TO ('2020-02-01');
+  CREATE TABLE sales_s2 PARTITION OF sales FOR VALUES FROM ('2020-02-01') TO ('2020-03-01');
+  CREATE TABLE sales_s3 PARTITION OF sales FOR VALUES FROM ('2020-03-01') TO ('2020-04-01');
+  CREATE TABLE sales_s4 PARTITION OF sales FOR VALUES FROM ('2020-04-01') TO ('2020-05-01');
+  CREATE TABLE sales_s5 PARTITION OF sales FOR VALUES FROM ('2020-05-01') TO ('2020-06-01');
+  CREATE TABLE sales_s999 PARTITION OF sales FOR VALUES FROM ('2020-06-01') TO (MAXVALUE);
+  ```
+
+- MySQL 範例: 查詢 table 的 partition 狀態 (metadata)
+  - _補_, `information_schema.partitions` 屬於 MySQL 專有的 table
+- ```sql
+  SELECT partition_name, partition_method, partition_expression
+  FROM information_schema.partitions
+  WHERE table_name = 'sales'
+  ORDER BY partition_ordinal_position;
+  ```
+- PostgreSQL 範例: 查詢 table 的 partitions 狀態 (metadata)
+  - 使用 `pg_partitioned_table`, `pg_inherits` table 查詢相關的 metadata
+  - 或者在互動介面使用 `\d+` 查詢 TABLE
+- MySQL 範例: 修改分割區進行擴充
+  - MySQL 中以 `ALTER TABLE` 與 `REORGANIZE PARTITION` 來修改現有的 PARTITION 並進行擴充
+  - _補_, PostgreSQL 中並沒有 `REORGANIZE PARTITION` 語法可以直接進行修改
+- ```sql
+  ALTER TABLE sales REORGANIZE PARTITION s999 INTO (
+    PARTITION s6 VALUES LESS THAN (202007),
+    PARTITION s7 VALUES LESS THAN (202008),
+    PARTITION s999 VALUES LESS THAN (MAXVALUE)
+  );
+  ```
+- PostgreSQL 範例: 修改分割區進行擴充
+  - 需要手動的對 parent table 與 partition table 進行操作
+- ```sql
+  <!-- ALTER TABLE sales DETACH PARTITION s999; -->
 
   ```
 
