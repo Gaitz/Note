@@ -3777,14 +3777,145 @@ Lag 和 Lead
   ```
 - PostgreSQL 範例: 修改分割區進行擴充
   - 需要手動的對 parent table 與 partition table 進行操作
+  - 包含 DETACH PARTITION, 建立新的 PARTITION, 把舊的資料傳進新的 PARTITION, 移除不再使用的 TABLE
 - ```sql
-  <!-- ALTER TABLE sales DETACH PARTITION s999; -->
+  /* DETACH the partition table */
+  ALTER TABLE sales DETACH PARTITION sales_s999;
 
+  /* rename old partition TABLE */
+  ALTER TABLE sales_s999 RENAME TO sales_s999_old;
+
+  /* CREATE new partition tables */
+  CREATE TABLE sales_s6 PARTITION OF sales FOR VALUES FROM ('2020-06-01') TO ('2020-07-01');
+  CREATE TABLE sales_s7 PARTITION OF sales FOR VALUES FROM ('2020-07-01') TO ('2020-08-01');
+  CREATE TABLE sales_s999 PARTITION OF sales FOR VALUES FROM ('2020-08-01') TO (MAXVALUE);
+
+  /* INSERT old values INTO */
+  INSERT INTO sales SELECT * FROM sales_s999_old;
+
+  /* DROP unused TABLE */
+  DROP TABLE sales_s999_old;
   ```
 
-清單分割法
+- MySQL 範例: 列出個別 partition 所擁有的資料數量
+  - `FROM ... PARTITION()` 語法, 屬於 MySQL 專有
+- ```sql
+  SELECT concat('# of rows in S1 = ', count(*)) partition_rowcount
+  FROM sales PARTITION (s1) UNION ALL
+  SELECT concat('# of rows in S2 = ', count(*)) partition_rowcount
+  FROM sales PARTITION (s2);
+  ```
 
-雜湊分割法
+- PostgreSQL 範例: 列出個別 partition 所擁有的資料數量
+  - 屬於較為資料庫管理需求的指令, 而非一般使用者會進行的操作
+  - PostgreSQL 中 PARTITION TABLE 就等於一般的 TABLE 一樣可以直接操作
+  - PostgreSQL 中也有專屬的系統管理函式可以協助列出所有的 partition table, `pg_partition_tree()`
+  - 與 `pg_class` table 進行 JOIN 取得 table metadata
+- ```sql
+  /* ANALYZE update the metadata of sales TABLE */
+  ANALYZE sales;
+
+  SELECT p.relid partition_name,
+    c.reltuples partition_rowcount
+  FROM pg_partition_tree('sales') p
+    INNER JOIN pg_class c
+    ON p.relid = c.oid::regclass
+  WHERE p.isleaf IS TRUE;
+  ```
+
+清單分割法 (list partitioning)
+
+- 如果資料是具有可枚舉性 (enumerated) 的時候, 就可以考慮使用 list partitioning
+  - 例如: 美國州代號 (CA, TX, VA, ...), 或類似貨幣簡寫 (USD, EUR, JPY, ...)
+- PostgreSQL 範例: 把 sales TABLE 中的資料依照地理區域分組
+  - 假設 sales TABLE 中具有 geo_region_cd 欄位可以用來進行 list partitioning
+  - 假設 geo_region_cd 欄位的資料為, US_NE, US_SE, CAN, MEX, EUR_E, ...
+- ```sql
+  CREATE TABLE sales (
+    sale_id SERIAL NOT NULL,
+    cust_id INTEGER NOT NULL,
+    store_id INTEGER NOT NULL,
+    sale_date DATE NOT NULL,
+    geo_region_cd VARCHAR(6) NOT NULL,
+    amount NUMERIC (9, 2)
+  ) PARTITION BY LIST (geo_region_cd);
+
+  CREATE INDEX ON sales (geo_region_cd);
+
+  CREATE TABLE sales_northamerica PARTITION OF sales FOR VALUES IN ('US_NE', 'US_SE', 'US_MW', 'NS_NW', 'US_SW', 'CAN', 'MEX');
+  CREATE TABLE sales_europe PARTITION OF sales FOR VALUES IN ('EUR_E', 'EUR_W');
+  CREATE TABLE sales_asia PARTITION OF sales FOR VALUES IN ('CHN', 'JPN', 'IND');
+  ```
+
+- PostgreSQL 範例: 增加的資料不符合 PARTITION 時, 會丟出錯誤訊息
+  - `ERROR:  no partition of relation "sales" found for row`
+  - `DETAIL:  Partition key of the failing row contains (geo_region_cd) = (KOR).`
+- ```sql
+  INSERT INTO sales (cust_id, store_id, sale_date, geo_region_cd, amount)
+  VALUES (6, 27, '2020-03-11', 'KOR', 4267.12);
+  ```
+- MySQL 範例: 修改 PARTITION LIST 中的值
+  - `REORGANIZE PARTITION` 屬於 MySQL 專屬語法
+- ```sql
+  ALTER TABLE sales REORGANIZE PARTITION ASIA INTO
+  (PARTITION ASIA VALUES IN ('CHN', 'JPN', 'IND', 'KOR'));
+  ```
+- PostgreSQL 範例: 修改 PARTITION LIST 中的值
+  - 並沒有像是 MySQL 中的 `REORGANIZE PARTITION` 語法直接擴充定義
+  - 而是需要手動的重建 PARTITION
+- ```sql
+  /* DETACH PARITION */
+  ALTER TABLE sales DETACH PARTITION sales_asia;
+
+  /* RENAME old partition table */
+  ALTER TABLE sales_asia RENAME TO sales_asia_old;
+
+  /* CREATE the same name new partition with extends values */
+  CREATE TABLE sales_asia PARTITION OF sales FOR VALUES IN ('CHN', 'JPN', 'IND', 'KOR');
+
+  /* INSERT old values INTO table */
+  INSERT INTO sales SELECT * FROM sales_asia_old;
+
+  /* DROP old partition table */
+  DROP TABLE sales_asia_old;
+  ```
+
+- MySQL 範例: 通過 `information_schema.partitions` 查看 partition 定義的 metadata
+  - `information_schema.partitions` 這個 metadata table 屬於 MySQL 專有
+- ```sql
+  SELECT partition_name, partition_expression, partition_description
+  FROM information_schema.partitions
+  WHERE table_name = 'sales'
+  ORDER BY partition_ordinal_position;
+  ```
+- PostgreSQL 範例: 取得 TABLE 的 PARTITION 定義
+  - 最簡單的方式是在 `psql` 中使用 `\d+` 來查詢
+  - 不然就是需要通過 `pg_inherits`, `pg_class` 偏向系統管理的專用 table 來查詢
+  - 參考文件: Chapter 52. System Catalogs, 52.11. pg_class
+  - 參考文件: 9.27. System Information Functions and Operators
+- ```sql
+  /* ANALYZE update the metadata of sales TABLE */
+  ANALYZE sales;
+
+  SELECT p.relid partition_name,
+    c.reltuples partition_rowcount,
+    pg_get_expr(c.relpartbound, c.oid) partition_description
+  FROM pg_partition_tree('sales') p
+    INNER JOIN pg_class c
+    ON p.relid = c.oid::regclass
+  WHERE p.isleaf IS TRUE;
+  ```
+
+- _補_, 可以為 LIST PARTITION 添加一個 DEFAULT PARTITION
+
+雜湊分割法 (hash partitioning)
+
+- 如果選做 partition key 的欄位, 不適用 range partitioning 或 list partitioning
+- 還有一個內建的第三種方法, 可以通過 hashing function 來把資料值分割成不同的 partitition
+  - 即雜湊分割法 (hash partitioning)
+- 與 list partitioning 主要的差異在於 list partition 的可能值, 是可枚舉且有限的
+  - 而雜受分割法適合用於大量不同的值
+- PostgreSQL 範例: 以 cust_id 欄位作為 partition key 用於 hash partitioning
 
 複合式分割法
 
