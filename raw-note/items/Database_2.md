@@ -3916,8 +3916,36 @@ Lag 和 Lead
 - 與 list partitioning 主要的差異在於 list partition 的可能值, 是可枚舉且有限的
   - 而雜受分割法適合用於大量不同的值
 - PostgreSQL 範例: 以 cust_id 欄位作為 partition key 用於 hash partitioning
+  - _補_, 從結果來觀察 hash partitioning 的 hash function 並不是單純的以 `%` 來進行的
+- ```sql
+  CREATE TABLE sales (
+    sale_id SERIAL NOT NULL,
+    cust_id INTEGER NOT NULL,
+    store_id INTEGER NOT NULL,
+    sale_date DATE NOT NULL,
+    amount NUMERIC(9, 2)
+  ) PARTITION BY HASH (cust_id);
 
-複合式分割法
+  CREATE TABLE sales_0 PARTITION OF sales FOR VALUES WITH (MODULUS 4, REMAINDER 0);
+  CREATE TABLE sales_1 PARTITION OF sales FOR VALUES WITH (MODULUS 4, REMAINDER 1);
+  CREATE TABLE sales_2 PARTITION OF sales FOR VALUES WITH (MODULUS 4, REMAINDER 2);
+  CREATE TABLE sales_3 PARTITION OF sales FOR VALUES WITH (MODULUS 4, REMAINDER 3);
+  ```
+
+複合式分割法 (composite partitioning)
+
+- 複合式分割法, 代表使用子分割區 (subpartition) 與此同時子分割區可以使用與上層分割區不同的分割方式
+- PostgreSQL 範例: 對 sales table 同時使用範圍分割與雜湊分割
+  - _補_, PostgreSQL 建立 PARTITION 的語法都與 MySQL 不同, 建立 PARTITION 時最好參照各家資料庫系統文件
+- ```sql
+  CREATE TABLE sales (
+    sale_id SERIAL NOT NULL,
+    cust_id INTEGER NOT NULL,
+    store_id INTEGER NOT NULL,
+    sale_date DATE NOT NULL,
+    amount NUMERIC(9, 2)
+  ) PARTITION BY RANGE (EXTRACT(sale_date));
+  ```
 
 分割的好處
 
