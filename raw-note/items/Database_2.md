@@ -4042,21 +4042,115 @@ Lag 和 Lead
 
 叢集 (clustering)
 
+- 讓數台伺服器如同單一資料庫一般的運作
+- 叢集架構有許多種變化, 擁有不同的能力與應對的方式
+- 商用資料庫廠商: Oracle 是其中的佼佼者
+- 超大型的企業需求 (Google, Facebook, Amazon, ...), 則需要另尋出路
+
 切片 (sharding)
 
-大數據
+- 當需求不斷變大的時候, 單一資料庫伺服器難以承受時
+- 不僅僅是個別的資料表需要分割, 連整個資料庫都需要進行分割 (sharding)
+  - 類似於資料表的分割, 但是規模更大也更複雜
+- 將資料分割 (sharding) 之後配置給數個資料庫 (切片, shards)
+- Sharding 是一個相當複雜的題目, 本書沒有過多深入, 只列出一些重要的問題
+  - _補_, 屬於使用關聯式資料庫最終會走向的解決方案
+- 1 必須選出一個 sharding key, 決定要連結哪一個資料庫的值
+- 2 當大型資料庫被分成多個片段時, 個別的資料列會被分給單一的切片
+  - 而較小的參考用資料表可能會被**複製**到所有的切片中
+  - 因此需要制定如何修改參考用資料表以及如何把更動的內容傳到所有切片中
+- 3 當出現某些切片也變得過大時, 就必須再次進行分割, 添加新的切片, 並且把資料重新分配
+- 4 當需要更動架構時, 必須有一套異動部署到各個分片的機制, 才能維持資料庫架構在各個分片上保持一致
+- 5 當應用程式邏輯需要進行跨分片的查詢, 甚至是進行交易 (transaction) 時, 需要如何進行的策略
+
+大數據 (big data)
+
+- 有別於關聯式資料庫的解決方案
+- 主要由大型公司 (Amazon, Google, Facebook, Twitter, ...) 提出的解決方案
+- 三個 V
+  - Volume 數量, 達到十億甚至數萬億級別
+  - Velocity 速度, 資料累積的速度
+  - Variety 變化, 資料並非常見的結構化資料, 而可能是非結構化的, 例如: 電子郵件, 影片, 相片, 聲音檔案, ...
+- 以下列出這幾年來發展出來的大數據處理技術
 
 Hadoop
 
+- 一套完整的 ecosystem, 主要成員有
+- Hadoop 分散式檔案系統 (Hadoop Distributed File System, HDFS)
+  - 進行跨大量伺服器的檔案系統管理
+- MapReduce
+  - 將運算工作打散至不同的伺服器同時運算的解決方案
+- YARN
+  - 對 HDFS 進行資源管理與作業排程的工具
+- 與此相關的 SQL 介面, Hive, Impala, Drill, ...
+
 NoSQL 與文件型資料庫
+
+- 在關聯式資料庫中, 資料必須符合事先定義的架構
+- 為了因應無法事前得知資料結構, 或者是資料架構會經常更動
+- 把架構定義與資料本身變成一種檔案, 即 XML 或 JSON 這類的檔案格式
+- 讓資料庫直接儲存檔案文件
+  - 優點是可以輕易容納和變更各種不同的資料架構
+  - 缺點是查詢與分析工具的困難, 變得必須先剖析文件
+- NoSQL, 常以 key-value pair 的形式儲存資料
+- 例如: MongoDB, 可以以 customer ID 為 key 對應一份 JSON 資料為 value
 
 雲端運算
 
+- 在過去大多數企業都需要自行建置資料中心
+- 在雲端運算之後, 基本上可以把整個資料中心交給雲端平台託管, 像是 Amazon Web Servies (AWS), Mircosoft Azure, Google Cloud, ...
+- 雲端平台的優點在於易於擴充, 可以迅速地上調或下調運算能力
+- 初創業者可以專注於程式碼的開發上, 而不必先花大錢建置伺服器等等硬體與軟體設備
+- 在 AWS 中關於資料庫相關的服務就有許多個
+- 關聯式資料庫 ( MySQL, Aurora, PostgreSQL, MariaDB, Oracle 和 SQL Server )
+- 記憶體型資料庫 ( ElasticCache )
+- 資料倉儲型資料庫 ( Redshift )
+- NoSQL 資料庫 ( DynamoDB )
+- 文件型資料庫 ( DocumentDB )
+- 圖形資料庫 ( Neptune )
+- 時序型資料庫 ( TimeStream )
+- Hadoop ( EMR )
+- 資料湖泊 ( Data lakes ) ( Lake Formation )
+- 現在更多的企業混合使用各種平台, 關聯式資料庫的受歡迎程度則有所增減
+
 結論
+
+- 資料庫越變越大, 與此同時, 儲存, 叢集, 分割等技術也越來越成熟
+- 無論是何種平台, 大量資料的操作都相當具有挑戰性
 
 ---
 
 ### 第十八章 - SQL 與大數據
+
+- 雖然說關聯式資料庫的逐漸被其他解決方案取代
+- 但是 SQL 仍然是許多人使用並且深入進程式碼中
+- 因此出現了一些解決方案來使用 SQL 去存取其他類型的資料庫
+  - 例如: Presto, Apache Drill, 和 Toad Data Point, ...
+- 本章節使用 Apache Drill 為例作為示範
+
+Apache Drill 簡介
+
+- 已經開發出大量的工具與介面, 例如以 SQL 存取 Hadoop, NoSQL, Spark, 等等雲端分散式檔案系統
+  - 例如 Hive 用來讓使用者存取 Hadoop
+  - Spark SQL 則是一套函式庫用來存取 Spark 中的資料
+- 開放原始碼的 Apache Drill 則是在 2015 年問世, 具有一些特色
+  - 可跨多種資料格式進行查詢, 包括 CSV, JSON, Parquet 和 log 檔案
+  - 可連結關聯式資料庫, Hadoop, NoSQL, HBase 和 Kafka, 以及特殊資料格式 (例如: PCAP, 區塊鏈, ...)
+  - 可以自訂外掛程式, 來連接任何其他資料來源
+  - 無需事先定義架構
+  - 支援 SQL:2003 標準
+  - 可搭配常見的 (Business Intelligence, BI) 工具, 例如: Tableau 和 Apache Superset
+- 可以透過 Drill 連接任意資料來源, 並且展開查詢, 無需設置 metadata repostiroy
+
+以 Drill 查詢檔案
+
+以 Drill 查詢 MySQL
+
+以 Drill 查詢 MongoDB
+
+具有多重資料來源的 Drill
+
+SQL 未來的展望
 
 ---
 
