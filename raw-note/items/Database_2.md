@@ -3944,10 +3944,101 @@ Lag 和 Lead
     store_id INTEGER NOT NULL,
     sale_date DATE NOT NULL,
     amount NUMERIC(9, 2)
-  ) PARTITION BY RANGE (EXTRACT(sale_date));
+  ) PARTITION BY RANGE ((EXTRACT(ISOYEAR FROM sale_date) * 100 + EXTRACT(WEEK FROM sale_date)));
+
+  CREATE TABLE sales_before_202002 PARTITION OF sales
+  FOR VALUES FROM (MINVALUE) TO (202002)
+  PARTITION BY HASH (cust_id);
+
+  CREATE TABLE sales_before_202002_h0 PARTITION OF sales_before_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 0);
+  CREATE TABLE sales_before_202002_h1 PARTITION OF sales_before_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 1);
+  CREATE TABLE sales_before_202002_h2 PARTITION OF sales_before_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 2);
+  CREATE TABLE sales_before_202002_h3 PARTITION OF sales_before_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 3);
+
+  CREATE TABLE sales_202002 PARTITION OF sales
+  FOR VALUES FROM (202002) TO (202003)
+  PARTITION BY HASH (cust_id);
+
+  CREATE TABLE sales_202002_h0 PARTITION OF sales_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 0);
+  CREATE TABLE sales_202002_h1 PARTITION OF sales_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 1);
+  CREATE TABLE sales_202002_h2 PARTITION OF sales_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 2);
+  CREATE TABLE sales_202002_h3 PARTITION OF sales_202002 FOR VALUES WITH (MODULUS 4, REMAINDER 3);
+
+  CREATE TABLE sales_202003 PARTITION OF sales
+  FOR VALUES FROM (202003) TO (202004)
+  PARTITION BY HASH (cust_id);
+
+  CREATE TABLE sales_202003_h0 PARTITION OF sales_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 0);
+  CREATE TABLE sales_202003_h1 PARTITION OF sales_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 1);
+  CREATE TABLE sales_202003_h2 PARTITION OF sales_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 2);
+  CREATE TABLE sales_202003_h3 PARTITION OF sales_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 3);
+
+  CREATE TABLE sales_after_202003 PARTITION OF sales
+  FOR VALUES FROM (202004) TO (MAXVALUE)
+  PARTITION BY HASH (cust_id);
+
+  CREATE TABLE sales_after_202003_h0 PARTITION OF sales_after_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 0);
+  CREATE TABLE sales_after_202003_h1 PARTITION OF sales_after_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 1);
+  CREATE TABLE sales_after_202003_h2 PARTITION OF sales_after_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 2);
+  CREATE TABLE sales_after_202003_h3 PARTITION OF sales_after_202003 FOR VALUES WITH (MODULUS 4, REMAINDER 3);
+
+  INSERT INTO sales (cust_id, store_id, sale_date, amount) VALUES
+  (1, 1, '2020-01-18', 1.1),
+  (17, 5, '2020-01-19', 1.3),
+  (56, 1, '2020-01-20', 1.6),
+  (122, 4, '2020-01-21', 1.8),
+  (179, 5, '2020-01-22', 2.0),
+  (263, 1, '2020-01-23', 2.2),
+  (346, 2, '2020-01-24', 2.4),
+  (472, 1, '2020-01-25', 2.6),
+  (3, 4, '2020-02-07', 1.2),
+  (23, 2, '2020-02-08', 1.4),
+  (77, 5, '2020-02-09', 1.7),
+  (153, 1, '2020-02-10', 1.9),
+  (244, 2, '2020-02-11', 2.1),
+  (312, 4, '2020-02-12', 2.3),
+  (389, 3, '2020-02-13', 2.5),
+  (502, 1, '2020-02-14', 2.7);
   ```
 
 分割的好處
+
+- 最主要的好處是在設計得當的時候, 可以只與少數分割區互動, 而不需要涉及整個資料表
+  - 減少所互動的資料量, 以提升效能
+- 當所運行的 SQL 敘述中有涉及到與分割區相同的過濾條件時,
+  - 資料庫系統就會進行分區修剪 (partition pruning), 這是使用分割最大的好處
+- 當運行的資料在 JOIN 時, 涉及到分割區的過濾條件時
+  - 資料庫系統會進行分割式結合 (partitionwise joins)
+- 從管理資料庫的角度來看, 分割區的另一個好處是可以迅速地刪除不需要的資料
+  - 直接以分割區為單位, 進行備份和刪除
+- 凡事分割過的資料表需要更新時, 可以同時對多個分割區進行, 以大幅減少運行時間
+  - _補_, 需要參考文件來判斷, 運行的 SQL 語法是什麼, 以及是否需要 lock 以及何種 lock
+  - _補_, PostgreSQL 中有分成 `ACCESS EXCLUSIVE` lock 會鎖定 parent table 和 `SHARE UPDATE EXCLUSIVE` lock 對 parent talbe 限制較少, 不同層級的 lock
+  - _補_, 在適當的時機應該使用 lock 層級較小的操作, 例如 `DETACH CONCURRENTLY` 取代直接 `DROP` TABLE 或單純的 `DETACH` (因為 lock 而昂貴的操作), 等到適當的時機才進行昂貴的操作
+- _補_, PostgreSQL
+  - 通過 `SHOW enable_partition_pruning;` 查看 partition pruning 功能是否開啟, 預設是開啟的
+  - 使用 `EXPLAIN` 可以查看 SQL 敘述的執行計劃, 並且看到預計參與的 table, 由此判斷是否有進行 partition pruning
+  - Partition pruning 不只作用於 planning 時期, 也運作於 execution 時期
+- _補_, PostgreSQL 官方文件裡的 Best Practices for Declarative Partitioning
+  - 使用 Partitioning 的時候必須審慎思考, 否則可能對效能造成負面效果
+  - 思考 1 要對哪個或哪些 columns 作為 partition key, 判斷方式為平時**最常用於 WHERE 敘述中的欄位**
+    - 另一個考量點是資料管理層面, 哪些資料可能會需要大規模的刪除以及如何切分, Partition 可以很有效率的進行 DETACH 與 DROP
+  - 思考 2 要切分成幾份 partition,
+    - 如果數量太少, 則單一個 partition 資料仍然太多造成 Index 效能變差和 cache hit ratios 變差
+    - 如果數量太多, 則造成 planning 的時間過長和在 planning 與 execution 時額外的記憶體使用過多
+    - 要思考的是資料在未來會如何成長, 來決定分割的 partition key, partition 方式
+    - sub-partitioning 也是在未來切割變大的 partition 時可以使用的方法之一, 但是必須克制, 否則 partition 的數量會大規模上升
+  - 思考 3 考量到 Partitioning 對 planning 與 executiong 時的額外消耗
+    - 大量的 partition 會造成效能變差, 以及大量的記憶體消耗, 尤其是當有多個 sessions 同時觸碰到多個 partitions 時
+    - 因為每個 partition 都有單獨一個自己的 metadata 要進行管理, 在運行時需要被載入記憶體中
+    - 並且因為 partition 產生大量的 lock 會造成嚴重的效能影響, (對於 index 的 lock, 對於 row 的 lock, ...)
+  - 思考 4 資料庫的使用情境, 如果是對於資料倉儲的使用情境而言, 可以稍微放寬對 partition 數量的要求
+    - 重要的是需要提早思考且做出正確的決定, 因為對大量的資料進行 re-partitioning 會是一個極度耗時的操作
+  - 思考 5 重要的是不能預設更多的 partition 就是更好的效能, 反之亦然
+- _補_, PostgreSQL
+  - `pg_locks` table
+  - lock `fastpath` 能快速運行的 lock 操作
+  - 小心 long transaction 操作, 應該盡可能的快速進行 commit 以減少 lock 的佔用導致影響到整個資料庫的反應時間
 
 叢集 (clustering)
 
