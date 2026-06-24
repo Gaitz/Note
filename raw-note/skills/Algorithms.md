@@ -4,6 +4,27 @@
 
 collection of algorithms that I learned
 
+- 紀錄該演算法的效果和實現概念, 不需要提供程式碼, 但是要能提供足夠的想法在任何時候能實作
+
+---
+
+Algorithm strategies and patterns
+
+---
+
+Divide and conquer
+
+- 會自然形成一種遞迴結構
+- 類似 mathematical induction
+- 分成三個步驟
+  - Divide, 把原問題分解成相同問題, 但是更小的範圍的子問題, 理想上是子問題剛好是原問題的一半大小 (最小化遞迴層數)
+  - Conquer, 遞迴的解決子問題 (recursive case), 直到子問題足夠簡單可以被解決 (base case)
+  - Combine, 利用子問題的解, 來產生原問題的解
+- Bottom up
+  - 先思考最小案例 (基礎情況), 在一步一步變複雜, 並且從中找到可以維持最佳解的結構
+- Top down
+  - 把主問題分成兩部分, 並且思考假設在已知兩個子問題的解答時, 如何產生主問題的最佳解
+
 ---
 
 Sorting
