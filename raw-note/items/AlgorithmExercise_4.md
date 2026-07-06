@@ -50,7 +50,9 @@ Week 1, Array, String, Hash Table, Recursion
 
 ---
 
-Array, 7 mins + 1 hour + 24 mins + 44 mins + 22 mins + 60 mins + 60 mins + 55 mins + 40 mins + 30 mins + 22 mins = 7 hours 4 mins
+Array,
+
+7 mins + 1 hour + 24 mins + 44 mins + 22 mins + 60 mins + 60 mins + 55 mins + 40 mins + 30 mins + 22 mins = 7 hours 4 mins
 
 常用技巧
 
@@ -126,6 +128,82 @@ Completed Practices
 ---
 
 String
+
+71 mins + 80 mins + 74 mins
+
+常用技巧
+
+- Array 能用的技巧通常也適用於 string
+- Counting characters
+  - 通常使用 hash map
+  - 紀錄字元所使用的 space complexity 取決於 input character set, 通常是 O(1), 因為字元集合是有限的且為常數
+- String of unique characters
+  - 操作在字元上具有唯一性的字串, 並且字元集合本身是常見的大小寫字母時
+  - 可以通過 bit-wise 操作, 使用等同於字母集合數量的 bitmask 來進行儲存
+  - 進行字串比較時, 可以通過 bit operator `&` 來進行
+- Anagram
+  - 同個字元內容但是經過 rearranging 的字串
+  - 判別是否為 anagram
+  - 方法 1, sorting, 需要花 T:O(n \* log n), S: O(n)
+  - 方法 2, 計算字元的出現頻率 (frequency), 需要花 T: O(n), S: O(n) or O(1) 取決於實作
+- Palindrome
+  - 從兩個方向順序讀取都是相同的字串
+  - 判別是否為 palindrome
+  - 方法 1, reverse
+  - 方法 2, two pointers, 分別從前後依序比對, 或者從中間點往外走依序比對
+- 字串的比對, 可以使用 regular expression, 對效能有幫助
+
+常見資料結構
+
+- Trie/Prefix Tree
+- Suffix Tree
+
+常見演算法
+
+- Rabin Karp, 用來搜尋 substring
+- KMP, 用來搜尋 substring
+
+基礎特性
+
+- 字串就是以字元組成的 array
+
+運算複雜度
+
+- 因為字串就是 array 因此時間複雜度等同於 array 操作
+- Access: O(1)
+- Search: O(n)
+- Insert: O(n)
+- Remove: O(n)
+- 與其他字串互動的複雜度, 假設原本字串長度為 n, 另一字串長度為 m
+- Find substring: O(n \* m), 一般做法, 依據字串的特性, 可以通過其他演算法進行優化到 O(n + m), 例如: KMP 演算法
+- 字串連接 (concatenating): O(n + m)
+- Slice: O(m)
+- Split (by token): O(n + m)
+
+優點
+
+缺點
+
+該詢問的問題
+
+- 字串的 input character set
+- 是否包含數字
+- case sensitively, 大小寫相關
+
+注意
+
+Corner cases
+
+- 空字串
+- 只有 1 ~ 2 個字元的字串
+- 連續重複字元的字串, repeated
+- 只含有不重複字元的字串, Strings with only distinct characters
+
+Completed Practices
+
+- [Valid Anagram](https://leetcode.com/problems/valid-anagram)
+- [Valid Palindrome](https://leetcode.com/problems/valid-palindrome)
+- [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters)
 
 ---
 
