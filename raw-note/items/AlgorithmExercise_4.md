@@ -129,7 +129,7 @@ Completed Practices
 
 String
 
-71 mins + 80 mins + 74 mins
+71 mins + 80 mins + 74 mins = 3 hours and 45 minutes
 
 常用技巧
 
@@ -208,6 +208,46 @@ Completed Practices
 ---
 
 Hash Table
+
+常用技巧
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+- 基於 array 的一種抽象化實作
+- 利用 hash function 轉換 key 成 array index
+- 來形成能以 O(1) 進行 get 的 key value pair
+- 常用於搜尋的 space-time tradeoff, 以 hash table 取代循序搜尋的其他資料結構, 搜尋從 O(n) 加速到平均 O(1)
+- 處理 hash collisions 的常見方法
+  - Separate chaining, 以 linked list 來處理
+  - Open addressing, 依據某種方式尋找一個空的位置來存放
+
+運算複雜度
+
+- Average case
+- Search: O(1)
+- Insert: O(1)
+- Remove: O(1)
+
+優點
+
+- 在平均的情況下, search, insert, delete 都是 O(1)
+- 通常程式語言都內建實作並且支援 key 可以是任何型別
+
+缺點
+
+- worst case 時, search, insert, delete 會變成 O(n)
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+Completed Practices
 
 ---
 
