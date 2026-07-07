@@ -209,6 +209,8 @@ Completed Practices
 
 Hash Table
 
+64 mins + 26 mins
+
 常用技巧
 
 常見資料結構
@@ -248,6 +250,9 @@ Hash Table
 Corner cases
 
 Completed Practices
+
+- [Two Sum](https://leetcode.com/problems/two-sum)
+- [Ransom Note](https://leetcode.com/problems/ransom-note)
 
 ---
 
