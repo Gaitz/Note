@@ -1,6 +1,6 @@
 ## Tech Interview Handbook: the 3 month study plan
 
-### [The 3 month study plan](https://www.techinterviewhandbook.org/coding-interview-study-plan/), AlgorithmExercise
+### [The 3 month study plan](https://www.techinterviewhandbook.org/coding-interview-study-plan/), ComputerScience/AlgorithmExercise
 
 ---
 
