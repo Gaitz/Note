@@ -258,6 +258,50 @@ Completed Practices
 
 Recursion
 
+常用技巧
+
+- 常用於 permutation 和 tree 相關的問題
+- Memorization
+  - 因為遞迴結構會解構到 base cases 因此可能會有多項重複的函式執行, 很直覺的可以使用 memorization 來提升其效率
+
+常見資料結構
+
+- tree
+
+常見演算法
+
+基礎特性
+
+- 每個遞迴演算法裡都必然會有的兩個部分
+  - 1 base case
+  - 2 breaking down
+- base cases 所需的數量取決於 breaking down 時的呼叫結構
+- 使用遞迴時, 是隱含的使用 stack 結構
+- 有些程式語言會支援尾端遞迴最佳化 (tail-call optimization, TCO)
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+- 必須要有 base case 千萬別漏掉
+- 當問題被解構成太多層時, 可能會有 stack overflow 發生
+  - JavaScript 的 stack size 取決於不同的執行環境
+- 注意到所需的
+
+Corner cases
+
+- n = 0
+- n = 1
+- 依據 breaking down 的結構來確認必須有足夠多的 base cases
+
+Completed Practices
+
 ---
 
 Week 2
