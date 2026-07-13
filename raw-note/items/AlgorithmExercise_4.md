@@ -263,6 +263,10 @@ Recursion
 - 常用於 permutation 和 tree 相關的問題
 - Memorization
   - 因為遞迴結構會解構到 base cases 因此可能會有多項重複的函式執行, 很直覺的可以使用 memorization 來提升其效率
+- Backtracking
+  - Explore + Check + Backtrack
+  - Explore by recursion
+  - Check and backtrack
 
 常見資料結構
 

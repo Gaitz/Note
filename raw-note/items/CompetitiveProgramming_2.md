@@ -39,7 +39,7 @@ Starting Competitive Programming
   - LeetCode Weekly/Biweekly
   - AtCoder Beginner
   - Codeforces Div.3
-- **!! constant practice**
+- **!! constantly practice !!**
 
 Common Mistakes
 
