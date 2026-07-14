@@ -14,12 +14,12 @@
 
 ---
 
-OpenAI, 提供生成式 AI 服務的公司
+**OpenAI**, 提供生成式 AI 服務的公司
 
 - Models: GPT series
   - latest version GPT‑5.6 Sol, 2026.6.26
 - 服務:
-  - ChatGPT 始於 2022
+  - ChatGPT, 始於 2022, chatbot
   - ChatGPT Deep Research
   - ChatGPT Search
   - ChatGPT Atlas
@@ -29,7 +29,7 @@ OpenAI, 提供生成式 AI 服務的公司
 
 ---
 
-two types of tokens
+**two types of tokens**
 
 - Input tokens, 輸入給 model 的 token 數量, 包含所有的後續資料 context history
   - cached input tokens
@@ -64,6 +64,21 @@ Reasoning tokens
 - AI model 實際的 reasoning traces 通常是不公開的, 防止其他競爭對手使用
 
 [ref: Why is OpenAI so much more efficient?](https://www.youtube.com/watch?v=ypO0q_8zhWw)
+
+---
+
+**Anthropic**, 提供生成式 AI 服務的公司
+
+- Models:
+  - Mythos
+  - Fable
+  - Opus
+  - Sonnet
+  - Haliku
+- Services/Products:
+  - Claude: chatbot
+  - Claude Code: for coding
+  - Clause Cowork: background agents
 
 ---
 
