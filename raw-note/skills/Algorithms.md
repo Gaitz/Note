@@ -18,12 +18,21 @@ Divide and conquer
 - 類似 mathematical induction
 - 分成三個步驟
   - Divide, 把原問題分解成相同問題, 但是更小的範圍的子問題, 理想上是子問題剛好是原問題的一半大小 (最小化遞迴層數)
-  - Conquer, 遞迴的解決子問題 (recursive case), 直到子問題足夠簡單可以被解決 (base case)
+  - Conquer, 遞迴子問題 (recursive case), 直到子問題足夠簡單可以被解決 (base case)
   - Combine, 利用子問題的解, 來產生原問題的解
 - Bottom up
   - 先思考最小案例 (基礎情況), 在一步一步變複雜, 並且從中找到可以維持最佳解的結構
 - Top down
-  - 把主問題分成兩部分, 並且思考假設在已知兩個子問題的解答時, 如何產生主問題的最佳解
+  - 把主問題分成兩部分, 並且思考假設在已知所有子問題的解答時, 如何產生主問題的最佳解
+
+Backtracking
+
+- 適用於條件滿足型的窮舉問題, 屬於遞迴窮舉解法的優化方案
+- 遞迴的每一層來處理當層的 candidate 進行判斷和是否需要再次延伸
+- 分成兩個步驟
+  - Check (is the candidate failed or accepted)
+  - Explore every combination by recursion
+- explicit backtrack 在於在當前這層時, 就建立下一層的 candidate, 因此在下層的遞迴函式回傳後, 在當前這層需要進行 backtrack 還原層這層原本的 candidate 來進行後續的處理
 
 ---
 

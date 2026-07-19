@@ -263,10 +263,11 @@ Recursion
 - 常用於 permutation 和 tree 相關的問題
 - Memorization
   - 因為遞迴結構會解構到 base cases 因此可能會有多項重複的函式執行, 很直覺的可以使用 memorization 來提升其效率
-- Backtracking
-  - Explore + Check + Backtrack
-  - Explore by recursion
-  - Check and backtrack
+- Backtracking, 適用於條件滿足型的窮舉問題, 屬於遞迴窮舉解法的優化方案
+  - Check (is the candidate failed or accepted)
+  - Explore every combination by recursion
+  - explicit backtrack 在於在當前這層時, 就建立下一層的 candidate, 因此在下層的遞迴函式回傳後, 在當前這層需要進行 backtrack 還原層這層原本的 candidate 來進行後續的處理
+- Divide and conquer
 
 常見資料結構
 
@@ -284,6 +285,11 @@ Recursion
 - 有些程式語言會支援尾端遞迴最佳化 (tail-call optimization, TCO)
 
 運算複雜度
+
+- 遞迴解的複雜度不容易計算, 理想上是劃出樹狀結構來觀察
+- 常與組合數 C 有關, `C(a, b) = a! / (b! * (a - b)!)`
+- central binomial coefficient 數 `C(2n, n)`, bound by `O(4^n/sqrt(n))`數列: 1, 2, 6, 20, 70, 252, ...
+- catalan number `1 / (n + 1) * C (2n, n)`, bound by `O(4^n/n^1.5)`, 數列: 1, 1, 2, 5, 14, 42, 132, 429, ...
 
 優點
 
@@ -305,6 +311,9 @@ Corner cases
 - 依據 breaking down 的結構來確認必須有足夠多的 base cases
 
 Completed Practices
+
+- [Subsets](https://leetcode.com/problems/subsets)
+- [Generate Parentheses](https://leetcode.com/problems/generate-parentheses)
 
 ---
 
