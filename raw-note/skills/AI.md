@@ -41,7 +41,7 @@
 - AI model 以 token 為單位進行處理
 - Context management, 對 AI 如何使用 tokens 進行優化
 
-### Input tokens
+#### Input tokens
 
 Compactions
 
@@ -52,7 +52,7 @@ Caching
 
 - 對過去完整的歷史進行 caching
 
-### Output tokens
+#### Output tokens
 
 Reasoning tokens
 
@@ -79,6 +79,26 @@ Reasoning tokens
   - Claude: chatbot
   - Claude Code: for coding
   - Clause Cowork: background agents
+
+---
+
+**Gemini**, Google 所提供的生成式 AI 服務
+
+---
+
+**Copilot**, Microsoft 所提供的生成式 AI 服務
+
+---
+
+**Cursor**, 被 SpaceX 所收購的生成式 AI 公司
+
+- 主要用於程式撰寫領域
+
+---
+
+**Ollama**, Open sourced 的 Large Language Model runtime (LLM)
+
+- 允許整個 model 在 local 運行, 或自行 host 在 cloud 上運行
 
 ---
 
