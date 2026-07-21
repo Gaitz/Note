@@ -18,6 +18,16 @@ Recursion
 
 Week 2
 
+Sorting and searching
+
+Matrix
+
+Linked List
+
+Queue
+
+Stack
+
 Week 3
 
 Week 4
@@ -281,7 +291,7 @@ Recursion
   - 1 base case
   - 2 breaking down
 - base cases 所需的數量取決於 breaking down 時的呼叫結構
-- 使用遞迴時, 是隱含的使用 stack 結構
+- 使用遞迴時, 是隱含的使用 stack 結構, 預設是 depth first search (DFS)
 - 有些程式語言會支援尾端遞迴最佳化 (tail-call optimization, TCO)
 
 運算複雜度
@@ -293,7 +303,12 @@ Recursion
 
 優點
 
+- 程式碼簡潔
+
 缺點
+
+- 有 stack overflow 的風險
+- 計算複雜度不容易
 
 該詢問的問題
 
@@ -314,10 +329,33 @@ Completed Practices
 
 - [Subsets](https://leetcode.com/problems/subsets)
 - [Generate Parentheses](https://leetcode.com/problems/generate-parentheses)
+- [combinations](https://leetcode.com/problems/combinations)
 
 ---
 
-Week 2
+Week 2, Sorting and searching, Matrix, Linked List, Queue, Stack
+
+---
+
+Sorting and searching
+
+---
+
+Matrix
+
+---
+
+Linked List
+
+---
+
+Queue
+
+---
+
+Stack
+
+---
 
 ---
 
