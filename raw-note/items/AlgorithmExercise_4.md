@@ -81,6 +81,7 @@ Array,
   - 多次走訪
   - 不需要在單一次走訪中完成所有的事情
 - 嘗試一項一項加入
+- 傳遞 index 取代複製 array 本身
 
 基礎特性
 
@@ -219,7 +220,7 @@ Completed Practices
 
 Hash Table
 
-64 mins + 26 mins
+64 mins + 26 mins = 90 mins = 1 hour and 30 mins
 
 常用技巧
 
@@ -268,6 +269,8 @@ Completed Practices
 
 Recursion
 
+20 mins + 90 mins + 90 mins + 50 mins + 22 mins + 50 mins + 20 mins + 60 mins + 22 mins + 75 mins + 62 mins + 92 mins = 10 hours and 43 minutes
+
 常用技巧
 
 - 常用於 permutation 和 tree 相關的問題
@@ -277,6 +280,7 @@ Recursion
   - Check (is the candidate failed or accepted)
   - Explore every combination by recursion
   - explicit backtrack 在於在當前這層時, 就建立下一層的 candidate, 因此在下層的遞迴函式回傳後, 在當前這層需要進行 backtrack 還原層這層原本的 candidate 來進行後續的處理
+  - 在遞迴探索時, 需要 pruning 來減少路線才是優化方案的關鍵
 - Divide and conquer
 
 常見資料結構
@@ -317,7 +321,7 @@ Recursion
 - 必須要有 base case 千萬別漏掉
 - 當問題被解構成太多層時, 可能會有 stack overflow 發生
   - JavaScript 的 stack size 取決於不同的執行環境
-- 注意到所需的
+- 注意到所需的空間複雜度
 
 Corner cases
 
@@ -338,6 +342,87 @@ Week 2, Sorting and searching, Matrix, Linked List, Queue, Stack
 ---
 
 Sorting and searching
+
+常用技巧
+
+- Binary search, 當輸入是以排序的時, 可以使用 T: O(log n) 來進行搜尋
+- bucket sort
+  - 當已知 input set 並且範圍是記憶體允許的時候, bucket sort 是一個優化, T: O(n)
+
+常見資料結構
+
+常見演算法
+
+- 比較型排序
+  - Bubble sort
+  - Insertion sort
+    - Binary sort
+  - Selection sort
+  - Heapsort
+  - Mergesort
+  - Quicksort
+- 非比較型排序
+  - Counting sort
+  - Bucket sort
+  - Radix sort
+- 新排序演算法
+  - TimSort
+  - PowerSort
+- Binary search
+
+基礎特性
+
+- 知道所使用的程式語言的內建排序函式, 包含調用方式與底層演算法名稱與特性
+  - JavaScript: `Array.prototype.sort()`, `sort()`, `sort(compareFn)`,
+  - 最好要明確使用比較函式, 因為 JavaScript 預設把所有的元素轉換成 string 來進行比較
+  - JavaScript: 底層的排序演算法, 不同的 engines 可能有不同的實作方式
+  - V8: TimSort; SpiderMonkey: MergeSort; JavaScriptCore: QuickSort
+
+運算複雜度
+
+- Bubble sort
+- Insertion sort
+- Binary sort
+- Selection sort
+- Heapsort
+- Mergesort
+- Quicksort
+- Counting sort
+- Bucket sort
+- Radix sort
+- TimSort
+- PowerSort
+- Binary search, T: O(log n), S: O(1)
+
+優點
+
+缺點
+
+該詢問的問題
+
+- sorted in ascending or descending
+- is unique or not
+
+注意
+
+- 排序演算法的不同之處,
+  - 時間複雜度 ( worst case, average case, best case ), 何時會 fallback 到 worst case,
+  - 空間複雜度, 是否是 in place,
+  - 是否是 stable algorithm (相同大小時, 是否維持原本的順序),
+  - 實作是 recursively 還是 iteratively
+- 分割字串 (`slice`) 是 T: O(n) operation
+
+Corner cases
+
+- 空集合
+- 只包含 1 個元素
+- 只包含 2 個元素
+- 包含重複元素
+
+Completed Practices
+
+- [binary-search](https://leetcode.com/problems/binary-search)
+- [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array)
 
 ---
 

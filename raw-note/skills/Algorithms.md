@@ -8,18 +8,19 @@ collection of algorithms that I learned
 
 ---
 
-Algorithm strategies and patterns
+## Algorithm strategies and patterns
 
 ---
 
 Divide and conquer
 
 - 主要想法在於藉由較小範圍的子問題, 來建構出原問題的解, 會自然形成一種遞迴結構
+- 把原問題分解層兩個範圍較小的子問題
 - 類似 mathematical induction
 - 分成三個步驟
   - Divide, 把原問題分解成相同問題, 但是更小的範圍的子問題, 理想上是子問題剛好是原問題的一半大小 (最小化遞迴層數)
   - Conquer, 遞迴子問題 (recursive case), 直到子問題足夠簡單可以被解決 (base case)
-  - Combine, 利用子問題的解, 來產生原問題的解
+  - Combine (resolution), 利用子問題的解, 來產生原問題的解
 - Bottom up
   - 先思考最小案例 (基礎情況), 在一步一步變複雜, 並且從中找到可以維持最佳解的結構
 - Top down
@@ -33,10 +34,21 @@ Backtracking
   - Check (is the candidate failed or accepted)
   - Explore every combination by recursion
 - explicit backtrack 在於在當前這層時, 就建立下一層的 candidate, 因此在下層的遞迴函式回傳後, 在當前這層需要進行 backtrack 還原層這層原本的 candidate 來進行後續的處理
+- 在遞迴探索時, 需要 pruning 來減少路線才是優化方案的關鍵
+
+Greedy
+
+- 逐步遞增, 在每個步驟都找出局部最佳解, 並以此往前推進最終得到全域最佳解
+- 時間複雜度, 通常為 O(n) \* 尋找每個局部最佳解所需的時間複雜度
+
+Dynamic Programming
+
+- 屬於 Divide and conquer 的變種
+- 通過儲存子問題的結果 (memorize), 依據特定的順序來推進, 得到更大的問題的解
 
 ---
 
-Sorting
+## Sorting
 
 ---
 
@@ -56,7 +68,7 @@ Bucket sort
 
 ---
 
-Searching
+## Searching
 
 ---
 
@@ -69,12 +81,16 @@ Binary Search
 
 ---
 
-Data structures
+## Data structures
 
 ---
 
 Min/max stack
 
 - 可以隨時以 O(1) time complexity 讀取 min/max 的 stack
+
+---
+
+## Questions
 
 ---
