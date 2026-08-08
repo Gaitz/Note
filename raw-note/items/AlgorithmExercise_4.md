@@ -428,6 +428,41 @@ Completed Practices
 
 Matrix
 
+常用技巧
+
+- 常出現在 graph 與 dynamic programming 相關問題
+
+常見資料結構
+
+- 2-dimensional array
+
+常見演算法
+
+基礎特性
+
+- 是一個 2 維陣列 (2-dimensional array)
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+- Empty matrix
+- 1 \* 1 matrix
+- only one row or only one column
+
+Completed Practices
+
+- [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes)
+- [Spiral Matrix](https://leetcode.com/problems/spiral-matrix)
+
 ---
 
 Linked List
