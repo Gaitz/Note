@@ -18,9 +18,9 @@ Divide and conquer
 - 把原問題分解層兩個範圍較小的子問題
 - 類似 mathematical induction
 - 分成三個步驟
-  - Divide, 把原問題分解成相同問題, 但是更小的範圍的子問題, 理想上是子問題剛好是原問題的一半大小 (最小化遞迴層數)
-  - Conquer, 遞迴子問題 (recursive case), 直到子問題足夠簡單可以被解決 (base case)
-  - Combine (resolution), 利用子問題的解, 來產生原問題的解
+  - **Divide**, 把原問題分解成相同問題, 但是更小的範圍的子問題, 理想上是子問題剛好是原問題的一半大小 (最小化遞迴層數)
+  - **Conquer**, 遞迴子問題 (recursive case), 直到子問題足夠簡單可以被解決 (base case)
+  - **Combine** (resolution), 利用子問題的解, 來產生原問題的解
 - Bottom up
   - 先思考最小案例 (基礎情況), 在一步一步變複雜, 並且從中找到可以維持最佳解的結構
 - Top down
@@ -31,10 +31,12 @@ Backtracking
 - 適用於**條件滿足型的窮舉問題**, 屬於遞迴窮舉解法的優化方案, 通常可以在計算複雜度與空間複雜度上優化, 尤其是空間複雜度上
 - 遞迴的每一層來處理當層的 candidate 進行判斷和是否需要再次延伸
 - 分成兩個步驟
-  - Check (is the candidate failed or accepted)
-  - Explore every combination by recursion
-- explicit backtrack 在於在當前這層時, 就建立下一層的 candidate, 因此在下層的遞迴函式回傳後, 在當前這層需要進行 backtrack 還原層這層原本的 candidate 來進行後續的處理
-- 在遞迴探索時, 需要 pruning 來減少路線才是優化方案的關鍵
+  - **Check** (is the candidate failed or accepted)
+  - **Explore** every combination by recursion
+- explicit backtrack
+  - 在於在當前這層時, 就建立下一層的 candidate,
+  - 因此在下層的遞迴函式回傳後, 在當前這層需要進行 backtrack 還原層這層原本的 candidate 來進行後續的處理
+- 在遞迴探索時, 需要 **pruning** 來減少路線才是優化方案的關鍵
 
 Greedy
 

@@ -431,6 +431,7 @@ Matrix
 常用技巧
 
 - 常出現在 graph 與 dynamic programming 相關問題
+- 以修改 input matrix 本身的空間, 來達到減低額外的空間複雜度
 
 常見資料結構
 
@@ -466,6 +467,64 @@ Completed Practices
 ---
 
 Linked List
+
+常用技巧
+
+- 新增額外的節點輔助運算, 完成後再移除
+- Two pointers
+  - 尋找 k-th 節點
+  - 探測是否有 cycle
+  - 尋找中間點 middle
+- 畫出圖, 表示節點與指標, 清楚看出 Linked List 與 Array 的不同
+
+常見資料結構
+
+- Singly Linked List
+  - 最基本的 linked list, 每個 node 只有一個 reference 指向下一個 node
+- Doubly Linked List
+  - 每一個 node 有兩個 reference 分別指向前一個 node 與下一個 node
+  - 通常會存有 head 與 tail 兩個 pointers
+- Circular Linked List
+  - 頭尾相連的 linked list
+
+常見演算法
+
+基礎特性
+
+- 屬於最基礎的資料結構, 與 array 本身特性顛倒, 並共同屬於最基本的資料結構
+- 與 array 不同之處在於他們如何使用記憶體, 因此產生不同的結構與運作方式
+
+運算複雜度
+
+- Insert, T: O(1); travel to the i th node, T: O(i)
+- Delete, T; O(1); travel to the i th node, T: O(i)
+- Get / Search / Travel, T: O(n)
+- Set, T: O(n)
+- Copy, T: O(n)
+
+優點
+
+缺點
+
+該詢問的問題
+
+- 是否存在 cycle
+
+注意
+
+Corner cases
+
+- empty linked list, head 為 null
+- Single node
+- Two nodes
+- 存在 cycle 的 linked list
+
+Completed Practices
+
+- [Reverse a Linked List](https://leetcode.com/problems/reverse-linked-list)
+  - Recursive way is tricky but worthy to learn, 對 linked list 的操作有更深刻的理解
+- [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle)
+  - Floyd's Cycle Finding Algorithm, 使用 fast and slow two pointers 的經典演算法
 
 ---
 
