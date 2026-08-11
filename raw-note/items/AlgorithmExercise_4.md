@@ -183,12 +183,13 @@ String
 - 因為字串就是 array 因此時間複雜度等同於 array 操作
 - Access: O(1)
 - Search: O(n)
-- Insert: O(n)
+- Insert / Create: O(n)
 - Remove: O(n)
+- Copy: O(n)
+- Slice: O(n)
 - 與其他字串互動的複雜度, 假設原本字串長度為 n, 另一字串長度為 m
-- Find substring: O(n \* m), 一般做法, 依據字串的特性, 可以通過其他演算法進行優化到 O(n + m), 例如: KMP 演算法
-- 字串連接 (concatenating): O(n + m)
-- Slice: O(m)
+  - Find substring: O(n \* m), 一般做法, 依據字串的特性, 可以通過其他演算法進行優化到 O(n + m), 例如: KMP 演算法
+  - 字串連接 (concatenating): O(n + m)
 - Split (by token): O(n + m)
 
 優點
@@ -202,6 +203,9 @@ String
 - case sensitively, 大小寫相關
 
 注意
+
+- 理解所使用的程式語言是如何對待 string, 以及 operations 的複雜度, 和如何優化
+  - 常見的是 immutable, 此時 operation 會帶來昂貴的時間複雜度
 
 Corner cases
 
@@ -530,9 +534,77 @@ Completed Practices
 
 Queue
 
+常用技巧
+
+常見資料結構
+
+- 底層可以使用 array 或 linked list 來實作
+
+常見演算法
+
+- Breadth-first search, 廣度優先搜尋
+
+基礎特性
+
+- first in, first out (FIFO)
+- `enqueue`, from back, tail, rear
+- `dequeue`, from front, head
+
+運算複雜度
+
+- enqueue, T: O(1)
+- dequeue, T: O(1)
+- check front, T: O(1)
+- check back, T: O(1)
+- is empty, T: O(1)
+- Search, T: O(n)
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+- 查詢所使用的程式語言, 是否有內建 queue, 並且理想上是知道底層使用的資料結構
+  - 否則需要知道替代方案並且知道替代方案的運算複雜度
+
+Corner cases
+
+- empty queue
+- one item queue
+- two items queue
+
+Completed Practices
+
+- [Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues)
+
 ---
 
 Stack
+
+常用技巧
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+Completed Practices
 
 ---
 
