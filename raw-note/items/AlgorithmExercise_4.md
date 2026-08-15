@@ -588,11 +588,23 @@ Stack
 
 常見資料結構
 
+- 底層使用 array 或 singly linked list 實作
+
 常見演算法
 
 基礎特性
 
+- last in, first out, (LIFO)
+- `push`, on top of stack
+- `pop`, remove and return from the top of stack
+
 運算複雜度
+
+- Top / Peek, T: O(1)
+- Push, T: O(1)
+- Pop, T: O(1)
+- isEmpty, T: O(1)
+- Search, T: O(n)
 
 優點
 
@@ -604,7 +616,14 @@ Stack
 
 Corner cases
 
+- empty stack
+- 單一元素 one element
+- 兩個元素 two elements
+
 Completed Practices
+
+- [Valid Parentheses](https://leetcode.com/problems/valid-parentheses)
+- [Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks)
 
 ---
 
