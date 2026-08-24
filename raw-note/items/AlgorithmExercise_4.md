@@ -30,6 +30,14 @@ Stack
 
 Week 3
 
+Tree
+
+Graph
+
+Heap
+
+Trie
+
 Week 4
 
 Week 5 - 12: In-depth practice
@@ -627,9 +635,111 @@ Completed Practices
 
 ---
 
+Week 3, Tree, Graph, Heap, Trie
+
 ---
 
-Week 3
+Tree
+
+常用技巧
+
+- Recursively
+  - 注意 base case, `null`, empty tree
+- Traversal by level, BFS
+
+常見資料結構
+
+- Binary Search Tree, BST
+  - Search, O(log n), 優於 O(n) 的循序搜尋
+  - Access, O(log n)
+  - Insert, O(log n)
+  - Remove, O(log n)
+- Binary Tree
+  - 每個節點最多只有兩個子節點
+- Ternary Tree, 三元樹
+- n-ary Tree, n 元樹
+- Heap
+  - min heap,
+  - max heap
+- Tries, 處理字串的樹
+- Red-black tree
+- AVL tree
+
+常見演算法
+
+- Traversals recursively
+  - in-order, pre-order, post-order
+- Traversals iteratively
+  - in-order, pre-order, post-order
+  - level-order (BFS)
+
+基礎特性
+
+- Terminology
+  - root
+  - children
+  - level
+  - depth
+  - leaf
+  - complete tree
+    - 除了 leaf 層, 每一層都是滿節點, 並且 leaf 層的節點必須以靠左優先排滿
+  - full tree, 每個節點必須是 n or zero children
+    - full tree 可以不是 complete tree
+  - prefect tree
+    - 即 complete full tree
+  - balanced
+- Acyclic
+  - Tree 樹必須是沒有循環的, 否則就會退化成 graph
+- Balanced Binary Tree
+  - 左右子樹的深度差, 最多為 1, 並且遞迴的運作, 所有子樹都是 balanced tree
+  - Red-black tree
+  - AVL tree
+- Traversals
+- Depth first traversal, DFS
+  - In-order, left -> root -> right
+    - 在 Binary Search Tree 時, In-order 會產生排序數列
+  - Pre-order, root -> left -> right
+    - 適合用於 copy tree
+  - Post-order, left -> right -> root
+    - 適合用於 delete tree
+- Breadth first traversal, BFS
+  - Level order
+- 應該要熟悉的基本操作
+  - Insert value
+  - Delete value
+  - Count number of nodes
+  - Whether a value in the tree
+  - Calculate height
+  - Binary Search Tree
+    - Determine
+    - Get maximum value
+    - Get minimum value
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+- Skewed tree
+  - 運算會從 O(log n) 退化至 O(n)
+
+Corner cases
+
+- empty tree
+- single node
+- two nodes
+- 歪斜樹 (skewed tree), 產生類似於 linked-list 的樹
+
+Completed Practices
+
+- [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree)
+- [Invert/Flip Binary Tree](https://leetcode.com/problems/invert-binary-tree)
+- [Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree)
 
 ---
 
