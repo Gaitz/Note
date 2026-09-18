@@ -388,7 +388,7 @@ Sorting and searching
   - JavaScript: `Array.prototype.sort()`, `sort()`, `sort(compareFn)`,
   - 最好要明確使用比較函式, 因為 JavaScript 預設把所有的元素轉換成 string 來進行比較
   - JavaScript: 底層的排序演算法, 不同的 engines 可能有不同的實作方式
-  - V8: TimSort; SpiderMonkey: MergeSort; JavaScriptCore: QuickSort
+  - V8: **TimSort**; SpiderMonkey: **MergeSort**; JavaScriptCore: **QuickSort**
 
 運算複雜度
 
@@ -828,17 +828,55 @@ Heap
 
 常用技巧
 
+- 當問題出現關於 k max 或者 k min 時, 通常是使用 Heap 的時機
+  - 需要持續追蹤且取得 min 或 max 的場景, 主要把時間複雜度從 O(n) 降至 O(log n)
+
 常見資料結構
+
+- Tree
+- Max heap, Min heap
+- (Max or Min) Priority Queue
+  - Heap 通常用於實現 Priority Queue
+  - 一個元素的集合, 並且每個元素都有一個 key 來決定他的 priority
+  - `create()`, 建立一個空的 priority queue
+  - `isEmpty()`,
+  - `top()`, 查看 priority 最高的元素
+  - `pop()`, 取出 priority 最高的元素, 並且從 queue 中移除
+  - `push()`, 插入新元素進入 priority queue
 
 常見演算法
 
+- Heap Sort
+
 基礎特性
+
+- 一種特殊的 **complete binary tree**
+- Max heap
+  - 符合 complete binary tree 的定義並且
+  - 每一個節點的值, 都必須 大於 他的子樹中所有的節點 (Max Tree)
+- Min heap
+  - 符合 complete binary tree 的定義並且
+  - 每一個節點的值, 都必須 小於 他的子樹中所有的節點 (Min Tree)
+- Heap 實現 insert, 使用的是 `bubbling up` process
+  - 先把新元素放在 complete binary tree 的下一個節點位置, 然後持續的 bubbling up 直到符合大小定義
+- Heap 實現 remove root, 使用的是 `trickle down` process
+  - 移除 root 之後, 把 last element 移動到 root 來進行 trickle down 直到符合 min tree 或者 max tree 的大小定義
 
 運算複雜度
 
+- Find max/min, T: O(1)
+- Insert, T: O(log n)
+- Remove, T: O(log n)
+- Heapify (transform an array into heap), T: O(n)
+
 優點
 
+- T: O(1) 取得 min 和 max
+- Insert 與 remove 也只需要 T: O(log n)
+
 缺點
+
+- 需要額外的空間來建立
 
 該詢問的問題
 
@@ -846,7 +884,14 @@ Heap
 
 Corner cases
 
+- Empty tree
+- with 1 element
+- with 2 elements
+
 Completed Practices
+
+- [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists)
+- [K Closest Points to Origin](https://leetcode.com/problems/k-closest-points-to-origin)
 
 ---
 

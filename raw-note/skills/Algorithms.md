@@ -15,6 +15,7 @@ collection of algorithms that I learned
 Divide and conquer
 
 - 主要想法在於藉由較小範圍的子問題, 來建構出原問題的解, 會自然形成一種遞迴結構
+  - 關鍵在於子問題的範圍會小於原問題, 並以子問題的解答來組合出原問題的解
 - 把原問題分解層兩個範圍較小的子問題
 - 類似 mathematical induction
 - 分成三個步驟
@@ -76,19 +77,49 @@ Amortization / amortized
 
 ---
 
-Bucket sort
+Bucket Sort
 
 - 前提條件: 輸入值的區間是有限, 且可接受的數量時
 - **當值區間是有限且可接受的數量時**
   - 常用於優化排序效能時使用, 時間複雜度最佳可以達到 O(n)
-- 建立多個 bucket 並把輸入放入桶內
-- 排序非空的 bucket
-- 依據大小輸出 bucket 則得排序好的數值
-- 最差的時間複雜度則會退回一般排序演算法的時間複雜度, O(n^2) 或者 O(n \* log n)
+- 複雜度:
+- 演算法實作:
+  - 建立多個 bucket 並把輸入放入桶內
+  - 排序非空的 bucket
+  - 依據大小輸出 bucket 則得排序好的數值
 - 優點:
   - 當 bucket 數量等同於輸入值的範圍區間相等時( k == n ), 最佳時間複雜度可以達到 O(n)
 - 缺點:
-  - 需要使用額外的空間, 空間複雜度為 O(n \* k), k 是 bucket 數量, n 是
+  - 需要使用額外的空間, 空間複雜度為 O(n \* k), k 是 bucket 數量, n 是元素的數量
+  - 最差的時間複雜度則會退回一般排序演算法的時間複雜度, T: O(n^2) 或者 T: O(n \* log n)
+
+Quick Sort
+
+- In-place 排序法, 採用 divide-and-conquer 建立
+  - 性能的關鍵在於每次所選擇的 pivot 是否能產生大小相當的 partitions
+- 複雜度:
+  - Best, Average, T: O(n \* log n), S: O(log n)
+  - Worst, T: O(n^2), S: O(n)
+  - 額外的空間是遞迴所使用的
+- 演算法實作概念:
+  - Divide-and-conquer,
+  - 通過選擇 pivot 並且每次決定該 pivot 位於排序後**最終位置**
+  - 通過 partition 產生出, 小於 pivot 與大於等於 pivot 的兩個 partitions (divide)
+  - 依序遞迴處理更小的 partitions 直到完成排序 (conquer)
+  - 因為每次都是以 in-space swap 的方式完成, 所以不需要 combine 階段
+- 演算法實作:
+  - `Partition`
+  - 選擇 pivot
+  - 移動 pivot 至最右側, 方便之後實作
+  - 初始化, 追蹤 pivot value 最終位置的 pointer
+  - 從頭走訪, 比較大小, 以追蹤的 pointer 為中間點,
+  - 並且移動元素 (swap), 逐漸區分出兩個 partitions, 最終形成 [ < pivot, pivot, >= pivot ] 的結構
+- 優點:
+  - 在實務上有優秀的性能, T: O(n \* log n) average and best, S: O(log n)
+- 缺點:
+  - 不是 stable 的排序演算法, 無法維持相等時的原位置順序
+  - 需要額外的空間, 用於遞迴呼叫, average S: O(log n), worst S: O(n)
+  - 在 pivot 每次都選擇到最糟的結果時, 複雜度會退化至 T:O (n^2), S: O(n)
 
 ---
 
@@ -109,14 +140,16 @@ Binary Search
 
 ---
 
-Min/max stack
+Min / max stack
 
-- 可以隨時以 O(1) time complexity 讀取 min/max 的 stack
+- 可以隨時以 O(1) time complexity 讀取 min / max 的 stack
 
 ---
 
 Disjoint Set / Union-find Forest / Union-find data structure / Merge-find Set
 
+- 功能
+  - 隨時知道 graph 中不相交的子集合個數, number of disjoint subsets
 - 資料結構,
   - 把一個 graph 分成互相不相交的 (disjoint) subsets
   - 做法在於以每個 tree 的 root 來決定兩個元素是否所屬同一個 tree
@@ -129,8 +162,6 @@ Disjoint Set / Union-find Forest / Union-find data structure / Merge-find Set
     - T: O(log n)
   - 2 Path compression, 把所有子節點都接到 root, 變成只有兩層的扁樹,
     - T: O(α(n)) amortized, `inverse Ackermann function`, 第一次需要完整走訪然後調整資料結構後, 其他次只需要向上走一層
-- 功能
-  - 隨時知道不相交的子集合個數, number of disjoint subsets
 - 提供的 members
   - `parent` array or other data structure
   - `size`, how many disjoint subsets
@@ -172,6 +203,68 @@ Disjoint Set / Union-find Forest / Union-find data structure / Merge-find Set
 
 ---
 
+Min / Max Heap
+
+- 資料結構,
+  - Complete Binary Tree + Min Tree or Max Tree
+- 功能,
+  - 以 O(1) 可以取得 Min 或者 Max
+- 時間複雜度
+  - Insert, T: O(log n)
+  - Remove min or max, T: O(log n)
+- 實作
+- Insert,
+  - 1 把新的 element 放到 complete binary tree 的順序位置
+  - 2 持續 bubbling up 直到符合 min tree 或 max tree 定義
+- Remove min or max,
+  - 1 移除 root, root 即是 min or max
+  - 2 把現有的 last element, 即當前 complete binary tree 的最後一個位置的值, 移動到 root
+  - 3 持續 trickle down 直到符合 min tree 或 max tree 的定義
+
+---
+
+## Specific Algorithms
+
+---
+
+QuickSelect
+
+- 用來處理 k-th max / k-th min 問題
+  - 原始演算法的回傳值是 k-th value
+  - 但是可以延伸成為, 快速的取得前 K 大或者前 K 小的集合, 但不排序其結果
+- 使用 quick sort 的 partition 但是不需要遞迴處理兩側, 因此可以變成 iterative algorithm
+- 複雜度:
+  - Best and Average, T: O(n), S: O(1)
+  - Worst, T: O(n^2)
+- 複雜度分析:
+  - 理想上 ( best case ) 處理的次數是 n + n / 2 + n / 4 + ...
+  - 套用等比級數和公式, S = a1 / ( 1 - r), 取得 S = n / (1 - (1/2)) = 2n
+  - 因此, 最佳的複雜度是 T: O(2n) = O(n)
+- 演算法實作概念:
+  - 採用 quick sort 的 partition
+  - 因為, 每次 partition 都能找到該次選擇的 pivot 值的最終排序位置, 並且分好兩邊的大小
+  - 因此, 尋找 k min 或 k max, 就變成尋找目標的 pivot position
+  - 因為, 尋找的是大小, 因此在 divide 階段就不需要搜尋兩邊, 只需要挑選 k 所在的分區即可
+  - 因此時間複雜度會從 T: O(n \* log n) 的 quick sort 降到 T: O(n)
+- 演算法實作:
+- 優點:
+  - 不需要完整排序就可以取得 k-th smallest / largest
+  - Average T: (O(n))，比完整 sorting 的 (O(n\log n)) 更好
+- 缺點:
+  - in-space 處理, 會改變原本的順序
+  - 取得的結果, 是沒有排序的
+
+---
+
 ## Questions
 
 ---
+
+Template
+
+- title and brief introduction
+- 複雜度:
+- 演算法實作概念:
+- 演算法實作:
+- 優點:
+- 缺點:
