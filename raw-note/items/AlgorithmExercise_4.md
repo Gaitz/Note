@@ -899,13 +899,39 @@ Trie
 
 常用技巧
 
+- 在處理大量字串時, 預處理轉換成 Trie,
+  - 可加快搜尋特定長度 k 的字串, 從比對所有的字串 T: O(n) 降至走 k 層的 Trie T: O(k)
+
 常見資料結構
+
+- Trie
+  - **節點儲存 char**
+- Compressed trie, Radix tree, Radix trie
+  - 所有 internal node (所有非 leaf) 的 child nodes 都必須有兩個以上
+  - 壓縮單一 child 的路徑, 減少不必要的節點
+  - 因此, 單一節點儲存的內容從 char 變為 **string**
+- Binary Radix Trie, PATRICA Trie ( Practical algorithm to retrieve information coded in alphanumeric )
+  - 相對較底層的實作, 主要是把 string 和數字, 以 binary 的方式呈現在 trie 中, **節點儲存 binary**
+  - 演進順序, Binary Trie -> Compressed binary trie ( 即是 PATRICA trie )
+  - 使用情境是與 key 相關的, 與 key 的 prefix 相關的 search,
+    - 否則使用 hash table 效能更佳
+  - Binary Trie, 是 binary tree, 左節點是 0, 右節點是 1, 把 string 或數字變成 binary 的格式在儲存在其中
+  - PATRICA Trie, 是儲存兩組 key 在哪個 bit 開始有區別, 只在不同之處才 branch, 以此來壓縮不必要的節點
+    - 因此, 壓縮節點儲存的不是 (0, 1) 而是共用的 prefix
 
 常見演算法
 
 基礎特性
 
+- 一種特殊的樹, prefix tree
+- 用於處理字串, 用於比對, 儲存, 自動補完等等, 與字串相關的功能
+
 運算複雜度
+
+- Add, T: O(n)
+- Remove, T: O(n)
+- Search, T: O(n)
+- where n is the length of the input string
 
 優點
 
@@ -917,7 +943,12 @@ Trie
 
 Corner cases
 
+- Empty trie
+- Operation with empty string `""`
+
 Completed Practices
+
+- [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree)
 
 ---
 
