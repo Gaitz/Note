@@ -956,6 +956,158 @@ Week 4, Interval, Dynamic Programming, Binary, Math, Geometry
 
 ---
 
+Interval
+
+常用技巧
+
+- 以 start point 排序
+- 檢測是否 overlapping
+  - 合併 overlapping 的 intervals 成為一個新的 interval
+- 合併兩個 intervals
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+- 屬於 array 的衍伸問題, 但是有很多需要注意細節, 因此值得特別劃分出來
+- 一個 interval 包含 start 和 end
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+- 1 能否假設 interval 的值, 必然是 start < end
+- 2 [1, 2], [2, 3], 這種唯一接觸點是結尾與開頭的 intervals 是否算是 overlapping
+
+注意
+
+Corner cases
+
+- Empty, No intervals
+- 單一個
+- 只有兩個
+- Non-overlapping 不重疊的
+- 一個大的 interval 完整包裹一個小的 interval 的 nested interval 結構
+- 重複相同的 intervals
+- 只有頭尾相接的 intervals, 例如: [1, 2], [2, 3]
+
+Completed Practices
+
+- [Merge Intervals](https://leetcode.com/problems/merge-intervals)
+- [Insert Interval](https://leetcode.com/problems/insert-interval)
+
+---
+
+Dynamic Programming
+
+常用技巧
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+Completed Practices
+
+---
+
+Binary
+
+常用技巧
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+Completed Practices
+
+---
+
+Math
+
+常用技巧
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+Completed Practices
+
+---
+
+Geometry
+
+常用技巧
+
+常見資料結構
+
+常見演算法
+
+基礎特性
+
+運算複雜度
+
+優點
+
+缺點
+
+該詢問的問題
+
+注意
+
+Corner cases
+
+Completed Practices
+
+---
+
 Week 5 - 12: In-depth practice
 
 ---
