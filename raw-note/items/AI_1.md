@@ -367,7 +367,9 @@ Features - Notifications
 
 Features - Pets
 
-Features - Codex Mircro
+Features - Codex Micro
+
+- 小的硬體裝置, 來啟用 Codex 功能
 
 ---
 
@@ -391,3 +393,264 @@ Developer mode
 
 - 讓 GPT 參與 Chrome DevTools Protocol (CDP)
 - 需要在設定中授權 Settings > Browser and, under Developer mode, turn on Enable full CDP access.
+
+---
+
+Capabilities - Computer Use
+
+- 讓 ChatGPT 可以看見且操作本地端的電腦環境
+
+Capabilities - ChatGPT Voice
+
+- 通過聲音與 ChatGPT 互動
+
+Capabilities - Plugins
+
+- ChatGPT 通過安裝 Plugins 來操作各種 Apps
+
+---
+
+### Capabilities - Sign in with ChatGPT
+
+- 使用 ChatGPT 帳號登入支援的第三方服務
+- 可以用來建立或者連結第三方服務的帳號
+- 登入本身只分享基本 profile 資訊
+  - name
+  - email
+  - profile picture
+- 並不代表直接授權 Plugin 存取資料
+  - Plugin 所要求的 permissions 依然需要另外確認與授權
+
+---
+
+### Capabilities - Web search
+
+- 讓 ChatGPT 可以搜尋 Web 取得最新資訊
+- 適合使用在需要 current / up-to-date information 的問題
+- Web search 與 Browser 不同
+  - Web search, 搜尋與取得網路資訊
+  - Browser, 實際操作網站與網頁 UI
+
+---
+
+### Capabilities - Image generation
+
+- 通過 prompting 生成或者修改圖片
+- 可以在 Chat 中持續使用 follow-up messages 調整圖片
+- 生成後的圖片可以繼續針對特定區域進行修改
+
+---
+
+### Capabilities - Image inputs
+
+- 可以提供圖片作為 prompt 的 context
+- 讓 ChatGPT 分析圖片內容
+- 可以搭配文字 prompt 說明希望 AI 關注的部分
+- 適合
+  - screenshot
+  - diagram
+  - UI
+  - photo
+  - whiteboard 等視覺資訊
+
+---
+
+### Capabilities - Appshots
+
+- Desktop app 功能
+- 將目前其他 App 的視窗內容提供給 ChatGPT 作為 context
+  - screenshot
+  - 可以取得的文字內容
+- 不需要手動 screenshot、copy / paste 或描述目前正在操作的 App
+- 適合讓 AI 協助處理其他 App 中正在進行的工作
+
+---
+
+### Capabilities - Browser extension
+
+- 將 ChatGPT 連接到目前使用的 Browser
+- 與 ChatGPT 內建的獨立 Browser 不同
+  - Browser extension 可以使用現有 Browser 的 tabs
+- 可以
+  - `@` mention 已經開啟的 tabs
+  - 將選取的網頁內容加入 context
+  - 讓 ChatGPT 操作 Browser
+- 支援的 Browser 包含 Chrome、Edge、Brave、Opera、Vivaldi
+  - 部分功能依 Browser 不同
+
+---
+
+### Capabilities - Work with files
+
+- 可以提供 files 作為 ChatGPT 的 context
+- 支援 documents、presentations、spreadsheets、PDF、images、data exports 等
+- 可以要求 AI
+  - summarize / compare
+  - 尋找 patterns / inconsistencies
+  - extract / clean / reorganize data
+  - 使用檔案內容產生新的 artifacts
+- ChatGPT 生成 file 後, 可以配合 `annotations`
+  - 可以 preview
+  - review 結果
+  - 通過 follow-up messages 繼續修改
+
+---
+
+## ChatGPT dots
+
+- 建立一個可以持續執行工作的 AI
+- 與一般單次 Chat 不同, dot 可以持續維持自己的工作與 context
+
+文件
+
+- Getting started
+- Messaging
+- Tasks and memory
+- Computers and apps
+- Controls
+
+---
+
+## ChatGPT Space
+
+- 用來進行 shared / collaborative work
+- 使用 Pages 與 ChatGPT 和其他 collaborators 一起工作
+
+文件
+
+- Space overview
+- Getting started
+- Pages
+- Work with the agent
+- Collaboration
+
+---
+
+## Reference
+
+### Commands
+
+- ChatGPT Desktop app 的 commands reference
+- 提供操作 ChatGPT / Codex 的各種 command 和 shortcuts
+
+### Slash commands
+
+- 使用 `/` 執行特定操作
+  - 可以作為快捷鍵使用, 具備自動補完功能
+- 例如前面使用過的
+  - `/plan`
+  - `/goal`
+  - `/review`
+
+### Settings
+
+- ChatGPT Desktop app 的設定 reference
+- 控制不同 features, permissions 與 app behavior
+
+### Troubleshooting
+
+---
+
+Configuration
+
+---
+
+### Configuration - Customization
+
+- 客製化 ChatGPT / Codex 的行為
+- 可以使用 instructions 告訴 AI 在特定環境下應該如何工作
+- Codex 可以使用 `AGENTS.md`
+  - 提供持續性的 instructions
+  - 可以針對不同 Project / repository 設定不同 instructions
+- 適合放置
+  - coding conventions
+  - project structure
+  - testing requirements
+  - workflow
+  - AI 執行任務時需要遵守的規則
+
+---
+
+### Configuration - Config file
+
+- 使用 config file 設定 Codex 的預設行為
+- 主要設定檔
+  - `config.toml`
+- 用來設定例如
+  - model
+  - reasoning
+  - permissions / sandbox
+  - tools
+  - features
+  - MCP servers
+- 將常用的設定持久化
+  - 不需要每次 conversation 都重新設定
+
+---
+
+### Configuration - Agent configuration
+
+- 設定 AI agent 執行工作的環境與行為
+- 可以控制
+  - agent 使用什麼 model
+  - reasoning effort
+  - tools
+  - permissions
+  - execution environment
+- 不同種類的工作可以設定不同 agent configuration
+
+---
+
+### Configuration - Extend ChatGPT and Codex
+
+- 擴充 ChatGPT / Codex 原本具有的能力
+
+主要方式
+
+- Skills
+  - 加入可重複使用的 instructions / workflows
+- Plugins
+  - 連接外部 Apps / tools
+- MCP
+  - 使用 Model Context Protocol 連接外部 tools / services
+- 可以將常用 workflow 封裝後重複使用
+
+概念上
+
+    Instructions
+        ↓
+      Skills
+        ↓
+    ChatGPT / Codex
+        ↓
+      Plugins
+        ↓
+    MCP servers
+        ↓
+    External tools / services
+
+---
+
+### Configuration - Linux
+
+- ChatGPT / Codex 在 Linux 環境中的設定
+- 主要包含
+  - installation
+  - permissions
+  - sandbox
+  - filesystem access
+  - command execution
+- Linux 的權限與 sandbox 設定會影響 AI 可以操作哪些系統資源
+
+---
+
+### Configuration - Windows
+
+- ChatGPT / Codex 在 Windows 環境中的設定
+- Windows 有與 Linux / macOS 不同的 execution environment 與 sandbox 設定
+- 主要包含
+  - installation
+  - permissions
+  - filesystem access
+  - command execution
+  - Windows-specific configuration

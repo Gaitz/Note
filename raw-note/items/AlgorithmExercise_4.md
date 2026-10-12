@@ -1008,11 +1008,17 @@ Dynamic Programming
 
 常用技巧
 
+- 當一個問題是關於多種組合, 並且**在組合中尋找極值的問題**時, 很有可能是可以使用 DP 解決的問題
+
 常見資料結構
+
+- Array, 必會有一個用來儲存子問題解答的空間
 
 常見演算法
 
 基礎特性
+
+- Divide-and-conquer + memorization 的變化
 
 運算複雜度
 
@@ -1024,9 +1030,19 @@ Dynamic Programming
 
 注意
 
+- 當 input 是 array 時, 必須詢問資料是否是已排序
+
 Corner cases
 
+- base cases
+- 盡可能去找出多個不符合 Greedy 的案例
+
 Completed Practices
+
+- [Climbing Stairs](https://leetcode.com/problems/climbing-stairs)
+- [Coin Change](https://leetcode.com/problems/coin-change)
+- [House Robber](https://leetcode.com/problems/house-robber)
+- [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence)
 
 ---
 
