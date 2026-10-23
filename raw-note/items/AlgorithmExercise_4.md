@@ -1009,6 +1009,8 @@ Dynamic Programming
 常用技巧
 
 - 當一個問題是關於多種組合, 並且**在組合中尋找極值的問題**時, 很有可能是可以使用 DP 解決的問題
+- 當使用 memorization 時, 除了單純儲存一維的子問題最佳解,
+  - 如果需要可以延伸儲存成 two-dimensional 甚至更多資料, Stack, Queue 等資料結構作為協助儲存
 
 常見資料結構
 
@@ -1050,11 +1052,79 @@ Binary
 
 常用技巧
 
+- bit masking, k-th
+  - Check, `mask & (1 << k) != 0`
+  - Set, `mask |= (1 << k)`
+  - Clear, `mask &= ~(1 << k)`
+  - Toggle, `mask ^= (1 << k)`
+  - Multiply by 2, `mask << k`
+  - Divide by 2, `mask >> k`
+- 建立在 Two's complement 規則下的 bit-wise 技巧
+  - `-x = ~x + 1`,
+  - `~x = -x - 1`
+  - `x & -x`, 呈現出 lowest set bit
+  - `x & (x - 1)`, 移除 lowest set bit
+- Bitwise add tricks
+  - `a ^ b`, XOR 產生結果
+  - `(a & b) << 1`, 產生 carry
+  - 重複執行直到 carry 為 0 則得最終結果
+  - 直接適用於 Two's complement 有號整數型態, 因為 << 1 在超出範圍時會自動把 carry 扔掉, 符合 Two's complement 的運作
+- JavaScript tricks
+  - `>>> 0` 轉換 signed 成 unsigned, 移除 signed 處理
+  - `Number.prototype.toString(radix)`, 轉換數字成指定 base 的字串表示
+  - `parseInt(string, radix)`, 轉換字串配合指定的 base 轉換回 Number
+- JavaScript 中所有的 Number 都是以 double 的方式儲存 (64-bit binary format IEEE 754)
+  - `1 sign bit`
+  - `11 bits` for exponent
+  - `52 bits` for mantissa
+
 常見資料結構
 
 常見演算法
 
+- 計算非 0 bits 數, Brian Kernighan's Algorithm
+  - The trick `(n & n - 1)`, 持續移除 lowest bit, 可跳過檢查每個 0 位元的次數
+
 基礎特性
+
+- Operations
+  - `&`, AND
+  - `|`, OR
+  - `^`, XOR
+  - `~`, NOT
+  - `<<`, Left Shift, JavaScript 中是 Arithmetic Shift
+  - `>>`, Right Shift, JavaScript 中是 Arithmetic Shift
+  - `>>>`, Unsigned Right Shift, JavaScript 中是 Logical Shift
+- Logical Shift
+  - 整個位元組進行位移
+- Arithmetic Shift
+  - 保持 sign bit 不變, 其他位元進行位移
+- 在二進制中, 儲存負數的方法
+- **Sign magnitude**,
+  - 最直覺的方式, 使用一個位元進行 sign bit, 其他位元正數與負數表示方式相同
+  - 缺點: 1. 0 有兩個, +0 與 -0; 2. 數字相加在二進制中不容易運算, 不符合 bit-wise 常見的運算方式
+  - 以上兩個缺點導致, 計算晶片難以設計和運算困難導致效能不佳
+- **One's complement**
+  - One's complement 的解決方案: 讓正負數表示時使用 `~` NOT 運算來產生, `-X = ~ X`
+  - 優點: 比起 sign magnitude, 在進行加法時, 使用的是簡單的 bit-wise 操作, 效能有所提升
+  - 缺點: 1. 仍然有兩個 0 的存在; 2. 加法運算時, 需要額外處理進位 (the carry bit), 因此, 需要兩階段運算
+- **Two's complement**
+  - Two's complement 的解決方案: 使用 module 運算, 讓負數與正數是建立在循環之上, 此時進位問題就不需要額外處理
+  - 概念上, 如何表達 `-1`, 首先, `1 + (-1) = 0` 在 module 固定的位元數時,
+    - 假設為 8 bits, 即 2^8 = 256, 因為要儲存正數與負數, 因此, `2^7 + 2^7` 分別儲存正數與負數,
+    - 正數照著 2 進制進行編碼, 負數要如何編碼呢, 照著 module 運算的想法, 讓正數與負數會循環的被編碼
+    - 因此, 此時的 module 運算為 `1 + (-1) module 256 = 0 module 256`, `1 + 255 = 256 = 0 module 256`
+    - 因此, `-1` 應該被表達為 `255` 的二進制, 通用是 `-x = 2^n - x`
+  - 如何推導出 bit-wise operation 呢？
+    - `~ x = 2^n - 1 - x` =>
+    - `~ x + 1 = 2^n - x` =>
+    - `(~ x + 1) module 2^n = (2^n - x) module 2^n` =>
+    - `(~ x + 1) module 2^n = (-x) module 2^n`
+    - 每個負數是正數值取 NOT 加 1, `-X = ~ X + 1`
+  - 優點: 1 沒有正負 0 的問題了, 2 加法非常容易實作, 使用 `&` 並且 drop any carry, 3 加法與減法實作共用相同的硬體設計
+  - 有效範圍: 原先 -0 多出來的一個位元變成負數多一位; 因此常見的 8 bits 代表的是 [-128, 127], 2^7 = 128
+  - 缺點: 人腦轉譯慢一點, 需要計算
+- 現代系統中, 多數負數系統都是採用 Two's complement 規則
 
 運算複雜度
 
@@ -1068,7 +1138,13 @@ Binary
 
 Corner cases
 
+- overflow / underflow
+- 負數, (Two's complement)
+
 Completed Practices
+
+- [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers)
+- [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits)
 
 ---
 

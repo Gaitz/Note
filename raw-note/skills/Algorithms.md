@@ -26,10 +26,12 @@ Backtracking
 
 Greedy
 
-- 逐步遞增, 在每個步驟都找出局部最佳解, 並以此往前推進最終得到全域最佳解
+- 逐步遞增, 在**每個步驟都找出局部最佳解**, 並以此**往前推進最終得到全域最佳解**
   - **從 base case 開始思考, 把 input 的內容一個一個加入, 在每次加入時尋找最佳解**
+  - **Bottom up**
 - 時間複雜度, 通常為 O(n) \* 尋找每個局部最佳解所需的時間複雜度
 - 當可運行時通常是最佳解, 或者是近似最佳解
+- Greedy 想法也可以**搭配 memorization 去協助**建置
 
 Divide and conquer
 
@@ -148,6 +150,7 @@ Binary Search
   - Binary Search 是很好的搜尋工具, Time: O(log n)
 - 前提條件:
   - Sorted
+- 從循序搜尋 T: O(n) 降至 T: O(log n)
 
 ---
 
@@ -235,6 +238,28 @@ Min / Max Heap
   - 1 移除 root, root 即是 min or max
   - 2 把現有的 last element, 即當前 complete binary tree 的最後一個位置的值, 移動到 root
   - 3 持續 trickle down 直到符合 min tree 或 max tree 的定義
+
+---
+
+Segment Tree
+
+- 操作 array, 將 array 中的 segments (intervals) 儲存到 binary tree 上
+  - leaf 是 array 中的個別元素
+  - root 是整個 array 形成的 segment
+  - 其中則是 array 以 binary tree 的方式切割的 segments
+  - 每個 node 儲存的是 segment mapping to a value (aggregated information, 例如: sum, max, min, ...)
+- 使用的想法是 divide-and-conquer
+  - 因此, 父節點的值可以通過其下兩個子節點的解運算組成
+  - 換句話說, 對應 Segment Tree 則兩個子線段 (segments) 的解, 可以形成兩個子線段連結成的父線段 (segment) 的解
+  - `tree[node] = operation(tree[leftChild], tree[rightChild])`
+- 使用空間換取時間的**優化**, Segment Tree 作為優化手段使用, 而非取代原本的解法
+  - 用來降低循序搜尋, T: O(n) -> T: O(log n)
+- 空間複雜度
+  - S: O(n)
+- 時間複雜度
+  - 建立 (build segment tree), T: O(n)
+  - Update, T: O(log n)
+  - Search/query, T: O(log n)
 
 ---
 

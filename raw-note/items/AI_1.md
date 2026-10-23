@@ -615,20 +615,6 @@ Configuration
   - 使用 Model Context Protocol 連接外部 tools / services
 - 可以將常用 workflow 封裝後重複使用
 
-概念上
-
-    Instructions
-        ↓
-      Skills
-        ↓
-    ChatGPT / Codex
-        ↓
-      Plugins
-        ↓
-    MCP servers
-        ↓
-    External tools / services
-
 ---
 
 ### Configuration - Linux
