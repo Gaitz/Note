@@ -1152,6 +1152,9 @@ Math
 
 常用技巧
 
+- Newton's Method
+  - 利用泰勒展開式的一次微分進行逼近
+
 常見資料結構
 
 常見演算法
@@ -1168,9 +1171,21 @@ Math
 
 注意
 
+- Overflow
+  - 如何使用數學技巧來避免 overflow
+
 Corner cases
 
+- 除 0
+- 0
+- 1
+- 負數
+- 浮點數
+
 Completed Practices
+
+- [Pow(x, n)](https://leetcode.com/problems/powx-n)
+- [Sqrt(x)](https://leetcode.com/problems/sqrtx)
 
 ---
 

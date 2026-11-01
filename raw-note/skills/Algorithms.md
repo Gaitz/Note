@@ -12,6 +12,8 @@ collection of algorithms that I learned
 
 ---
 
+- Don't try, know why and prove it.
+
 Backtracking
 
 - 適用於**條件滿足型的窮舉問題**, 屬於遞迴窮舉解法的優化方案, 通常可以在計算複雜度與空間複雜度上優化, 尤其是空間複雜度上
