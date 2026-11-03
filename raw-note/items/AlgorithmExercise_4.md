@@ -1213,6 +1213,8 @@ Corner cases
 
 Completed Practices
 
+- [Rectangle Overlap](https://leetcode.com/problems/rectangle-overlap/)
+
 ---
 
 Week 5 - 12: In-depth practice
