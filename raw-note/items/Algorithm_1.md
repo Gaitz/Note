@@ -1,6 +1,6 @@
 ## 寫程式前就該懂的演算法
 
-### Grokking algorithms, Aditya Y. Bhargava 中文版, Computer Science / Algorithm
+### Grokking algorithms, Aditya Y. Bhargava 中文版, Computer Science/Algorithm
 
 ---
 

@@ -354,7 +354,7 @@ Part 3 - Talking about abstract topics
   - 注意聽考官的問題, 確認自己能完整且合適的回答
   - 測驗的重點在於對於每個問題都能充分的回答, 盡可能延伸自已的回答
   - Part 3 的回答重點在於提供自己的觀點
-- Agreeing an disagreeing
+- Agreeing and disagreeing
   - 不用擔心觀點不同, 可以不同意考官的想法, 考試重點在於展現自己的語言能力和觀點
 - Improving your Lexical Resource score
 

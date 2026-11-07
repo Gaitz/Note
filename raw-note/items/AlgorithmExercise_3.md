@@ -363,10 +363,10 @@ Hints:
   1. 無視額外的 parent pointer 存在 array 後查詢, T: O(n), S: O(n), n = length
   1. 因為輸入的目標含有指標, 可以直接進行搜尋, T: O(h), S: O(1), h = depth
 
-  #### 6. Height Balanced Binary Tree
+#### 6. Height Balanced Binary Tree
 
-  - DFS, 紀錄 balance 狀態與 height
-  - 先思考 base case 然後擴張, 記得使用範例思考演算法
+- DFS, 紀錄 balance 狀態與 height
+- 先思考 base case 然後擴張, 記得使用範例思考演算法
 
 ---
 
